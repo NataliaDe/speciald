@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" class="">
+<head>
+    <meta charset="utf-8" />
+    <title>{% block title %}{% endblock %}</title>
+    <meta name="description" content="app, web app, responsive, responsive layout, admin, admin panel, admin dashboard, flat, flat ui, ui kit, AngularJS, ui route, charts, widgets, components" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+<!-- css -->
+    <link rel="stylesheet" href="{{ base_url('/assets/libs/bootstrap/dist/css/bootstrap.css') }}" type="text/css" />
+    <!-- <link rel="shortcut icon" href="/assets/rostelecom/img/favicon.png" type="image/png"> -->
+
+    <link rel="stylesheet" href="{{ base_url('/assets/js/chosen/chosen.css')}}">
+    <link rel="stylesheet" href="{{ base_url('assets/fontawesome/css/all.min.css') }}">
+
+    <link href="{{ base_url('assets/libs/toastr/css/toastr.min.css') }}" rel="stylesheet"/>
+    {% block head %}{% endblock %}
+</head>
+<body class="wrapper" id="main-page">
+<div class="wrapper_form">
+{% block content %}{% endblock %}
+</div>
+
+<!-- js -->
+<script src="{{ base_url('/assets/libs/jquery/jquery/dist/jquery.js')}}"></script>
+<script src="{{ base_url('assets/libs/toastr/js/toastr.min.js') }}"></script>
+<!-- <script src="{{ base_url('/assets/mts/js/login.js')}}"></script> -->
+<script src="{{ base_url('/assets/libs/jquery/bootstrap/dist/js/bootstrap.js')}}"></script>
+<script src="{{ base_url('/assets/js/chosen/chosen.jquery.min.js')}}"></script>
+
+{% block footer %}{% endblock %}
+</body>
+</html>
