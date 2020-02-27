@@ -1,0 +1,29 @@
+.countdown{
+list-style:none;
+margin:6px 0 0 0;
+padding:0;
+display: block;}
+
+.countdown li{display: inline-block;}
+
+/* здесь дни, часы, минуты, секунды */
+.countdown li span{
+width:100%;
+color:#000;
+font:18px Verdana;
+display:inline-block;}
+
+/* разделители . и : */
+.countdown li.seperator {
+color:#000;
+font:16px Verdana;
+vertical-align:top;}
+
+.countdown li div{
+margin:0;
+color: #a7abb1;
+font:8pt Verdana;}
+
+.countdown{
+    float: right;
+}

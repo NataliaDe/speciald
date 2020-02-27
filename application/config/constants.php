@@ -31,6 +31,7 @@ defined('FILE_WRITE_MODE') OR define('FILE_WRITE_MODE', 0666);
 defined('DIR_READ_MODE')   OR define('DIR_READ_MODE', 0755);
 defined('DIR_WRITE_MODE')  OR define('DIR_WRITE_MODE', 0755);
 
+
 /*
 |--------------------------------------------------------------------------
 | File Stream Modes
@@ -83,3 +84,31 @@ defined('EXIT_USER_INPUT')     OR define('EXIT_USER_INPUT', 7); // invalid user 
 defined('EXIT_DATABASE')       OR define('EXIT_DATABASE', 8); // database error
 defined('EXIT__AUTO_MIN')      OR define('EXIT__AUTO_MIN', 9); // lowest automatically-assigned error code
 defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
+
+
+
+
+
+
+        defined('LEVEL_ID_RCU') OR define('LEVEL_ID_RCU', 1); //RCU
+        define('LEVEL_ID_UMCHS', 2); //UMCHS
+        define('LEVEL_ID_ROCHS', 3); //ROCHS
+
+        /* each level has property 'can_edit' and 'is_admin'.
+          UMCHS level : umchs, rosn g.Minsk(all rosn), ugz g.Minsk(all), avia g.Minsk(all).
+          ROCHS level: rochs, rosn, ugz, avia.
+         */
+
+        defined('ORGAN_ID_RCU') OR define('ORGAN_ID_RCU', 5); //RCU
+        define('ORGAN_ID_UMCHS', 4); //UMCHS
+
+        define('ORGAN_ID_PASO', 6); //PASO
+        define('ORGAN_ID_PASO_OBJECT', 7); //PASO OBJECT
+
+        define('ORGAN_ID_GOCHS', 1); //GOCHS
+        define('ORGAN_ID_ROCHS', 2); //ROCHS
+        define('ORGAN_ID_GROCHS', 3); //GROCHS
+
+        define('ORGAN_ID_ROSN', 8); //ROSN
+        define('ORGAN_ID_UGZ', 9); //UGZ
+        define('ORGAN_ID_AVIA', 12); //AVIA

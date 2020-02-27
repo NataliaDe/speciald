@@ -1,0 +1,24 @@
+
+<nav aria-label="breadcrumb" class="float-right" style="height: 40px;">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{base_url()}}"><i class="fa fa-home"></i></a></li>
+
+        {%if bread_crumb is defined and bread_crumb is not empty%}
+
+            {%set active=bread_crumb|last%}
+            {% set array = bread_crumb|slice(0,-1) %}
+
+            {%if array is defined and array is not empty%}
+                {%for href, bread in array %}
+                    <li class="breadcrumb-item"><a href="{{base_url(href)}}">{{bread}}</a></li>
+
+
+                {%endfor%}
+            {%endif%}
+            <li class="breadcrumb-item active  " aria-current="page">{{active}}</li>
+
+        {%endif%}
+
+
+    </ol>
+</nav>

@@ -1,0 +1,131 @@
+<!-- Modal Delele-->
+
+<div class="modal fade" id="modal-search-str-cars" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="  margin-left: 390px;">
+        <div class="modal-content" style="width:230%; ">
+            <div class="modal-header">
+                <h4 class="modal-title ff-l" id="myModalLabel">Поиск техники в строевой записке</h4>
+
+                <button class="close danger" type="button" data-dismiss="modal" style="font-weight: bolder;">×</button>
+
+            </div>
+
+            <div class="modal-body" style="padding-top:5px;">
+
+
+                <p>Поиск осуществляется в <a href="/str" target="_blank">ПС &laquo;Строевая записка&raquo;</a>. Информация берется за последнюю заступившуу смену подразделения.<br>
+
+                </p>
+
+
+                <form role="form" id="searchStrCarsForm" method="POST"  >
+
+                    <div class="row">
+
+                        <div class="col-lg-3">
+                            <label for="id_region">Область</label>
+                            <div class="form-group">
+                                <select multiple class="form-control select2-multi-not-clear" name="id_region" id="id_region_str_cars"  >
+
+                                    {% for region in regions_cp_list %}
+                                        <option  value="{{ region.id }}" {% if user is defined and user.id_region == region.id%} selected {%endif%}>{{ region.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3">
+                            <label for="id_local">ГРОЧС</label>
+                            <div class="form-group">
+
+                                <select multiple class="form-control select2-multi-not-clear" name="id_local" id="id_local_str_cars"  >
+{#                                         {% for local in locorg_cp_list %}
+                                        <option value="{{ local.id_loc_org }}" class="{{local.id_region}}" >{{ local.locorg_name }}</option>
+                                    {% endfor %}#}
+                                </select>
+                            </div>
+                        </div>
+
+
+
+                    <div class="col-lg-4">
+                        <label for="id_pasp">ПАСЧ</label>
+                        <div class="form-group select-cars-pasp-cls">
+
+                            <select multiple class="form-control select2-multi-not-clear" name="id_pasp" id="id_pasp_str_cars"  >
+                                {#                                         {% for local in locorg_cp_list %}
+                                                                        <option value="{{ local.id_loc_org }}" class="{{local.id_region}}" >{{ local.locorg_name }}</option>
+                                                                    {% endfor %}#}
+                            </select>
+                        </div>
+                    </div>
+
+                        <div class="col-lg-2">
+                            <label for="btn-search-str-cars"></label>
+                            <div class="form-group " style="margin-top:8px">
+                                <button  type="button" class="btn btn-success" id="btn-search-str-cars" >Искать</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+<br>
+                            <center> <p>Результат поиска</p></center>
+
+                                                <div class="col-lg-5">
+                        <label for="id_cars">Техника</label>
+                        <div class="form-group select-cars-cls" >
+
+                            <select multiple class="form-control select2-multi-not-clear" name="id_cars" id="id_cars_str_cars"  >
+                                {#                                         {% for local in locorg_cp_list %}
+                                                                        <option value="{{ local.id_loc_org }}" class="{{local.id_region}}" >{{ local.locorg_name }}</option>
+                                                                    {% endfor %}#}
+                            </select>
+                        </div>
+                    </div>
+
+
+                </form>
+                <br><br>
+
+
+
+                 {%include 'searchRig/preloader.twig'%}
+
+                {%include 'parts/preloader.twig'%}
+
+
+            </div>
+            <div class="modal-footer">
+                <button id="btn-get-data-str-cars"  type="button" class="btn btn-info" disabled  data-toggle="modal"  data-target="#modal-agree-get-str-cars"  data-url="{{base_url('/create/add_str_cars_to_form')}}">Получить данные</button>
+                <button  type="button" class="btn btn-secondary" id="close-modal-search-str-cars" >Отмена</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="modal-agree-get-str-cars" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <h4 class="modal-title ff-l" id="myModalLabel">Поиск техники в строевой записке</h4>
+
+                <button class="close danger" type="button" data-dismiss="modal" style="font-weight: bolder;">×</button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <p>Информация по выбранной технике будет добавлена в таблицу привлекаемых СиС МЧС на форме создания специального донесения</p>
+
+            </div>
+            <div class="modal-footer">
+
+                <button id="btn-fill-str-cars-form"  type="button" class="btn btn-warning" >ОК</button>
+                <button  type="button" class="btn btn-secondary" id="close-modal-agree-get-str-cars" >Отмена</button>
+            </div>
+        </div>
+    </div>
+</div>

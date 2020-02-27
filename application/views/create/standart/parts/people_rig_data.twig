@@ -1,0 +1,23 @@
+            <div class="form-group col-md-2">
+                <label for="people_fio" >Ф.И.О.:</label>
+                <input type="text" class="form-control"  placeholder="" name="people_fio"  value="{%if rig is defined and rig.people is defined and rig.people is not empty and rig.people.fio  %}{{rig.people.fio|trim}}{%endif%}">
+            </div>
+
+
+            <div class="form-group col-md-1">
+                <label for="people_phone" >Телефон:</label>
+                <input type="text" class="form-control"  placeholder="" name="people_phone"  value="{%if rig is defined and rig.people is defined and rig.people.phone is defined and rig.people.phone is not empty %}{{rig.people.phone|trim}}{%endif%}">
+            </div>
+
+            <div class="form-group col-md-3">
+                <label for="people_address" >Место жительства:</label>
+                <input type="text" class="form-control"  placeholder="" name="people_address"  value="{%if rig is defined and rig.people is defined and rig.people is not empty and rig.people.address is not empty %}{{rig.people.address|trim}}{%endif%}">
+            </div>
+
+
+            <div class="form-group col-md-2">
+                <label for="people_position" >Должность:</label>
+                <input type="text" class="form-control"  placeholder="" name="people_position"  value="{%if rig is defined and rig.people is defined and rig.people is not empty and rig.people.position is not empty %}{{rig.people.position|trim}}{%endif%}">
+            </div>
+
+

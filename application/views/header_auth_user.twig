@@ -1,0 +1,44 @@
+{#  <form class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2" type="text" placeholder="введите слово" aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Поиск</button>
+    </form>#}
+
+{%if active_item_menu is defined and active_item_menu == 'create' and active_item_menu_type_create is defined and active_item_menu_type_create == 'standart'%}
+<a href="#" data-toggle="modal"  data-target="#modal-search-rig" data-url="" >
+    <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="fa fa-search" aria-hidden="true" id="search-rig"></i> Поиск выезда</button>
+
+</a>
+{%endif%}
+      <li class="nav-item dropdown">
+          <a href="#" class="dropdown-toggle custom-a {%if active_user.is_guest == 1%} guest-user {%endif%}" data-toggle="dropdown">
+              <i class="fa fa-user {%if active_user.is_guest == 1%} guest-user {%endif%}"></i>
+              <span class="hidden-xs ">{{active_user.auth_fio}}</span>
+          </a>
+          <ul class="dropdown-menu login-window">
+
+              <li class="user-header">
+
+                  <p>
+                      {{active_user.auth_organ}}<br><br>
+
+
+                      <small class="title-user">
+                          {%if active_user.is_guest == 1%}
+                              <span class="{%if active_user.is_guest == 1%} guest-user {%endif%}" >Вы авторизованы как Гость</span>
+                              <br>
+                          {%endif%}
+                          Звание: {{active_user.rank_name}}<br>
+                          Должность: {{active_user.position_name}}<br>
+                          Право создавать/ред.спец.донесения: {% if active_user.can_edit == 1 %} да {%else%} нет {%endif%}<br>
+                          Права администратора: {{active_user.admin_name}}
+                      </small>
+                  </p>
+              </li>
+
+              <li class="user-footer">
+                  <div >
+                      <center><a href="{{ base_url('/auth/logout')}}" class="btn btn-logout">Выйти</a></center>
+                  </div>
+              </li>
+          </ul>
+      </li>

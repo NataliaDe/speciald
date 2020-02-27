@@ -1,0 +1,134 @@
+<div class="card">
+    <div class="card-header" >
+
+    </div>
+    <!-- /.panel-heading -->
+    <div class="card-body" >
+
+
+        {#        <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="inputEmail4">Email</label>
+                        <input type="email" class="form-control" id="inputEmail4" placeholder="Email">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="inputPassword4">Password</label>
+                        <input type="password" class="form-control" id="inputPassword4" placeholder="Password">
+                    </div>
+                </div>#}
+
+
+
+        {#from journal#}
+        <div class="form-row create-form-row" id="object-data">
+            {%include '/create/standart/parts/object_data.twig'%}
+        </div>
+
+
+
+
+        <div class="form-row create-form-row">
+
+
+            <div class="form-group col-md-2">
+                <label for="object_house">Дом
+                    <a href="#" class="add-new-vid-object-house" data-placement="right" title="Добавить новый вид" data-toggle="modal" data-target="#modal-add-new-vid-object-house">
+                        <i class="fa fa-pencil-square-o " aria-hidden="true" style="color:green;padding-left: 10px; cursor: pointer"></i>
+                    </a>
+                </label>
+                <select  class="form-control select2-single object_house" name="object_house" id="object_house_id" >
+                    <option></option>
+                    {% for vid in object_house %}
+                        <option value="{{ vid.id }}" >{{ vid.name }}</option>
+                    {% endfor %}
+                </select>
+
+
+            </div>
+
+
+            <div class="form-group col-md-1" id="object-floor-div">
+                {%include '/create/standart/parts/object_floor.twig'%}
+            </div>
+
+
+            <div class="form-group col-md-2">
+                <label for="object_size" >Размеры:</label>
+                <input type="text" class="form-control"  placeholder="" name="object_size"  value="">
+            </div>
+
+
+
+            <div class="form-group col-md-2">
+                <label for="object_size" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                <div class="checkbox checkbox-success">
+                    <input  type="checkbox" name="object_is_electric" value="1" id="object_is_electric" >
+                    <label for="object_is_electric">
+                        Электрофицирован
+                    </label>
+                </div>
+            </div>
+
+
+
+        </div>
+
+
+
+        <div class="form-row create-form-row">
+
+
+            <div class="form-group col-md-2">
+                <label for="object_material" >Материал стен
+                    <a href="#" class="add-new-vid-object-material" data-placement="right" title="Добавить новый вид" data-toggle="modal" data-target="#modal-add-new-vid-object-material">
+                        <i class="fa fa-pencil-square-o " aria-hidden="true" style="color:green;padding-left: 10px; cursor: pointer"></i>
+                    </a>
+                </label>
+                <select  class="form-control select2-single object_house" name="object_material" id="object_material_id" >
+                    <option></option>
+                    {% for vid in object_material %}
+                        <option value="{{ vid.id }}" >{{ vid.name }}</option>
+                    {% endfor %}
+                </select>
+
+
+            </div>
+
+
+
+            <div class="form-group col-md-2">
+                <label for="object_roof" >Материал кровли
+                    <a href="#" class="add-new-vid-object-roof" data-placement="right" title="Добавить новый вид" data-toggle="modal" data-target="#modal-add-new-vid-object-roof">
+                        <i class="fa fa-pencil-square-o " aria-hidden="true" style="color:green;padding-left: 10px; cursor: pointer"></i>
+                    </a>
+                </label>
+                <select  class="form-control select2-single object_roof" name="object_roof" id="object_roof_id" >
+                    <option></option>
+                    {% for vid in object_roof %}
+                        <option value="{{ vid.id }}" >{{ vid.name }}</option>
+                    {% endfor %}
+                </select>
+
+
+            </div>
+
+
+
+                <div class="form-group col-md-1">
+                </div>
+
+                            <div class="form-group col-md-2">
+                <label for="object_size" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                <div class="checkbox checkbox-success">
+                    <input  type="checkbox" name="object_is_api" value="1" id="object_is_api" >
+                    <label for="object_is_api" >
+                        Оборудован АПИ
+                    </label>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <!-- /.panel-body -->
+</div>

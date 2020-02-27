@@ -1,0 +1,3 @@
+<label for="object_floor" >Этажность:</label>
+<input type="text" class="form-control"  placeholder="" name="object_floor"  value="{%if rig.people.floor is defined and rig.people.floor is not empty%}{{((rig.people.floor|split('/'))|first)|trim}}{%endif%}">
+

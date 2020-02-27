@@ -1,0 +1,246 @@
+{% extends 'layout.twig' %}
+
+{% block title %}{{title}}{% endblock %}
+
+{% block content %}
+    <!-- content -->
+
+    <a href="{{ base_url('/users/form_add/') }}" class="new-user">
+        <button class="btn btn-xs btn-success " type="button"><i class="fa fa-plus" aria-hidden="true"></i> Добавить пользователя</button>
+    </a>
+
+    <center>
+        <caption>Активные пользователи</caption>
+        <table class="table table-condensed   table-bordered table-custom" id="userTable" >
+            <!-- строка 1 -->
+            <thead>
+                <tr>
+                    <th>Ф.И.О.</th>
+                    <th>Должность</th>
+                    <th>Создатель в форме создания спец.донесения</th>
+                    <th>Роль</th>
+                    <th>Админ.</th>
+                    <th>Область</th>
+                    <th>Район</th>
+                    <th>Подразд.</th>
+                    <th>Уровень</th>
+                    <th>Логин<br>Пароль</th>
+
+                    <th>Ред.</th>
+                    <th>Уд.</th>
+
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th>Ф.И.О.</th>
+                    <th>Должность</th>
+                    <th></th>
+                    <th>Роль</th>
+                    <th>Админ.</th>
+                    <th>Область</th>
+                    <th>Район</th>
+                    <th>Подразд.</th>
+                    <th>Уровень</th>
+                    <th>Логин<br>Пароль</th>
+
+                    <th></th>
+                    <th></th>
+
+                </tr>
+            </tfoot>
+            <tbody>
+                {% for user in all_users %}
+
+                    <tr class="{% if user.is_guest == 1%} info {%endif%}">
+                        <td>{% if user.is_guest == 1%} Гость для аторизации из ЖЦ {%else%}{{user.fio}}{%endif%}<br>
+                        {% if user.is_guest == 0%} {{user.rank_name}}{%endif%}</td>
+                        <td>{% if user.is_guest == 1%} - {%else%}{{user.position_name}}{%endif%}</td>
+                        <td>{% if user.is_guest == 1%} - {%else%}{{user.creator_name}}{%endif%}</td>
+                        <td>{% if user.can_edit == 1%} Создатель {%else%}Просмоторщик{%endif%}</td>
+                        <td>{{user.admin_name}}</td>
+                        <td>{{user.region_name}}</td>
+                        <td>{{user.local_name}}</td>
+                        <td>{{user.organ_name}}</td>
+                        <td>{{user.level_name}}</td>
+                        <td>{{user.login}}<br>{{user.password}}</td>
+
+
+                        <td>
+                            {% if user.id_user != session_id_user%}
+                                <a href="{% if user.is_guest == 1%} {{ base_url('/users/form_edit_guest/'~user.id_user) }} {%else%}{{ base_url('/users/form_edit/'~user.id_user) }}{%endif%}">
+                                    <button class="btn btn-xs btn-warning " type="button"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                                </a>
+                            {%endif%}
+                        </td>
+
+
+
+                        <td>
+                            {% if user.id_user != session_id_user%}
+                                <a href="#" data-toggle="modal"  data-target="#delete-user-modal" data-url="{{ base_url('/users/delete/'~user.id_user) }}" data-userid="{{user.id_user}}" data-userfio="{% if user.is_guest == 1%}Гость{%else%}{{user.fio}}{%endif%}">
+                                    <button class="btn btn-xs btn-danger "  type="button"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                                </a>
+                            {%endif%}
+                        </td>
+
+                    </tr>
+
+
+                {%endfor%}
+            </tbody>
+
+        </table>
+    </center>
+
+    <!-- .content -->
+
+
+    {%include 'users/modals/delete_user_modal.twig'%}
+
+{% endblock %}
+
+
+{% block head %}
+    <link rel="stylesheet" href="{{ base_url('assets/datatables/jquery.dataTables.css') }}">
+
+    <style>
+        .new-user{
+            margin-left: 160px;
+        }
+        #userTable_wrapper{
+            width: 85% !important;
+        }
+        #inptuserForm8, #inptuserForm5{
+            width: 150px !important;
+        }
+        #seluserForm7{
+            width: 90px !important;
+        }
+    </style>
+
+{% endblock %}
+
+{% block footer %}
+    <script src="{{ base_url('/assets/datatables/jquery.dataTables.js')}}"></script>
+
+    <script>
+        (function ($, undefined) {
+            $(function () {
+                $('#userTable').DataTable({
+                    "pageLength": 50,
+                    // "order": [[2, "desc"]],
+                    language: {
+                        "processing": "Подождите...",
+                        "search": "Поиск:",
+                        "lengthMenu": "Показать _MENU_ записей",
+                        "info": "Записи с _START_ до _END_ из _TOTAL_ записей",
+                        "infoEmpty": "Записи с 0 до 0 из 0 записей",
+                        "infoFiltered": "(отфильтровано из _MAX_ записей)",
+                        "infoPostFix": "",
+                        "loadingRecords": "Загрузка записей...",
+                        "zeroRecords": "Записи отсутствуют.",
+                        "emptyTable": "В таблице отсутствуют данные",
+                        "paginate": {
+                            "first": "Первая",
+                            "previous": "Предыдущая",
+                            "next": "Следующая",
+                            "last": "Последняя"
+                        },
+                        "aria": {
+                            "sortAscending": ": активировать для сортировки столбца по возрастанию",
+                            "sortDescending": ": активировать для сортировки столбца по убыванию"
+                        }
+
+                    }
+                });
+            });
+
+        })(jQuery);
+
+
+
+        $(document).ready(function () {
+
+            $('#userTable tfoot th').each(function (i) {
+                var table = $('#userTable').DataTable();
+                if (i !== 10 && i != 11) {
+
+                    if (i == 3 || i == 4 || i == 5 || i == 7 || i == 8) {
+                        //выпадающий список
+                        var y = 'userForm';
+                        var select = $('<select class="' + i + '  noprint" id="sel' + y + i + '"><option value=""></option></select>')
+                                .appendTo($(this).empty())
+                                .on('change', function () {
+
+                                    var val = $(this).val();
+
+                                    table.column(i) //Only the first column
+                                            .search(val ? '^' + $(this).val() + '$' : val, true, false)
+                                            .draw();
+                                });
+
+                        var x = $('#userTable tfoot th').index($(this));
+                        table.column(i).data().unique().sort().each(function (d, j) {
+                            select.append('<option value="' + d + '" >' + d + '</option>');
+                        });
+
+
+                    } else {
+                        var title = $('#userTable tfoot th').eq($(this).index()).text();
+                        var x = $('#userTable tfoot th').index($(this));
+                        var y = 'userForm';
+                        //$(this).html( '<input type="text" placeholder="Поиск '+title+'" />' );
+                        $(this).html('<input type="text" class="noprint" id="inpt' + y + x + '" placeholder="Поиск"  />');
+                        // document.getElementById("inpt11").html('placeholder="<i class="fa fa-search" aria-hidden="true"></i>"');
+                    }
+
+                }
+            });
+            $("#userTable tfoot input").on('keyup change', function () {
+                var table = $('#userTable').DataTable();
+                table
+                        .column($(this).parent().index() + ':visible')
+                        .search(this.value)
+                        .draw();
+            });
+        });
+
+        $('#delete-user-modal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+
+            $(this).find('#delete-user-btn').attr('data-url', button.data('url'));
+            $(this).find('.modal-body p b span').text(button.data('userfio'));
+        });
+
+        $('.close-window').on('click', function (event) {
+            $('#delete-user-modal').click();
+        });
+
+
+        $('#delete-user-modal #delete-user-btn').on('click', function (e) {
+            e.preventDefault();
+            var button = $(this);
+            $.ajax({
+                type: 'POST',
+                url: button.data('url'),
+                dataType: 'json',
+                success: function (response) {
+                    if (response.success) {
+                        toastr.success('Пользователь удален', 'Успех:', {progressBar: true, timeOut: 2500});
+                        $('#delete-user-modal').click();
+                        setTimeout(function () {
+                            location.reload();
+                        }, 2500);
+                    }
+                },
+                error: function () {
+                    toastr.error('Что-то пошло не так', 'Ошибка:', {progressBar: true, timeOut: 2500});
+                    console.log('course deleting error');
+                }
+            });
+        });
+
+    </script>
+{% endblock %}
+

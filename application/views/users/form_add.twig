@@ -1,0 +1,339 @@
+{% extends 'layout.twig' %}
+
+{% block title %}{{title}}{% endblock %}
+
+{% block content %}
+    <!-- content -->
+
+    <form role="form" id="addUserForm" method="POST" action="{{base_url('/users/add')}}" >
+
+        <div class="row">
+
+            <div class="col-lg-2">
+                <label for="id_region">Область</label>
+                <div class="form-group">
+                    <select class="form-control select2-select" name="id_region" id="id_region"  >
+
+                        {% for region in regions %}
+                            <option value="{{ region.id }}" {% if user is defined and user.id_region == region.id%} selected {%endif%}>{{ region.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-lg-2">
+                <label for="id_local">Район</label>
+                <div class="form-group">
+
+                    <select class="form-control select2-select" name="id_local" id="id_local"  >
+                        <option value="0" class="1" selected>Не выбран</option>
+                        <option value="0" class="2" selected>Не выбран</option>
+                        <option value="0" class="3" selected>Не выбран</option>
+                        <option value="0" class="4" selected>Не выбран</option>
+                        <option value="0" class="5" selected>Не выбран</option>
+                        <option value="0" class="6" selected>Не выбран</option>
+                        <option value="0" class="7" selected>Не выбран</option>
+                        {% for local in locals %}
+                            <option value="{{ local.id }}" class="{{local.id_region}}" {% if user is defined and user.id_local == local.id%} selected {%endif%}>{{ local.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+
+            <div class="col-lg-2">
+                <label for="id_organ">Подразд.</label>
+                <div class="form-group">
+
+                    <select class="form-control select2-select" name="id_organ" id="id_organ"  >
+                        <option value="0">Не выбрано</option>
+                        {% for organ in organs %}
+                            <option value="{{ organ.id }}" class="{{organ.id_local}}" {% if user is defined and user.id_organ == organ.id%} selected {%endif%}>{{ organ.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+
+
+
+            <div class="col-lg-2">
+                <div class="form-group">
+                    <div class="checkbox checkbox-success">
+                        <input  type="checkbox" name="can_edit" value="1" id="can_edit" {% if user is defined and user.can_edit == 1%} checked {%endif%}>
+                        <label for="can_edit">
+                            Может создавать/ред. спец.донесения
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="col-lg-2" id="is-admin-div" style="display:{% if user is defined and user.can_edit == 1  %} block {%else%}none{%endif%}">
+                <label for="is_admin">Админ</label>
+                <div class="form-group">
+
+                    <select class="form-control select2-select" name="is_admin" id="is_admin"  >
+                        <option value="0" {% if user is defined and user.is_admin == 0 %} selected {%endif%}>Нет</option>
+                        <option value="2" {% if user is defined and user.is_admin == 2 %} selected {%endif%}>Админ</option>
+                        {#<option value="1">Суперадмин</option>#}
+
+                    </select>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="row">
+
+
+            <div class="col-lg-2">
+                <div class="form-group">
+                    <label for="name">Ф.И.О. пользователя</label>
+                    <input type="text" class="form-control"  placeholder="Ф.И.О." name="fio" value="{% if user is defined %}{{user.fio|trim}}{%endif%}">
+                </div>
+            </div>
+
+
+            <div class="col-lg-2">
+                <div class="form-group">
+                    <label for="id_position">Должность</label><br>
+                    <select class="form-control select2-select" name="id_position" id="id_position"  >
+
+                        {% for position in positions %}
+                            <option value="{{ position.id }}" {% if user is defined and user.id_position == position.id%} selected {%endif%}>{{ position.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-lg-2">
+                <div class="form-group">
+                    <label for="id_rank"  >Звание</label><br>
+                    <select class="form-control select2-select" name="id_rank" id="id_rank"  >
+
+                        {% for rank in ranks %}
+                            <option value="{{ rank.id }}" {% if user is defined and user.id_rank == rank.id%} selected {%endif%}>{{ rank.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+
+
+            <div class="col-lg-2">
+                <div class="form-group">
+                    <label for="login">Логин</label>
+                    <input type="text" class="form-control"  placeholder="логин" name="login" value="{% if user is defined %}{{user.login|trim}}{%endif%}">
+                </div>
+            </div>
+
+            <div class="col-lg-2">
+                <div class="form-group">
+                    <label for="password">Пароль</label>
+                    <input type="text" class="form-control"  placeholder="пароль" name="password" value="{% if user is defined %}{{user.password|trim}}{%endif%}">
+                </div>
+            </div>
+
+
+
+            <input type="hidden" class="form-control"  name="id_user" value="{% if user is defined %}{{user.id}} {%endif%}">
+        </div>
+
+
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="form-group">
+                    <label for="creator_name">Подразделение (отображается в форме создания спец.донесения как Создатель)</label>
+                    <input type="text" class="form-control"  placeholder="" name="creator_name" value="{% if user is defined %}{{user.creator_name|trim}}{%endif%}">
+                </div>
+            </div>
+
+
+
+        </div>
+
+        <br>
+        <div class="row">
+            <div class="col-lg-2">
+                <div class="form-group">
+                    <button type="submit" class="btn btn-success" id="save">Сохранить</button>
+                    <br>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-2">
+                <div class="form-group">
+                    <a href="{{base_url('/users')}}">  <button type="button" class="btn btn-warning">Назад</button></a>
+
+                </div>
+            </div>
+        </div>
+
+    </form>
+
+
+    <!-- .content -->
+
+{% endblock %}
+
+
+{% block head %}
+
+{% endblock %}
+
+{% block footer %}
+    <script>
+        $(document).ready(function () {
+        $('.select2-select').select2();
+        jQuery("#id_local").chained("#id_region");
+        jQuery("#id_organ").chained("#id_local");
+        {% if user is defined and user.id_organ == ORGAN_ID_RCU %}
+            var option = new Option('Суперадмин', 1, true);
+            $('#is_admin').append(option).trigger('change');
+        {%endif%}
+
+        {% if user is defined and user.id_organ == ORGAN_ID_RCU and  user.is_admin == 1 %}
+            $('#is_admin').val(1);
+            $('#is_admin').trigger('change');
+        {%endif%}
+
+            });
+            $('#can_edit').change(function () {
+
+            $("#is_admin option[value='1']").remove();
+            $('#is_admin').trigger('change');
+            if ($(this).is(":checked")) {
+            if (parseInt($('#id_organ').val()) === {{ORGAN_ID_RCU}}) {
+            //alert($('#id_organ').val());
+            var option = new Option('Суперадмин', 1, true);
+            $('#is_admin').append(option).trigger('change');
+            }
+
+
+            $('#is-admin-div').show();
+            } else {
+            // $('#is_admin').val(0);
+            $('#is_admin').trigger('change');
+            $('#is-admin-div').hide();
+            }
+            });
+            $('#id_organ').change(function () {
+
+            if (parseInt($(this).val()) === {{ORGAN_ID_RCU}}) {
+            var option = new Option('Суперадмин', 1, true);
+            $('#is_admin').append(option).trigger('change');
+            } else {
+            $("#is_admin option[value='1']").remove();
+            $('#is_admin').trigger('change');
+            }
+            });
+            $('#addUserForm')
+                    .bootstrapValidator({
+                    message: 'This value is not valid',
+                            fields: {
+                            login: {
+                            message: 'The username is not valid',
+                                    validators: {
+        {#                                    stringLength: {
+                                                min: 3,
+                                                max: 10,
+                                                message: 'от 3 до 10 символов'
+                                            },#}
+                                    regexp: {
+                                    regexp: /^[a-zA-Z0-9_]+$/,
+                                            message: 'буквы англ.алфавита, цифры, нижнее подчеркивание '
+                                    }
+                                    }
+                            },
+                                    password: {
+                                    message: 'The username is not valid',
+                                            validators: {
+                                            notEmpty: {
+                                            message: 'Введите пароль'
+                                            },{#                                    stringLength: {
+                                                min: 3,
+                                                max: 7,
+                                                message: 'от 3 до 7 символов'
+                                            },#}
+                                                    regexp: {
+                                                    regexp: /^[a-zA-Z0-9_]+$/,
+                                                            message: 'буквы англ.алфавита, цифры, нижнее подчеркивание '
+                                                    }
+                                            }
+                                    },
+                                    fio: {
+                                    message: 'The username is not valid',
+                                            validators: {
+                                            notEmpty: {
+                                            message: 'Введите имя пользователя'
+                                            },{#                                    stringLength: {
+                                                min: 3,
+                                                max: 30,
+                                                message: 'от 3 до 30 символов'
+                                            },#}
+                                                    regexp: {
+                                                    regexp: /^[а-яА-Я0-9\s-.]+$/,
+                                                            message: 'буквы русск.алфавита, пробел,- '
+                                                    }
+                                            }
+                                    },
+                                creator_name: {
+                                    message: 'The username is not valid',
+                                            validators: {
+                                            notEmpty: {
+                                            message: 'Заполните поле'
+                                            },{#                                    stringLength: {
+                                                min: 3,
+                                                max: 30,
+                                                message: 'от 3 до 30 символов'
+                                            },#}
+                                                    regexp: {
+                                                    regexp: /^[а-яА-Я0-9\s-.]+$/,
+                                                            message: 'буквы русск.алфавита, пробел,- '
+                                                    }
+                                            }
+                                    }
+                            }
+
+                    });
+            $(function () {
+            var buttonpressed;
+            $('#save').click(function () {
+            buttonpressed = $(this).attr('id');
+            });
+            $('form#addUserForm').submit(function (e) {
+            if (buttonpressed === 'save') {
+
+            // Запрещаем стандартное поведение для кнопки submit
+            e.preventDefault();
+            var realArray = $('#addUserForm').serializeArray();
+            $.ajax({
+            url: '{{base_url('/users/is_user_unique')}}',
+                    dataType: 'json',
+                    type: 'POST',
+                    data: realArray,
+                    success: function (data) {
+
+                    if (data.error) {
+                    toastr.error(data.error, 'Ошибка:', {progressBar: true, timeOut: 2500});
+                    } else if (data.success) {
+                    $('form#addUserForm').unbind('submit').submit();
+                    }
+                    }
+            });
+            }
+            buttonpressed = '';
+            });
+            });
+
+
+
+
+    </script>
+{% endblock %}
+

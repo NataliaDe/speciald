@@ -1,0 +1,190 @@
+<center>
+
+    {%if rigs is defined and rigs is not empty%}
+        <caption>Результаты поиска</caption>
+        <table class="table table-condensed   table-bordered table-custom" id="result-search-rig-table"  style="font-size: 13px; width: auto;">
+            <!-- строка 1 -->
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Дата и время сообщения</th>
+                    {#<th>Дата и время локализации</th>
+                    <th>
+                        Дата и время ликвидации</th>#}
+                    <th>Адрес<br>Объект</th>
+                  {#  <th>Коорд.</th>
+                    <th>ФИО заявителя</th>#}
+                    <th>Причина выезда</th>
+                    {#<th>Причина пожара</th>#}
+                    {#<th>Инспектор</th>#}
+                    <th>Описание</th>
+                    {#<th>Детал.инф.</th>#}
+
+
+                </tr>
+            </thead>
+            {#            <tfoot>
+                            <tr>
+                                <th>Ф.И.О.</th>
+                                <th>Должность</th>
+                                <th></th>
+                                <th>Роль</th>
+                                <th>Админ.</th>
+                                <th>Область</th>
+                                <th>Район</th>
+                                <th>Подразд.</th>
+
+
+                            </tr>
+                        </tfoot>#}
+            <tbody>
+
+                {%for rig in rigs%}
+
+                    <tr>
+                        <td class="options">
+                              <label>
+                            <input type="radio" name="id_rig" class="selected-rig" value="{{rig.id}}" onChange="selectRig(this);">
+                            <img />
+                              </label>
+                            </td>
+
+                        {%set time_msg=''%}
+                        {% if rig is defined and rig.time_msg is not empty and rig.time_msg is not null and rig.time_msg != '0000-00-00 00:00:00' %}
+                            {%set time_msg=rig.date_msg~' '~rig.time_msg%}
+                        {%endif%}
+
+                        <td>{%if time_msg is not empty%}{{time_msg|date('d.m.Y H:i')}}{%endif%}</td>
+                        {#<td>{%if rig is defined and rig.time_loc is not empty and rig.time_loc is not null and rig.time_loc != '0000-00-00 00:00:00'%}{{rig.time_loc|date('d.m.Y H:i:s')}}{%endif%}</td>
+                        <td>{%if rig is defined and rig.time_likv is not empty and rig.time_likv is not null and rig.time_likv != '0000-00-00 00:00:00'%}{{rig.time_likv|date('d.m.Y H:i:s')}}{%endif%}</td>#}
+                        <td>{{rig.address}} {% if rig.additional_field_address is not empty%}({{rig.additional_field_address}}){%endif%}
+                            {% if rig.object is not empty%}<br>{{rig.object}}{%endif%}
+                        </td>
+
+                        {#<td>{%if rig is defined and rig.latitude is defined and rig.latitude is not empty and rig.latitude != 0%}шир:<br>{{rig.latitude|trim}}{%endif%}
+                            {%if rig is defined and rig.longitude is defined and rig.longitude is not empty and rig.longitude != 0%}<br>долг:<br>{{rig.longitude|trim}}{%endif%}
+                        </td>
+
+
+                        {%set fio_people=''%}
+                        {%set address_people=''%}
+                        {%set phone_people=''%}
+                        {%set all_people=''%}
+
+                        {%if rig is defined and rig.fio_people is defined and rig.fio_people is not empty   %}
+                            {%set fio_people=rig.fio_people%}
+                        {%endif%}
+
+                        {%if rig is defined and rig.address_people is defined and rig.address_people is not empty %}
+                            {%set address_people=rig.address_people%}
+                        {%endif%}
+
+                        {%if rig is defined and rig.phone_people is defined  and rig.phone_people is not empty %}
+                            {%set phone_people=rig.phone_people%}
+                        {%endif%}
+
+                        {%if fio_people is not empty %}
+                            {%set all_people=fio_people%}
+                        {%endif%}
+
+                        {%if address_people is not empty %}
+                            {%if all_people is not empty %}
+                                {%set all_people=all_people~' ('~address_people~')'%}
+                            {%else%}
+                                {%set all_people=address_people%}
+                            {%endif%}
+                        {%endif%}
+
+                        {%if phone_people is not empty %}
+                            {%if all_people is not empty %}
+                                {%set all_people=all_people~', тел. '~phone_people%}
+                            {%else%}
+                                {%set all_people='тел. '~phone_people%}
+                            {%endif%}
+                        {%endif%}
+
+
+                        <td>{{all_people}}</td>#}
+                        <td>{{rig.reasonrig_name}}
+                        {%if rig.view_work_id is defined and rig.view_work_id != 0%} ({{rig.view_work|trim}}){%endif%}
+                        </td>
+
+                        {#<td>{{rig.firereason_name}}
+
+                        </td>#}
+                        {#<td>{{rig.inspector}}</td>#}
+                        <td>{{rig.description}}</td>
+                        {#<td>{{rig.inf_detail}}</td>#}
+
+
+
+                    </tr>
+
+
+                {%endfor%}
+
+
+            </tbody>
+
+        </table>
+    {%else%}
+        Поиск не дал результатов
+    {%endif%}
+</center>
+
+<script>
+  (function ($, undefined) {
+            $(function () {
+                $('#result-search-rig-table').DataTable({
+                    {#"pageLength": 10,#}
+                    "lengthMenu": [[2, 4, 6], [2,4,6]],
+                    "order": [[1, "desc"]],
+                    language: {
+                        "processing": "Подождите...",
+                        "search": "Поиск:",
+                        "lengthMenu": "Показать _MENU_ записей",
+                        "info": "Записи с _START_ до _END_ из _TOTAL_ записей",
+                        "infoEmpty": "Записи с 0 до 0 из 0 записей",
+                        "infoFiltered": "(отфильтровано из _MAX_ записей)",
+                        "infoPostFix": "",
+                        "loadingRecords": "Загрузка записей...",
+                        "zeroRecords": "Записи отсутствуют.",
+                        "emptyTable": "В таблице отсутствуют данные",
+                        "paginate": {
+                            "first": "Первая",
+                            "previous": "Предыдущая",
+                            "next": "Следующая",
+                            "last": "Последняя"
+                        },
+                        "aria": {
+                            "sortAscending": ": активировать для сортировки столбца по возрастанию",
+                            "sortDescending": ": активировать для сортировки столбца по убыванию"
+                        }
+
+                    },
+  "columnDefs": [
+    { "orderable": false, "targets": 0 }
+  ]
+                });
+            });
+
+        })(jQuery);
+
+
+
+$('#result-search-rig-table').on('draw.dt', function() {
+$('#btn-get-data-rig').attr('disabled', true);
+            $('#result-search-rig-table').find('.selected-rig:checked').each(function () {
+
+$('#btn-get-data-rig').attr('data-rig',0);
+
+
+        $(this).prop('checked', false);
+
+    });
+});
+
+    </script>
+
+
+

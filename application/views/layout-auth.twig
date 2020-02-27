@@ -1,32 +1,64 @@
 <!DOCTYPE html>
 <html lang="en" class="">
-<head>
-    <meta charset="utf-8" />
-    <title>{% block title %}{% endblock %}</title>
-    <meta name="description" content="app, web app, responsive, responsive layout, admin, admin panel, admin dashboard, flat, flat ui, ui kit, AngularJS, ui route, charts, widgets, components" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <head>
+        <meta charset="utf-8" />
+        <title>{% block title %}{% endblock %}</title>
+        <meta name="description" content="app, web app, responsive, responsive layout, admin, admin panel, admin dashboard, flat, flat ui, ui kit, AngularJS, ui route, charts, widgets, components" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 
-<!-- css -->
-    <link rel="stylesheet" href="{{ base_url('/assets/libs/bootstrap/dist/css/bootstrap.css') }}" type="text/css" />
-    <!-- <link rel="shortcut icon" href="/assets/rostelecom/img/favicon.png" type="image/png"> -->
+        <!-- css -->
+        <link rel="stylesheet" href="{{ base_url('/assets/libs/bootstrap-4.3.1/css/bootstrap.min.css') }}" type="text/css" />
+        <link rel="shortcut icon" href="{{ base_url('/favicon.ico')}}" type="image/png">
 
-    <link rel="stylesheet" href="{{ base_url('/assets/js/chosen/chosen.css')}}">
-    <link rel="stylesheet" href="{{ base_url('assets/fontawesome/css/all.min.css') }}">
+        <link rel="stylesheet" href="{{ base_url('/assets/js/chosen/chosen.css')}}">
+        <link rel="stylesheet" href="{{ base_url('assets/font-awesome/css/font-awesome.min.css') }}">
 
-    <link href="{{ base_url('assets/libs/toastr/css/toastr.min.css') }}" rel="stylesheet"/>
+        <link href="{{ base_url('assets/libs/toastr/css/toastr.min.css') }}" rel="stylesheet"/>
+
+
+        <link rel="stylesheet" href="{{ base_url('assets/js/bootstrapValidator/css/bootstrapValidator.min.css') }}">
+
+        <link rel="stylesheet" href="{{ base_url('assets/css/signin.css') }}">
+        <link rel="stylesheet" href="{{ base_url('assets/css/checkbox.css') }}">
+        <link rel="stylesheet" href="{{ base_url('assets/css/all.css') }}">
+
     {% block head %}{% endblock %}
 </head>
-<body class="wrapper" id="main-page">
-<div class="wrapper_form">
-{% block content %}{% endblock %}
-</div>
+<body >
+
+
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        {% set headerTemplate = '/header_auth.twig' %}
+
+        {#
+         {% if sidebar == 'manager' %}
+             {% set headerTemplate = 'student/header.twig' %}
+         {% endif %}
+
+         {% include headerTemplate %}
+         {% include sidebar ~ '/sidebar.twig' %}#}
+
+        {% include headerTemplate %}
+
+
+    </nav>
+
+    <main role="main" class="main-content">
+    {% block content %}{% endblock %}
+</main>
+
+
+
+{% include 'copyright_footer.twig' %}
 
 <!-- js -->
 <script src="{{ base_url('/assets/libs/jquery/jquery/dist/jquery.js')}}"></script>
 <script src="{{ base_url('assets/libs/toastr/js/toastr.min.js') }}"></script>
-<!-- <script src="{{ base_url('/assets/mts/js/login.js')}}"></script> -->
-<script src="{{ base_url('/assets/libs/jquery/bootstrap/dist/js/bootstrap.js')}}"></script>
+<script src="{{ base_url('/assets/libs/bootstrap-4.3.1/js/bootstrap.min.js')}}"></script>
+<script src="{{ base_url('/assets/js/bootstrapValidator/js/bootstrapValidator.min.js')}}"></script>
 <script src="{{ base_url('/assets/js/chosen/chosen.jquery.min.js')}}"></script>
+
+<script src="{{ base_url('/assets/js/signin.js')}}"></script>
 
 {% block footer %}{% endblock %}
 </body>

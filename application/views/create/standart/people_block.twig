@@ -1,0 +1,53 @@
+<div class="card">
+    <div class="card-header" >
+
+    </div>
+    <!-- /.panel-heading -->
+    <div class="card-body" >
+
+        {#from journal#}
+        <div class="form-row create-form-row" id="people-rig-data">
+            {%include '/create/standart/parts/people_rig_data.twig'%}
+        </div>
+
+
+
+
+        <div class="form-row create-form-row">
+
+
+            <div class="form-group col-md-2">
+                <label for="people_status">Статус
+                    <a href="#" class="add-new-vid-people-status" data-placement="right" title="Добавить новый вид" data-toggle="modal" data-target="#modal-add-new-vid-people-status">
+                        <i class="fa fa-pencil-square-o " aria-hidden="true" style="color:green;padding-left: 10px; cursor: pointer"></i>
+                    </a>
+                </label>
+                <select  class="form-control select2-single people_status" name="people_status" id="people_status_id" >
+                    <option></option>
+                    {% for vid in people_status %}
+                        <option value="{{ vid.id }}" >{{ vid.name }}</option>
+                    {% endfor %}
+                </select>
+
+
+            </div>
+
+
+
+            <div class="form-group col-md-2">
+                <label for="people_is_uhet" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                <div class="checkbox checkbox-success">
+                    <input  type="checkbox" name="people_is_uhet" value="1" id="people_is_uhet" >
+                    <label for="people_is_uhet">
+                        Состоит на учете профилактики
+                    </label>
+                </div>
+            </div>
+
+
+        </div>
+
+
+    </div>
+    <!-- /.panel-body -->
+</div>

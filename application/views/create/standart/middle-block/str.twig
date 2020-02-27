@@ -1,0 +1,344 @@
+<div class="card" id="div-str">
+    <div class="card-header" style="background-color: #d9edf7">
+        Сведения по строевой записке (возможность ручной корректировки)
+    </div>
+    <!-- /.panel-heading -->
+    <div class="card-body">
+{#{{dump(str)}}#}
+        <div class="table-responsive table-bordered">
+            <table class="table" >
+                <thead>
+                    <tr >
+                        <th rowspan="3" >#</th>
+                        <th rowspan="3" colspan="2">Наименование подразделения</th>
+                        <th colspan="12">Строевая записка по личному составу</th>
+
+                    </tr>
+                    <!-- строка 2 -->
+                    <tr>
+                        <th colspan="2">Подразделения</th>
+                        <th colspan="10">Дежурной смены</th>
+
+                    </tr>
+                    <tr>
+
+                        <th>По<br>штату</th>
+                        <th>Вакант</th>
+                        <th>По<br>списку<br>в деж.<br>смене</th>
+                        <th>Вакансия<br>в деж.<br>смене</th>
+                        <th>Налицо</th>
+                        <th>В<br>боевом<br>расчете</th>
+                        <th>Ком-ка</th>
+                        <th>Отпуск</th>
+                        <th>Больные</th>
+                        <th>Наряд</th>
+                        <th>Др.<br>причины</th>
+                        <th>ГДЗС, чел</th>
+                    </tr>
+
+                </thead>
+                <tbody style="border-top:none">
+                    {%set x=1%}
+                    {% if str.table is defined  and str.table is not empty  %}
+
+
+                    <tbody>
+
+                        {%for st in str.table %}
+                            {%set x=loop.index%}
+
+                            <tr class="str_row" id="str_id_row{{loop.index}}" data-loop="{{loop.index}}">
+                                <td class="loop-index">{{loop.index}}</td>
+                                <td style="width:200px">
+                                    {%set podr_name=''%}
+                                    {%if st.pasp_name_spec is defined and st.pasp_name_spec is not empty %}
+                                        {%set podr_name=st.pasp_name_spec%}
+                                    {%endif%}
+                                    {%if st.locorg_name_spec is defined and st.locorg_name_spec is not empty %}
+                                        {%set podr_name=podr_name~' '~st.locorg_name_spec%}
+                                    {%endif%}
+
+                                    <input type="text" class="form-control  str_pasp_name "   placeholder="ПАСЧ-1" name="str[{{loop.index}}][pasp_name]" value="{%if st.pasp_name_spec is defined and st.pasp_name_spec is not empty %}{{st.pasp_name_spec|trim}}{%endif%}">
+
+                                </td>
+
+
+                                <td style="width:350px">
+                                    <input type="text" class="form-control  str_locorg_name "   placeholder="Ленинского РОЧС" name="str[{{loop.index}}][locorg_name]" value="{%if st.locorg_name_spec is defined and st.locorg_name_spec is not empty %}{{st.locorg_name_spec|trim}}{%endif%}">
+
+                                </td>
+
+                                <td>
+                                    <input type="number" class="form-control str_shtat"   placeholder="" name="str[{{loop.index}}][shtat]" value="{%if st.shtat is defined and st.shtat is not empty %}{{st.shtat}}{%endif%}">
+
+                                </td>
+
+                                <td>
+                                    <input type="number" class="form-control str_vacant"   placeholder="" name="str[{{loop.index}}][vacant]" value="{%if st.vacant is defined and st.vacant is not empty %}{{st.vacant}}{%endif%}">
+                                </td>
+
+                                <td>
+                                    <input type="number" class="form-control str_on_list_ch"   placeholder="" name="str[{{loop.index}}][on_list_ch]" value="{%if st.listls is defined and st.listls is not empty %}{{st.listls}}{%endif%}">
+
+                                </td>
+                                <td>
+                                    <input type="number" class="form-control str_vacant_ch"   placeholder="" name="str[{{loop.index}}][vacant_ch]" value="{%if st.vacant_ch is defined and st.vacant_ch is not empty %}{{st.vacant_ch}}{%endif%}">
+
+                                </td>
+
+                                <td>
+                                    <input type="number" class="form-control str_face_ch"   placeholder="" name="str[{{loop.index}}][face_ch]" value="{%if st.face is defined and st.face is not empty %}{{st.face}}{%endif%}">
+
+                                </td>
+
+                                <td>
+                                    <input type="number" class="form-control str_br_ch"   placeholder="" name="str[{{loop.index}}][br_ch]" value="{%if st.br is defined and st.br is not empty %}{{st.br}}{%endif%}">
+
+                                </td>
+
+                                <td>
+                                    <input type="number" class="form-control str_trip_ch"   placeholder="" name="str[{{loop.index}}][trip_ch]" value="{%if st.cnt_trip_man is defined and st.cnt_trip_man is not empty %}{{st.cnt_trip_man}}{%endif%}">
+
+                                </td>
+                                <td>
+                                    <input type="number" class="form-control str_holiday_ch"   placeholder="" name="str[{{loop.index}}][holiday_ch]" value="{%if st.cnt_holiday_man is defined and st.cnt_holiday_man is not empty %}{{st.cnt_holiday_man}}{%endif%}">
+
+                                </td>
+
+                                <td>
+                                    <input type="number" class="form-control str_ill_ch"   placeholder="" name="str[{{loop.index}}][ill_ch]" value="{%if st.cnt_ill_man is defined and st.cnt_ill_man is not empty %}{{st.cnt_ill_man}}{%endif%}">
+
+                                </td>
+
+                                <td>
+                                    <input type="number" class="form-control str_duty_ch"   placeholder="" name="str[{{loop.index}}][duty_ch]" value="{%if st.cnt_naryd is defined and st.cnt_naryd is not empty %}{{st.cnt_naryd}}{%endif%}">
+
+                                </td>
+
+                                <td>
+                                    <input type="number" class="form-control str_other_ch"   placeholder="" name="str[{{loop.index}}][other_ch]" value="{%if st.cnt_other_man is defined and st.cnt_other_man is not empty %}{{st.cnt_other_man}}{%endif%}">
+
+                                </td>
+
+
+                                <td>
+                                    <input type="number" class="form-control str_gdzs_ch"   placeholder="" name="str[{{loop.index}}][gdzs_ch]" value="{%if st.gas is defined and st.gas is not empty %}{{st.gas}}{%endif%}">
+
+                                </td>
+
+
+                                <td>
+                                    <a href="#" class="del-str-row delete-cross"  data-toggle="tooltip" data-placement="right" title="Удалить строку"  ><i class="fa fa-times" aria-hidden="true"></i></a>
+                                </td>
+                            </tr>
+
+                        {%endfor%}
+                    </tbody>
+
+                {%else%}
+                    {%set i=1%}
+                    {%set x=i%}
+                    <tbody>
+
+                        <tr class="str_row" id="str_id_row{{i}}" data-loop="{{i}}">
+                            <td class="loop-index">{{i}}</td>
+                            <td style="width:200px">
+
+                                <input type="text" class="form-control  str_pasp_name str-list"   placeholder="ПАСЧ-1" name="str[{{i}}][pasp_name]" >
+
+                            </td>
+
+
+                            <td style="width:350px">
+
+                                <input type="text" class="form-control  str_locorg_name str-list"   placeholder="Ленинского РОЧС" name="str[{{i}}][locorg_name]" >
+
+                            </td>
+
+                            <td>
+                                <input type="number" class="form-control str_shtat"   placeholder="" name="str[{{i}}][shtat]" >
+
+                            </td>
+
+                            <td>
+                                <input type="number" class="form-control str_vacant"   placeholder="" name="str[{{i}}][vacant]" >
+                            </td>
+
+                            <td>
+                                <input type="number" class="form-control str_on_list_ch"   placeholder="" name="str[{{i}}][on_list_ch]" >
+
+                            </td>
+                            <td>
+                                <input type="number" class="form-control str_vacant_ch"   placeholder="" name="str[{{i}}][vacant_ch]" >
+
+                            </td>
+
+                            <td>
+                                <input type="number" class="form-control str_face_ch"   placeholder="" name="str[{{i}}][face_ch]" >
+
+                            </td>
+
+                            <td>
+                                <input type="number" class="form-control str_br_ch"   placeholder="" name="str[{{i}}][br_ch]" >
+
+                            </td>
+
+                            <td>
+                                <input type="number" class="form-control str_trip_ch"   placeholder="" name="str[{{i}}][trip_ch]" >
+
+                            </td>
+                            <td>
+                                <input type="number" class="form-control str_holiday_ch"   placeholder="" name="str[{{i}}][holiday_ch]" >
+
+                            </td>
+
+                            <td>
+                                <input type="number" class="form-control str_ill_ch"   placeholder="" name="str[{{i}}][ill_ch]" >
+
+                            </td>
+
+                            <td>
+                                <input type="number" class="form-control str_duty_ch"   placeholder="" name="str[{{i}}][duty_ch]" >
+
+                            </td>
+
+                            <td>
+                                <input type="number" class="form-control str_other_ch"   placeholder="" name="str[{{i}}][other_ch]" >
+
+                            </td>
+
+                            <td>
+                                <input type="number" class="form-control str_gdzs_ch"   placeholder="" name="str[{{i}}][gdzs_ch]" >
+
+                            </td>
+
+
+
+
+
+                            <td>
+                                <a href="#" class="del-str-row delete-cross"  data-toggle="tooltip" data-placement="right" title="Удалить строку"  ><i class="fa fa-times" aria-hidden="true" ></i></a>
+                            </td>
+                        </tr>
+
+
+                    </tbody>
+
+
+                {%endif%}
+                </tbody>
+
+            </table>
+        </div>
+        <a href="#" id="add-row-str-tr" >+  добавить еще</a>
+
+        <br><br>
+
+        <div id="str-text">
+
+            <table class="table" >
+
+                {%set x=1%}
+                {% if str.table is defined  and str.table is not empty  %}
+
+                    {%for st in str.table %}
+                        {%set x=loop.index%}
+
+                        <tbody>
+
+                            <tr class="str_text_row" id="str_text_id_row{{loop.index}}" data-loop="{{loop.index}}">
+
+                                <td style="border-top:none;">
+                                    {%set podr_name=''%}
+                                    {%if st.pasp_name_spec is defined and st.pasp_name_spec is not empty %}
+                                        {%set podr_name=st.pasp_name_spec%}
+                                    {%endif%}
+                                    {%if st.locorg_name_spec is defined and st.locorg_name_spec is not empty %}
+                                        {%set podr_name=podr_name~' '~st.locorg_name_spec%}
+                                    {%endif%}
+                                    <input  type="text" class="form-control str_text_podr_name "   placeholder="ПАСЧ-1 Ленинского РОЧС" name="str_text[{{loop.index}}][str_text_podr_name]" value="{%if podr_name is defined and podr_name is not empty %}{{podr_name|trim}}{%endif%}">
+
+
+
+                                    {%set inf=''%}
+                                    {%if st.non_available is defined and st.non_available is not empty%}
+
+                                        {%set cnt=st.non_available|length%}
+                                        {%for trip in st.non_available %}
+
+                                            {%if inf is empty%}
+
+                                                {%if loop.index == cnt%}
+                                                    {%set inf=trip|trim~'.'%}
+                                                {%else%}
+                                                    {%set inf=trip|trim~';'%}
+                                                {%endif%}
+
+
+                                            {%else%}
+                                                {%if loop.index == cnt%}
+                                                    {%set inf=inf~'\n'~trip|trim~'.'%}
+                                                {%else%}
+                                                    {%set inf=inf~'\n'~trip|trim~';'%}
+                                                {%endif%}
+
+
+                                            {%endif%}
+
+                                        {%endfor%}
+                                    {%endif%}
+
+
+
+
+                                    <textarea class="form-control str_text_descr" name="str_text[{{loop.index}}][str_text_description]"  rows="8" cols="3">{%if inf is defined and inf is not empty%}{{inf}}{%endif%}</textarea>
+
+                                </td>
+
+
+                                <td style="padding-top: 50px;border-top:none;">
+                                    <a href="#" class="del-str-text-row delete-cross"  data-toggle="tooltip" data-placement="right" title="Удалить строку"  ><i class="fa fa-times" aria-hidden="true"></i></a>
+                                </td>
+                            </tr>
+
+
+                        </tbody>
+
+                    {%endfor%}
+
+                {%else%}
+                    {%set i=1%}
+                    {%set x=i%}
+
+
+                    <tbody>
+
+                        <tr class="str_text_row" id="str_text_id_row{{i}}" data-loop="{{i}}">
+
+                            <td style="border-top:none">
+
+                                <input  type="text" class="form-control str_text_podr_name "   placeholder="ПАСЧ-1 Ленинского РОЧС" name="str_text[{{i}}][str_text_podr_name]" value="">
+
+                                <textarea class="form-control str_text_descr" name="str_text[{{i}}][str_text_description]"  rows="8" cols="3"></textarea>
+
+                            </td>
+
+
+                            <td style="padding-top: 50px;border-top:none;">
+                                <a href="#" class="del-str-text-row delete-cross"  data-toggle="tooltip" data-placement="right" title="Удалить строку"  ><i class="fa fa-times" aria-hidden="true" ></i></a>
+                            </td>
+                        </tr>
+
+
+                    </tbody>
+
+                {%endif%}
+
+            </table>
+            <a href="#" id="add-str-text-row" >+  добавить еще</a>
+        </div>
+
+        <!-- /.table-responsive -->
+    </div>
+    <!-- /.panel-body -->
+</div>

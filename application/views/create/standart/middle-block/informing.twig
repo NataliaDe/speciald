@@ -1,0 +1,171 @@
+<div class="card" id="div-informing">
+    <div class="card-header" style="background-color: #d9edf7">
+        Информирование должностных лиц (возможность ручной корректировки)
+        <label for="informing_is_not_involved" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+        <div class="checkbox checkbox-danger" style='display:inline'>
+            <input  type="checkbox" name="informing[is_not_involved]" value="1"  id='informing_is_not_involved' onChange='notEnvolve("div-informing",this);'>
+            <label for="informing_is_not_involved">
+                Информирование не выполнялось
+            </label>
+        </div>
+    </div>
+
+
+    <div class="card-body">
+        <div class="table-responsive table-bordered">
+            <table class="table" >
+                <thead>
+                    <tr>
+                        <th style="width: 30px">#</th>
+                        <th style="width: 480px">Адресат (ОПГ МЧС и иные службы взаимодействия)</th>
+                        <th style="width: 120px">Время сообщения о ЧС</th>
+                        <th style="width: 120px">Время выезда</th>
+                        <th style="width: 120px">Время прибытия</th>
+
+                        <th></th>
+                    </tr>
+                </thead>
+
+                {%set x=1%}
+                {% if rig is defined and rig.informing is defined and rig.informing is not empty  %}
+
+
+                    <tbody>
+
+                        {%for sily in rig.informing %}
+                            {%set x=loop.index%}
+
+                            <tr class="informing_row" id="informing_id_row{{i}}" data-loop="{{loop.index}}">
+                                <td class="loop-index">{{loop.index}}</td>
+                                <td>
+                                    <input type="text" class="form-control  informing_fio"    placeholder="" name="informing[{{loop.index}}][fio]" value="{%if sily.fio is defined %}{{sily.fio|trim}}{%endif%}">
+                                </td>
+
+
+                                <td>
+                                    {%set time_msg_informing=''%}
+                                    {% if sily.time_msg is not empty and sily.time_msg is not null and sily.time_msg != '0000-00-00 00:00:00' %}
+                                        {%set time_msg_informing=sily.time_msg%}
+                                    {%endif%}
+                                    <input type="time" class="form-control informing_msg_time"    placeholder="" name="informing[{{loop.index}}][informing_msg_time]" value="{%if time_msg_informing is not empty %}{{time_msg_informing|date('H:i')}}{%endif%}">
+
+                                </td>
+
+                                <td>
+                                    {%set time_exit_informing=''%}
+                                    {% if sily.time_exit is not empty and sily.time_exit is not null and sily.time_exit != '0000-00-00 00:00:00' %}
+                                        {%set time_exit_informing=sily.time_exit%}
+                                    {%endif%}
+                                    <input type="time" class="form-control informing_time_exit "    placeholder="" name="informing[{{loop.index}}][time_exit]" value="{%if time_exit_informing is not empty %}{{time_exit_informing|date('H:i')}}{%endif%}">
+
+                                </td>
+
+                                <td>
+                                    {%set time_arrival_informing=''%}
+                                    {% if sily.time_arrival is not empty and sily.time_arrival is not null and sily.time_arrival != '0000-00-00 00:00:00' %}
+                                        {%set time_arrival_informing=sily.time_arrival%}
+                                    {%endif%}
+                                    <input type="time" class="form-control informing_time_arrival "    placeholder="" name="informing[{{loop.index}}][time_arrival]" value="{%if time_arrival_informing is not empty %}{{time_arrival_informing|date('H:i')}}{%endif%}">
+
+                                </td>
+
+
+                                <td>
+                                    <a href="#" class="del-row-informing delete-cross"  data-toggle="tooltip" data-placement="right" title="Удалить строку"  ><i class="fa fa-times" aria-hidden="true" ></i></a>
+                                </td>
+                            </tr>
+
+                        {%endfor%}
+                    </tbody>
+
+                {%else%}
+                    {%set i=1%}
+                    {%set x=i%}
+                    <tbody>
+
+                        <tr class="informing_row" id="informing_id_row{{i}}" data-loop="{{i}}">
+                            <td class="loop-index">{{i}}</td>
+                            <td>
+                                    <input type="text" class="form-control  informing_fio"    placeholder="" name="informing[{{i}}][fio]" value="">
+                                </td>
+
+
+                                <td>
+
+                                   <input type="time" class="form-control informing_msg_time"    placeholder="" name="informing[{{i}}][informing_msg_time]" value="">
+
+                                </td>
+
+                                <td>
+
+                                    <input type="time" class="form-control informing_time_exit "    placeholder="" name="informing[{{i}}][time_exit]" value="">
+
+                                </td>
+
+                                <td>
+
+                                    <input type="time" class="form-control informing_time_arrival "    placeholder="" name="informing[{{i}}][time_arrival]" value="">
+
+                                </td>
+                            <td>
+
+
+
+                                <a href="#" class="del-row-informing delete-cross"  data-toggle="tooltip" data-placement="right" title="Удалить строку" ><i class="fa fa-times" aria-hidden="true"></i></a>
+                            </td>
+                        </tr>
+
+
+                    </tbody>
+
+
+                {%endif%}
+            </table>
+        </div>
+
+        <a href="#" id="add-row-informing" >+  добавить еще</a>
+
+        <!-- /.table-responsive -->
+    </div>
+
+
+
+    <!-- /.panel-heading -->
+    {#<div class="card-body">
+        <div class="table-responsive table-bordered">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Адресат</th>
+                        <th>Время сообщения о ЧС</th>
+                        <th>Время выезда</th>
+                        <th>Время прибытия</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>начальник Иванов И.И.</td>
+                        <td>0:26</td>
+                        <td>0:36</td>
+                        <td>0:46</td>
+
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>начальник Сидоров И.И.</td>
+                        <td>0:27</td>
+                        <td>0:37</td>
+                        <td>0:47</td>
+
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+        <!-- /.table-responsive -->
+    </div>#}
+    <!-- /.panel-body -->
+</div>

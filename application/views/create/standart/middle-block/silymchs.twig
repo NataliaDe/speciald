@@ -1,0 +1,251 @@
+<div class="card" id="div-silymchs">
+
+    <div class="card-header" style="background-color: #d9edf7">
+        К месту вызова направлялись: (возможность ручной корректировки)
+
+            <label for="silymchs_is_not_involved" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+            <div class="checkbox checkbox-danger" style='display:inline'>
+                <input  type="checkbox" name="silymchs[is_not_involved]" value="1"  id='silymchs_is_not_involved' onChange='notEnvolve("div-silymchs",this);'>
+                <label for="silymchs_is_not_involved">
+                    СиС МЧС не привлекались
+                </label>
+            </div>
+            &nbsp;&nbsp;
+            <a href="#" data-toggle="modal"  data-target="#modal-search-str-cars" data-url="" data-toggle="tooltip" data-placement="right" title="Поиск техники в строевой записке">
+                <i class="fa fa-search" aria-hidden="true" id="search-str-cars"></i>
+            </a>
+
+
+        </div>
+
+    <!-- /.panel-heading -->
+    <div class="card-body" >
+
+{#{{dump(rig.silymchs)}}#}
+        <div class="table-responsive table-bordered">
+            <table class="table" >
+                <thead>
+                    <tr>
+                        <th style="width: 30px">#</th>
+                        <th style="width: 320px">Техника</th>
+                        <th style="width: 150px">Подразделение</th>
+                        <th style="width: 250px">РОЧС</th>
+                        <th style="width: 120px">Объем цистерны (тонн)</th>
+                        <th style="width: 130px">Кол-во<br>л/с<br>(чел.)
+
+{#                            {%if rig is defined and rig.man_per_car_note is defined and rig.man_per_car_note is not empty%}
+                                <i class="fa fa-info-circle" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="{{rig.man_per_car_note}}"></i>
+
+                            {%endif%}#}
+
+                        </th>
+                        <th style="width: 120px">Время выезда</th>
+                        <th style="width: 120px">Время прибытия</th>
+                        <th style="width: 120px">Время следования<br>(мин)</th>
+                        <th style="width: 100px">Расстояние<br>(км)</th>
+                        <th style="width: 120px">Время окончания работ</th>
+                        <th style="width: 120px">Время возвращения</th>
+
+                        <th></th>
+                    </tr>
+                </thead>
+
+                {%set x=1%}
+                {% if rig is defined and rig.silymchs is defined and rig.silymchs is not empty  %}
+
+
+                    <tbody>
+
+                        {%for sily in rig.silymchs %}
+                            {%set x=loop.index%}
+
+                            <tr class="teacher_row" id="klon{{loop.index}}" data-loop="{{loop.index}}">
+                                <td class="loop-index">{{loop.index}}</td>
+                                <td>
+
+                                    <input type="text" class="form-control  mark teacher-list"   placeholder="" name="silymchs[{{loop.index}}][mark]" value="{%if sily.mark is defined %}{{sily.mark|trim}}{%endif%}">
+
+                                </td>
+                                <td>
+
+                                    <input type="text" class="form-control  pasp_name"   placeholder="" name="silymchs[{{loop.index}}][pasp_name]" value="{%if sily.pasp_name_spec is defined %}{{sily.pasp_name_spec|trim}}{%endif%}">
+
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control locorg_name"   placeholder="" name="silymchs[{{loop.index}}][locorg_name]" value="{%if sily.locorg_name_spec is defined %}{{sily.locorg_name_spec|trim}}{%endif%}">
+
+                                </td>
+
+                                <td>
+                                    <input type="text" class="form-control v_ac" onkeypress="allowFloat();"  placeholder="" name="silymchs[{{loop.index}}][v_ac]" value="{%if sily.v_ac is defined and sily.v_ac is not empty%}{{(sily.v_ac/1000)|number_format(1)}}{%endif%}">
+                                </td>
+
+                                <td>
+                                    <input type="number" class="form-control man_per_car"   placeholder="" name="silymchs[{{loop.index}}][man_per_car]" value="{%if sily.man_per_car is defined and sily.man_per_car is not empty%}{{sily.man_per_car}}{%endif%}">
+                            {%if sily.man_per_car_note is defined and sily.man_per_car_note is not empty%}
+                                <i class="fa fa-info-circle" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="{{sily.man_per_car_note}}"></i>
+
+                            {%endif%}
+                                </td>
+
+                                <td>
+                                    {%set time_exit=''%}
+                                    {% if sily.time_exit is not empty and sily.time_exit is not null and sily.time_exit != '0000-00-00 00:00:00' %}
+                                        {%set time_exit=sily.time_exit%}
+                                    {%endif%}
+
+                                    <input type="time" class="form-control time_exit" onchange="setTimeFollow(this);"  placeholder="" name="silymchs[{{loop.index}}][time_exit]" value="{%if time_exit is not empty%}{{time_exit|date('H:i')}}{%endif%}">
+                                </td>
+                                <td>
+                                    {%set time_arrival=''%}
+                                    {% if sily.time_arrival is not empty and sily.time_arrival is not null and sily.time_arrival != '0000-00-00 00:00:00' %}
+                                        {%set time_arrival=sily.time_arrival%}
+                                    {%endif%}
+
+                                    <input type="time" class="form-control time_arrival" onchange="setTimeFollow(this);"  placeholder="" name="silymchs[{{loop.index}}][time_arrival]" value="{%if time_arrival is not empty%}{{time_arrival|date('H:i')}}{%endif%}">
+
+                                </td>
+
+
+                                <td>
+
+                                    {%set time_follow=''%}
+                                    {% if sily.time_follow is not empty and sily.time_follow is not null and sily.time_follow != '0000-00-00 00:00:00' %}
+                                        {%set time_follow=sily.time_follow|date('i')|trim('0','left')%}
+                                    {%endif%}
+
+                                    <input type="number" class="form-control time_follow"   placeholder="" name="silymchs[{{loop.index}}][time_follow]" value="{%if time_follow is not empty%}{{time_follow}}{%endif%}">
+
+
+                                </td>
+
+                                <td>
+                                    {%set distance=''%}
+                                    {% if sily.distance is not empty and sily.distance is not null  %}
+                                        {%set distance=sily.distance%}
+                                    {%endif%}
+
+                                    <input type="text" class="form-control distance" onkeypress="allowFloat();"  placeholder="" name="silymchs[{{loop.index}}][distance]" value="{%if distance is not empty%}{{distance}}{%endif%}">
+
+                                </td>
+
+                                <td>
+                                    {%set time_end=''%}
+                                    {% if sily.time_end is not empty and sily.time_end is not null and sily.time_end != '0000-00-00 00:00:00' %}
+                                        {%set time_end=sily.time_end%}
+                                    {%endif%}
+
+                                    <input type="time" class="form-control time_end"   placeholder="" name="silymchs[{{loop.index}}][time_end]" value="{%if time_end is not empty%}{{time_end|date('H:i')}}{%endif%}">
+
+                                </td>
+
+
+                                <td>
+                                    {%set time_return=''%}
+                                    {% if sily.time_return is not empty and sily.time_return is not null and sily.time_return != '0000-00-00 00:00:00' %}
+                                        {%set time_return=sily.time_return%}
+                                    {%endif%}
+
+                                    <input type="time" class="form-control time_return"   placeholder="" name="silymchs[{{loop.index}}][time_return]" value="{%if time_return is not empty%}{{time_return|date('H:i')}}{%endif%}">
+
+                                </td>
+
+                                <td>
+                                    <a href="#" class="del-teacher delete-cross"  data-toggle="tooltip" data-placement="right" title="Удалить строку"  ><i class="fa fa-times" aria-hidden="true" ></i></a>
+                                </td>
+                            </tr>
+
+                        {%endfor%}
+                    </tbody>
+
+                {%else%}
+                    {%set i=1%}
+                    {%set x=i%}
+                    <tbody>
+
+                        <tr class="teacher_row" id="klon{{i}}" data-loop="{{i}}">
+                            <td class="loop-index">{{i}}</td>
+                            <td>
+
+                                <input type="text" class="form-control  mark teacher-list"   placeholder="" name="silymchs[{{i}}][mark]" value="">
+
+                            </td>
+                            <td>
+
+                                <input type="text" class="form-control pasp_name"   placeholder="ПАСЧ-1" name="silymchs[{{i}}][pasp_name]" value="">
+
+                            </td>
+                            <td>
+                                <input type="text" class="form-control locorg_name"   placeholder="Дрогичинского РОЧС" name="silymchs[{{i}}][locorg_name]" value="">
+
+                            </td>
+
+                            <td>
+                                <input type="text" class="form-control v_ac" onkeypress="allowFloat();"  placeholder="" name="silymchs[{{i}}][v_ac]" value="">
+                            </td>
+
+
+                            <td>
+                                <input type="number" class="form-control man_per_car"   placeholder="" name="silymchs[{{i}}][man_per_car]" value="">
+                            </td>
+
+
+                            <td>
+
+                                <input type="time" class="form-control time_exit" onchange="setTimeFollow(this);"   placeholder="" name="silymchs[{{i}}][time_exit]" value="">
+                            </td>
+                            <td>
+                                <input type="time" class="form-control time_arrival" onchange="setTimeFollow(this);"   placeholder="" name="silymchs[{{i}}][time_arrival]" value="">
+
+                            </td>
+
+
+                            <td>
+
+
+                                <input type="number" class="form-control time_follow"   placeholder="" name="silymchs[{{i}}][time_follow]" value="">
+
+
+                            </td>
+
+
+                            <td>
+
+                                <input type="text" class="form-control  distance" onkeypress="allowFloat();"  placeholder="" name="silymchs[{{i}}][distance]" value="">
+
+                            </td>
+
+
+                             <td>
+
+                                <input type="time" class="form-control time_end"   placeholder="" name="silymchs[{{i}}][time_end]" value="">
+
+                            </td>
+
+
+                            <td>
+
+                                <input type="time" class="form-control time_return"   placeholder="" name="silymchs[{{i}}][time_return]" value="">
+
+                            </td>
+
+                            <td>
+
+                                <a href="#" class="del-teacher delete-cross"  data-toggle="tooltip" data-placement="right" title="Удалить строку" ><i class="fa fa-times" aria-hidden="true" ></i></a>
+                            </td>
+                        </tr>
+
+
+                    </tbody>
+
+
+                {%endif%}
+            </table>
+        </div>
+
+        <a href="#" id="add_teacher" >+  добавить еще</a>
+
+        <!-- /.table-responsive -->
+    </div>
+    <!-- /.panel-body -->
+</div>

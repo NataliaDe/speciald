@@ -1,0 +1,201 @@
+<aside id="aside-view" class="collapse">
+    <div class="aside-wrap">
+        <div class="logo-block">
+            <a href="{{ base_url('teacher/catalog') }}">АКАДЕМИЯ</a>
+        </div>
+
+        <nav class="navi">
+            <ul class="nav">
+                {% if session.userdata.ghost_user is defined %}
+                    {% include 'access_sidebar.twig' %} {# Вывод доступных разделов для тек. доступа {access, sections} #}
+                {% else %}
+                    {#<li class="list-profile">
+                        <a href="{{ base_url('teacher/profile') }}">
+                            <i></i>
+                            <span>Профиль</span>
+                        </a>
+                    </li>
+                    <li class="list-PR">
+                        <a href="{{ base_url('teacher/matching/managing') }}">
+                            <i class="far fa-calendar"></i>
+                            <span>{{ lang('interface') }}</span>
+                        </a>
+                    </li>#}
+
+                    <li class="list-catalog">
+                        <a href="{{ base_url('teacher/catalog') }}">
+                            <i></i>
+                            <span>Каталог</span>
+                        </a>
+                    </li>
+                    {# Новый раздел #}
+                    {% if (2 in user.groups  or (8 in user.groups)) %}
+                        <li class="list-structure">
+                            <a href="{{ base_url('teacher/kpi/structure') }}">
+                                <i></i>
+                                <span>{{ lang('organization_structure') }}</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                    <li class="list-application">
+                        <a href="{{ base_url('/teacher/requestPool') }}">
+                            <i></i>
+                            <span>Заявки</span>
+                        </a>
+                    </li>
+                    <li class="list-application-archiv">
+                        <a href="{{ base_url('/teacher/requestPool/archive') }}">
+                            <i></i>
+                            <span>Архив заявок</span>
+                        </a>
+                    </li>
+                    {# Новый раздел #}
+                    {#<li class="list-s3">
+                        <a href="{{base_url('teacher/calendar')}}">
+                            <i class="far fa-calendar"></i>
+                            <span>{{ lang('calendar_of_events') }}</span>
+                        </a>
+                    </li>#}
+                    {# {% if (2 in user.groups  or 6 in user.groups  or 7 in user.groups )    %}
+                     <li class="list-feedback">
+                         <a href="{{ base_url('teacher/polls') }}">
+                             <i></i>
+                             <span>Обратная связь</span>
+                         </a>
+                     </li>
+                     {% endif %} #}
+
+                    {# Новый раздел #}
+                    {#<li  class="list-s9">
+                        <a href="{{base_url('teacher/adaptation')}}">
+                            <i class="fas fa-ad"></i>
+                            <span>{{ lang('adaptation') }}</span>
+                        </a>
+                    </li>#}
+                    {# Новый раздел #}
+                    {#<li>
+                        <a href="{{base_url('teacher/certification')}}">
+                            <i class="fas fa-certificate"></i>
+                            <span>{{ lang('certification') }}</span>
+                        </a>
+                    </li>#}
+
+                    {% if (4 in user.groups  or 2 in user.groups  or 6 in user.groups or 7 in user.groups or 8 in user.groups ) %}
+                        <li class="dropdown  list-reports">
+                            <a href="{{ base_url('reports') }}">
+                                <i></i>
+                                <span>Отчетность</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                    <li class="list-analytics">
+                        <a href="{{ base_url('teacher/analytics/general') }}">
+                            <i></i>
+                            <span>{{ lang('sidebar_teacher_analytics') }}</span>
+                        </a>
+                    </li>
+                    {#<li class="list-s4 list-s-dn">
+                        <a href="{{base_url('wchat')}}">
+                            <i class="fas fa-envelope"></i>
+                            <span>{{ lang('sidebar_dialogs') }} (новые)</span>
+                        </a>
+                    </li>
+                    <li class="list-s4">
+                        <a href="{{ base_url('teacher/messages/old') }}">
+                            <i class="fas fa-envelope"></i>
+                            <span>{{ lang('sidebar_dialogs') }}</span>
+                        </a>
+                    </li>#}
+                    {% if 8 in user.groups %}
+                        <li class="list-provider">
+                            <a href="{{ base_url('teacher/companies') }}">
+                                <i></i>
+                                <span>Провайдер</span>
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    {#<li class="list-actions dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                            <i></i>
+                            <span>{{ lang('actions') }}</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li><a href="{{ base_url('teacher/case/check') }}">{{lang('sidebar_case_check')}}</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="list-s6">
+                        <a href="{{ base_url('teacher/news') }}">
+                            <i class="fas fa-newspaper"></i>
+                            <span>{{ lang('sidebar_news') }}</span>
+                        </a>
+                    </li>#}
+                    {% if (1 in user.groups  or 2 in user.groups  or 6 in user.groups or 7 in user.groups or 8 in user.groups ) %}
+                        <li class="list-wiki">
+                            <a href="{{ base_url('wiki') }}">
+                                <i></i>
+                                <span>{{ lang('wikipedia') }}</span>
+                            </a>
+                        </li>
+                        <li class="list-library">
+                            <a href="{{ base_url('library') }}">
+                                <i></i>
+                                <span>{{ lang('sidebar_library') }}</span>
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    {% if show_budget or data.show_budget %}
+                        <li class="list-budget">
+                            <a href="{{ base_url('teacher/budget') }}">
+                                <i></i>
+                                <span>{{ lang('budget') }}</span>
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    {% if 2 in user.groups or 8 in user.groups %}
+                        <li class="list-tests">
+                            <a href="{{ base_url('teacher/testsCatalog') }}">
+                                <i></i>
+                                <span>Тесты</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                    {# if user.chain_sort != null  and user.is_chief  == 1 %}
+                        <li>
+                            <a href="{{ base_url('teacher/matching') }}">
+                                <i class="fas fa-money-bill-alt"></i>
+                                <span>{{ lang('matching_title') }}</span>
+                            </a>
+                        </li>
+                    {% endif #}
+
+                    {# Новый раздел
+                    <li class="list-s11">
+                        <a href="{{base_url('teacher/game')}}">
+                            <i class="fas fa-money-bill-alt"></i>
+                            <span>{{ lang('gamification') }}</span>
+                        </a>
+                    </li>
+                    #}
+                {% endif %}
+            </ul>
+        </nav>
+
+        {# <div class="footer-aside dropup">
+            <div id="aside-user">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <span class="avatar-user">
+                        <img src="{{ user.avatar ?  base_url('data/avatars/') ~ user.avatar : '/img/default-user.png' }}">
+                    </span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="{{ base_url('teacher/profile') }}">Профиль</a></li>
+                    <li><a href="{{ base_url('auth/logout') }}">Выйти</a></li>
+                </ul>
+            </div>
+        </div> #}
+    </div>
+</aside>

@@ -1,0 +1,87 @@
+{#<p>Дата и время создания специального донесения: 2019-10-10 12:10:04</p>#}
+<br>
+<input type="hidden" class="form-control"  placeholder="" name="id_rig" value="{{active_user.id_rig}}">
+<div class="form-row create-form-row">
+
+
+    <div class="form-group col-md-3">
+        <label for="official_date_start" >Дата и время создания специального донесения:</label>
+        <input type="text" class="form-control" disabled  placeholder="" name="official_date_start" value="{{"now"|date('d.m.Y H:i:s')}}">
+    </div>
+
+
+    <div class="form-group col-md-2">
+        <label for="specd_vid" >Вид специального донесения</label>
+        <select class="form-control select2-select" name="specd_vid" id="specd_vid"  >
+
+            {% for vid in vid_specd %}
+                <option {%if vid.id == 370%} selected {%endif%} value="{{ vid.id }}" >{{ vid.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+
+
+
+</div>
+{#
+<table>
+    <tr>
+        <td>Создатель:</td>
+         <td>
+             <div class="col-sm-4">
+             <input type="text" class="form-control"  placeholder="" name="creator_name" value="ЦОУ Минского областного УМЧС">
+             </div>
+             </td>
+    </tr>
+    </table>#}
+<div class="form-row create-form-row">
+
+
+
+    <div class="form-group col-md-3">
+        <label for="official_creator_name" >Создатель:</label>
+        {%set official_creator_name=''%}
+        {%if active_user.creator_name is defined and active_user.creator_name is not empty %}
+            {%set official_creator_name=active_user.creator_name%}
+        {%endif%}
+        <input type="text" class="form-control"  placeholder="наим. подразделения" name="official_creator_name" value="{{official_creator_name}}">
+    </div>
+
+
+
+    <div class="form-group col-md-3">
+        <label for="official_creator_position" >Должность:</label>
+        {%set official_creator_position=''%}
+        {%if active_user.position_name is defined and active_user.position_name is not empty %}
+            {%set official_creator_position=official_creator_position~active_user.position_name%}
+        {%endif%}
+        {%if active_user.rank_name is defined and active_user.rank_name is not empty %}
+            {%set official_creator_position=official_creator_position~' '~active_user.rank_name|lower%}
+        {%endif%}
+        {%if active_user.auth_fio is defined and active_user.auth_fio is not empty %}
+            {%set official_creator_position=official_creator_position~' '~active_user.auth_fio%}
+        {%endif%}
+        <input type="text" class="form-control"  placeholder="" name="official_creator_position" value="{{official_creator_position}}">
+    </div>
+
+
+    <div class="form-group col-md-3">
+        <label for="official_destination" >Получатель:</label>
+        <input type="text" class="form-control"  placeholder="" name="official_destination" value="Оперативный дежурный РЦУРЧС">
+    </div>
+
+
+
+</div>
+
+
+
+
+{#<div class="form-group row create-form-row">
+    <label for="official_date_end" class="col-sm-3 col-form-label">Дата и время завершения работы со специальным донесением:</label>
+    <div class="col-sm-2">
+
+        <input type="text" class="form-control" disabled  placeholder="" name="official_date_end" value="10.10.2019 12:50:55">
+    </div>
+</div>#}

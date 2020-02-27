@@ -1,0 +1,27 @@
+.options > label > input {
+    visibility: hidden;
+}
+
+.options > label {
+    display: block;
+    margin: 0 0 5px -10px;
+    padding: 0 0 20px 0;
+    height: 20px;
+    width: 64px;
+
+}
+
+.options > label > img {
+    display: inline-block;
+    padding: 0px;
+    height:30px;
+    width:30px;
+    background: none;
+}
+
+.options > label > input:checked +img {
+    background: url(../images/onebit_34.png);
+    background-repeat: no-repeat;
+    background-position:center center;
+    background-size:30px 30px;
+}

@@ -1,0 +1,62 @@
+<br>
+<div class="form-row create-form-row">
+
+    <div class="form-group col-md-12">
+        <label for="detail_inf">Содержание поступившей информации (детализированная информация)</label>
+        <textarea class="form-control" name="detail_inf"  rows="10" cols="50">{%if  rig.inf_detail is defined and  rig.inf_detail is not empty and rig.inf_detail is not null %}{{rig.inf_detail|trim}}{%endif%}</textarea>
+    </div>
+
+
+
+</div>
+
+
+<div class="form-row create-form-row">
+
+    <div class="form-group col-md-2">
+        <label for="type_water_source">Тип водоисточника
+            <a href="#" class="add-new-vid-type-water-source" data-placement="right" title="Добавить новый вид" data-toggle="modal" data-target="#modal-add-new-vid-type-water-source">
+                <i class="fa fa-pencil-square-o " aria-hidden="true" style="color:green;padding-left: 10px; cursor: pointer"></i>
+            </a>
+        </label>
+        <select  class="form-control select2-single type_water_source" name="type_water_source" id="type_water_source_id" >
+            <option></option>
+            {% for vid in type_water_source %}
+                <option value="{{ vid.id }}" >{{ vid.name }}</option>
+            {% endfor %}
+        </select>
+
+
+    </div>
+
+
+    <div class="form-group col-md-2">
+        <label for="distance_water_source">Расстояние до водоисточника</label>
+        <input type="text" class="form-control" onkeypress="allowFloat();"  placeholder="" name="distance_water_source"  value="">
+    </div>
+
+
+    <div class="form-group col-md-2">
+        <label for="use_water_source">Использование на пожаре</label>
+        <input type="text" class="form-control"   placeholder="" name="use_water_source"  value="">
+    </div>
+
+
+
+    <div class="form-group col-md-2">
+        <label for="detail_photo">Фото (3)</label>
+
+    </div>
+
+
+    <div class="form-group col-md-2">
+        <label for="detail_video">Видео</label>
+
+    </div>
+
+        
+
+
+
+</div>
+

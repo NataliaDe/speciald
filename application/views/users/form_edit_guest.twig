@@ -1,0 +1,139 @@
+{% extends 'layout.twig' %}
+
+{% block title %}{{title}}{% endblock %}
+
+{% block content %}
+    <!-- content -->
+
+    <form role="form" id="editUserGuestForm" method="POST" action="{{base_url('/users/edit_user_guest')}}" >
+
+        <div class="row">
+
+            <div class="col-lg-2">
+                <div class="form-group">
+                    <label for="login">Логин</label>
+                    <input type="text" class="form-control"  placeholder="логин" name="login" value="{% if user is defined %}{{user.login|trim}}{%endif%}">
+                </div>
+            </div>
+
+            <div class="col-lg-2">
+                <div class="form-group">
+                    <label for="password">Пароль</label>
+                    <input type="text" class="form-control"  placeholder="пароль" name="password" value="{% if user is defined %}{{user.password|trim}}{%endif%}">
+                </div>
+            </div>
+
+            <input type="hidden" class="form-control"  name="id_user" value="{% if user is defined %}{{user.id}} {%endif%}">
+
+        </div>
+
+
+        <br>
+        <div class="row">
+            <div class="col-lg-2">
+                <div class="form-group">
+                    <button type="submit" class="btn btn-success" id="save">Сохранить</button>
+                    <br>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-2">
+                <div class="form-group">
+                    <a href="{{base_url('/users')}}">  <button type="button" class="btn btn-warning">Назад</button></a>
+
+                </div>
+            </div>
+        </div>
+
+    </form>
+
+
+    <!-- .content -->
+
+{% endblock %}
+
+{% block head %}{% endblock %}
+
+
+{% block footer %}
+    <script>
+
+$('#editUserGuestForm')
+        .bootstrapValidator({
+            message: 'This value is not valid',
+            fields: {
+                login: {
+                    message: 'The username is not valid',
+                    validators: {
+{#                        stringLength: {
+                            min: 3,
+                            max: 10,
+                            message: 'от 3 до 10 символов'
+                        },#}
+                        regexp: {
+                            regexp: /^[a-zA-Z0-9_]+$/,
+                            message: 'буквы англ.алфавита, цифры, нижнее подчеркивание '
+                        }
+                    }
+                },
+                password: {
+                    message: 'The username is not valid',
+                    validators: {
+                        notEmpty: {
+                            message: 'Введите пароль'
+                        },
+{#                        stringLength: {
+                            min: 3,
+                            max: 7,
+                            message: 'от 3 до 7 символов'
+                        },#}
+                        regexp: {
+                            regexp: /^[a-zA-Z0-9_]+$/,
+                            message: 'буквы англ.алфавита, цифры, нижнее подчеркивание '
+                        }
+                    }
+                }
+            }
+
+        });
+
+$(function() {
+     var buttonpressed;
+    $('#save').click(function() {
+          buttonpressed = $(this).attr('id');
+    });
+    $('form#editUserGuestForm').submit(function(e) {
+        if (buttonpressed === 'save') {
+
+         // Запрещаем стандартное поведение для кнопки submit
+         e.preventDefault();
+         var realArray = $('#editUserGuestForm').serializeArray();
+
+           $.ajax({
+                url: '{{base_url('/users/is_user_unique')}}',
+                dataType: 'json',
+                type: 'POST',
+                data: realArray,
+                success: function (data) {
+
+                    if (data.error) {
+                        toastr.error(data.error, 'Ошибка:', {progressBar: true,timeOut: 2500});
+                    }
+                    else if (data.success) {
+                        $('form#editUserGuestForm').unbind('submit').submit();
+                    }
+                }
+            });
+         }
+            buttonpressed='';
+    });
+});
+
+
+
+
+    </script>
+{% endblock %}
+

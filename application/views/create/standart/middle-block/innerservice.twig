@@ -1,0 +1,237 @@
+<div class="card" id="div-innerservice">
+    <div class="card-header" style="background-color: #d9edf7">
+        Привлекаемые силы и средства других ведомств (возможность ручной корректировки)
+        <label for="innerservice_is_not_involved" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+        <div class="checkbox checkbox-danger" style='display:inline'>
+            <input  type="checkbox" name="innerservice[is_not_involved]" value="1"  id='innerservice_is_not_involved' onChange='notEnvolve("div-innerservice",this);'>
+            <label for="innerservice_is_not_involved">
+                СиС других ведомств не привлекались
+            </label>
+        </div>
+    </div>
+    <!-- /.panel-heading -->
+    <div class="card-body">
+        <div class="table-responsive table-bordered">
+            <table class="table" id="innerservice-table">
+                <thead>
+                    <tr>
+                        <th style="width: 30px">#</th>
+                        <th style="width: 320px">Служба</th>
+                        <th style="width: 120px">Время сообщения</th>
+                        <th style="width: 120px">Время прибытия</th>
+                        <th style="width: 120px">Расстояние (км)</th>
+                        <th style="width: 120px">Примечание</th>
+                        <th style="width: 270px">Выполняемый вид работ</th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                {%set x=1%}
+                {% if rig is defined and rig.innerservice is defined and rig.innerservice is not empty  %}
+
+
+                    <tbody>
+
+                        {%for sily in rig.innerservice %}
+                            {%set x=loop.index%}
+
+                            <tr class="innerservice_row" id="innerservice_id_row{{i}}" data-loop="{{loop.index}}">
+                                <td class="loop-index">{{loop.index}}</td>
+                                <td class='td_innerservice_name'>
+
+                                    {%if sily.service_id is defined %}
+                                        {%set service_id=sily.service_id%}
+                                    {%endif%}
+                                    <select class="form-control select2-single innerservice-list innerservice_name" name="innerservice[{{loop.index}}][innerservice_name]" >
+                                        <option></option>
+                                        {% for vid in innerservice_list %}
+                                            <option value="{{ vid.id }}" {%if service_id is defined and service_id == vid.id %}selected {%endif%}>{{ vid.name }}</option>
+                                        {% endfor %}
+                                    </select>
+
+                                    {#<input type="text" class="form-control  innerservice-list innerservice_name"    placeholder="" name="innerservice[{{loop.index}}][innerservice_name]" value="{%if sily.service_name is defined %}{{sily.service_name|trim}}{%endif%}">#}
+
+
+                                </td>
+
+
+                                <td>
+                                    {%set time_msg_innerservice=''%}
+                                    {% if sily.time_msg is not empty and sily.time_msg is not null and sily.time_msg != '0000-00-00 00:00:00' %}
+                                        {%set time_msg_innerservice=sily.time_msg%}
+                                    {%endif%}
+                                    <input type="time" class="form-control innerservice_msg_time"    placeholder="" name="innerservice[{{loop.index}}][innerservice_msg_time]" value="{%if time_msg_innerservice is not empty %}{{time_msg_innerservice|date('H:i')}}{%endif%}">
+
+                                </td>
+
+                                <td>
+                                    {%set time_arrival_innerservice=''%}
+                                    {% if sily.time_arrival is not empty and sily.time_arrival is not null and sily.time_arrival != '0000-00-00 00:00:00' %}
+                                        {%set time_arrival_innerservice=sily.time_arrival%}
+                                    {%endif%}
+                                    <input type="time" class="form-control innerservice_time_arrival "    placeholder="" name="innerservice[{{loop.index}}][time_arrival]" value="{%if time_arrival_innerservice is not empty %}{{time_arrival_innerservice|date('H:i')}}{%endif%}">
+
+                                </td>
+
+                                <td>
+
+                                    <input type="text" class="form-control  innerservice_distance"  onkeypress="allowFloat();"  placeholder="" name="innerservice[{{loop.index}}][distance]" value="{%if sily.distance is defined %}{{sily.distance|trim}}{%endif%}">
+
+                                </td>
+                                <td>
+                                    <textarea class="innerservice_note" name="innerservice[{{loop.index}}][note]"></textarea>
+
+
+                                </td>
+
+                            <td>
+                                <select multiple class="form-control select2-multi work_innerservice" name="innerservice[{{loop.index}}][work_innerservice]" >
+
+                                    {% for vid in work_innerservice %}
+                                        <option value="{{ vid.id }}" >{{ vid.name }}</option>
+                                    {% endfor %}
+                                </select>
+
+                                <a href="#" class="add-new-work-innerservice" data-placement="right" title="Добавить новый вид" data-toggle="modal" data-target="#modal-add-new-work-innerservice">
+                                    <i class="fa fa-pencil-square-o " aria-hidden="true" style="color:green;padding-left: 10px; cursor: pointer"></i>
+                                </a>
+
+
+                            </td>
+
+
+                                <td>
+                                    <a href="#" class="del-row-innerservice delete-cross"  data-toggle="tooltip" data-placement="right" title="Удалить строку"  ><i class="fa fa-times" aria-hidden="true" ></i></a>
+                                </td>
+                            </tr>
+
+                        {%endfor%}
+                    </tbody>
+
+                {%else%}
+                    {%set i=1%}
+                    {%set x=i%}
+                    <tbody>
+
+                        <tr class="innerservice_row" id="innerservice_id_row{{i}}" data-loop="{{i}}">
+                            <td class="loop-index">{{i}}</td>
+                            <td class='td_innerservice_name'>
+
+                                <select class="form-control select2-single innerservice-list innerservice_name" name="innerservice[{{i}}][innerservice_name]" >
+                                    <option></option>
+                                    {% for vid in innerservice_list  %}
+                                        <option value="{{ vid.id }}" >{{ vid.name }}</option>
+                                    {% endfor %}
+                                </select>
+                                {#<input type="text" class="form-control  innerservice-list innerservice_name"    placeholder="" name="innerservice[{{i}}][innerservice_name]" value="">#}
+
+                            </td>
+
+                            <td>
+
+                                <input type="time" class="form-control innerservice_msg_time"    placeholder="" name="innerservice[{{i}}][innerservice_msg_time]" value="">
+
+                            </td>
+
+                            <td>
+                                <input type="time" class="form-control innerservice_time_arrival"    placeholder="" name="innerservice[{{i}}][time_arrival]" value="">
+
+                            </td>
+
+                            <td>
+
+                                <input type="text" class="form-control  innerservice_distance"  onkeypress="allowFloat();"  placeholder="" name="innerservice[{{i}}][distance]" value="">
+
+                            </td>
+                            <td>
+                                <textarea rows="5" cols="50" class="innerservice_note" name="innerservice[{{i}}][note]"></textarea>
+
+
+                            </td>
+
+                            <td>
+                                <select multiple class="form-control select2-multi work_innerservice" name="innerservice[{{i}}][work_innerservice]" >
+
+                                    {% for vid in work_innerservice %}
+                                        <option value="{{ vid.id }}" >{{ vid.name }}</option>
+                                    {% endfor %}
+                                </select>
+
+                                <a href="#" class="add-new-work-innerservice" data-placement="right" title="Добавить новый вид" data-toggle="modal" data-target="#modal-add-new-work-innerservice">
+                                    <i class="fa fa-pencil-square-o " aria-hidden="true" style="color:green;padding-left: 10px; cursor: pointer"></i>
+                                </a>
+
+
+                            </td>
+
+                            <td>
+
+
+
+                                <a href="#" class="del-row-innerservice delete-cross"  data-toggle="tooltip" data-placement="right" title="Удалить строку" ><i class="fa fa-times" aria-hidden="true" ></i></a>
+                            </td>
+                        </tr>
+
+
+                    </tbody>
+
+
+                {%endif%}
+            </table>
+        </div>
+
+        <a href="#" id="add-row-innerservice" >+  добавить еще</a>
+
+        <!-- /.table-responsive -->
+    </div>
+
+
+
+    {#<div class="card-body">
+        {{dump(rig.innerservice)}}
+        <div class="table-responsive table-bordered">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Служба</th>
+                        <th>Время сообщения</th>
+                        <th>время прибытия</th>
+                        <th>Расстояние</th>
+                        <th>Примечание</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>102</td>
+                        <td>0:26</td>
+                        <td>0:27</td>
+                        <td>5</td>
+                        <td>отряд</td>
+
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Скорая помощь</td>
+                        <td>0:26</td>
+                        <td>0:27</td>
+                        <td>5</td>
+                        <td>2 работника</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>ГИМС</td>
+                        <td>0:26</td>
+                        <td>0:27</td>
+                        <td>6</td>
+                        <td>3 жилета</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- /.table-responsive -->
+    </div>#}
+    <!-- /.panel-body -->
+</div>

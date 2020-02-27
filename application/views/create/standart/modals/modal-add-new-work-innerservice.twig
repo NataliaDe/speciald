@@ -1,0 +1,71 @@
+
+<div class="modal fade" id="modal-add-new-work-innerservice" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title ff-l" id="myModalLabel">Выполненный вид работ</h4>
+                <button class="close danger" type="button" data-dismiss="modal" style="font-weight: bolder;">×</button>
+
+            </div>
+            <div class="modal-body">
+
+                <p class="line"><span>Добавление</span></p>
+
+                <div class="form-group">
+                    <h5>Добавить новый вид</h5>
+                    <input type="text" class="form-control" placeholder="Введите наименование" required="" id='new_name_work_innerservice' >
+                    <br>
+                    <div class="btn-modal">
+                        <button type="button" class="btn btn-success"  onclick="AddWorkInnerservice();
+                                return false;">Добавить</button>
+                    </div>
+                </div>
+
+
+                <br>
+                <p class="line"><span>Редактирование</span></p>
+
+                <div class="form-group">
+                    <h5>Выберите вид для редактирования</h5>
+                    <div class="tags-select">
+                        <select class="select2-select" data-placeholder="Выберите из списка" id='name_work_innerservice_for_edit' style="width:50%">
+                            {% for vid in work_innerservice %}
+                                {%if vid.created_by == active_user.id_user%}
+                                    <option value="{{ vid.id }}" >{{ vid.name }}</option>
+                                {%endif%}
+                            {% endfor %}
+
+                        </select>
+                    </div>
+                    <br>
+                    <input type="text" class="form-control" placeholder="Введите новое наименование" required="" id='edit_name_work_innerservice' >
+                    <br>
+                    <div class="btn-modal">
+                        <button type="button" class="btn btn-warning"  onclick="EditWorkInnerservice();
+                                return false;">Сохранить изменения</button>
+                    </div>
+                </div>
+                <br>
+                <p class="line"><span>Удаление</span></p>
+                <div class="form-group">
+                    <h5>Выберите вид для удаления</h5>
+                    <div class="tags-select">
+                        <select class="select2-select" data-placeholder="Выберите из списка" id='name_work_innerservice_for_delete' style="width:50%">
+                            {% for vid in work_innerservice %}
+                                {%if vid.created_by == active_user.id_user%}
+                                    <option value="{{ vid.id }}" >{{ vid.name }}</option>
+                                {%endif%}
+                            {% endfor %}
+
+                        </select>
+                    </div>
+                    <br>
+                    <div class="btn-modal">
+                        <button type="button" class="btn btn-danger" onclick="deleteWorkInnerservice();return false;">Удалить</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
