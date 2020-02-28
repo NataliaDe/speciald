@@ -13,7 +13,7 @@
             <div class="modal-body" style="padding-top:5px;">
 
 
-                <p>Поиск осуществляется в <a href="/str" target="_blank">ПС &laquo;Строевая записка&raquo;</a>. Информация берется за последнюю заступившуу смену подразделения.<br>
+                <p>Поиск осуществляется в <a href="/str" target="_blank">ПС &laquo;Строевая записка&raquo;</a>. Информация берется за последнюю заступившую смену подразделения.<br>
 
                 </p>
 
@@ -39,65 +39,63 @@
                             <div class="form-group">
 
                                 <select multiple class="form-control select2-multi-not-clear" name="id_local" id="id_local_str_cars"  >
-{#                                         {% for local in locorg_cp_list %}
-                                        <option value="{{ local.id_loc_org }}" class="{{local.id_region}}" >{{ local.locorg_name }}</option>
-                                    {% endfor %}#}
+                                    {#                                         {% for local in locorg_cp_list %}
+                                                                            <option value="{{ local.id_loc_org }}" class="{{local.id_region}}" >{{ local.locorg_name }}</option>
+                                                                        {% endfor %}#}
                                 </select>
                             </div>
                         </div>
 
 
 
-                    <div class="col-lg-4">
-                        <label for="id_pasp">ПАСЧ</label>
-                        <div class="form-group select-cars-pasp-cls">
+                        <div class="col-lg-4">
+                            <label for="id_pasp">ПАСЧ</label>
+                            <div class="form-group select-cars-pasp-cls">
 
-                            <select multiple class="form-control select2-multi-not-clear" name="id_pasp" id="id_pasp_str_cars"  >
-                                {#                                         {% for local in locorg_cp_list %}
-                                                                        <option value="{{ local.id_loc_org }}" class="{{local.id_region}}" >{{ local.locorg_name }}</option>
-                                                                    {% endfor %}#}
-                            </select>
+                                <select multiple class="form-control select2-multi-not-clear" name="id_pasp" id="id_pasp_str_cars"  >
+                                    {#                                         {% for local in locorg_cp_list %}
+                                                                            <option value="{{ local.id_loc_org }}" class="{{local.id_region}}" >{{ local.locorg_name }}</option>
+                                                                        {% endfor %}#}
+                                </select>
+                            </div>
                         </div>
-                    </div>
 
                         <div class="col-lg-2">
-                            <label for="btn-search-str-cars"></label>
+                            <label for="btn-search-str-cars-clear-filter"></label>
                             <div class="form-group " style="margin-top:8px">
-                                <button  type="button" class="btn btn-success" id="btn-search-str-cars" >Искать</button>
+                                <button  type="button" class="btn btn-outline-primary" id="btn-search-str-cars-clear-filter" >Сбросить фильтр</button>
                             </div>
                         </div>
 
                     </div>
 
-<br>
-                            <center> <p>Результат поиска</p></center>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <label for="id_cars">Техника</label>
+                            <div class="form-group select-cars-cls" >
 
-                                                <div class="col-lg-5">
-                        <label for="id_cars">Техника</label>
-                        <div class="form-group select-cars-cls" >
-
-                            <select multiple class="form-control select2-multi-not-clear" name="id_cars" id="id_cars_str_cars"  >
-                                {#                                         {% for local in locorg_cp_list %}
-                                                                        <option value="{{ local.id_loc_org }}" class="{{local.id_region}}" >{{ local.locorg_name }}</option>
-                                                                    {% endfor %}#}
-                            </select>
+                                <select multiple class="form-control select2-multi-not-clear" name="id_cars" id="id_cars_str_cars"  >
+                                    {#                                         {% for local in locorg_cp_list %}
+                                                                            <option value="{{ local.id_loc_org }}" class="{{local.id_region}}" >{{ local.locorg_name }}</option>
+                                                                        {% endfor %}#}
+                                </select>
+                            </div>
                         </div>
                     </div>
-
 
                 </form>
                 <br><br>
 
 
 
-                 {%include 'searchRig/preloader.twig'%}
+                {%include 'searchRig/preloader.twig'%}
 
                 {%include 'parts/preloader.twig'%}
 
 
             </div>
             <div class="modal-footer">
-                <button id="btn-get-data-str-cars"  type="button" class="btn btn-info" disabled  data-toggle="modal"  data-target="#modal-agree-get-str-cars"  data-url="{{base_url('/create/add_str_cars_to_form')}}">Получить данные</button>
+                <button id="btn-get-data-str-cars"  type="button" class="btn btn-info" disabled  data-toggle="modal"  data-target="#modal-agree-get-str-cars"  >Получить выбранную технику</button>
                 <button  type="button" class="btn btn-secondary" id="close-modal-search-str-cars" >Отмена</button>
             </div>
         </div>
@@ -118,12 +116,12 @@
 
             <div class="modal-body">
 
-                <p>Информация по выбранной технике будет добавлена в таблицу привлекаемых СиС МЧС на форме создания специального донесения</p>
+                <p>Информация по выбранной технике будет добавлена в таблицу привлекаемых СиС МЧС (к уже существующим в таблице) на форме создания специального донесения</p>
 
             </div>
             <div class="modal-footer">
 
-                <button id="btn-fill-str-cars-form"  type="button" class="btn btn-warning" >ОК</button>
+                <button id="btn-fill-str-cars-form"  type="button" class="btn btn-warning" data-url="{{base_url('/create/add_str_cars_to_form')}}">ОК</button>
                 <button  type="button" class="btn btn-secondary" id="close-modal-agree-get-str-cars" >Отмена</button>
             </div>
         </div>

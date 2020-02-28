@@ -219,7 +219,7 @@
         }
 
         #modal-search-str-cars .select-cars-cls .select2-container {
-            width: 500px !important;
+            width: 550px !important;
         }
 
 
@@ -227,14 +227,16 @@
             width: 200px !important;
         }
 
-         #innerservice-table .td_innerservice_name .select2-container {
+        #innerservice-table .td_innerservice_name .select2-container {
             width: 290px !important;
         }
 
 
-{#        .select2-results .select2-results__option[aria-disabled=true] {
-            display: none;
-        }#}
+
+
+        {#        .select2-results .select2-results__option[aria-disabled=true] {
+                    display: none;
+                }#}
 
 
     </style>
@@ -1112,12 +1114,23 @@
 
                 $('#' + what).find('.card-body').hide();
 
+                if (what === 'div-trunks') {// wide table for trunks block
+                    $('#' + what).find('#trunks_is_wide_table').prop('disabled', true);
+                    $('#' + what).find('#trunks_is_wide_table').prop('checked', false);
+                }
+
             } else {
 
                 $('#' + what).find('.card-body').show();
+
+                if (what === 'div-trunks') {// wide table for trunks block
+                    $('#' + what).find('#trunks_is_wide_table').prop('disabled', false);
+
+                }
             }
 
         }
+
 
     </script>
 

@@ -1084,4 +1084,42 @@ class Create extends My_Controller
             echo json_encode(array('msg' => 'Выберите ПАСЧ', 'is_error' => 1));
         }
     }
+
+
+
+    public function add_str_cars_to_form()
+    {
+
+        $cars = $this->input->post('cars');
+
+        if (isset($cars) && !empty($cars)) {
+
+            foreach ($cars as $value) {
+                $row= explode('~', $value);
+
+                $res=array();
+                $res['id_car']=(isset($row[0])) ? trim($row[0]) : '';
+                $res['mark']=(isset($row[1])) ? trim($row[1]) : '';
+                $res['pasp_name']=(isset($row[2])) ? trim($row[2]) : '';
+                $res['locorg_name']=(isset($row[3])) ? trim($row[3]) : '';
+                $res['v_ac']=(isset($row[4])) ? $row[4] : '';
+                $res['man_per_car']=(isset($row[5])) ? $row[5] : '';
+
+                if(!empty($res))
+                    $result[]=$res;
+            }
+
+            if(isset($result) && !empty($result)){
+
+                echo json_encode(array('cars'=>$result,'is_error' => 0));
+            }
+            else{
+               echo json_encode(array('is_error' => 1, 'msg' => 'Данные по технике не найдены'));
+            }
+
+
+        } else {
+            echo json_encode(array('is_error' => 1, 'msg' => 'Данные по технике не найдены'));
+        }
+    }
 }
