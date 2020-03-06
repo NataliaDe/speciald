@@ -3,7 +3,7 @@
         Привлекаемые силы и средства других ведомств (возможность ручной корректировки)
         <label for="innerservice_is_not_involved" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
         <div class="checkbox checkbox-danger" style='display:inline'>
-            <input  type="checkbox" name="innerservice[is_not_involved]" value="1"  id='innerservice_is_not_involved' onChange='notEnvolve("div-innerservice",this);'>
+            <input  type="checkbox" name="innerservice[is_not_involved]" value="1"  id='innerservice_is_not_involved' onChange='notEnvolve("div-innerservice", this);' {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_not_involved_innerservice == 1 %}checked{%endif%}>
             <label for="innerservice_is_not_involved">
                 СиС других ведомств не привлекались
             </label>
@@ -16,40 +16,64 @@
                 <thead>
                     <tr>
                         <th style="width: 30px">#</th>
+                        <th style="width: 30px"></th>
                         <th style="width: 320px">Служба</th>
                         <th style="width: 120px">Время сообщения</th>
                         <th style="width: 120px">Время прибытия</th>
                         <th style="width: 120px">Расстояние (км)</th>
-                        <th style="width: 120px">Примечание</th>
+                        <th style="width: 300px">Примечание</th>
                         <th style="width: 270px">Выполняемый вид работ</th>
                         <th></th>
                     </tr>
                 </thead>
 
                 {%set x=1%}
-                {% if rig is defined and rig.innerservice is defined and rig.innerservice is not empty  %}
+                {% if (rig is defined and rig.innerservice is defined and rig.innerservice is not empty) or (is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_not_involved_innerservice == 0 and dones.innerservice is defined and dones.innerservice is not empty)  %}
 
+                    {% if rig is defined and rig.innerservice is defined and rig.innerservice is not empty%}
+
+                        {%set arr_innerservice=rig.innerservice%}
+
+                    {%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_not_involved_innerservice == 0 and dones.innerservice is defined and dones.innerservice is not empty%}
+                        {%set arr_innerservice=dones.innerservice%}
+                    {%endif%}
 
                     <tbody>
 
-                        {%for sily in rig.innerservice %}
-                            {%set x=loop.index%}
+                        {%for sily in arr_innerservice %}
 
-                            <tr class="innerservice_row" id="innerservice_id_row{{i}}" data-loop="{{loop.index}}">
-                                <td class="loop-index">{{loop.index}}</td>
+                            {% if rig is defined and rig.innerservice is defined and rig.innerservice is not empty%}
+
+                                {%set x=loop.index%}
+
+                            {%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_not_involved_innerservice == 0 and dones.innerservice is defined and dones.innerservice is not empty%}
+                                {%set x=sily.sort%}
+                            {%endif%}
+
+                            <tr class="innerservice_row" id="innerservice_id_row{{x}}" data-loop="{{x}}">
+                                <td class="loop-index">{{x}}</td>
+
+                                <td>
+                                    <div class="btn-group btn-group-xs">
+                                        <img src="{{ base_url('assets/images/updown/24-em-up.png') }}" class="up" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Переместить строку вверх" >
+                                        <img src="{{ base_url('assets/images/updown/24-em-down.png') }}" class="down" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Переместить строку вниз" >
+                                    </div>
+                                    <input type="hidden" class="sort" name="innerservice[{{x}}][sort]" value="{{x}}">
+                                </td>
+
                                 <td class='td_innerservice_name'>
 
                                     {%if sily.service_id is defined %}
                                         {%set service_id=sily.service_id%}
                                     {%endif%}
-                                    <select class="form-control select2-single innerservice-list innerservice_name" name="innerservice[{{loop.index}}][innerservice_name]" >
+                                    <select class="form-control select2-single innerservice-list service_id" name="innerservice[{{x}}][service_id]" >
                                         <option></option>
                                         {% for vid in innerservice_list %}
                                             <option value="{{ vid.id }}" {%if service_id is defined and service_id == vid.id %}selected {%endif%}>{{ vid.name }}</option>
                                         {% endfor %}
                                     </select>
 
-                                    {#<input type="text" class="form-control  innerservice-list innerservice_name"    placeholder="" name="innerservice[{{loop.index}}][innerservice_name]" value="{%if sily.service_name is defined %}{{sily.service_name|trim}}{%endif%}">#}
+                                    {#<input type="text" class="form-control  innerservice-list innerservice_name"    placeholder="" name="innerservice[{{x}}][innerservice_name]" value="{%if sily.service_name is defined %}{{sily.service_name|trim}}{%endif%}">#}
 
 
                                 </td>
@@ -60,7 +84,7 @@
                                     {% if sily.time_msg is not empty and sily.time_msg is not null and sily.time_msg != '0000-00-00 00:00:00' %}
                                         {%set time_msg_innerservice=sily.time_msg%}
                                     {%endif%}
-                                    <input type="time" class="form-control innerservice_msg_time"    placeholder="" name="innerservice[{{loop.index}}][innerservice_msg_time]" value="{%if time_msg_innerservice is not empty %}{{time_msg_innerservice|date('H:i')}}{%endif%}">
+                                    <input type="time" class="form-control innerservice_msg_time"    placeholder="" name="innerservice[{{x}}][time_msg]" value="{%if time_msg_innerservice is not empty %}{{time_msg_innerservice|date('H:i')}}{%endif%}">
 
                                 </td>
 
@@ -69,38 +93,43 @@
                                     {% if sily.time_arrival is not empty and sily.time_arrival is not null and sily.time_arrival != '0000-00-00 00:00:00' %}
                                         {%set time_arrival_innerservice=sily.time_arrival%}
                                     {%endif%}
-                                    <input type="time" class="form-control innerservice_time_arrival "    placeholder="" name="innerservice[{{loop.index}}][time_arrival]" value="{%if time_arrival_innerservice is not empty %}{{time_arrival_innerservice|date('H:i')}}{%endif%}">
+                                    <input type="time" class="form-control innerservice_time_arrival "    placeholder="" name="innerservice[{{x}}][time_arrival]" value="{%if time_arrival_innerservice is not empty %}{{time_arrival_innerservice|date('H:i')}}{%endif%}">
 
                                 </td>
 
                                 <td>
 
-                                    <input type="text" class="form-control  innerservice_distance"  onkeypress="allowFloat();"  placeholder="" name="innerservice[{{loop.index}}][distance]" value="{%if sily.distance is defined %}{{sily.distance|trim}}{%endif%}">
+                                    <input type="text" class="form-control  innerservice_distance"  onkeypress="allowFloat();"  placeholder="" name="innerservice[{{x}}][distance]" value="{%if sily.distance is defined %}{{sily.distance|trim}}{%endif%}">
 
                                 </td>
                                 <td>
-                                    <textarea class="innerservice_note" name="innerservice[{{loop.index}}][note]"></textarea>
+                                    <textarea class="innerservice_note" cols="50" rows="4" name="innerservice[{{x}}][note]">{%if sily.note is defined and sily.note is not empty%}{{sily.note|trim}}{%endif%}</textarea>
 
 
                                 </td>
 
-                            <td>
-                                <select multiple class="form-control select2-multi work_innerservice" name="innerservice[{{loop.index}}][work_innerservice]" >
+                                <td>
+                                    <select multiple class="form-control select2-multi work_innerservice" name="innerservice[{{x}}][work_innerservice][]" >
 
-                                    {% for vid in work_innerservice %}
-                                        <option value="{{ vid.id }}" >{{ vid.name }}</option>
-                                    {% endfor %}
-                                </select>
+                                        {% for vid in work_innerservice %}
+                                            <option value="{{ vid.id }}" {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_not_involved_innerservice == 0 and sily.works is defined and sily.works is not empty and vid.id in sily.works%}selected{%endif%} >{{ vid.name }}</option>
+                                        {% endfor %}
+                                    </select>
 
-                                <a href="#" class="add-new-work-innerservice" data-placement="right" title="Добавить новый вид" data-toggle="modal" data-target="#modal-add-new-work-innerservice">
-                                    <i class="fa fa-pencil-square-o " aria-hidden="true" style="color:green;padding-left: 10px; cursor: pointer"></i>
-                                </a>
+                                    <a href="#" class="add-new-work-innerservice" data-placement="right" title="Добавить новый вид" data-toggle="modal" data-target="#modal-add-new-work-innerservice">
+                                        <i class="fa fa-pencil-square-o " aria-hidden="true" style="color:green;padding-left: 10px; cursor: pointer"></i>
+                                    </a>
 
 
-                            </td>
+                                </td>
 
 
                                 <td>
+
+                                    {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_not_involved_innerservice == 0 and sily.id is defined %}
+                                        <input type="hidden" class="id_innerservice" name="innerservice[{{x}}][id_innerservice]" value="{{sily.id}}">
+                                    {%endif%}
+
                                     <a href="#" class="del-row-innerservice delete-cross"  data-toggle="tooltip" data-placement="right" title="Удалить строку"  ><i class="fa fa-times" aria-hidden="true" ></i></a>
                                 </td>
                             </tr>
@@ -115,9 +144,18 @@
 
                         <tr class="innerservice_row" id="innerservice_id_row{{i}}" data-loop="{{i}}">
                             <td class="loop-index">{{i}}</td>
+
+                            <td>
+                                <div class="btn-group btn-group-xs">
+                                    <img src="{{ base_url('assets/images/updown/24-em-up.png') }}" class="up" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Переместить строку вверх" >
+                                    <img src="{{ base_url('assets/images/updown/24-em-down.png') }}" class="down" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Переместить строку вниз" >
+                                </div>
+                                <input type="hidden" class="sort" name="innerservice[{{i}}][sort]" value="{{i}}">
+                            </td>
+
                             <td class='td_innerservice_name'>
 
-                                <select class="form-control select2-single innerservice-list innerservice_name" name="innerservice[{{i}}][innerservice_name]" >
+                                <select class="form-control select2-single innerservice-list service_id" name="innerservice[{{i}}][service_id]" >
                                     <option></option>
                                     {% for vid in innerservice_list  %}
                                         <option value="{{ vid.id }}" >{{ vid.name }}</option>
@@ -129,7 +167,7 @@
 
                             <td>
 
-                                <input type="time" class="form-control innerservice_msg_time"    placeholder="" name="innerservice[{{i}}][innerservice_msg_time]" value="">
+                                <input type="time" class="form-control innerservice_msg_time"    placeholder="" name="innerservice[{{i}}][time_msg]" value="">
 
                             </td>
 
@@ -150,7 +188,7 @@
                             </td>
 
                             <td>
-                                <select multiple class="form-control select2-multi work_innerservice" name="innerservice[{{i}}][work_innerservice]" >
+                                <select multiple class="form-control select2-multi work_innerservice" name="innerservice[{{i}}][work_innerservice][]" >
 
                                     {% for vid in work_innerservice %}
                                         <option value="{{ vid.id }}" >{{ vid.name }}</option>

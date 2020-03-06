@@ -3,7 +3,7 @@
       <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Поиск</button>
     </form>#}
 
-{%if active_item_menu is defined and active_item_menu == 'create' and active_item_menu_type_create is defined and active_item_menu_type_create == 'standart'%}
+{%if is_show_btn_search_rig is defined and is_show_btn_search_rig == 1%}
 <a href="#" data-toggle="modal"  data-target="#modal-search-rig" data-url="" >
     <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="fa fa-search" aria-hidden="true" id="search-rig"></i> Поиск выезда</button>
 

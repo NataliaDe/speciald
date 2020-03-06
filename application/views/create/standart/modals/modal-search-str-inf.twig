@@ -1,0 +1,120 @@
+<!-- Modal Delele-->
+
+<div class="modal fade" id="modal-search-str-inf"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="  margin-left: 390px;">
+        <div class="modal-content" style="width:230%; ">
+            <div class="modal-header">
+                <h4 class="modal-title ff-l" id="myModalLabel">Поиск информации по строевой записке</h4>
+
+                <button class="close danger" type="button" data-dismiss="modal" style="font-weight: bolder;">×</button>
+
+            </div>
+
+            <div class="modal-body" style="padding-top:5px;">
+
+
+                <p>Поиск осуществляется в <a href="/str" target="_blank">ПС &laquo;Строевая записка&raquo;</a>. Информация берется за последнюю заступившую смену подразделения.<br>
+
+                </p>
+
+
+                <form role="form" id="searchStrInfForm" method="POST"  >
+
+                    <div class="row">
+
+                        <div class="col-lg-4">
+                            <label for="id_region">Область</label>
+                            <div class="form-group">
+                                <select multiple class="form-control select2-multi-not-clear" name="id_region" id="id_region_str_inf"  >
+
+                                    {% for region in regions_cp_list %}
+                                        <option  value="{{ region.id }}" {% if user is defined and user.id_region == region.id%} selected {%endif%}>{{ region.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4">
+                            <label for="id_local">ГРОЧС</label>
+                            <div class="form-group">
+
+                                <select multiple class="form-control select2-multi-not-clear" name="id_local" id="id_local_str_inf"  >
+                                    {#                                         {% for local in locorg_cp_list %}
+                                                                            <option value="{{ local.id_loc_org }}" class="{{local.id_region}}" >{{ local.locorg_name }}</option>
+                                                                        {% endfor %}#}
+                                </select>
+                            </div>
+                        </div>
+
+
+                        <div class="col-lg-2">
+                            <label for="btn-search-str-inf-clear-filter"></label>
+                            <div class="form-group " style="margin-top:8px">
+                                <button  type="button" class="btn btn-outline-primary" id="btn-search-str-inf-clear-filter" >Сбросить фильтр</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                                <div class="row">
+
+
+                        <div class="col-lg-4">
+                            <label for="id_pasp">ПАСЧ</label>
+                            <div class="form-group select-pasp-cls">
+
+                                <select multiple class="form-control select2-multi-not-clear" name="id_pasp" id="id_pasp_str_inf"  >
+                                    {#                                         {% for local in locorg_cp_list %}
+                                                                            <option value="{{ local.id_loc_org }}" class="{{local.id_region}}" >{{ local.locorg_name }}</option>
+                                                                        {% endfor %}#}
+                                </select>
+                            </div>
+                        </div>
+
+                                </div>
+
+                </form>
+                <br><br>
+
+
+
+                {%include 'searchRig/preloader.twig'%}
+
+                {%include 'parts/preloader.twig'%}
+
+
+            </div>
+            <div class="modal-footer">
+                <button id="btn-get-data-str-inf"  type="button" class="btn btn-info" disabled  data-toggle="modal"  data-target="#modal-agree-get-str-inf"  >Получить информацию по выбранным подразделениям</button>
+                <button  type="button" class="btn btn-secondary" id="close-modal-search-str-inf" >Отмена</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="modal-agree-get-str-inf" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <h4 class="modal-title ff-l" id="myModalLabel">Поиск информации по строевой записке</h4>
+
+                <button class="close danger" type="button" data-dismiss="modal" style="font-weight: bolder;">×</button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <p>Информация по выбранным подразделениям будет добавлена в таблицу <u>&laquo;Сведения по строевой записке&raquo; (к уже существующим в таблице)</u> на форме создания специального донесения</p>
+
+            </div>
+            <div class="modal-footer">
+
+                <button id="btn-fill-str-inf-form"  type="button" class="btn btn-warning" data-url="{{base_url('/create/add_str_inf_to_form')}}">ОК</button>
+                <button  type="button" class="btn btn-secondary" id="close-modal-agree-get-str-inf" >Отмена</button>
+            </div>
+        </div>
+    </div>
+</div>

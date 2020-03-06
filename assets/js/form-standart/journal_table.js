@@ -9,6 +9,15 @@ $(document).ready(function () {
         var id_car_block=$div_for_clon.data('loop');
         var new_loop=parseInt($div_for_clon.find('.loop-index').text())+1;
 
+        /* max loop */
+//        var max=1;
+//        $('#div-silymchs').find('.loop-index').each(function () {
+//            if($(this).text()>max)
+//            k++;
+//        });
+
+
+
         var num = parseInt(id_car_block) + 1;
 
         var is = $('div #klon' + num);
@@ -35,10 +44,15 @@ $(document).ready(function () {
         $div_new.find('td').find('.time_end').attr('name','silymchs['+num+'][time_end]');
         $div_new.find('td').find('.time_return').attr('name','silymchs['+num+'][time_return]');
         $div_new.find('td').find('.distance').attr('name','silymchs['+num+'][distance]');
+        $div_new.find('td').find('.sort').attr('name','silymchs['+num+'][sort]');
+        $div_new.find('td').find('.id_teh').attr('name','silymchs['+num+'][id_teh]');
+        $div_new.find('td').find('.id_silymchs').attr('name','silymchs['+num+'][id_silymchs]');
 
         $div_new.find('td').find('input').val('');
         $div_new.find('.loop-index').text(new_loop);
         $div_new.attr('data-loop',new_loop);
+
+        $div_new.find('td').find('.sort').val(new_loop);
 
 
         return false;
@@ -55,10 +69,16 @@ $(document).ready(function () {
             $(this).parent().parent().remove();
 
             var k = 1;
+            var k_sort = 1;
 
             $('#div-silymchs').find('.loop-index').each(function () {
                 $(this).text(k);
                 k++;
+            });
+
+            $('#div-silymchs').find('.sort').each(function () {
+                $(this).val(k_sort);
+                k_sort++;
             });
 
         }
@@ -95,12 +115,14 @@ $(document).ready(function () {
 
         /* new name */
         var $div_new = $('#innerservice_id_row'+num);
-        $div_new.find('td').find('.innerservice_name').attr('name','innerservice['+num+'][innerservice_name]');
-        $div_new.find('td').find('.innerservice_msg_time').attr('name','innerservice['+num+'][innerservice_msg_time]');
+        $div_new.find('td').find('.service_id').attr('name','innerservice['+num+'][service_id]');
+        $div_new.find('td').find('.innerservice_msg_time').attr('name','innerservice['+num+'][time_msg]');
         $div_new.find('td').find('.innerservice_time_arrival').attr('name','innerservice['+num+'][time_arrival]');
         $div_new.find('td').find('.innerservice_distance').attr('name','innerservice['+num+'][distance]');
         $div_new.find('td').find('.innerservice_note').attr('name','innerservice['+num+'][note]');
-        $div_new.find('td').find('.work_innerservice').attr('name','innerservice['+num+'][work_innerservice]');
+        $div_new.find('td').find('.work_innerservice').attr('name','innerservice['+num+'][work_innerservice][]');
+        $div_new.find('td').find('.sort').attr('name','innerservice['+num+'][sort]');
+        $div_new.find('td').find('.id_innerservice').attr('name','innerservice['+num+'][id_innerservice]');
 
 
         $('#innerservice-table').find('.select2-single, .select2-multi').select2({
@@ -116,8 +138,12 @@ $(document).ready(function () {
         $('#innerservice-table').find('.select2-multi').last().next().next().remove();
 
         $div_new.find('td').find('input').val('');
+        $div_new.find('td').find('textarea').val('');
+        $div_new.find('td').find('.select2-single, .select2-multi').val('').trigger('change');
         $div_new.find('.loop-index').text(new_loop);
         $div_new.attr('data-loop',new_loop);
+
+        $div_new.find('td').find('.sort').val(new_loop);
 
 
         return false;
@@ -128,15 +154,21 @@ $(document).ready(function () {
 
         e.preventDefault();
 
-        if ($(".innerservice_name").length > 1) {
+        if ($(".service_id").length > 1) {
 
             $(this).parent().parent().remove();
 
             var k = 1;
+            var k_sort = 1;
 
             $('#div-innerservice').find('.loop-index').each(function () {
                 $(this).text(k);
                 k++;
+            });
+
+            $('#div-innerservice').find('.sort').each(function () {
+                $(this).val(k_sort);
+                k_sort++;
             });
 
         }
@@ -170,15 +202,19 @@ $(document).ready(function () {
 
         /* new name */
         var $div_new = $('#informing_id_row'+num);
-        $div_new.find('td').find('.informing_fio').attr('name','informing['+num+'][informing_fio]');
-        $div_new.find('td').find('.informing_msg_time').attr('name','informing['+num+'][informing_msg_time]');
+        $div_new.find('td').find('.informing_fio').attr('name','informing['+num+'][fio]');
+        $div_new.find('td').find('.informing_msg_time').attr('name','informing['+num+'][time_msg]');
         $div_new.find('td').find('.informing_time_exit').attr('name','informing['+num+'][time_exit]');
         $div_new.find('td').find('.informing_time_arrival').attr('name','informing['+num+'][time_arrival]');
+        $div_new.find('td').find('.sort').attr('name','informing['+num+'][sort]');
+        $div_new.find('td').find('.id_informing').attr('name','informing['+num+'][id_informing]');
 
 
         $div_new.find('td').find('input').val('');
         $div_new.find('.loop-index').text(new_loop);
         $div_new.attr('data-loop',new_loop);
+
+        $div_new.find('td').find('.sort').val(new_loop);
 
 
         return false;
@@ -194,10 +230,16 @@ $(document).ready(function () {
             $(this).parent().parent().remove();
 
             var k = 1;
+            var k_sort = 1;
 
             $('#div-informing').find('.loop-index').each(function () {
                 $(this).text(k);
                 k++;
+            });
+
+            $('#div-informing').find('.sort').each(function () {
+                $(this).val(k_sort);
+                k_sort++;
             });
 
         }
@@ -247,12 +289,18 @@ $(document).ready(function () {
         $div_new.find('td').find('.time_loc_trunks').attr('name','trunks['+num+'][time_loc]');
         $div_new.find('td').find('.s_fire_loc_trunks').attr('name','trunks['+num+'][s_fire_loc]');
         $div_new.find('td').find('.time_likv_trunks').attr('name','trunks['+num+'][time_likv]');
+        $div_new.find('td').find('.id_teh').attr('name','trunks['+num+'][id_teh]');
 
+        $div_new.find('td').find('.sort').attr('name','trunks['+num+'][sort]');
+
+        $div_new.find('td').find('.id_trunks').attr('name','trunks['+num+'][id_trunks]');
 
        // $div_new.find('td').find('input').val('');
-        $div_new.find('td').find('.mark_trunks, .pasp_name_trunks,.locorg_name_trunks, .v_ac_trunks, .man_per_car_trunks, .time_arrival_trunks, .time_pod_trunks, .means_trunks, .water_po_out_trunks').val('');
+        $div_new.find('td').find('.mark_trunks, .pasp_name_trunks,.locorg_name_trunks, .v_ac_trunks, .man_per_car_trunks, .time_arrival_trunks, .time_pod_trunks, .means_trunks, .water_po_out_trunks, .sort, .id_teh').val('');
         $div_new.find('.loop-index').text(new_loop);
         $div_new.attr('data-loop',new_loop);
+
+        $div_new.find('td').find('.sort').val(new_loop);
 
 
         return false;
@@ -268,10 +316,14 @@ $(document).ready(function () {
             $(this).parent().parent().remove();
 
             var k = 1;
-
+            var k_sort = 1;
             $('#trunks-block').find('.loop-index').each(function () {
                 $(this).text(k);
                 k++;
+            });
+            $('#trunks-block').find('.sort').each(function () {
+                $(this).val(k_sort);
+                k_sort++;
             });
 
         }
@@ -325,6 +377,102 @@ function setTimeFollow(td) {
 
 }
 
+
+
+$("#div-silymchs table").on("click", ".up, .down", function(){
+     var $row = $(this).closest("tr");
+
+     var up = $(this).hasClass("up");
+
+     var $t = up  ?  $row.prev() : $row.next() ;
+     if($t.length){
+        up ? $t.insertAfter($row) : $t.insertBefore($row);
+     }
+
+    var k = 1;
+    var k_sort=1;
+
+    $('#div-silymchs').find('.loop-index').each(function () {
+        $(this).text(k);
+        k++;
+    });
+
+    $('#div-silymchs').find('.sort').each(function () {
+        $(this).val(k_sort);
+        k_sort++;
+    });
+  });
+
+
+
+
+  $("#div-innerservice table").on("click", ".up, .down", function(){
+     var $row = $(this).closest("tr");
+
+     var up = $(this).hasClass("up");
+
+     var $t = up  ?  $row.prev() : $row.next() ;
+     if($t.length){
+        up ? $t.insertAfter($row) : $t.insertBefore($row);
+     }
+
+    var k = 1;
+    var k_sort = 1;
+    $('#div-innerservice').find('.loop-index').each(function () {
+        $(this).text(k);
+        k++;
+    });
+            $('#div-innerservice').find('.sort').each(function () {
+                $(this).val(k_sort);
+                k_sort++;
+            });
+  });
+
+    $("#div-informing table").on("click", ".up, .down", function(){
+     var $row = $(this).closest("tr");
+
+     var up = $(this).hasClass("up");
+
+     var $t = up  ?  $row.prev() : $row.next() ;
+     if($t.length){
+        up ? $t.insertAfter($row) : $t.insertBefore($row);
+     }
+
+    var k = 1;
+    var k_sort=1;
+    $('#div-informing').find('.loop-index').each(function () {
+        $(this).text(k);
+        k++;
+    });
+    $('#div-informing').find('.sort').each(function () {
+        $(this).val(k_sort);
+        k_sort++;
+    });
+  });
+
+
+    $("#div-trunks table").on("click", ".up, .down", function(){
+     var $row = $(this).closest("tr");
+
+     var up = $(this).hasClass("up");
+
+     var $t = up  ?  $row.prev() : $row.next() ;
+     if($t.length){
+        up ? $t.insertAfter($row) : $t.insertBefore($row);
+     }
+
+    var k = 1;
+    var k_sort = 1;
+    $('#div-trunks').find('.loop-index').each(function () {
+        $(this).text(k);
+        k++;
+    });
+
+    $('#div-trunks').find('.sort').each(function () {
+        $(this).val(k_sort);
+        k_sort++;
+    });
+  });
 
 
 

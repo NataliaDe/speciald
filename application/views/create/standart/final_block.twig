@@ -3,7 +3,7 @@
 
     <div class="form-group col-md-12">
         <label for="detail_inf">Содержание поступившей информации (детализированная информация)</label>
-        <textarea class="form-control" name="detail_inf"  rows="10" cols="50">{%if  rig.inf_detail is defined and  rig.inf_detail is not empty and rig.inf_detail is not null %}{{rig.inf_detail|trim}}{%endif%}</textarea>
+        <textarea class="form-control" name="detail_inf"  rows="10" cols="50">{%if  rig.inf_detail is defined and  rig.inf_detail is not empty and rig.inf_detail is not null %}{{rig.inf_detail|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.detail_inf is not empty %}{{dones.detail_inf|trim}}{%endif%}</textarea>
     </div>
 
 
@@ -11,52 +11,152 @@
 </div>
 
 
-<div class="form-row create-form-row">
-
-    <div class="form-group col-md-2">
-        <label for="type_water_source">Тип водоисточника
-            <a href="#" class="add-new-vid-type-water-source" data-placement="right" title="Добавить новый вид" data-toggle="modal" data-target="#modal-add-new-vid-type-water-source">
-                <i class="fa fa-pencil-square-o " aria-hidden="true" style="color:green;padding-left: 10px; cursor: pointer"></i>
-            </a>
-        </label>
-        <select  class="form-control select2-single type_water_source" name="type_water_source" id="type_water_source_id" >
-            <option></option>
-            {% for vid in type_water_source %}
-                <option value="{{ vid.id }}" >{{ vid.name }}</option>
-            {% endfor %}
-        </select>
+<div class="form-row create-form-row" id="div-water-source">
 
 
+
+    <div class="table-responsive table-bordered">
+        <table class="table table-borderless" id="water-source-table">
+            <thead>
+                <tr>
+                    <th style="width: 30px">#</th>
+                    <th style="width: 30px"></th>
+                    <th style="width: 370px">Тип водоисточника</th>
+                    <th style="width: 50px">Расстояние до водоисточника</th>
+                    <th style="width: 480px">Использование на пожаре</th>
+                    <th></th>
+                </tr>
+            </thead>
+
+            {%set x=1%}
+
+            {% if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.water_source  is defined and dones.water_source is not empty%}
+
+
+                <tbody>
+
+                    {%for water in dones.water_source %}
+
+                        {%set x=water.sort%}
+
+
+                        <tr class="water_source_row" id="water_source_id_row{{x}}" data-loop="{{x}}" >
+                            <td class="loop-index">{{x}}</td>
+                            <td>
+                                <div class="btn-group btn-group-xs">
+                                    <img src="{{ base_url('assets/images/updown/24-em-up.png') }}" class="up" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Переместить строку вверх" >
+                                    <img src="{{ base_url('assets/images/updown/24-em-down.png') }}" class="down" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Переместить строку вниз" >
+                                </div>
+                                <input type="hidden" class="sort" name="water_source[{{x}}][sort]" value="{{x}}">
+                            </td>
+
+                            <td class="td_water-source-type">
+                                <select class="form-control select2-single  water_source_type" name="water_source[{{x}}][water_source_type]" >
+                                    <option></option>
+                                    {% for vid in type_water_source %}
+                                        <option value="{{ vid.id }}" {%if water.water_source_type is defined and water.water_source_type == vid.id%}selected{%endif%} >{{ vid.name }}</option>
+                                    {% endfor %}
+                                </select>
+                                <a href="#" class="add-new-vid-type-water-source" data-placement="right" title="Добавить новый вид" data-toggle="modal" data-target="#modal-add-new-vid-type-water-source">
+                                    <i class="fa fa-pencil-square-o " aria-hidden="true" style="color:green;padding-left: 10px; cursor: pointer"></i>
+                                </a>
+
+                            </td>
+
+
+                            <td>
+
+                                <input type="text" class="form-control water_source_distance" onkeypress="allowFloat();"  placeholder=""  name="water_source[{{x}}][water_source_distance]" value="{%if water.water_source_distance is defined %}{{water.water_source_distance|trim}}{%endif%}">
+
+                            </td>
+
+                            <td>
+
+                                <input type="text" class="form-control water_source_use"   placeholder="" name="water_source[{{x}}][water_source_use]"  value="{%if water.water_source_use is defined %}{{water.water_source_use|trim}}{%endif%}">
+
+                            </td>
+
+                            <td>
+                                 <input type="hidden" class="id_water_source" name="water_source[{{x}}][id_water_source]" value="{{water.id}}">
+                                <a href="#" class="del-row-water-source delete-cross"  data-toggle="tooltip" data-placement="right" title="Удалить строку" ><i class="fa fa-times" aria-hidden="true"></i></a>
+                            </td>
+                        </tr>
+
+
+
+                    {%endfor%}
+
+                </tbody>
+
+
+            {%else%}
+
+            {%set i=1%}
+            {%set x=i%}
+            <tbody>
+
+                <tr class="water_source_row" id="water_source_id_row{{i}}" data-loop="{{i}}" >
+                    <td class="loop-index">{{i}}</td>
+                    <td>
+                        <div class="btn-group btn-group-xs">
+                            <img src="{{ base_url('assets/images/updown/24-em-up.png') }}" class="up" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Переместить строку вверх" >
+                            <img src="{{ base_url('assets/images/updown/24-em-down.png') }}" class="down" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Переместить строку вниз" >
+                        </div>
+                        <input type="hidden" class="sort" name="water_source[{{i}}][sort]" value="{{i}}">
+                    </td>
+
+                    <td class="td_water-source-type">
+                        <select class="form-control select2-single  water_source_type" name="water_source[{{i}}][water_source_type]" >
+                            <option></option>
+                            {% for vid in type_water_source %}
+                                <option value="{{ vid.id }}" >{{ vid.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <a href="#" class="add-new-vid-type-water-source" data-placement="right" title="Добавить новый вид" data-toggle="modal" data-target="#modal-add-new-vid-type-water-source">
+                            <i class="fa fa-pencil-square-o " aria-hidden="true" style="color:green;padding-left: 10px; cursor: pointer"></i>
+                        </a>
+
+                    </td>
+
+
+                    <td>
+
+                        <input type="text" class="form-control water_source_distance" onkeypress="allowFloat();"  placeholder=""  name="water_source[{{i}}][water_source_distance]" value="">
+
+                    </td>
+
+                    <td>
+
+                        <input type="text" class="form-control water_source_use"   placeholder="" name="water_source[{{i}}][water_source_use]"  value="">
+
+                    </td>
+
+                    <td>
+                        <a href="#" class="del-row-water-source delete-cross"  data-toggle="tooltip" data-placement="right" title="Удалить строку" ><i class="fa fa-times" aria-hidden="true"></i></a>
+                    </td>
+                </tr>
+
+
+            </tbody>
+{%endif%}
+        </table>
     </div>
+    <a href="#" id="add-row-water-source" >+  добавить еще</a>
 
 
-    <div class="form-group col-md-2">
-        <label for="distance_water_source">Расстояние до водоисточника</label>
-        <input type="text" class="form-control" onkeypress="allowFloat();"  placeholder="" name="distance_water_source"  value="">
-    </div>
-
-
-    <div class="form-group col-md-2">
-        <label for="use_water_source">Использование на пожаре</label>
-        <input type="text" class="form-control"   placeholder="" name="use_water_source"  value="">
-    </div>
+</div>
 
 
 
-    <div class="form-group col-md-2">
-        <label for="detail_photo">Фото (3)</label>
+<br><br>
+<div class="form-group col-md-2">
+    <label for="detail_photo">Фото (3)</label>
 
-    </div>
-
-
-    <div class="form-group col-md-2">
-        <label for="detail_video">Видео</label>
-
-    </div>
-
-        
+</div>
 
 
+<div class="form-group col-md-2">
+    <label for="detail_video">Видео</label>
 
 </div>
 

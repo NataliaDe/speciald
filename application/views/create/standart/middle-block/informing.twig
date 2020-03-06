@@ -3,7 +3,7 @@
         Информирование должностных лиц (возможность ручной корректировки)
         <label for="informing_is_not_involved" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
         <div class="checkbox checkbox-danger" style='display:inline'>
-            <input  type="checkbox" name="informing[is_not_involved]" value="1"  id='informing_is_not_involved' onChange='notEnvolve("div-informing",this);'>
+            <input  type="checkbox" name="informing[is_not_involved]" value="1"  id='informing_is_not_involved' onChange='notEnvolve("div-informing", this);' {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_not_involved_informing == 1 %}checked{%endif%}>
             <label for="informing_is_not_involved">
                 Информирование не выполнялось
             </label>
@@ -17,6 +17,7 @@
                 <thead>
                     <tr>
                         <th style="width: 30px">#</th>
+                        <th style="width: 30px"></th>
                         <th style="width: 480px">Адресат (ОПГ МЧС и иные службы взаимодействия)</th>
                         <th style="width: 120px">Время сообщения о ЧС</th>
                         <th style="width: 120px">Время выезда</th>
@@ -27,18 +28,42 @@
                 </thead>
 
                 {%set x=1%}
-                {% if rig is defined and rig.informing is defined and rig.informing is not empty  %}
+                {% if (rig is defined and rig.informing is defined and rig.informing is not empty) or (is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_not_involved_informing == 0 and dones.informing is defined and dones.informing is not empty)  %}
 
+                    {% if rig is defined and rig.informing is defined and rig.informing is not empty%}
+
+                        {%set arr_informing=rig.informing%}
+
+                    {%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_not_involved_informing == 0 and dones.informing is defined and dones.informing is not empty%}
+                        {%set arr_informing=dones.informing%}
+                    {%endif%}
 
                     <tbody>
 
-                        {%for sily in rig.informing %}
-                            {%set x=loop.index%}
+                        {%for sily in arr_informing %}
 
-                            <tr class="informing_row" id="informing_id_row{{i}}" data-loop="{{loop.index}}">
-                                <td class="loop-index">{{loop.index}}</td>
+                            {% if rig is defined and rig.informing is defined and rig.informing is not empty%}
+
+                                {%set x=loop.index%}
+
+                            {%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_not_involved_informing == 0 and dones.informing is defined and dones.informing is not empty%}
+                                {%set x=sily.sort%}
+                            {%endif%}
+
+                            <tr class="informing_row" id="informing_id_row{{x}}" data-loop="{{x}}">
+                                <td class="loop-index">{{x}}</td>
+
+
                                 <td>
-                                    <input type="text" class="form-control  informing_fio"    placeholder="" name="informing[{{loop.index}}][fio]" value="{%if sily.fio is defined %}{{sily.fio|trim}}{%endif%}">
+                                    <div class="btn-group btn-group-xs">
+                                        <img src="{{ base_url('assets/images/updown/24-em-up.png') }}" class="up" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Переместить строку вверх" >
+                                        <img src="{{ base_url('assets/images/updown/24-em-down.png') }}" class="down" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Переместить строку вниз" >
+                                    </div>
+                                    <input type="hidden" class="sort" name="informing[{{x}}][sort]" value="{{x}}">
+                                </td>
+
+                                <td>
+                                    <input type="text" class="form-control  informing_fio"    placeholder="" name="informing[{{x}}][fio]" value="{%if sily.fio is defined %}{{sily.fio|trim}}{%endif%}">
                                 </td>
 
 
@@ -47,7 +72,7 @@
                                     {% if sily.time_msg is not empty and sily.time_msg is not null and sily.time_msg != '0000-00-00 00:00:00' %}
                                         {%set time_msg_informing=sily.time_msg%}
                                     {%endif%}
-                                    <input type="time" class="form-control informing_msg_time"    placeholder="" name="informing[{{loop.index}}][informing_msg_time]" value="{%if time_msg_informing is not empty %}{{time_msg_informing|date('H:i')}}{%endif%}">
+                                    <input type="time" class="form-control informing_msg_time"    placeholder="" name="informing[{{x}}][time_msg]" value="{%if time_msg_informing is not empty %}{{time_msg_informing|date('H:i')}}{%endif%}">
 
                                 </td>
 
@@ -56,7 +81,7 @@
                                     {% if sily.time_exit is not empty and sily.time_exit is not null and sily.time_exit != '0000-00-00 00:00:00' %}
                                         {%set time_exit_informing=sily.time_exit%}
                                     {%endif%}
-                                    <input type="time" class="form-control informing_time_exit "    placeholder="" name="informing[{{loop.index}}][time_exit]" value="{%if time_exit_informing is not empty %}{{time_exit_informing|date('H:i')}}{%endif%}">
+                                    <input type="time" class="form-control informing_time_exit "    placeholder="" name="informing[{{x}}][time_exit]" value="{%if time_exit_informing is not empty %}{{time_exit_informing|date('H:i')}}{%endif%}">
 
                                 </td>
 
@@ -65,12 +90,16 @@
                                     {% if sily.time_arrival is not empty and sily.time_arrival is not null and sily.time_arrival != '0000-00-00 00:00:00' %}
                                         {%set time_arrival_informing=sily.time_arrival%}
                                     {%endif%}
-                                    <input type="time" class="form-control informing_time_arrival "    placeholder="" name="informing[{{loop.index}}][time_arrival]" value="{%if time_arrival_informing is not empty %}{{time_arrival_informing|date('H:i')}}{%endif%}">
+                                    <input type="time" class="form-control informing_time_arrival "    placeholder="" name="informing[{{x}}][time_arrival]" value="{%if time_arrival_informing is not empty %}{{time_arrival_informing|date('H:i')}}{%endif%}">
 
                                 </td>
 
 
                                 <td>
+                                    {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_not_involved_informing == 0 and sily.id is defined %}
+                                        <input type="hidden" class="id_informing" name="informing[{{x}}][id_informing]" value="{{sily.id}}">
+                                    {%endif%}
+
                                     <a href="#" class="del-row-informing delete-cross"  data-toggle="tooltip" data-placement="right" title="Удалить строку"  ><i class="fa fa-times" aria-hidden="true" ></i></a>
                                 </td>
                             </tr>
@@ -86,27 +115,35 @@
                         <tr class="informing_row" id="informing_id_row{{i}}" data-loop="{{i}}">
                             <td class="loop-index">{{i}}</td>
                             <td>
-                                    <input type="text" class="form-control  informing_fio"    placeholder="" name="informing[{{i}}][fio]" value="">
-                                </td>
+                                <div class="btn-group btn-group-xs">
+                                    <img src="{{ base_url('assets/images/updown/24-em-up.png') }}" class="up" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Переместить строку вверх" >
+                                    <img src="{{ base_url('assets/images/updown/24-em-down.png') }}" class="down" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Переместить строку вниз" >
+                                </div>
+                                <input type="hidden" class="sort" name="informing[{{i}}][sort]" value="{{i}}">
+                            </td>
+
+                            <td>
+                                <input type="text" class="form-control  informing_fio"    placeholder="" name="informing[{{i}}][fio]" value="">
+                            </td>
 
 
-                                <td>
+                            <td>
 
-                                   <input type="time" class="form-control informing_msg_time"    placeholder="" name="informing[{{i}}][informing_msg_time]" value="">
+                                <input type="time" class="form-control informing_msg_time"    placeholder="" name="informing[{{i}}][time_msg]" value="">
 
-                                </td>
+                            </td>
 
-                                <td>
+                            <td>
 
-                                    <input type="time" class="form-control informing_time_exit "    placeholder="" name="informing[{{i}}][time_exit]" value="">
+                                <input type="time" class="form-control informing_time_exit "    placeholder="" name="informing[{{i}}][time_exit]" value="">
 
-                                </td>
+                            </td>
 
-                                <td>
+                            <td>
 
-                                    <input type="time" class="form-control informing_time_arrival "    placeholder="" name="informing[{{i}}][time_arrival]" value="">
+                                <input type="time" class="form-control informing_time_arrival "    placeholder="" name="informing[{{i}}][time_arrival]" value="">
 
-                                </td>
+                            </td>
                             <td>
 
 

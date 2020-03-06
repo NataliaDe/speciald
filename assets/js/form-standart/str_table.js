@@ -34,17 +34,23 @@ $(document).ready(function () {
         $div_new.find('td').find('.str_vacant_ch').attr('name','str['+num+'][vacant_ch]');
         $div_new.find('td').find('.str_face_ch').attr('name','str['+num+'][face_ch]');
         $div_new.find('td').find('.str_br_ch').attr('name','str['+num+'][br_ch]');
-        $div_new.find('td').find('.str_trip_ch').attr('name','str['+num+'][trip_ch]');
-        $div_new.find('td').find('.str_holiday_ch').attr('name','str['+num+'][holiday_ch]');
-        $div_new.find('td').find('.str_ill_ch').attr('name','str['+num+'][ill_ch]');
-        $div_new.find('td').find('.str_duty_ch').attr('name','str['+num+'][duty_ch]');
-        $div_new.find('td').find('.str_other_ch').attr('name','str['+num+'][other_ch]');
-        $div_new.find('td').find('.str_gdzs_ch').attr('name','str['+num+'][gdzs_ch]');
+        $div_new.find('td').find('.str_trip_ch').attr('name','str['+num+'][cnt_trip_man]');
+        $div_new.find('td').find('.str_holiday_ch').attr('name','str['+num+'][cnt_holiday_man]');
+        $div_new.find('td').find('.str_ill_ch').attr('name','str['+num+'][cnt_ill_man]');
+        $div_new.find('td').find('.str_duty_ch').attr('name','str['+num+'][cnt_naryd]');
+        $div_new.find('td').find('.str_other_ch').attr('name','str['+num+'][cnt_other_man]');
+        $div_new.find('td').find('.str_gdzs_ch').attr('name','str['+num+'][gas]');
+        $div_new.find('td').find('.sort').attr('name','str['+num+'][sort]');
+        $div_new.find('td').find('.id_pasp').attr('name','str['+num+'][id_pasp]');
+
+        $div_new.find('td').find('.id_str').attr('name','str['+num+'][id_str]');
 
 
         $div_new.find('td').find('input').val('');
         $div_new.find('.loop-index').text(new_loop);
         $div_new.attr('data-loop',new_loop);
+
+        $div_new.find('td').find('.sort').val(new_loop);
 
 
         return false;
@@ -60,10 +66,15 @@ $(document).ready(function () {
             $(this).parent().parent().remove();
 
             var k = 1;
+            var k_sort = 1;
 
             $('#div-str').find('.loop-index').each(function () {
                 $(this).text(k);
                 k++;
+            });
+            $('#div-str').find('.sort').each(function () {
+                $(this).val(k_sort);
+                k_sort++;
             });
 
         }
@@ -79,7 +90,8 @@ $(document).ready(function () {
         var $div_for_clon = $('.str_text_row:last');
 
         var id_car_block=$div_for_clon.data('loop');
-        var new_loop=parseInt($div_for_clon.find('.loop-index').text())+1;
+        //var new_loop=parseInt($div_for_clon.find('.loop-index').text())+1;
+        var new_loop=parseInt($div_for_clon.find('.sort').val())+1;
 
         var num = parseInt(id_car_block) + 1;
 
@@ -98,9 +110,16 @@ $(document).ready(function () {
         var $div_new = $('#str_text_id_row'+num);
         $div_new.find('td').find('.str_text_podr_name').attr('name','str_text['+num+'][str_text_podr_name]');
         $div_new.find('td').find('.str_text_descr').attr('name','str_text['+num+'][str_text_descr]');
+        $div_new.find('td').find('.sort').attr('name','str_text['+num+'][sort]');
+        $div_new.find('td').find('.id_pasp_text').attr('name','silymchs['+num+'][id_pasp_text]');
+
+        $div_new.find('td').find('.id_str_text').attr('name','str['+num+'][id_str_text]');
 
         $div_new.find('td').find('input').val('');
         $div_new.find('td').find('textarea').val('');
+
+        $div_new.find('td').find('.sort').val(new_loop);
+
        // $div_new.find('.loop-index').text(new_loop);
        // $div_new.attr('data-loop',new_loop);
 
@@ -118,14 +137,60 @@ $(document).ready(function () {
             $(this).parent().parent().remove();
 
             var k = 1;
-
-//            $('#div-str').find('.loop-index').each(function () {
-//                $(this).text(k);
-//                k++;
-//            });
+            var k_sort = 1;
+            $('#str-text table').find('.sort').each(function () {
+                $(this).val(k_sort);
+                k_sort++;
+            });
 
         }
         return false;
     });
 
 });
+
+    $("#div-str .table-str").on("click", ".up, .down", function(){
+     var $row = $(this).closest("tr");
+
+     var up = $(this).hasClass("up");
+
+     var $t = up  ?  $row.prev() : $row.next() ;
+     if($t.length){
+        up ? $t.insertAfter($row) : $t.insertBefore($row);
+     }
+
+    var k = 1;
+    var k_sort = 1;
+    $('#div-str .table-str').find('.loop-index').each(function () {
+        $(this).text(k);
+        k++;
+    });
+
+    $('#div-str .table-str').find('.sort').each(function () {
+        $(this).val(k_sort);
+        k_sort++;
+    });
+  });
+
+
+      $("#div-str #str-text table").on("click", ".up, .down", function(){
+     var $row = $(this).closest("tr");
+
+     var up = $(this).hasClass("up");
+
+     var $t = up  ?  $row.prev() : $row.next() ;
+     if($t.length){
+        up ? $t.insertAfter($row) : $t.insertBefore($row);
+     }
+
+    var k = 1;
+    var k_sort = 1;
+    $('#div-str #str-text table').find('.loop-index').each(function () {
+        $(this).text(k);
+        k++;
+    });
+    $('#str-text table').find('.sort').each(function () {
+        $(this).val(k_sort);
+        k_sort++;
+    });
+  });

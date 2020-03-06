@@ -1,6 +1,6 @@
 <!-- Modal Delele-->
 
-<div class="modal fade" id="modal-search-rig" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="modal-search-rig"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog" style="  margin-left: 390px;">
         <div class="modal-content" style="width:230%; ">
             <div class="modal-header">
@@ -13,7 +13,7 @@
             <div class="modal-body" style="padding-top:5px;">
 
 
-                <p>Поиск осуществляется в <a href="/journal" target="_blank">ПС &laquo;Журнал ЦОУ&raquo;</a> среди определенных причин выезда (пожар, другие загорания) по указанным ниже параметрам.<br>
+                <p>Поиск осуществляется в <a href="/journal" target="_blank">ПС &laquo;Журнал ЦОУ&raquo;</a> по указанным ниже параметрам.<br>
                     После того как найден нужный выезд - необходимо его выбрать, установив отметку <img src="{{base_url('assets/images/onebit_34.png')}}" style="width:25px">, и нажать кнопку &laquo;Получить данные&raquo;.<br>
                     Форма создания специального донесения автоматически заполнится данными из выезда.
                 </p>
@@ -65,9 +65,9 @@
 
                         <div class="col-lg-3">
                             <label for="date_msg" >Дата выезда:</label>
-                            <div class="input-group date-cal">
+                            <div class="input-group ">
 
-                                <input type="text" class="form-control date-cal"  placeholder="" name="date_msg" >
+                                <input type="text" autocomplete="off" class="form-control date-cal-default-empty"  placeholder="" name="date_msg" value="{{date('now')|date('d.m.Y')}}">
 
                             </div>
                         </div>
@@ -76,8 +76,8 @@
                         <div class="col-lg-3">
                             <label for="id_reasonrig">Причина выезда</label>
                             <div class="form-group">
-                                <select class="form-control select2-select" name="id_reasonrig"  >
-                                    <option value="0" selected>Не выбрано</option>
+                                <select class="form-control select2-single" name="id_reasonrig"  >
+                                    <option></option>
                                     {% for reason in reasonrig %}
                                         <option value="{{ reason.id }}" >{{ reason.name }}</option>
                                     {% endfor %}

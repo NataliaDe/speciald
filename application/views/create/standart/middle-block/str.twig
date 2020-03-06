@@ -9,12 +9,13 @@
     </div>
     <!-- /.panel-heading -->
     <div class="card-body">
-{#{{dump(str)}}#}
+        {#{{dump(str)}}#}
         <div class="table-responsive table-bordered">
-            <table class="table" >
+            <table class="table table-str" >
                 <thead>
                     <tr >
                         <th rowspan="3" >#</th>
+                        <th rowspan="3" ></th>
                         <th rowspan="3" colspan="2">Наименование подразделения</th>
                         <th colspan="12">Строевая записка по личному составу</th>
 
@@ -36,7 +37,7 @@
                         <th>Ком-ка</th>
                         <th>Отпуск</th>
                         <th>Больные</th>
-                        <th>Наряд</th>
+                        <th>Наряд <i class="fa fa-info-circle info-all" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Ф.И.О. могут быть не указаны в блоке подробного описания ниже"></i></th>
                         <th>Др.<br>причины</th>
                         <th>ГДЗС, чел</th>
                     </tr>
@@ -44,16 +45,39 @@
                 </thead>
                 <tbody style="border-top:none">
                     {%set x=1%}
-                    {% if str.table is defined  and str.table is not empty  %}
+                    {% if (str.table is defined  and str.table is not empty) or (is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.str is defined and dones.str is not empty) %}
 
+                        {% if str.table is defined  and str.table is not empty %}
+
+                            {%set arr_str=str.table%}
+
+                        {%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.str is defined and dones.str is not empty%}
+                            {%set arr_str=dones.str%}
+                        {%endif%}
 
                     <tbody>
 
-                        {%for st in str.table %}
-                            {%set x=loop.index%}
+                        {%for st in arr_str %}
 
-                            <tr class="str_row" id="str_id_row{{loop.index}}" data-loop="{{loop.index}}">
-                                <td class="loop-index">{{loop.index}}</td>
+                            {% if str.table is defined  and str.table is not empty %}
+
+                                {%set x=loop.index%}
+
+                            {%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.str is defined and dones.str is not empty%}
+                                {%set x=st.sort%}
+                            {%endif%}
+
+                            <tr class="str_row" id="str_id_row{{x}}" data-loop="{{x}}">
+                                <td class="loop-index">{{x}}</td>
+
+                                <td>
+                                    <div class="btn-group btn-group-xs">
+                                        <img src="{{ base_url('assets/images/updown/24-em-up.png') }}" class="up" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Переместить строку вверх" >
+                                        <img src="{{ base_url('assets/images/updown/24-em-down.png') }}" class="down" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Переместить строку вниз" >
+                                    </div>
+                                    <input type="hidden" class="sort" name="str[{{x}}][sort]" value="{{x}}">
+                                </td>
+
                                 <td style="width:200px">
                                     {%set podr_name=''%}
                                     {%if st.pasp_name_spec is defined and st.pasp_name_spec is not empty %}
@@ -63,76 +87,82 @@
                                         {%set podr_name=podr_name~' '~st.locorg_name_spec%}
                                     {%endif%}
 
-                                    <input type="text" class="form-control  str_pasp_name "   placeholder="ПАСЧ-1" name="str[{{loop.index}}][pasp_name]" value="{%if st.pasp_name_spec is defined and st.pasp_name_spec is not empty %}{{st.pasp_name_spec|trim}}{%endif%}">
+                                    <input type="text" class="form-control  str_pasp_name "   placeholder="ПАСЧ-1" name="str[{{x}}][pasp_name]" value="{%if str.table is defined and st.pasp_name_spec is defined and st.pasp_name_spec is not empty %}{{st.pasp_name_spec|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and st.pasp_name is defined%}{{st.pasp_name|trim}}{%endif%}">
 
                                 </td>
 
 
                                 <td style="width:350px">
-                                    <input type="text" class="form-control  str_locorg_name "   placeholder="Ленинского РОЧС" name="str[{{loop.index}}][locorg_name]" value="{%if st.locorg_name_spec is defined and st.locorg_name_spec is not empty %}{{st.locorg_name_spec|trim}}{%endif%}">
+                                    <input type="text" class="form-control  str_locorg_name "   placeholder="Ленинского РОЧС" name="str[{{x}}][locorg_name]" value="{%if str.table is defined and st.locorg_name_spec is defined and st.locorg_name_spec is not empty %}{{st.locorg_name_spec|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and st.locorg_name is defined%}{{st.locorg_name|trim}}{%endif%}">
 
                                 </td>
 
                                 <td>
-                                    <input type="number" class="form-control str_shtat"   placeholder="" name="str[{{loop.index}}][shtat]" value="{%if st.shtat is defined and st.shtat is not empty %}{{st.shtat}}{%endif%}">
+                                    <input type="number" class="form-control str_shtat"   placeholder="" name="str[{{x}}][shtat]" value="{%if st.shtat is defined and st.shtat is not empty %}{{st.shtat}}{%endif%}">
 
                                 </td>
 
                                 <td>
-                                    <input type="number" class="form-control str_vacant"   placeholder="" name="str[{{loop.index}}][vacant]" value="{%if st.vacant is defined and st.vacant is not empty %}{{st.vacant}}{%endif%}">
+                                    <input type="number" class="form-control str_vacant"   placeholder="" name="str[{{x}}][vacant]" value="{%if st.vacant is defined and st.vacant is not empty %}{{st.vacant}}{%endif%}">
                                 </td>
 
                                 <td>
-                                    <input type="number" class="form-control str_on_list_ch"   placeholder="" name="str[{{loop.index}}][on_list_ch]" value="{%if st.listls is defined and st.listls is not empty %}{{st.listls}}{%endif%}">
+                                    <input type="number" class="form-control str_on_list_ch"   placeholder="" name="str[{{x}}][on_list_ch]" value="{%if st.on_list_ch is defined and st.on_list_ch is not empty %}{{st.on_list_ch}}{%endif%}">
 
                                 </td>
                                 <td>
-                                    <input type="number" class="form-control str_vacant_ch"   placeholder="" name="str[{{loop.index}}][vacant_ch]" value="{%if st.vacant_ch is defined and st.vacant_ch is not empty %}{{st.vacant_ch}}{%endif%}">
-
-                                </td>
-
-                                <td>
-                                    <input type="number" class="form-control str_face_ch"   placeholder="" name="str[{{loop.index}}][face_ch]" value="{%if st.face is defined and st.face is not empty %}{{st.face}}{%endif%}">
+                                    <input type="number" class="form-control str_vacant_ch"   placeholder="" name="str[{{x}}][vacant_ch]" value="{%if st.vacant_ch is defined and st.vacant_ch is not empty %}{{st.vacant_ch}}{%endif%}">
 
                                 </td>
 
                                 <td>
-                                    <input type="number" class="form-control str_br_ch"   placeholder="" name="str[{{loop.index}}][br_ch]" value="{%if st.br is defined and st.br is not empty %}{{st.br}}{%endif%}">
+                                    <input type="number" class="form-control str_face_ch"   placeholder="" name="str[{{x}}][face_ch]" value="{%if st.face_ch is defined and st.face_ch is not empty %}{{st.face_ch}}{%endif%}">
 
                                 </td>
 
                                 <td>
-                                    <input type="number" class="form-control str_trip_ch"   placeholder="" name="str[{{loop.index}}][trip_ch]" value="{%if st.cnt_trip_man is defined and st.cnt_trip_man is not empty %}{{st.cnt_trip_man}}{%endif%}">
-
-                                </td>
-                                <td>
-                                    <input type="number" class="form-control str_holiday_ch"   placeholder="" name="str[{{loop.index}}][holiday_ch]" value="{%if st.cnt_holiday_man is defined and st.cnt_holiday_man is not empty %}{{st.cnt_holiday_man}}{%endif%}">
+                                    <input type="number" class="form-control str_br_ch"   placeholder="" name="str[{{x}}][br_ch]" value="{%if st.br_ch is defined and st.br_ch is not empty %}{{st.br_ch}}{%endif%}">
 
                                 </td>
 
                                 <td>
-                                    <input type="number" class="form-control str_ill_ch"   placeholder="" name="str[{{loop.index}}][ill_ch]" value="{%if st.cnt_ill_man is defined and st.cnt_ill_man is not empty %}{{st.cnt_ill_man}}{%endif%}">
+                                    <input type="number" class="form-control str_trip_ch"   placeholder="" name="str[{{x}}][cnt_trip_man]" value="{%if st.cnt_trip_man is defined and st.cnt_trip_man is not empty %}{{st.cnt_trip_man}}{%endif%}">
+
+                                </td>
+                                <td>
+                                    <input type="number" class="form-control str_holiday_ch"   placeholder="" name="str[{{x}}][cnt_holiday_man]" value="{%if st.cnt_holiday_man is defined and st.cnt_holiday_man is not empty %}{{st.cnt_holiday_man}}{%endif%}">
 
                                 </td>
 
                                 <td>
-                                    <input type="number" class="form-control str_duty_ch"   placeholder="" name="str[{{loop.index}}][duty_ch]" value="{%if st.cnt_naryd is defined and st.cnt_naryd is not empty %}{{st.cnt_naryd}}{%endif%}">
+                                    <input type="number" class="form-control str_ill_ch"   placeholder="" name="str[{{x}}][cnt_ill_man]" value="{%if st.cnt_ill_man is defined and st.cnt_ill_man is not empty %}{{st.cnt_ill_man}}{%endif%}">
 
                                 </td>
 
                                 <td>
-                                    <input type="number" class="form-control str_other_ch"   placeholder="" name="str[{{loop.index}}][other_ch]" value="{%if st.cnt_other_man is defined and st.cnt_other_man is not empty %}{{st.cnt_other_man}}{%endif%}">
+                                    <input  type="number" class="form-control str_duty_ch"   placeholder="" name="str[{{x}}][cnt_naryd]" value="{%if st.cnt_naryd is defined and st.cnt_naryd is not empty %}{{st.cnt_naryd}}{%endif%}">
 
                                 </td>
 
-
                                 <td>
-                                    <input type="number" class="form-control str_gdzs_ch"   placeholder="" name="str[{{loop.index}}][gdzs_ch]" value="{%if st.gas is defined and st.gas is not empty %}{{st.gas}}{%endif%}">
+                                    <input type="number" class="form-control str_other_ch"   placeholder="" name="str[{{x}}][cnt_other_man]" value="{%if st.cnt_other_man is defined and st.cnt_other_man is not empty %}{{st.cnt_other_man}}{%endif%}">
 
                                 </td>
 
 
                                 <td>
+                                    <input type="number" class="form-control str_gdzs_ch"   placeholder="" name="str[{{x}}][gas]" value="{%if st.gas is defined and st.gas is not empty %}{{st.gas}}{%endif%}">
+
+                                </td>
+
+
+                                <td>
+                                    <input type="hidden" class="id_pasp" name="str[{{x}}][id_pasp]" value="{%if st.id_pasp is defined and st.id_pasp is not empty %}{{st.id_pasp}}{%endif%}">
+
+                                    {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined  and st.id is defined %}
+                                        <input type="hidden" class="id_str" name="str[{{x}}][id_str]" value="{{st.id}}">
+                                    {%endif%}
+
                                     <a href="#" class="del-str-row delete-cross"  data-toggle="tooltip" data-placement="right" title="Удалить строку"  ><i class="fa fa-times" aria-hidden="true"></i></a>
                                 </td>
                             </tr>
@@ -147,6 +177,16 @@
 
                         <tr class="str_row" id="str_id_row{{i}}" data-loop="{{i}}">
                             <td class="loop-index">{{i}}</td>
+
+
+                            <td>
+                                <div class="btn-group btn-group-xs">
+                                    <img src="{{ base_url('assets/images/updown/24-em-up.png') }}" class="up" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Переместить строку вверх" >
+                                    <img src="{{ base_url('assets/images/updown/24-em-down.png') }}" class="down" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Переместить строку вниз" >
+                                </div>
+                                <input type="hidden" class="sort" name="str[{{i}}][sort]" value="{{i}}">
+                            </td>
+
                             <td style="width:200px">
 
                                 <input type="text" class="form-control  str_pasp_name str-list"   placeholder="ПАСЧ-1" name="str[{{i}}][pasp_name]" >
@@ -217,11 +257,8 @@
 
                             </td>
 
-
-
-
-
                             <td>
+                                <input type="hidden" class="id_pasp" name="str[{{i}}][id_pasp]" >
                                 <a href="#" class="del-str-row delete-cross"  data-toggle="tooltip" data-placement="right" title="Удалить строку"  ><i class="fa fa-times" aria-hidden="true" ></i></a>
                             </td>
                         </tr>
@@ -241,27 +278,59 @@
 
         <div id="str-text">
 
-            <table class="table" >
+            <table class="table table-borderless" >
 
                 {%set x=1%}
-                {% if str.table is defined  and str.table is not empty  %}
+                {% if (str.table is defined  and str.table is not empty) or (is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.str_text is defined and dones.str_text is not empty)  %}
 
-                    {%for st in str.table %}
-                        {%set x=loop.index%}
 
-                        <tbody>
+                    {% if str.table is defined  and str.table is not empty %}
 
-                            <tr class="str_text_row" id="str_text_id_row{{loop.index}}" data-loop="{{loop.index}}">
+                        {%set arr_str_text=str.table%}
 
-                                <td style="border-top:none;">
+                    {%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.str_text is defined and dones.str_text is not empty%}
+                        {%set arr_str_text=dones.str_text%}
+                    {%endif%}
+
+                    <tbody>
+                        {%for st in arr_str_text %}
+
+                            {% if str.table is defined  and str.table is not empty %}
+
+                                {%set x=loop.index%}
+
+                            {%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.str_text is defined and dones.str_text is not empty%}
+                                {%set x=st.sort%}
+                            {%endif%}
+
+
+
+                            <tr class="str_text_row" id="str_text_id_row{{x}}" data-loop="{{x}}">
+
+
+                                <td style="width: 30px">
+                                    <div class="btn-group btn-group-xs">
+                                        <img src="{{ base_url('assets/images/updown/24-em-up.png') }}" class="up" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Переместить строку вверх" >
+                                        <img src="{{ base_url('assets/images/updown/24-em-down.png') }}" class="down" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Переместить строку вниз" >
+                                    </div>
+                                    <input type="hidden" class="sort" name="str_text[{{x}}][sort]" value="{{x}}">
+                                </td>
+
+                                <td>
                                     {%set podr_name=''%}
-                                    {%if st.pasp_name_spec is defined and st.pasp_name_spec is not empty %}
-                                        {%set podr_name=st.pasp_name_spec%}
+                                    {%if str.table is defined  and str.table is not empty%}
+                                        {%if st.pasp_name_spec is defined and st.pasp_name_spec is not empty %}
+                                            {%set podr_name=st.pasp_name_spec%}
+                                        {%endif%}
+                                        {%if st.locorg_name_spec is defined and st.locorg_name_spec is not empty %}
+                                            {%set podr_name=podr_name~' '~st.locorg_name_spec%}
+                                        {%endif%}
+
+                                    {%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.str_text is defined and dones.str_text is not empty%}
+                                        {%set podr_name=st.str_text_podr_name%}
                                     {%endif%}
-                                    {%if st.locorg_name_spec is defined and st.locorg_name_spec is not empty %}
-                                        {%set podr_name=podr_name~' '~st.locorg_name_spec%}
-                                    {%endif%}
-                                    <input  type="text" class="form-control str_text_podr_name "   placeholder="ПАСЧ-1 Ленинского РОЧС" name="str_text[{{loop.index}}][str_text_podr_name]" value="{%if podr_name is defined and podr_name is not empty %}{{podr_name|trim}}{%endif%}">
+
+                                    <input  type="text" class="form-control str_text_podr_name "   placeholder="ПАСЧ-1 Ленинского РОЧС" name="str_text[{{x}}][str_text_podr_name]" value="{%if podr_name is defined and podr_name is not empty %}{{podr_name|trim}}{%endif%}">
 
 
 
@@ -291,25 +360,34 @@
                                             {%endif%}
 
                                         {%endfor%}
+                                    {%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.str_text is defined and dones.str_text is not empty%}
+                                        {%set inf=st.str_text_description%}
                                     {%endif%}
 
 
 
 
-                                    <textarea class="form-control str_text_descr" name="str_text[{{loop.index}}][str_text_description]"  rows="8" cols="3">{%if inf is defined and inf is not empty%}{{inf}}{%endif%}</textarea>
+                                    <textarea class="form-control str_text_descr" name="str_text[{{x}}][str_text_description]"  rows="8" cols="3">{%if inf is defined and inf is not empty%}{{inf}}{%endif%}</textarea>
 
                                 </td>
 
 
-                                <td style="padding-top: 50px;border-top:none;">
+                                <td style="padding-top: 50px;">
+                                    <input type="hidden" class="id_pasp_text" name="str_text[{{x}}][id_pasp]"  value="{%if st.id_pasp is defined and st.id_pasp is not empty %}{{st.id_pasp}}{%endif%}">
+
+                                    {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined  and st.id is defined %}
+                                        <input type="hidden" class="id_str" name="str_text[{{x}}][id_str_text]" value="{{st.id}}">
+                                    {%endif%}
+
                                     <a href="#" class="del-str-text-row delete-cross"  data-toggle="tooltip" data-placement="right" title="Удалить строку"  ><i class="fa fa-times" aria-hidden="true"></i></a>
                                 </td>
                             </tr>
 
 
-                        </tbody>
 
-                    {%endfor%}
+
+                        {%endfor%}
+                    </tbody>
 
                 {%else%}
                     {%set i=1%}
@@ -320,7 +398,16 @@
 
                         <tr class="str_text_row" id="str_text_id_row{{i}}" data-loop="{{i}}">
 
-                            <td style="border-top:none">
+
+                            <td style=" width: 30px">
+                                <div class="btn-group btn-group-xs">
+                                    <img src="{{ base_url('assets/images/updown/24-em-up.png') }}" class="up" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Переместить строку вверх" >
+                                    <img src="{{ base_url('assets/images/updown/24-em-down.png') }}" class="down" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Переместить строку вниз" >
+                                </div>
+                                <input type="hidden" class="sort" name="str_text[{{i}}][sort]" value="{{i}}">
+                            </td>
+
+                            <td>
 
                                 <input  type="text" class="form-control str_text_podr_name "   placeholder="ПАСЧ-1 Ленинского РОЧС" name="str_text[{{i}}][str_text_podr_name]" value="">
 
@@ -329,7 +416,8 @@
                             </td>
 
 
-                            <td style="padding-top: 50px;border-top:none;">
+                            <td style="padding-top: 50px;">
+                                <input type="hidden" class="id_pasp_text" name="str_text[{{i}}][id_pasp]">
                                 <a href="#" class="del-str-text-row delete-cross"  data-toggle="tooltip" data-placement="right" title="Удалить строку"  ><i class="fa fa-times" aria-hidden="true" ></i></a>
                             </td>
                         </tr>

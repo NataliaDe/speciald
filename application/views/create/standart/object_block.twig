@@ -5,6 +5,7 @@
     <!-- /.panel-heading -->
     <div class="card-body" >
 
+         <input type="hidden" class="id_object" name="id_object" value="{%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.object is defined and dones.object is not empty %}{{dones.object.id}}{%endif%}">
 
         {#        <div class="form-row">
                     <div class="form-group col-md-6">
@@ -39,7 +40,7 @@
                 <select  class="form-control select2-single object_house" name="object_house" id="object_house_id" >
                     <option></option>
                     {% for vid in object_house %}
-                        <option value="{{ vid.id }}" >{{ vid.name }}</option>
+                        <option value="{{ vid.id }}" {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.object is defined and dones.object is not empty and dones.object.object_house== vid.id %}selected{%endif%} >{{ vid.name }}</option>
                     {% endfor %}
                 </select>
 
@@ -54,7 +55,7 @@
 
             <div class="form-group col-md-2">
                 <label for="object_size" >Размеры:</label>
-                <input type="text" class="form-control"  placeholder="" name="object_size"  value="">
+                <input type="text" class="form-control"  placeholder="" name="object_size"  value="{%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.object is defined and dones.object is not empty %}{{dones.object.object_size}}{%endif%}">
             </div>
 
 
@@ -62,7 +63,7 @@
             <div class="form-group col-md-2">
                 <label for="object_size" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
                 <div class="checkbox checkbox-success">
-                    <input  type="checkbox" name="object_is_electric" value="1" id="object_is_electric" >
+                    <input  type="checkbox" name="object_is_electric" value="1" id="object_is_electric" {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.object is defined and dones.object is not empty and dones.object.object_is_electric == 1 %}checked{%endif%}>
                     <label for="object_is_electric">
                         Электрофицирован
                     </label>
@@ -87,7 +88,7 @@
                 <select  class="form-control select2-single object_house" name="object_material" id="object_material_id" >
                     <option></option>
                     {% for vid in object_material %}
-                        <option value="{{ vid.id }}" >{{ vid.name }}</option>
+                        <option value="{{ vid.id }}" {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.object is defined and dones.object is not empty and dones.object.object_material == vid.id %}selected{%endif%}>{{ vid.name }}</option>
                     {% endfor %}
                 </select>
 
@@ -105,7 +106,7 @@
                 <select  class="form-control select2-single object_roof" name="object_roof" id="object_roof_id" >
                     <option></option>
                     {% for vid in object_roof %}
-                        <option value="{{ vid.id }}" >{{ vid.name }}</option>
+                        <option value="{{ vid.id }}" {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.object is defined and dones.object is not empty and dones.object.object_roof == vid.id %}selected{%endif%}>{{ vid.name }}</option>
                     {% endfor %}
                 </select>
 
@@ -120,7 +121,7 @@
                             <div class="form-group col-md-2">
                 <label for="object_size" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
                 <div class="checkbox checkbox-success">
-                    <input  type="checkbox" name="object_is_api" value="1" id="object_is_api" >
+                    <input  type="checkbox" name="object_is_api" value="1" id="object_is_api" {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.object is defined and dones.object is not empty and dones.object.object_is_api == 1 %}checked{%endif%}>
                     <label for="object_is_api" >
                         Оборудован АПИ
                     </label>

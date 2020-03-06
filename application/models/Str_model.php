@@ -100,18 +100,20 @@ class Str_model extends CI_Model
 
                        public function get_inf_by_id_pasp($id_pasp)
     {
-        return $this->db->select('* ')
+        return $this->db->select('*, concat(pasp_name_spec," ",locorg_name_spec) as full_name_podr ')
                 ->from('str.spec_tbl_dones')
                 ->where_in('id_pasp', $id_pasp)
+                ->order_by('locorg_name_spec', 'asc')
+                ->order_by('sort_diviz', 'asc')
+                ->order_by('divizion_num', 'asc')
                 ->get()
                 ->result_array();
     }
 
-
-        public function get_main_by_id_pasp($id_pasp)
+    public function get_main_by_id_pasp($id_pasp)
     {
 
-        $this->db->select('m.dateduty,m.ch,m.id_card,m.listls,m.countls as shtat_ch, m.vacant as vacant_ch,m.face,m.calc as br, m.duty as cnt_naryd, m.gas, m.fio_duty');
+        $this->db->select('m.dateduty,m.ch,m.id_card,m.listls as on_list_ch,m.countls as shtat_ch, m.vacant as vacant_ch,m.face as face_ch,m.calc as br_ch, m.duty as cnt_naryd, m.gas, m.fio_duty');
         $this->db->where('m.id_card', $id_pasp);
         $this->db->where('m.is_duty', 1);
         $this->db->order_by('m.dateduty','desc');
@@ -417,7 +419,8 @@ class Str_model extends CI_Model
             $this->db->where('id_loc_org', $ids_locorg);
 
         $this->db->order_by('of_locorg_name_spec', 'asc');
-        $this->db->order_by('pasp_name_spec', 'asc');
+        $this->db->order_by('sort_diviz', 'asc');
+        $this->db->order_by('divizion_num', 'asc');
 
         return $this->db->get('str.spec_list_podr_for_search_str_cars')->result_array();
     }

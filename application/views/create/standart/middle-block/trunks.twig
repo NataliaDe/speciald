@@ -3,7 +3,7 @@
         Сведения по подаче стволов
         <label for="trunks_is_not_involved" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
         <div class="checkbox checkbox-danger" style='display:inline'>
-            <input  type="checkbox" name="trunks[is_not_involved]" value="1"  id='trunks_is_not_involved' onChange='notEnvolve("div-trunks",this);'>
+            <input  type="checkbox" name="trunks[is_not_involved]" value="1"  id='trunks_is_not_involved' onChange='notEnvolve("div-trunks", this);' {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_not_involved_trunks == 1 %}checked{%endif%}>
             <label for="trunks_is_not_involved">
                 Подача стволов не выполнялось
             </label>
@@ -12,7 +12,7 @@
 
         <label for="trunks_is_wide_table" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
         <div class="checkbox checkbox-warning" style='display:inline'>
-            <input  type="checkbox" name="trunks[is_wide_table]" value="1"  id='trunks_is_wide_table' >
+            <input  type="checkbox" name="trunks[is_wide_table]" value="1"  id='trunks_is_wide_table' {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_wide_table_trunks == 1 %}checked{%endif%} {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_not_involved_trunks == 1 %}disabled{%endif%}>
             <label for="trunks_is_wide_table">
                 Расширенная таблица в Word
             </label>
@@ -23,19 +23,21 @@
     <!-- /.panel-heading -->
     <div class="card-body" id="trunks-block">
 
-{#{{dump(rig.trunks)}}#}
+        {#{{dump(rig.trunks)}}#}
         <div class="table-responsive table-bordered">
             <table class="table" >
                 <thead>
                     <tr >
                         <th rowspan="2" >#</th>
-                        <th rowspan="2" colspan="3" >Наименование подразделения</th>
+                        <th rowspan="2"  style="width: 20px"></th>
+                        <th rowspan="2">Техника</th>
+                        <th rowspan="2" colspan="2" >Наименование подразделения</th>
                         <th rowspan="2" >Объем цистерны<br>(тонн)</th>
-                        <th rowspan="2" style="width: 90px">Кол-во л/с<br>(чел.)</th>
+                        <th rowspan="2" style="width: 168px">Кол-во л/с<br>(чел.)</th>
                         <th colspan="2">Прибыте</th>
                         <th>Подача стволов</th>
-                        <th rowspan="2" style="width:150px" >Средства тушения<br>(кол-во, тип)</th>
-                        <th rowspan="2" >Израсходовано воды/ПО<br>(тонн)</th>
+                        <th rowspan="2" style="width:300px" >Средства тушения<br>(кол-во, тип)</th>
+                        <th rowspan="2" style="width:150px" >Израсходо-<br>вано<br>воды/ПО<br>(тонн)</th>
                         <th colspan="2">Локализация</th>
                         <th>Ликвидация</th>
 
@@ -44,10 +46,10 @@
                     <tr>
 
                         <th>Время</th>
-                        <th style="width: 90px">S пож. <br>(кв.м) <i class="fa fa-info-circle info-all" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Ячейка общая для всего столбца"></i></th>
+                        <th style="width: 140px">S пож. <br>(кв.м) <i class="fa fa-info-circle info-all" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Ячейка общая для всего столбца"></i></th>
                         <th>Время</th>
                         <th>Время <i class="fa fa-info-circle info-all" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Ячейка общая для всего столбца"></i></th>
-                        <th style="width: 91px">S пож. <br>(кв.м) <i class="fa fa-info-circle info-all" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Ячейка общая для всего столбца"></i></th>
+                        <th style="width: 140px">S пож. <br>(кв.м) <i class="fa fa-info-circle info-all" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Ячейка общая для всего столбца"></i></th>
                         <th>Время <i class="fa fa-info-circle info-all" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Ячейка общая для всего столбца"></i></th>
 
                     </tr>
@@ -56,39 +58,66 @@
                 </thead>
 
                 {%set x=1%}
-                {% if rig is defined and rig.trunks is defined and rig.trunks is not empty  %}
+                {% if (rig is defined and rig.trunks is defined and rig.trunks is not empty) or (is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_not_involved_trunks == 0 and dones.trunks is defined and dones.trunks is not empty)  %}
+
+                    {% if rig is defined and rig.trunks is defined and rig.trunks is not empty%}
+
+                        {%set arr_trunks=rig.trunks%}
+
+                    {%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_not_involved_trunks == 0 and dones.trunks is defined and dones.trunks is not empty%}
+                        {%set arr_trunks=dones.trunks%}
+                    {%endif%}
+
+
                     <tbody>
 
-                        {%for trunk in rig.trunks %}
-                            {%set x=loop.index%}
+                        {%for trunk in arr_trunks %}
 
-                            <tr class="trunks_row" id="trunks_row_id{{loop.index}}" data-loop="{{loop.index}}">
-                                <td class="loop-index">{{loop.index}}</td>
-                                <td style="width: 300px">
+                            {% if rig is defined and rig.trunks is defined and rig.trunks is not empty%}
 
-                                    <input type="text" class="form-control  mark_trunks"   placeholder="АЦ 5,0-50/4(533702)" name="trunks[{{i}}][mark]" value="{%if trunk.mark is defined %}{{trunk.mark|trim}}{%endif%}">
+                                {%set x=loop.index%}
+
+                            {%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_not_involved_trunks == 0 and dones.trunks is defined and dones.trunks is not empty%}
+                                {%set x=trunk.sort%}
+                            {%endif%}
+
+                            <tr class="trunks_row" id="trunks_row_id{{x}}" data-loop="{{x}}">
+                                <td class="loop-index">{{x}}</td>
+
+                                <td>
+                                    <div class="btn-group btn-group-xs">
+                                        <img src="{{ base_url('assets/images/updown/24-em-up.png') }}" class="up" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Переместить строку вверх" >
+                                        <img src="{{ base_url('assets/images/updown/24-em-down.png') }}" class="down" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Переместить строку вниз" >
+                                    </div>
+                                    <input type="hidden" class="sort" name="trunks[{{x}}][sort]" value="{{x}}">
+                                </td>
+
+
+                                <td style="width: 550px">
+
+                                    <input type="text" class="form-control  mark_trunks"   placeholder="АЦ 5,0-50/4(533702)" name="trunks[{{x}}][mark]" value="{%if trunk.mark is defined %}{{trunk.mark|trim}}{%endif%}">
 
                                 </td>
-                                <td style="width: 300px">
+                                <td style="width: 350px">
 
-                                    <input type="text" class="form-control pasp_name_trunks"   placeholder="ПАСЧ-1" name="trunks[{{i}}][pasp_name]" value="{%if trunk.pasp_name_spec is defined and trunk.pasp_name_spec is not empty %}{{trunk.pasp_name_spec|trim}}{%endif%}">
+                                    <input type="text" class="form-control pasp_name_trunks"   placeholder="ПАСЧ-1" name="trunks[{{x}}][pasp_name]" value="{%if rig is defined and trunk.pasp_name_spec is defined and trunk.pasp_name_spec is not empty %}{{trunk.pasp_name_spec|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and trunk.pasp_name is defined%}{{trunk.pasp_name|trim}}{%endif%}">
 
                                 </td>
 
-                                <td style="width: 340px">
+                                <td style="width: 550px">
 
-                                    <input type="text" class="form-control locorg_name_trunks"   placeholder="Ленинского РОЧС" name="trunks[{{i}}][locorg_name]" value="{%if trunk.locorg_name_spec is defined and trunk.locorg_name_spec is not empty %}{{trunk.locorg_name_spec|trim}}{%endif%}">
+                                    <input type="text" class="form-control locorg_name_trunks"   placeholder="Ленинского РОЧС" name="trunks[{{x}}][locorg_name]" value="{%if rig is defined and trunk.locorg_name_spec is defined and trunk.locorg_name_spec is not empty %}{{trunk.locorg_name_spec|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and trunk.locorg_name is defined%}{{trunk.locorg_name|trim}}{%endif%}">
 
                                 </td>
 
 
                                 <td>
-                                    <input type="text" class="form-control v_ac_trunks" onkeypress="allowFloat();"  placeholder="" name="trunks[{{i}}][v_ac]" value="{%if trunk.v_ac is defined and trunk.v_ac is not empty%}{{(trunk.v_ac/1000)|number_format(1)}}{%endif%}">
+                                    <input type="text" class="form-control v_ac_trunks" onkeypress="allowFloat();"  placeholder="" name="trunks[{{x}}][v_ac]" value="{%if trunk.v_ac is defined and trunk.v_ac is not empty%}{{(trunk.v_ac/1000)|number_format(1)}}{%endif%}">
                                 </td>
 
 
                                 <td>
-                                    <input type="number" class="form-control man_per_car_trunks"   placeholder="" name="trunks[{{i}}][man_per_car]" value="{%if trunk.man_per_car is defined and trunk.man_per_car is not empty%}{{trunk.man_per_car}}{%endif%}">
+                                    <input type="number" class="form-control man_per_car_trunks"   placeholder="" name="trunks[{{x}}][man_per_car]" value="{%if trunk.man_per_car is defined and trunk.man_per_car is not empty%}{{trunk.man_per_car}}{%endif%}">
                                 </td>
 
 
@@ -97,55 +126,65 @@
                                     {% if trunk.time_arrival is not empty and trunk.time_arrival is not null and trunk.time_arrival != '0000-00-00 00:00:00' %}
                                         {%set time_arrival=trunk.time_arrival%}
                                     {%endif%}
-                                    <input type="time" class="form-control time_arrival_trunks"   placeholder="" name="trunks[{{i}}][time_arrival]" value="{%if time_arrival is not empty%}{{time_arrival|date('H:i')}}{%endif%}">
+                                    <input type="time" class="form-control time_arrival_trunks"   placeholder="" name="trunks[{{x}}][time_arrival]" value="{%if time_arrival is not empty%}{{time_arrival|date('H:i')}}{%endif%}">
 
                                 </td>
 
 
                                 <td>
-                                    <input type="text" class="form-control s_fire_arrival_trunks" onkeypress="allowFloat();" onkeyup="setSFire(this);" onchange="setSFire(this);"  placeholder="" name="trunks[{{i}}][s_fire_arrival]" value="{%if trunk.s_bef is defined and trunk.s_bef is not empty %}{{trunk.s_bef|trim}}{%endif%}">
+                                    <input type="text" class="form-control s_fire_arrival_trunks" onkeypress="allowFloat();" onkeyup="setSFire(this);" onchange="setSFire(this);"  placeholder="" name="trunks[{{x}}][s_fire_arrival]" value="{%if rig is defined and trunk.s_bef is defined and trunk.s_bef is not empty %}{{trunk.s_bef|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and trunk.s_fire_arrival is defined%}{{trunk.s_fire_arrival|trim}}{%endif%}">
                                 </td>
 
                                 <td>
-                                    <input type="time" class="form-control time_pod_trunks"   placeholder="" name="trunks[{{i}}][time_pod]" value="{%if trunk.time_pod is defined and  trunk.time_pod is not empty%}{{trunk.time_pod|trim}}{%endif%}">
+                                    <input type="time" class="form-control time_pod_trunks"   placeholder="" name="trunks[{{x}}][time_pod]" value="{%if trunk.time_pod is defined and  trunk.time_pod is not empty%}{{trunk.time_pod|date('H:i')}}{%endif%}">
 
                                 </td>
 
                                 <td>
                                     {%set means=''%}
-                                    {%if trunk.cnt is defined and  trunk.cnt is not empty%}
-                                    {%set means=trunk.cnt|trim%}
+                                    {% if rig is defined %}
+                                        {%if trunk.cnt is defined and  trunk.cnt is not empty%}
+                                            {%set means=trunk.cnt|trim%}
+                                        {%endif%}
+                                        {%if trunk.trunk_name is defined and  trunk.trunk_name is not empty%}
+                                            {%set means=means~' '~trunk.trunk_name|trim%}
+                                        {%endif%}
+                                    {%elseif is_edit_dones is defined and is_edit_dones == 1 and trunk.means_trunks is defined%}
+                                        {%set means=trunk.means_trunks|trim%}
                                     {%endif%}
-                                    {%if trunk.trunk_name is defined and  trunk.trunk_name is not empty%}
-                                    {%set means=means~' '~trunk.trunk_name|trim%}
+
+                                    <input type="text" class="form-control means_trunks"   placeholder="" name="trunks[{{x}}][means_trunks]" value="{%if means is not empty%}{{means|trim}}{%endif%}">
+                                </td>
+
+                                <td>
+                                    <input type="text" class="form-control water_po_out_trunks" onkeypress="allowFloatTrunks();"  placeholder="" name="trunks[{{x}}][water_po_out]" value="{%if rig is defined and  trunk.water is defined and  trunk.water is not empty%}{{trunk.water|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and trunk.water_po_out is defined%}{{trunk.water_po_out|trim}}{%endif%}">
+                                </td>
+
+
+                                <td>
+                                    <input type="time" class="form-control time_loc_trunks"   onchange="setTimeFireLoc(this);" placeholder="" name="trunks[{{x}}][time_loc]" value="{%if trunk.time_loc is defined and trunk.time_loc is not empty and trunk.time_loc is not null and trunk.time_loc != '0000-00-00 00:00:00'%}{{trunk.time_loc|date('H:i')}}{%endif%}">
+
+                                </td>
+
+
+                                <td>
+                                    <input type="text" class="form-control s_fire_loc_trunks" onkeyup="setSFireLoc(this);" onchange="setSFireLoc(this);" onkeypress="allowFloat();"  placeholder="" name="trunks[{{x}}][s_fire_loc]" value="{%if rig.s_loc is defined %}{{rig.s_loc|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and trunk.s_fire_loc is defined%}{{trunk.s_fire_loc|trim}}{%endif%}">
+                                </td>
+
+
+                                <td>
+                                    <input type="time" class="form-control time_likv_trunks"  onchange="setTimeFireLikv(this);"   placeholder="" name="trunks[{{x}}][time_likv]" value="{%if trunk.time_likv is defined and trunk.time_likv is not empty and trunk.time_likv is not null and trunk.time_likv != '0000-00-00 00:00:00'%}{{trunk.time_likv|date('H:i')}}{%endif%}">
+
+                                </td>
+
+
+
+                                <td>
+                                    <input type="hidden" class="id_teh" name="trunks[{{x}}][id_teh]" value="{%if trunk.id_teh is defined and trunk.id_teh is not empty %}{{trunk.id_teh}}{%endif%}">
+
+                                    {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_not_involved_trunks == 0 and trunk.id is defined %}
+                                        <input type="hidden" class="id_trunks" name="trunks[{{x}}][id_trunks]" value="{{trunk.id}}">
                                     {%endif%}
-                                    <input type="text" class="form-control means_trunks"   placeholder="" name="trunks[{{i}}][means_trunks]" value="{%if means is not empty%}{{means|trim}}{%endif%}">
-                                </td>
-
-                                <td>
-                                    <input type="text" class="form-control water_po_out_trunks" onkeypress="allowFloatTrunks();"  placeholder="" name="trunks[{{i}}][water_po_out]" value="{%if trunk.water is defined and  trunk.water is not empty%}{{trunk.water|trim}}{%endif%}">
-                                </td>
-
-
-                                <td>
-                                    <input type="time" class="form-control time_loc_trunks"   onchange="setTimeFireLoc(this);" placeholder="" name="trunks[{{i}}][time_loc]" value="{%if trunk.time_loc is defined and trunk.time_loc is not empty and trunk.time_loc is not null and trunk.time_loc != '0000-00-00 00:00:00'%}{{trunk.time_loc|date('H:i')}}{%endif%}">
-
-                                </td>
-
-
-                                <td>
-                                    <input type="text" class="form-control s_fire_loc_trunks" onkeyup="setSFireLoc(this);" onchange="setSFireLoc(this);" onkeypress="allowFloat();"  placeholder="" name="trunks[{{i}}][s_fire_loc]" value="{%if rig.s_loc is defined %}{{rig.s_loc|trim}}{%endif%}">
-                                </td>
-
-
-                                <td>
-                                    <input type="time" class="form-control time_likv_trunks"  onchange="setTimeFireLikv(this);"   placeholder="" name="trunks[{{i}}][time_likv]" value="{%if trunk.time_likv is defined and trunk.time_likv is not empty and trunk.time_likv is not null and trunk.time_likv != '0000-00-00 00:00:00'%}{{trunk.time_likv|date('H:i')}}{%endif%}">
-
-                                </td>
-
-
-
-                                <td>
 
                                     <a href="#" class="del-row-trunks delete-cross"  data-toggle="tooltip" data-placement="right" title="Удалить строку" ><i class="fa fa-times" aria-hidden="true" ></i></a>
                                 </td>
@@ -162,19 +201,28 @@
 
                         <tr class="trunks_row" id="trunks_row_id{{i}}" data-loop="{{i}}">
                             <td class="loop-index">{{i}}</td>
-                            <td style="width: 300px">
+
+                            <td>
+                                <div class="btn-group btn-group-xs">
+                                    <img src="{{ base_url('assets/images/updown/24-em-up.png') }}" class="up" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Переместить строку вверх" >
+                                    <img src="{{ base_url('assets/images/updown/24-em-down.png') }}" class="down" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Переместить строку вниз" >
+                                </div>
+                                <input type="hidden" class="sort" name="trunks[{{i}}][sort]" value="{{i}}">
+                            </td>
+
+                            <td style="width: 550px">
 
                                 <input type="text" class="form-control  mark_trunks"   placeholder="АЦ 5,0-50/4(533702)" name="trunks[{{i}}][mark]" value="">
 
                             </td>
-                            <td style="width: 300px">
+                            <td style="width: 350px">
 
                                 <input type="text" class="form-control pasp_name_trunks"   placeholder="ПАСЧ-1" name="trunks[{{i}}][pasp_name]" value="">
 
                             </td>
 
 
-                              <td style="width: 340px">
+                            <td style="width: 550px">
 
                                 <input type="text" class="form-control locorg_name_trunks"   placeholder="Ленинского РОЧС" name="trunks[{{i}}][locorg_name]" value="">
 
@@ -234,7 +282,7 @@
 
 
                             <td>
-
+                                <input type="hidden" class="id_teh" name="trunks[{{i}}][id_teh]" >
                                 <a href="#" class="del-row-trunks delete-cross"  data-toggle="tooltip" data-placement="right" title="Удалить строку" ><i class="fa fa-times" aria-hidden="true" ></i></a>
                             </td>
                         </tr>

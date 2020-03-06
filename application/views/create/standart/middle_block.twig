@@ -8,7 +8,7 @@
         {# Дата и время сообщения: 2019-06-26 12:10:04 | Дата и время локализации: 2019-06-26 12:10:05 | Дата и время ликвидации: 2019-06-26 12:10:06#}
 
         <div class="form-row create-form-row">
-
+<input type="hidden" class="form-control"  placeholder="" name="id_rig_current" value="{%if id_rig_current is defined and id_rig_current is not empty%}{{id_rig_current}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.id_rig is not empty %}{{dones.id_rig}}{%endif%}">
 
 
             <div class="form-group col-md-2">
@@ -16,27 +16,29 @@
                 {%set time_msg=''%}
                 {% if rig is defined and rig.time_msg is not empty and rig.time_msg is not null and rig.time_msg != '0000-00-00 00:00:00' %}
                     {%set time_msg=rig.date_msg~' '~rig.time_msg%}
+                {%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.time_msg is not empty and dones.time_msg != '0000-00-00 00:00:00'%}
+                    {%set time_msg=dones.time_msg|date('d.m.Y H:i:s')%}
                 {%endif%}
-                <input type="text" class="form-control date-time-cal"  placeholder="" name="time_msg" value="{%if time_msg is not empty%}{{time_msg|date('d.m.Y H:i')}}{%endif%}">
+                <input type="text" autocomplete="off" class="form-control date-time-sec-cal"  placeholder="" name="time_msg" value="{%if time_msg is not empty%}{{time_msg|date('d.m.Y H:i:s')}}{%endif%}">
             </div>
 
 
             <div class="form-group col-md-2">
                 <label for="time_loc" >Дата и время локализации:</label>
-                <input type="text" class="form-control date-time-cal"  placeholder="" name="time_loc" value="{%if rig is defined and rig.time_loc is not empty and rig.time_loc is not null and rig.time_loc != '0000-00-00 00:00:00'%}{{rig.time_loc|date('d.m.Y H:i:s')}}{%endif%}">
+                <input type="text" autocomplete="off" class="form-control  date-time-sec-cal"  placeholder="" name="time_loc" value="{%if rig is defined and rig.time_loc is not empty and rig.time_loc is not null and rig.time_loc != '0000-00-00 00:00:00'%}{{rig.time_loc|date('d.m.Y H:i:s')}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.time_loc is not empty and dones.time_loc != '0000-00-00 00:00:00'%}{{time_loc|date('d.m.Y H:i:s')}}{%endif%}">
             </div>
 
 
             <div class="form-group col-md-2">
                 <label for="time_likv" >Дата и время ликвидации:</label>
-                <input type="text" class="form-control date-time-cal"  placeholder="" name="time_likv" value="{%if rig is defined and rig.time_likv is not empty and rig.time_likv is not null and rig.time_likv != '0000-00-00 00:00:00'%}{{rig.time_likv|date('d.m.Y H:i:s')}}{%endif%}">
+                <input type="text" autocomplete="off" class="form-control date-time-sec-cal"  placeholder="" name="time_likv" value="{%if rig is defined and rig.time_likv is not empty and rig.time_likv is not null and rig.time_likv != '0000-00-00 00:00:00'%}{{rig.time_likv|date('d.m.Y H:i:s')}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.time_likv is not empty and dones.time_likv != '0000-00-00 00:00:00'%}{{time_likv|date('d.m.Y H:i:s')}}{%endif%}">
             </div>
 
 
 
             <div class="form-group col-md-3">
                 <label for="podr_take_msg" >Подразделение, принявшее сообщение:</label>
-                <input type="text" class="form-control"  placeholder="" name="podr_take_msg" value="{%if rig is defined and rig.spec_podr_take_msg is defined and rig.spec_podr_take_msg is not empty %}{{rig.spec_podr_take_msg|trim}}{%elseif active_user.creator_name is defined and active_user.creator_name is not empty%}{{active_user.creator_name|trim}}{%endif%}">
+                <input type="text" class="form-control"  placeholder="" name="podr_take_msg" value="{%if rig is defined and rig.spec_podr_take_msg is defined and rig.spec_podr_take_msg is not empty %}{{rig.spec_podr_take_msg|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.podr_take_msg is not empty %}{{dones.podr_take_msg|trim}}{%elseif active_user.creator_name is defined and active_user.creator_name is not empty%}{{active_user.creator_name|trim}}{%endif%}">
             </div>
 
 
@@ -44,7 +46,7 @@
 
             <div class="form-group col-md-3">
                 <label for="disp_take_msg" >Диспетчер, принявший сообщение:</label>
-                <input type="text" class="form-control"  placeholder="диспетчер ЦОУ Иванов И.И." name="disp_take_msg" value="диспетчер ЦОУ {%if rig is defined and rig.auth_locorg is defined and rig.auth_locorg is not empty %}{{rig.auth_locorg|trim}}{%endif%}">
+                <input type="text" class="form-control"  placeholder="диспетчер ЦОУ Иванов И.И." name="disp_take_msg" value="{%if rig is defined and rig.auth_locorg is defined and rig.auth_locorg is not empty %}{{rig.auth_locorg|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.disp_take_msg is not empty %}{{dones.disp_take_msg|trim}}{%else%}диспетчер ЦОУ{%endif%}">
             </div>
 
 
@@ -66,63 +68,69 @@
                     {%set is_opposite=''%}
                     {%set all_address=''%}
 
+
                     {%if rig is defined and rig.address is not empty %}
-                        {%set address=rig.address%}
+
+                        {%if rig is defined and rig.address is not empty %}
+                            {%set address=rig.address%}
+                        {%endif%}
+
+                        {%if rig is defined and rig.region_name is not empty and rig.id_region != 3 %}
+                            {%set region=rig.region_name~' область'%}
+                        {%endif%}
+
+                        {%if rig is defined and rig.additional_field_address is not empty %}
+                            {%set additional_field_address=additional_field_address%}
+                        {%endif%}
+
+
+                        {%if rig is defined and rig.is_opposite == 1 %}
+                            {%set is_opposite='напротив'%}
+                        {%endif%}
+
+                        {%if address is not empty  %}
+                            {%set all_address=address%}
+                        {%endif%}
+
+
+                        {%if is_opposite is not empty or additional_field_address is not empty  %}
+                            {%set all_address=all_address~' ('%}
+                        {%endif%}
+
+                        {%if additional_field_address is not empty  %}
+                            {%set all_address=all_address~additional_field_address%}
+                        {%endif%}
+
+                        {%if is_opposite is not empty and additional_field_address is not empty  %}
+                            {%set all_address=all_address~', '~is_opposite%}
+                        {%elseif is_opposite is not empty %}
+                            {%set all_address=all_address~is_opposite%}
+                        {%endif%}
+
+                        {%if is_opposite is not empty or additional_field_address is not empty  %}
+                            {%set all_address=all_address~' )'%}
+                        {%endif%}
+
+                        {%if region is not empty  %}
+                            {%set all_address=all_address~' '~region%}
+                        {%endif%}
+
+                    {%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.address is not empty %}
+                        {%set all_address=dones.address|trim%}
                     {%endif%}
-
-                    {%if rig is defined and rig.region_name is not empty and rig.id_region != 3 %}
-                        {%set region=rig.region_name~' область'%}
-                    {%endif%}
-
-                    {%if rig is defined and rig.additional_field_address is not empty %}
-                        {%set additional_field_address=additional_field_address%}
-                    {%endif%}
-
-
-                    {%if rig is defined and rig.is_opposite == 1 %}
-                        {%set is_opposite='напротив'%}
-                    {%endif%}
-
-                    {%if address is not empty  %}
-                        {%set all_address=address%}
-                    {%endif%}
-
-
-                    {%if is_opposite is not empty or additional_field_address is not empty  %}
-                        {%set all_address=all_address~' ('%}
-                    {%endif%}
-
-                    {%if additional_field_address is not empty  %}
-                        {%set all_address=all_address~additional_field_address%}
-                    {%endif%}
-
-                    {%if is_opposite is not empty and additional_field_address is not empty  %}
-                        {%set all_address=all_address~', '~is_opposite%}
-                    {%elseif is_opposite is not empty %}
-                        {%set all_address=all_address~is_opposite%}
-                    {%endif%}
-
-                    {%if is_opposite is not empty or additional_field_address is not empty  %}
-                        {%set all_address=all_address~' )'%}
-                    {%endif%}
-
-                    {%if region is not empty  %}
-                        {%set all_address=all_address~' '~region%}
-                    {%endif%}
-
                     <textarea class="form-control" name="address"  rows="2" cols="20">{{all_address}}</textarea>
                 </div>
 
 
                 <div class="form-group col-md-1">
                     <label for="latitude" >Широта:</label>
-                    <input type="text" class="form-control" id="lat_id"  placeholder="" name="latitude" value="{%if rig is defined and rig.latitude is defined and rig.latitude is not empty and rig.latitude != 0%}{{rig.latitude|trim}}{%endif%}">
+                    <input type="text" class="form-control" id="lat_id"  placeholder="" name="latitude" value="{%if rig is defined and rig.latitude is defined and rig.latitude is not empty and rig.latitude != 0%}{{rig.latitude|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.latitude is not empty %}{{dones.latitude|trim}}{%endif%}">
                 </div>
 
 
                 <div class="form-group col-md-1">
                     <label for="longitude" >Долгота:</label>
-                    <input type="text" class="form-control" id="long_id"  placeholder="" name="longitude" value="{%if rig is defined and rig.longitude is defined and rig.longitude is not empty and rig.longitude != 0%}{{rig.longitude|trim}}{%endif%}">
+                    <input type="text" class="form-control" id="long_id"  placeholder="" name="longitude" value="{%if rig is defined and rig.longitude is defined and rig.longitude is not empty and rig.longitude != 0%}{{rig.longitude|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.longitude is not empty %}{{dones.longitude|trim}}{%endif%}">
                 </div>
 
                 <div class="col-sm-2"><br>
@@ -224,7 +232,7 @@
                     <select class="form-control select2-single" name="vid_hs_1" id="vid_hs_1"  >
                         <option></option>
                         {% for vid in vid_hs_1 %}
-                            <option value="{{ vid.id }}" >{{ vid.name }}</option>
+                            <option value="{{ vid.id }}" {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.vid_hs_1 == vid.id %}selected{%endif%} >{{ vid.name }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -235,7 +243,7 @@
                     <select class="form-control  select2-single" name="vid_hs_2" id="vid_hs_2"  >
                     <option></option>
                         {% for vid in vid_hs_2 %}
-                            <option value="{{ vid.id }}" class="{{vid.id_vid_hs_1}}">{{ vid.name }}</option>
+                            <option value="{{ vid.id }}" class="{{vid.id_vid_hs_1}}" {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.vid_hs_2 == vid.id %}selected{%endif%}>{{ vid.name }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -262,21 +270,21 @@
 
                 <div class="form-group col-md-2">
                     <label for="reason_rig">Причина выезда:</label>
-                    <input type="text" class="form-control"  placeholder="" name="reason_rig" value="{%if rig is defined and rig.id_reasonrig is defined and rig.id_reasonrig is not empty and rig.id_reasonrig != 0%}{{rig.reasonrig_name|trim}}{%endif%}{%if rig.view_work_id is defined and rig.view_work_id != 0%} ({{rig.view_work|trim}}){%endif%}">
+                    <input type="text" class="form-control"  placeholder="" name="reason_rig" value="{%if rig is defined and rig.id_reasonrig is defined and rig.id_reasonrig is not empty and rig.id_reasonrig != 0%}{{rig.reasonrig_name|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.reason_rig is not empty %}{{dones.reason_rig|trim}}{%endif%}{%if is_edit_dones is not defined and rig.view_work_id is defined and rig.view_work_id != 0 %} ({{rig.view_work|trim}}){%endif%}">
                 </div>
 
 
 
                 <div class="form-group col-md-2">
                     <label for="firereason_rig" >Причина пожара:</label>
-                    <input type="text" class="form-control"  placeholder="" name="firereason_rig" value="{%if rig is defined and rig.firereason_id is defined and rig.firereason_id is not empty and rig.firereason_id != 0%}{{rig.firereason_name|trim}}{%endif%}">
+                    <input type="text" class="form-control"  placeholder="" name="firereason_rig" value="{%if rig is defined and rig.firereason_id is defined and rig.firereason_id is not empty and rig.firereason_id != 0%}{{rig.firereason_name|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.firereason_rig is not empty %}{{dones.firereason_rig|trim}}{%endif%}">
                 </div>
 
 
 
                 <div class="form-group col-md-2">
                     <label for="inspector" >Инспектор:</label>
-                    <input type="text" class="form-control"  placeholder="" name="inspector" value="{%if rig is defined and rig.inspector is defined and rig.inspector is not empty %}{{rig.inspector|trim}}{%endif%}">
+                    <input type="text" class="form-control"  placeholder="" name="inspector" value="{%if rig is defined and rig.inspector is defined and rig.inspector is not empty %}{{rig.inspector|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.inspector is not empty %}{{dones.inspector|trim}}{%endif%}">
                 </div>
 
 

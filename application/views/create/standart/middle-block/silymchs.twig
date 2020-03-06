@@ -4,13 +4,13 @@
         К месту вызова направлялись: (возможность ручной корректировки)
 
         &nbsp;&nbsp;
-        <a href="#" data-toggle="modal"  data-target="#modal-search-str-cars" data-url="" data-toggle="tooltip" data-placement="right" title="Поиск техники в строевой записке">
+        <a href="#" id="a-search-str-cars" data-toggle="modal"  data-target="#modal-search-str-cars" data-url="" data-toggle="tooltip" data-placement="right" title="Поиск техники в строевой записке">
             <i class="fa fa-search" aria-hidden="true" id="search-str-cars"></i>
         </a>
         &nbsp;&nbsp;
         <label for="silymchs_is_not_involved" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
         <div class="checkbox checkbox-danger" style='display:inline'>
-            <input  type="checkbox" name="silymchs[is_not_involved]" value="1"  id='silymchs_is_not_involved' onChange='notEnvolve("div-silymchs", this);'>
+            <input  type="checkbox" name="silymchs[is_not_involved]" value="1"  id='silymchs_is_not_involved' onChange='notEnvolve("div-silymchs", this);' {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_not_involved_silymchs == 1 %}checked{%endif%}>
             <label for="silymchs_is_not_involved">
                 СиС МЧС не привлекались
             </label>
@@ -29,7 +29,8 @@
             <table class="table" >
                 <thead>
                     <tr>
-                        <th style="width: 30px">#</th>
+                        <th>#</th>
+                        <th ></th>
                         <th style="width: 320px">Техника</th>
                         <th style="width: 150px">Подразделение</th>
                         <th style="width: 250px">РОЧС</th>
@@ -54,38 +55,66 @@
                 </thead>
 
                 {%set x=1%}
-                {% if rig is defined and rig.silymchs is defined and rig.silymchs is not empty  %}
 
+                {% if (rig is defined and rig.silymchs is defined and rig.silymchs is not empty) or (is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_not_involved_silymchs == 0 and dones.silymchs is defined and dones.silymchs is not empty)%}
+
+                    {% if rig is defined and rig.silymchs is defined and rig.silymchs is not empty%}
+
+                        {%set arr_silymchs=rig.silymchs%}
+
+                    {%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_not_involved_silymchs == 0 and dones.silymchs is defined and dones.silymchs is not empty%}
+                        {%set arr_silymchs=dones.silymchs%}
+                    {%endif%}
 
                     <tbody>
 
-                        {%for sily in rig.silymchs %}
-                            {%set x=loop.index%}
+                        {%for sily in arr_silymchs %}
 
-                            <tr class="teacher_row" id="klon{{loop.index}}" data-loop="{{loop.index}}">
-                                <td class="loop-index">{{loop.index}}</td>
+
+                            {% if rig is defined and rig.silymchs is defined and rig.silymchs is not empty%}
+
+                                {%set x=loop.index%}
+
+                            {%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_not_involved_silymchs == 0 and dones.silymchs is defined and dones.silymchs is not empty%}
+                                {%set x=sily.sort%}
+                            {%endif%}
+
+
+                            <tr class="teacher_row" id="klon{{x}}" data-loop="{{x}}">
+
+
+                                <td class="loop-index">{{x}}</td>
+
+                                <td>
+                                    <div class="btn-group btn-group-xs">
+                                        <img src="{{ base_url('assets/images/updown/24-em-up.png') }}" class="up" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Переместить строку вверх" >
+                                        <img src="{{ base_url('assets/images/updown/24-em-down.png') }}" class="down" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Переместить строку вниз" >
+                                    </div>
+                                    <input type="hidden" class="sort" name="silymchs[{{x}}][sort]" value="{{x}}">
+                                </td>
+
                                 <td>
 
-                                    <input type="text" class="form-control  mark teacher-list"   placeholder="" name="silymchs[{{loop.index}}][mark]" value="{%if sily.mark is defined %}{{sily.mark|trim}}{%endif%}">
+                                    <input type="text" class="form-control  mark teacher-list"   placeholder="" name="silymchs[{{x}}][mark]" value="{%if sily.mark is defined %}{{sily.mark|trim}}{%endif%}">
 
                                 </td>
                                 <td>
 
-                                    <input type="text" class="form-control  pasp_name"   placeholder="" name="silymchs[{{loop.index}}][pasp_name]" value="{%if sily.pasp_name_spec is defined %}{{sily.pasp_name_spec|trim}}{%endif%}">
+                                    <input type="text" class="form-control  pasp_name"   placeholder="" name="silymchs[{{x}}][pasp_name]" value="{%if rig is defined and sily.pasp_name_spec is defined %}{{sily.pasp_name_spec|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and sily.pasp_name is defined%}{{sily.pasp_name|trim}}{%endif%}">
 
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control locorg_name"   placeholder="" name="silymchs[{{loop.index}}][locorg_name]" value="{%if sily.locorg_name_spec is defined %}{{sily.locorg_name_spec|trim}}{%endif%}">
+                                    <input type="text" class="form-control locorg_name"   placeholder="" name="silymchs[{{x}}][locorg_name]" value="{%if sily.locorg_name_spec is defined %}{{sily.locorg_name_spec|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and sily.locorg_name is defined%}{{sily.locorg_name|trim}}{%endif%}">
 
                                 </td>
 
                                 <td>
-                                    <input type="text" class="form-control v_ac" onkeypress="allowFloat();"  placeholder="" name="silymchs[{{loop.index}}][v_ac]" value="{%if sily.v_ac is defined and sily.v_ac is not empty%}{{(sily.v_ac/1000)|number_format(1)}}{%endif%}">
+                                    <input type="text" class="form-control v_ac" onkeypress="allowFloat();"  placeholder="" name="silymchs[{{x}}][v_ac]" value="{%if sily.v_ac is defined and sily.v_ac is not empty%}{{(sily.v_ac/1000)|number_format(1)}}{%endif%}">
                                 </td>
 
                                 <td>
-                                    <input type="number" class="form-control man_per_car"   placeholder="" name="silymchs[{{loop.index}}][man_per_car]" value="{%if sily.man_per_car is defined and sily.man_per_car is not empty%}{{sily.man_per_car}}{%endif%}">
-                                    {%if sily.man_per_car_note is defined and sily.man_per_car_note is not empty%}
+                                    <input type="number" class="form-control man_per_car"   placeholder="" name="silymchs[{{x}}][man_per_car]" value="{%if sily.man_per_car is defined and sily.man_per_car is not empty%}{{sily.man_per_car}}{%endif%}">
+                                    {%if rig is defined and sily.man_per_car_note is defined and sily.man_per_car_note is not empty%}
                                         <i class="fa fa-info-circle" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="{{sily.man_per_car_note}}"></i>
 
                                     {%endif%}
@@ -97,7 +126,7 @@
                                         {%set time_exit=sily.time_exit%}
                                     {%endif%}
 
-                                    <input type="time" class="form-control time_exit" onchange="setTimeFollow(this);"  placeholder="" name="silymchs[{{loop.index}}][time_exit]" value="{%if time_exit is not empty%}{{time_exit|date('H:i')}}{%endif%}">
+                                    <input type="time" class="form-control time_exit" onchange="setTimeFollow(this);"  placeholder="" name="silymchs[{{x}}][time_exit]" value="{%if time_exit is not empty%}{{time_exit|date('H:i')}}{%endif%}">
                                 </td>
                                 <td>
                                     {%set time_arrival=''%}
@@ -105,7 +134,7 @@
                                         {%set time_arrival=sily.time_arrival%}
                                     {%endif%}
 
-                                    <input type="time" class="form-control time_arrival" onchange="setTimeFollow(this);"  placeholder="" name="silymchs[{{loop.index}}][time_arrival]" value="{%if time_arrival is not empty%}{{time_arrival|date('H:i')}}{%endif%}">
+                                    <input type="time" class="form-control time_arrival" onchange="setTimeFollow(this);"  placeholder="" name="silymchs[{{x}}][time_arrival]" value="{%if time_arrival is not empty%}{{time_arrival|date('H:i')}}{%endif%}">
 
                                 </td>
 
@@ -117,7 +146,7 @@
                                         {%set time_follow=sily.time_follow|date('i')|trim('0','left')%}
                                     {%endif%}
 
-                                    <input type="number" class="form-control time_follow"   placeholder="" name="silymchs[{{loop.index}}][time_follow]" value="{%if time_follow is not empty%}{{time_follow}}{%endif%}">
+                                    <input type="number" class="form-control time_follow"   placeholder="" name="silymchs[{{x}}][time_follow]" value="{%if time_follow is not empty%}{{time_follow}}{%endif%}">
 
 
                                 </td>
@@ -128,7 +157,7 @@
                                         {%set distance=sily.distance%}
                                     {%endif%}
 
-                                    <input type="text" class="form-control distance" onkeypress="allowFloat();"  placeholder="" name="silymchs[{{loop.index}}][distance]" value="{%if distance is not empty%}{{distance}}{%endif%}">
+                                    <input type="text" class="form-control distance" onkeypress="allowFloat();"  placeholder="" name="silymchs[{{x}}][distance]" value="{%if distance is not empty%}{{distance}}{%endif%}">
 
                                 </td>
 
@@ -138,7 +167,7 @@
                                         {%set time_end=sily.time_end%}
                                     {%endif%}
 
-                                    <input type="time" class="form-control time_end"   placeholder="" name="silymchs[{{loop.index}}][time_end]" value="{%if time_end is not empty%}{{time_end|date('H:i')}}{%endif%}">
+                                    <input type="time" class="form-control time_end"   placeholder="" name="silymchs[{{x}}][time_end]" value="{%if time_end is not empty%}{{time_end|date('H:i')}}{%endif%}">
 
                                 </td>
 
@@ -149,12 +178,19 @@
                                         {%set time_return=sily.time_return%}
                                     {%endif%}
 
-                                    <input type="time" class="form-control time_return"   placeholder="" name="silymchs[{{loop.index}}][time_return]" value="{%if time_return is not empty%}{{time_return|date('H:i')}}{%endif%}">
+                                    <input type="time" class="form-control time_return"   placeholder="" name="silymchs[{{x}}][time_return]" value="{%if time_return is not empty%}{{time_return|date('H:i')}}{%endif%}">
 
                                 </td>
 
                                 <td>
-                                    <input type="hidden" name="id_car_from_str">
+
+                                    <input type="hidden" class="id_teh" name="silymchs[{{x}}][id_teh]" value="{%if sily.id_teh is defined and sily.id_teh is not empty %}{{sily.id_teh}}{%endif%}">
+
+                                    {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_not_involved_silymchs == 0 and sily.id is defined %}
+                                        <input type="hidden" class="id_silymchs" name="silymchs[{{x}}][id_silymchs]" value="{{sily.id}}">
+                                    {%endif%}
+
+
                                     <a href="#" class="del-teacher delete-cross"  data-toggle="tooltip" data-placement="right" title="Удалить строку"  ><i class="fa fa-times" aria-hidden="true" ></i></a>
                                 </td>
                             </tr>
@@ -162,13 +198,32 @@
                         {%endfor%}
                     </tbody>
 
+
                 {%else%}
                     {%set i=1%}
                     {%set x=i%}
                     <tbody>
 
                         <tr class="teacher_row" id="klon{{i}}" data-loop="{{i}}">
+
+
                             <td class="loop-index">{{i}}</td>
+
+
+                            <td>
+                                <div class="btn-group btn-group-xs">
+                                    <img src="{{ base_url('assets/images/updown/24-em-up.png') }}" class="up" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Переместить строку вверх" >
+                                    <img src="{{ base_url('assets/images/updown/24-em-down.png') }}" class="down" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Переместить строку вниз" >
+                                    {#<img src="{{ base_url('assets/images/arrow_up.gif') }}" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Переместить строку вверх" >
+                                    <img src="{{ base_url('assets/images/arrow_down.gif') }}" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Переместить строку вниз" >#}
+                                    {#<i class="fa fa-sort-asc up fa-2x" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Переместить строку вверх" ></i>
+                                    <i class="fa fa-sort-desc down fa-2x" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Переместить строку вниз" ></i>#}
+                                    {#<button class="btn btn-default up" type="button">Вверх</button>
+                                    <button class="btn btn-default down" type="button">Вниз</button>#}
+                                </div>
+                                <input type="hidden" class="sort" name="silymchs[{{i}}][sort]" value="{{i}}">
+                            </td>
+
                             <td>
 
                                 <input type="text" class="form-control  mark teacher-list"   placeholder="" name="silymchs[{{i}}][mark]" value="">
@@ -234,7 +289,7 @@
                             </td>
 
                             <td>
-                                <input type="hidden" name="id_car_from_str">
+                                <input type="hidden" class="id_teh" name="silymchs[{{i}}][id_teh]">
                                 <a href="#" class="del-teacher delete-cross"  data-toggle="tooltip" data-placement="right" title="Удалить строку" ><i class="fa fa-times" aria-hidden="true" ></i></a>
                             </td>
                         </tr>
@@ -248,6 +303,7 @@
         </div>
 
         <a href="#" id="add_teacher" >+  добавить еще</a>
+
 
         <!-- /.table-responsive -->
     </div>

@@ -12,7 +12,6 @@
 
 
 
-
         <div class="form-group row create-form-row">
             <div class="col-sm-2">
                 <h4 class="heading-primary" style="float: left">Специальное донесение
@@ -21,29 +20,30 @@
 </a>#}
             </div>
             <label for="specd_date" class="col-form-label">от &nbsp</label>
-            <div class="col-sm-1 input-group date-cal">
+            <div class="col-sm-1 input-group">
 
-                <input type="text" class="form-control date-cal"  placeholder="" name="specd_date" value="">
+                <input type="text" class="form-control date-cal"  placeholder="" name="specd_date" value="{%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.specd_date is not empty%}{{dones.specd_date|date('d.m.Y')}}{%endif%}">
             </div>
 
 
             <div class="col-sm-2 input-group ">
                 <label for="specd_number" class="col-form-label">№ &nbsp</label>
-                <input type="text" class="form-control "  placeholder="00/00-00/0000" name="specd_number" value="">
+                <input type="text" class="form-control "  placeholder="00/00-00/0000" name="specd_number" value="{%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.specd_number is not empty%}{{dones.specd_number|trim}}{%endif%}">
             </div>
 
-
-            <div class="col-sm-5" style="margin-left:260px;">
-                {%include '/create/timer.twig'%}
-            </div>
+                {%if is_edit_dones is not defined  %}
+                    <div class="col-sm-5" style="margin-left:260px;">
+                        {%include '/create/timer.twig'%}
+                    </div>
+                {%endif%}
         </div>
 
         <div class="accordion">
             <dl>
                 <dt class="dt-class">
-                    <a style="background-color:#428bca; color: white;border-color: #428bca;" href="#accordion1" aria-expanded="true" aria-controls="accordion1" class="accordion-title accordionTitle js-accordionTrigger custom-a is-collapsed is-expanded" >Специальная служебная информация</a>
+                    <a  href="#accordion1" aria-expanded="true" aria-controls="accordion1" class="accordion-title accordionTitle js-accordionTrigger custom-a is-collapsed is-expanded accordion-a-official" >Специальная служебная информация</a>
                 </dt>
-                <dd class="accordion-content accordionItem is-expanded animateIn" id="accordion1" aria-hidden="false">
+                <dd class="accordion-content accordionItem is-expanded animateIn accordion-content-official" id="accordion1" aria-hidden="false">
                     {%include '/create/standart/official_block.twig'%}
                 </dd>
                 <dt class="dt-class">
@@ -56,7 +56,7 @@
 
                 <dt class="dt-class">
                     <a style="background-color:#428bca; color: white;border-color: #428bca; " href="#accordion3" aria-expanded="false" aria-controls="accordion3" class="accordion-title accordionTitle js-accordionTrigger custom-a is-collapsed is-expanded">
-                        Таблицы
+                        Описание выезда и базовые таблицы
                     </a>
                 </dt>
                 <dd class="accordion-content accordionItem is-expanded animateIn" id="accordion3" aria-hidden="false">
@@ -82,7 +82,7 @@
                     </div>
 
                     <br>
-                    <div  id="informing-block-div">
+                    <div  id="str-block-div">
                         {%include '/create/standart/middle-block/str.twig'%}
                     </div>
 
@@ -155,8 +155,28 @@
 
 
         </div>
+                    <center>
+
+                        <button type="submit" class="btn btn-danger">Сохранить</button>
+                    </center>
+
+{#                    <div class="form-row create-form-row ">
 
 
+                        <div class="form-group col-md-4" >
+
+                        </div>
+
+                        <div class="form-group col-md-1" >
+                            <button type="submit" class="btn btn-danger">Сохранить</button>
+                        </div>
+
+
+                       <div class="form-group col-md-2">
+                            <button type="submit" class="btn btn-primary">Сформировать для Microsoft Word &raquo;</button>
+                        </div>
+
+                    </div>#}
 
 
         {# </div>#}
@@ -168,6 +188,7 @@
 
     {%include 'create/standart/modals/modal-search-rig.twig'%}
     {%include 'create/standart/modals/modal-search-str-cars.twig'%}
+    {%include 'create/standart/modals/modal-search-str-inf.twig'%}
 
     {%include 'create/standart/modals/modal-add-new-work-innerservice.twig'%}
     {%include 'create/standart/modals/modal-add-new-vid-object-house.twig'%}
@@ -189,7 +210,10 @@
 
 
 
-    <link rel="stylesheet" href="{{ base_url('assets/js/dd/css/bootstrap-datetimepicker.min.css') }}">
+    {#<link rel="stylesheet" href="{{ base_url('assets/js/dd/css/bootstrap-datetimepicker.min.css') }}">#}
+
+ <link href="{{ base_url('/assets/daterangepicker/daterangepicker.css') }}" rel="stylesheet">
+
 
 
     <link rel="stylesheet" href="{{ base_url('assets/datatables/jquery.dataTables.css') }}">
@@ -207,7 +231,7 @@
 
 
         #modal-search-rig .select2-container {
-            width: 160px !important;
+            width: 250px !important;
         }
 
         #modal-search-str-cars .select2-container {
@@ -223,6 +247,15 @@
         }
 
 
+        #modal-search-str-inf  .select2-container {
+            width: 350px !important;
+        }
+        #modal-search-str-inf .select-pasp-cls .select2-container {
+            width: 550px !important;
+        }
+
+
+
         #innerservice-table .select2-container {
             width: 200px !important;
         }
@@ -230,8 +263,20 @@
         #innerservice-table .td_innerservice_name .select2-container {
             width: 290px !important;
         }
+                #water-source-table .td_water-source-type .select2-container {
+            width: 290px !important;
+        }
 
 
+{#       #div-silymchs table {
+            counter-reset: row-num;
+        }
+       #div-silymchs table tr {
+            counter-increment: row-num;
+        }
+       #div-silymchs table tr td:first-child::before {
+            content: counter(row-num);
+        }#}
 
 
         {#        .select2-results .select2-results__option[aria-disabled=true] {
@@ -251,17 +296,26 @@
     <script src="{{ base_url('/assets/js/mask/jquery.maskedinput.min.js')}}"></script>
 
 
-    <script src="{{ base_url('/assets/js/dd/moment.min.js')}}"></script>
-    <script src="{{ base_url('/assets/js/dd/locale/ru.js')}}"></script>
-    <script src="{{ base_url('/assets/js/dd/js/bootstrap-datetimepicker.min.js')}}"></script>
+
+        <script type="text/javascript"
+            src="{{ base_url('assets/daterangepicker/moment.min.js') }}"></script>
+    <script type="text/javascript"
+            src="{{ base_url('assets/daterangepicker/daterangepicker.js') }}"></script>
+
+    {#<script src="{{ base_url('/assets/js/dd/moment.min.js')}}"></script>#}
+
+    {#<script src="{{ base_url('/assets/js/dd/locale/ru.js')}}"></script>#}
+{#    <script src="{{ base_url('/assets/js/dd/js/bootstrap-datetimepicker.min.js')}}"></script>#}
     <script src="{{ base_url('/assets/js/manual_datetimepicker.js')}}"></script>
 
 
     <script src="{{ base_url('/assets/js/form-standart/journal_table.js')}}"></script>
     <script src="{{ base_url('/assets/js/form-standart/str_table.js')}}"></script>
+    <script src="{{ base_url('/assets/js/form-standart/final_block.js')}}"></script>
 
     <script src="{{ base_url('/assets/js/form-standart/search_rig.js')}}"></script>
     <script src="{{ base_url('/assets/js/form-standart/search_str_cars.js')}}"></script>
+    <script src="{{ base_url('/assets/js/form-standart/search_str_inf.js')}}"></script>
 
     <script src="{{ base_url('/assets/datatables/jquery.dataTables.js')}}"></script>
 
@@ -270,10 +324,6 @@
     <script>
         jQuery("#lat_id").mask("99.999999");//долгота
         jQuery("#long_id").mask("99.999999");//широта
-
-
-
-
 
         $(document).ready(function () {
 
@@ -284,6 +334,7 @@
 
 
     <script>
+        {%if is_edit_dones is not defined  %}
 // здесь нужная дата в формате гггг-мм-дд чч:мм:сс
 //var deadline='2020-01-20 00:00:00';
         function dateAdd(date, interval, units) {
@@ -339,7 +390,7 @@
                     alert("Время истекло!");
                 });
 
-
+        {%endif%}
 
 
 
@@ -990,8 +1041,8 @@
             }).done(function (data) {
 
                 if (data.is_success === 1) {
-                    $('#type_water_source_id').append('<option value="' + data.id + '">' + data.name + '</option>');
-                    $('#type_water_source_id').trigger("change");
+                    $('#div-water-source #water-source-table .water_source_type').append('<option value="' + data.id + '">' + data.name + '</option>');
+                    $('#div-water-source #water-source-table .water_source_type').trigger("change");
 
                     $('#type_water_source_for_edit').append('<option value="' + data.id + '">' + data.name + '</option>');
                     $('#type_water_source_for_edit').trigger("change");
@@ -1035,7 +1086,7 @@
                     /*  set data*/
                     $('#modal-add-new-vid-type-water-source').find('#type_water_source_for_edit option[value=' + id_edit + ']').text(data.name);//select edit
                     $('#modal-add-new-vid-type-water-source').find('#type_water_source_for_delete option[value=' + id_edit + ']').text(data.name);//select delete
-                    $('#type_water_source_id option[value=' + id_edit + ']').text(data.name);//select on form
+                    $('#div-water-source #water-source-table').find('.water_source_type option[value=' + id_edit + ']').text(data.name);//select on form
 
                     /* refresh update select */
                     $('#modal-add-new-vid-type-water-source').find('#type_water_source_for_edit').select2('destroy');
@@ -1046,8 +1097,8 @@
                     $('#modal-add-new-vid-type-water-source').find('#type_water_source_for_delete').select2();
 
                     /* refresh select on form */
-                    $('#type_water_source_id').select2('destroy');
-                    $('#type_water_source_id').select2({
+                    $('#div-water-source #water-source-table .water_source_type').select2('destroy');
+                    $('#div-water-source #water-source-table .water_source_type').select2({
                         placeholder: "Выберите из списка",
                         allowClear: true,
                         "language": {
@@ -1086,7 +1137,7 @@
                     id: id
                 }
             });
-            $('#type_water_source_id option[value=' + id + ']').remove();
+            $('#div-water-source #water-source-table .water_source_type option[value=' + id + ']').remove();
             $('#modal-add-new-vid-type-water-source').find('#type_water_source_for_edit option[value=' + id + ']').remove();//edit select
             $('#modal-add-new-vid-type-water-source').find('#type_water_source_for_delete option[value=' + id + ']').remove();
             toastr.success('Тип был удален из БД', 'Info:', {timeOut: 5000});
@@ -1101,7 +1152,7 @@
             $('#modal-add-new-vid-type-water-source').find('#type_water_source_for_delete').trigger("change");
 
             /* refresh select on form */
-            $('#type_water_source_id').trigger("change");// on form
+            $('#div-water-source #water-source-table .water_source_type').trigger("change");// on form
         }
 
 
@@ -1114,6 +1165,13 @@
 
                 $('#' + what).find('.card-body').hide();
 
+                if (what === 'div-silymchs') {// silymchs - don't show serach cars
+                    $('#' + what).find('#a-search-str-cars').hide();
+
+                }
+
+
+
                 if (what === 'div-trunks') {// wide table for trunks block
                     $('#' + what).find('#trunks_is_wide_table').prop('disabled', true);
                     $('#' + what).find('#trunks_is_wide_table').prop('checked', false);
@@ -1122,6 +1180,12 @@
             } else {
 
                 $('#' + what).find('.card-body').show();
+
+
+                if (what === 'div-silymchs') {// silymchs - don't show serach cars
+                    $('#' + what).find('#a-search-str-cars').show();
+
+                }
 
                 if (what === 'div-trunks') {// wide table for trunks block
                     $('#' + what).find('#trunks_is_wide_table').prop('disabled', false);

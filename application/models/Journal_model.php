@@ -194,6 +194,7 @@ class Journal_model extends CI_Model
                     'is_delete' => 0
                 ])
                 ->where('id != ', 0)
+            ->order_by('name', 'asc')
                 ->get()
                 ->result_array();
     }

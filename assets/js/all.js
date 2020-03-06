@@ -33,7 +33,7 @@ $(document).ready(function () {
                 }
             });
 
-            jQuery("#vid_hs_2").chained("#vid_hs_1");
+           
 
 
 });

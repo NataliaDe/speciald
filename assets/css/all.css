@@ -124,5 +124,33 @@ table.dataTable tbody td {
 
 
                  .select2-search__field{
-            width: auto !important;
+/*            width: auto !important;*/
         }
+
+        .field-not-exectly{
+            background-color: #f7ecb5;
+        }
+
+        .up,.down{
+            cursor: pointer;
+        }
+
+
+        .table td {
+    padding: 0.5rem !important;
+}
+
+.card-body {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+}
+
+
+.accordion-a-official{
+    background-color:#999 !important;
+    color: white !important;
+    border: solid 1px #6c757d !important;
+}
+.accordion-content-official{
+    border: solid 1px #999999 !important;
+}

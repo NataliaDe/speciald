@@ -1,3 +1,3 @@
 <label for="object_floor" >Этажность:</label>
-<input type="text" class="form-control"  placeholder="" name="object_floor"  value="{%if rig.people.floor is defined and rig.people.floor is not empty%}{{((rig.people.floor|split('/'))|first)|trim}}{%endif%}">
+<input type="text" class="form-control"  placeholder="" name="object_floor"  value="{%if rig.people.floor is defined and rig.people.floor is not empty%}{{((rig.people.floor|split('/'))|first)|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.object is defined and dones.object is not empty %}{{dones.object.object_floor}}{%endif%}">
 

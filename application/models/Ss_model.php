@@ -46,4 +46,14 @@ class Ss_model extends CI_Model
                 ->result_array();
     }
 
+
+        public function set_regions_cp_list()
+    {
+        $regions = $this->get_regions();
+        $cp_region[] = array('id' => 8, 'name' => 'РОСН');
+        $cp_region[] = array('id' => 9, 'name' => 'УГЗ');
+        $cp_region[] = array('id' => 12, 'name' => 'Авиация');
+        return array_merge($regions, $cp_region);
+    }
+
 }

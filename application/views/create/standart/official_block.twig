@@ -1,13 +1,24 @@
 {#<p>Дата и время создания специального донесения: 2019-10-10 12:10:04</p>#}
 <br>
-<input type="hidden" class="form-control"  placeholder="" name="id_rig" value="{{active_user.id_rig}}">
+
 <div class="form-row create-form-row">
 
 
     <div class="form-group col-md-3">
         <label for="official_date_start" >Дата и время создания специального донесения:</label>
-        <input type="text" class="form-control" disabled  placeholder="" name="official_date_start" value="{{"now"|date('d.m.Y H:i:s')}}">
+        <input type="text" class="form-control" readonly  placeholder="" name="official_date_start" value="{%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.official_date_start is not empty and dones.official_date_start != '0000-00-00 00:00:00'%}{{dones.official_date_start|date('d.m.Y H:i:s')}}{%else%}{{"now"|date('d.m.Y H:i:s')}}{%endif%}">
     </div>
+
+
+    {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.official_date_end is not empty %}
+
+        <div class="form-group col-md-3">
+            <label for="official_date_end" >Дата и время окончания создания специального донесения:</label>
+            <input type="text" class="form-control" disabled  value="{{dones.official_date_end|date('d.m.Y H:i:s')}}">
+        </div>
+
+        <input type="hidden" class="form-control" name="official_date_start_edit"  value="{{"now"|date('d.m.Y H:i:s')}}">
+    {%endif%}
 
 
     <div class="form-group col-md-2">
@@ -15,13 +26,18 @@
         <select class="form-control select2-select" name="specd_vid" id="specd_vid"  >
 
             {% for vid in vid_specd %}
-                <option {%if vid.id == 370%} selected {%endif%} value="{{ vid.id }}" >{{ vid.name }}</option>
+                {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined %}
+                    <option {%if dones.specd_vid == vid.id%} selected {%endif%} value="{{ vid.id }}" >{{ vid.name }}</option>
+                {%else %}
+                    <option {%if vid.id == 370%} selected {%elseif vid.id == 370 %}{%endif%} value="{{ vid.id }}" >{{ vid.name }}</option>
+                {%endif%}
+
             {% endfor %}
         </select>
     </div>
 
-
-
+    {#id of edit dones#}
+    <input type="hidden" class="form-control"  placeholder="" name="id_dones" value="{%if is_edit_dones is defined and is_edit_dones == 1 and id_dones is defined and id_dones is not empty%}{{id_dones}}{%endif%}">
 
 </div>
 {#
@@ -42,7 +58,9 @@
     <div class="form-group col-md-3">
         <label for="official_creator_name" >Создатель:</label>
         {%set official_creator_name=''%}
-        {%if active_user.creator_name is defined and active_user.creator_name is not empty %}
+        {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined %}
+            {%set official_creator_name=dones.official_creator_name|trim%}
+        {%elseif active_user.creator_name is defined and active_user.creator_name is not empty %}
             {%set official_creator_name=active_user.creator_name%}
         {%endif%}
         <input type="text" class="form-control"  placeholder="наим. подразделения" name="official_creator_name" value="{{official_creator_name}}">
@@ -53,14 +71,18 @@
     <div class="form-group col-md-3">
         <label for="official_creator_position" >Должность:</label>
         {%set official_creator_position=''%}
-        {%if active_user.position_name is defined and active_user.position_name is not empty %}
-            {%set official_creator_position=official_creator_position~active_user.position_name%}
-        {%endif%}
-        {%if active_user.rank_name is defined and active_user.rank_name is not empty %}
-            {%set official_creator_position=official_creator_position~' '~active_user.rank_name|lower%}
-        {%endif%}
-        {%if active_user.auth_fio is defined and active_user.auth_fio is not empty %}
-            {%set official_creator_position=official_creator_position~' '~active_user.auth_fio%}
+        {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.official_creator_position is not empty %}
+            {%set official_creator_position=dones.official_creator_position|trim%}
+        {%else%}
+            {%if active_user.position_name is defined and active_user.position_name is not empty %}
+                {%set official_creator_position=official_creator_position~active_user.position_name%}
+            {%endif%}
+            {%if active_user.rank_name is defined and active_user.rank_name is not empty %}
+                {%set official_creator_position=official_creator_position~' '~active_user.rank_name|lower%}
+            {%endif%}
+            {%if active_user.auth_fio is defined and active_user.auth_fio is not empty %}
+                {%set official_creator_position=official_creator_position~' '~active_user.auth_fio%}
+            {%endif%}
         {%endif%}
         <input type="text" class="form-control"  placeholder="" name="official_creator_position" value="{{official_creator_position}}">
     </div>
@@ -68,7 +90,7 @@
 
     <div class="form-group col-md-3">
         <label for="official_destination" >Получатель:</label>
-        <input type="text" class="form-control"  placeholder="" name="official_destination" value="Оперативный дежурный РЦУРЧС">
+        <input type="text" class="form-control"  placeholder="" name="official_destination" value="{%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.official_destination is not empty %}{{dones.official_destination|trim}}{%else%}Оперативный дежурный РЦУРЧС{%endif%}">
     </div>
 
 

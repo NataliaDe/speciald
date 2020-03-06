@@ -35,7 +35,7 @@ $('#searchStrCarsForm #id_region_str_cars').on('change', function (event) {
         //get locals by region
         $.ajax({
             dataType: "json",
-            url: '../get_grochs_by_region',
+            url: '../../create/get_grochs_by_region',
             method: 'POST',
             data: {
                 ids_region: ids_region
@@ -85,7 +85,7 @@ $('#searchStrCarsForm #id_local_str_cars').on('change', function (event) {
         //get locals by region
         $.ajax({
             dataType: "json",
-            url: '../get_pasp_by_locorg',
+            url: '../../create/get_pasp_by_locorg',
             method: 'POST',
             data: {
                 ids_locorg: ids_locorg
@@ -136,7 +136,7 @@ $('#searchStrCarsForm #id_pasp_str_cars').on('change', function (event) {
         //get locals by region
         $.ajax({
             dataType: "json",
-            url: '../get_str_cars_by_pasp',
+            url: '../../create/get_str_cars_by_pasp',
             method: 'POST',
             data: {
                 ids_pasp: ids_pasp
@@ -156,9 +156,9 @@ $('#searchStrCarsForm #id_pasp_str_cars').on('change', function (event) {
                             if (value.id_car !== null) {
                                 if (cur_cars !== null && cur_cars !== '' && cur_cars !== undefined && cur_cars !== "undefined" && cur_cars.includes(value.id_car)) {
                                     console.log('u');
-                                    $('#searchStrCarsForm ').find("#id_cars_str_cars").append($("<option selected></option>").attr({"value": value.id_car + '~' + value.mark + '~' + value.pasp_name_spec_real + '~' + value.of_locorg_name_spec_real + '~' + value.v_ac + '~' + value.man_per_car, 'data-idcar': value.id_car}).text(value.mark + ' ' + value.status + value.pasp_name_spec_real + ' ' + value.of_locorg_name_spec_real));
+                                    $('#searchStrCarsForm ').find("#id_cars_str_cars").append($("<option selected></option>").attr({"value": value.id_teh + '~' + value.mark + '~' + value.pasp_name_spec_real + '~' + value.of_locorg_name_spec_real + '~' + value.v_ac + '~' + value.man_per_car, 'data-idcar': value.id_car}).text(value.mark + ' ' + value.status + value.pasp_name_spec_real + ' ' + value.of_locorg_name_spec_real));
                                 } else {
-                                    $('#searchStrCarsForm ').find("#id_cars_str_cars").append($("<option></option>").attr({"value": value.id_car + '~' + value.mark + '~' + value.pasp_name_spec_real + '~' + value.of_locorg_name_spec_real + '~' + value.v_ac + '~' + value.man_per_car, 'data-idcar': value.id_car}).text(value.mark + ' ' + value.status + value.pasp_name_spec_real + ' ' + value.of_locorg_name_spec_real));
+                                    $('#searchStrCarsForm ').find("#id_cars_str_cars").append($("<option></option>").attr({"value": value.id_teh + '~' + value.mark + '~' + value.pasp_name_spec_real + '~' + value.of_locorg_name_spec_real + '~' + value.v_ac + '~' + value.man_per_car, 'data-idcar': value.id_car}).text(value.mark + ' ' + value.status + value.pasp_name_spec_real + ' ' + value.of_locorg_name_spec_real));
                                 }
 
                             }
@@ -230,6 +230,7 @@ $('#modal-agree-get-str-cars #btn-fill-str-cars-form').on('click', function (eve
     var url = $(this).attr('data-url');
     var data = {'cars': cars};
 
+if(cars !== '' && cars !== null){
     $.post(url, data, function (res) {
 
 
@@ -241,8 +242,8 @@ $('#modal-agree-get-str-cars #btn-fill-str-cars-form').on('click', function (eve
                 $(val).each(function (index_1, value) {
 
                     var yes = 0;
-                    $('#silymchs-block-div').find('input[name="id_car_from_str"]').each(function (i, v) {
-                        if ($(this).val() === value.id_car)
+                    $('#silymchs-block-div').find('.id_teh').each(function (i, v) {
+                        if ($(this).val() === value.id_teh)
                             yes = yes + 1;
                     });
 
@@ -257,10 +258,30 @@ $('#modal-agree-get-str-cars #btn-fill-str-cars-form').on('click', function (eve
                         $row.find('td').find('.v_ac').val(value.v_ac);
                         $row.find('td').find('.man_per_car').val(value.man_per_car);
 
-                        $row.find('td').find('input[name="id_car_from_str"]').val(value.id_car);
+                        $row.find('td').find('.id_teh').val(value.id_teh);
 
                     }
 
+                    /* add teh to trunks table */
+                    var yes_trunks = 0;
+                    $('#trunks_data-block-div #trunks-block').find('.id_teh').each(function (i, v) {
+                        if ($(this).val() === value.id_teh)
+                            yes_trunks = yes_trunks + 1;
+                    });
+
+                    if (yes_trunks === 0) {// car is not in table trunks
+
+                        $('#trunks_data-block-div #trunks-block').find('#add-row-trunks-tr').trigger('click');
+                        var $row = $('#trunks_data-block-div #trunks-block .table tbody').find('.trunks_row:last');
+                        $row.find('td').find('.mark_trunks').val(value.mark);
+                        $row.find('td').find('.pasp_name_trunks').val(value.pasp_name);
+                        $row.find('td').find('.locorg_name_trunks').val(value.locorg_name);
+                        $row.find('td').find('.v_ac_trunks').val(value.v_ac);
+                        $row.find('td').find('.man_per_car_trunks').val(value.man_per_car);
+
+                        $row.find('td').find('.id_teh').val(value.id_teh);
+
+                    }
 
 
                 });
@@ -283,7 +304,14 @@ $('#modal-agree-get-str-cars #btn-fill-str-cars-form').on('click', function (eve
         }
     });
 
+    }
+else{
+    toastr.error('Необходимо выбрать технику', 'Ошибка!', {progressBar: true, timeOut: 2500});
+}
+
 });
+
+
 
 
 
