@@ -35,7 +35,7 @@ $('#searchStrCarsForm #id_region_str_cars').on('change', function (event) {
         //get locals by region
         $.ajax({
             dataType: "json",
-            url: '../../create/get_grochs_by_region',
+            url: '../../dones/get_grochs_by_region',
             method: 'POST',
             data: {
                 ids_region: ids_region
@@ -85,7 +85,7 @@ $('#searchStrCarsForm #id_local_str_cars').on('change', function (event) {
         //get locals by region
         $.ajax({
             dataType: "json",
-            url: '../../create/get_pasp_by_locorg',
+            url: '../../dones/get_pasp_by_locorg',
             method: 'POST',
             data: {
                 ids_locorg: ids_locorg
@@ -136,7 +136,7 @@ $('#searchStrCarsForm #id_pasp_str_cars').on('change', function (event) {
         //get locals by region
         $.ajax({
             dataType: "json",
-            url: '../../create/get_str_cars_by_pasp',
+            url: '../../dones/get_str_cars_by_pasp',
             method: 'POST',
             data: {
                 ids_pasp: ids_pasp

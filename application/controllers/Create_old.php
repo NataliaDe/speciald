@@ -19,6 +19,17 @@ class Create extends My_Controller
      * map to /index.php/welcome/<method_name>
      * @see https://codeigniter.com/user_guide/general/urls.html
      */
+
+
+
+    const actions = [
+        'create_sd' => 1,
+        'edit_sd'   => 2,
+        'delete_sd' => 3,
+        'prove_sd'  => 4,
+        'refuse_sd' => 5,
+    ];
+
     public function __construct()
     {
         parent::__construct();
@@ -32,6 +43,7 @@ class Create extends My_Controller
             $this->load->model('str_model');
             $this->load->model('ss_model');
             $this->load->model('create_model');
+            $this->load->model('logs_model');
 
             $this->data['regions'] = $this->main_model->get_regions();
             $this->data['locals'] = $this->main_model->get_locals();
@@ -1227,9 +1239,22 @@ class Create extends My_Controller
         /* insert/edit dones */
         if ($id_dones == 0) {//create a new
             $id_dones_new = $this->create_model->add_new_dones($dones);
+
+            //logs
+            $logs['id_user']= $this->data['active_user']['id_user'];
+            $logs['id_dones']=$id_dones_new;
+            $logs['id_action']=self::actions['create_sd'];
+            $logs['date_action']=date("Y-m-d H:i:s");
+            $this->logs_model->add_logs($logs);
         } else {//edit
             $this->create_model->edit_dones($id_dones, $dones);
             $id_dones_new = $id_dones;
+             //logs
+            $logs['id_user']= $this->data['active_user']['id_user'];
+            $logs['id_dones']=$id_dones_new;
+            $logs['id_action']=self::actions['edit_sd'];
+            $logs['date_action']=date("Y-m-d H:i:s");
+            $this->logs_model->add_logs($logs);
         }
 
 

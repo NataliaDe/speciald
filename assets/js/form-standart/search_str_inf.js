@@ -34,7 +34,7 @@ $('#searchStrInfForm #id_region_str_inf').on('change', function (event) {
         //get locals by region
         $.ajax({
             dataType: "json",
-            url: '../../create/get_grochs_by_region',
+            url: '../../dones/get_grochs_by_region',
             method: 'POST',
             data: {
                 ids_region: ids_region
@@ -84,7 +84,7 @@ $('#searchStrInfForm #id_local_str_inf').on('change', function (event) {
         //get locals by region
         $.ajax({
             dataType: "json",
-            url: '../../create/get_pasp_by_locorg',
+            url: '../../dones/get_pasp_by_locorg',
             method: 'POST',
             data: {
                 ids_locorg: ids_locorg
