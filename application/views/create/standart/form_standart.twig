@@ -7,7 +7,7 @@
     {%include '/parts/bread_crumb.twig'%}
     <br> <br>
     <!-- content -->
-    <form role="form" id="createStandart" method="POST" action="{{base_url('/create/standart_save')}}" >
+    <form role="form" id="createStandart" method="POST" action="{{base_url('/dones/standart_save')}}" >
         {#<div class="container">#}
 
 
@@ -398,7 +398,7 @@
         function AddWorkInnerservice() {//add in modal
             $.ajax({
                 dataType: "json",
-                url: '{{ base_url('/create/add_work_innerservice_ajax')}}',
+                url: '{{ base_url('/dones/add_work_innerservice_ajax')}}',
                 method: 'POST',
                 data: {
                     name: $('#modal-add-new-work-innerservice').find('#new_name_work_innerservice').val()
@@ -434,7 +434,7 @@
 
             $.ajax({
                 dataType: "json",
-                url: '{{ base_url('/create/edit_work_innerservice_ajax')}}',
+                url: '{{ base_url('/dones/edit_work_innerservice_ajax')}}',
                 method: 'POST',
                 data: {
                     name: $('#modal-add-new-work-innerservice').find('#edit_name_work_innerservice').val(),
@@ -496,7 +496,7 @@
 
             $.ajax({
                 dataType: "json",
-                url: '{{ base_url('/create/delete_work_innerservice_ajax')}}',
+                url: '{{ base_url('/dones/delete_work_innerservice_ajax')}}',
                 method: 'POST',
                 data: {
                     id: id
@@ -534,7 +534,7 @@
         function AddObjectHouse() {//add in modal
             $.ajax({
                 dataType: "json",
-                url: '{{ base_url('/create/add_object_house_ajax')}}',
+                url: '{{ base_url('/dones/add_object_house_ajax')}}',
                 method: 'POST',
                 data: {
                     name: $('#modal-add-new-vid-object-house').find('#new_object_house').val()
@@ -572,7 +572,7 @@
 
             $.ajax({
                 dataType: "json",
-                url: '{{ base_url('/create/edit_object_house_ajax')}}',
+                url: '{{ base_url('/dones/edit_object_house_ajax')}}',
                 method: 'POST',
                 data: {
                     name: $('#modal-add-new-vid-object-house').find('#new_name_object_house').val(),
@@ -628,7 +628,7 @@
 
             $.ajax({
                 dataType: "json",
-                url: '{{ base_url('/create/delete_object_house_ajax')}}',
+                url: '{{ base_url('/dones/delete_object_house_ajax')}}',
                 method: 'POST',
                 data: {
                     id: id
@@ -658,7 +658,7 @@
         function AddObjectMaterial() {//add in modal
             $.ajax({
                 dataType: "json",
-                url: '{{ base_url('/create/add_object_material_ajax')}}',
+                url: '{{ base_url('/dones/add_object_material_ajax')}}',
                 method: 'POST',
                 data: {
                     name: $('#modal-add-new-vid-object-material').find('#new_object_material').val()
@@ -695,7 +695,7 @@
 
             $.ajax({
                 dataType: "json",
-                url: '{{ base_url('/create/edit_object_material_ajax')}}',
+                url: '{{ base_url('/dones/edit_object_material_ajax')}}',
                 method: 'POST',
                 data: {
                     name: $('#modal-add-new-vid-object-material').find('#new_name_object_material').val(),
@@ -750,7 +750,7 @@
 
             $.ajax({
                 dataType: "json",
-                url: '{{ base_url('/create/delete_object_material_ajax')}}',
+                url: '{{ base_url('/dones/delete_object_material_ajax')}}',
                 method: 'POST',
                 data: {
                     id: id
@@ -780,7 +780,7 @@
         function AddObjectRoof() {//add in modal
             $.ajax({
                 dataType: "json",
-                url: '{{ base_url('/create/add_object_roof_ajax')}}',
+                url: '{{ base_url('/dones/add_object_roof_ajax')}}',
                 method: 'POST',
                 data: {
                     name: $('#modal-add-new-vid-object-roof').find('#new_object_roof').val()
@@ -818,7 +818,7 @@
 
             $.ajax({
                 dataType: "json",
-                url: '{{ base_url('/create/edit_object_roof_ajax')}}',
+                url: '{{ base_url('/dones/edit_object_roof_ajax')}}',
                 method: 'POST',
                 data: {
                     name: $('#modal-add-new-vid-object-roof').find('#new_name_object_roof').val(),
@@ -874,7 +874,7 @@
 
             $.ajax({
                 dataType: "json",
-                url: '{{ base_url('/create/delete_object_roof_ajax')}}',
+                url: '{{ base_url('/dones/delete_object_roof_ajax')}}',
                 method: 'POST',
                 data: {
                     id: id
@@ -905,7 +905,7 @@
         function AddPeopleStatus() {//add in modal
             $.ajax({
                 dataType: "json",
-                url: '{{ base_url('/create/add_people_status_ajax')}}',
+                url: '{{ base_url('/dones/add_people_status_ajax')}}',
                 method: 'POST',
                 data: {
                     name: $('#modal-add-new-vid-people-status').find('#new_people_status').val()
@@ -943,7 +943,7 @@
 
             $.ajax({
                 dataType: "json",
-                url: '{{ base_url('/create/edit_people_status_ajax')}}',
+                url: '{{ base_url('/dones/edit_people_status_ajax')}}',
                 method: 'POST',
                 data: {
                     name: $('#modal-add-new-vid-people-status').find('#new_name_people_status').val(),
@@ -1000,7 +1000,7 @@
 
             $.ajax({
                 dataType: "json",
-                url: '{{ base_url('/create/delete_people_status_ajax')}}',
+                url: '{{ base_url('/dones/delete_people_status_ajax')}}',
                 method: 'POST',
                 data: {
                     id: id
@@ -1033,7 +1033,7 @@
         function AddWaterSource() {//add in modal
             $.ajax({
                 dataType: "json",
-                url: '{{ base_url('/create/add_water_source_ajax')}}',
+                url: '{{ base_url('/dones/add_water_source_ajax')}}',
                 method: 'POST',
                 data: {
                     name: $('#modal-add-new-vid-type-water-source').find('#new_type_water_source').val()
@@ -1073,7 +1073,7 @@
 
             $.ajax({
                 dataType: "json",
-                url: '{{ base_url('/create/edit_water_source_ajax')}}',
+                url: '{{ base_url('/dones/edit_water_source_ajax')}}',
                 method: 'POST',
                 data: {
                     name: $('#modal-add-new-vid-type-water-source').find('#new_name_type_water_source').val(),
@@ -1131,7 +1131,7 @@
 
             $.ajax({
                 dataType: "json",
-                url: '{{ base_url('/create/delete_water_source_ajax')}}',
+                url: '{{ base_url('/dones/delete_water_source_ajax')}}',
                 method: 'POST',
                 data: {
                     id: id

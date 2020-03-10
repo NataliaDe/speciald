@@ -309,4 +309,15 @@ class Create_model extends CI_Model
                 ->get()
                 ->row_array();
     }
+
+
+    public function delete_dones($id_dones)
+    {
+        $this->db->where('id', $id_dones);
+        $this->db->set('is_delete', 1);
+        $this->db->update('speciald.dones');
+
+//        $this->db->where('id', $id_dones);
+//        $this->db->delete('speciald.dones');
+    }
 }

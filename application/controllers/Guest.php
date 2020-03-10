@@ -65,7 +65,7 @@ class Guest extends CI_Controller
             $this->login();
             $id = $this->session->userdata('id_user');
 
-            redirect('create/form_standart');
+            redirect('dones/form_standart');
         } else {
 
             redirect('catalog');
