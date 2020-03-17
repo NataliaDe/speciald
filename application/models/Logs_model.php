@@ -33,6 +33,13 @@ class Logs_model extends CI_Model
 //	const ORGAN_ID_UGZ=9;//UGZ
 //	const ORGAN_ID_AVIA=12;//AVIA
 
+
+     const ACTION_CREATE_SD = 1;
+     const ACTION_EDIT_SD = 2;
+     const ACTION_DELETE_SD = 3;
+     const ACTION_PROVE_SD = 4;
+     const ACTION_REFUSE_SD = 5;
+
     public function __construct()
     {
         parent::__construct();
