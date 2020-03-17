@@ -13,14 +13,14 @@
 
 
         <div class="form-group row create-form-row">
-            <div class="col-sm-2">
-                <h4 class="heading-primary" style="float: left">Специальное донесение
+            <div class="col-sm-3">
+                <h4 class="heading-primary" style="float: left">Специальное донесение</h4>
                     {#<a href="#" data-toggle="modal"  data-target="#modal-search-rig" data-url="" >
     <i class="fa fa-search" aria-hidden="true" id="search-rig"></i></h4>
 </a>#}
             </div>
             <label for="specd_date" class="col-form-label">от &nbsp</label>
-            <div class="col-sm-1 input-group">
+            <div class="col-sm-2 input-group">
 
                 <input type="text" class="form-control date-cal"  placeholder="" name="specd_date" value="{%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.specd_date is not empty%}{{dones.specd_date|date('d.m.Y')}}{%endif%}">
             </div>
@@ -32,8 +32,8 @@
             </div>
 
                 {%if is_edit_dones is not defined  %}
-                    <div class="col-sm-5" style="margin-left:260px;">
-                        {%include '/create/timer.twig'%}
+                    <div class="col-sm-4">
+                      {%include '/create/timer.twig'%}
                     </div>
                 {%endif%}
         </div>
@@ -158,6 +158,7 @@
                     <center>
 
                         <button type="submit" class="btn btn-danger">Сохранить</button>
+                        <a href="{{base_url('/catalog')}}"><button type="button" class="btn btn-secondary" >Отмена</button></a>
                     </center>
 
 {#                    <div class="form-row create-form-row ">
@@ -231,27 +232,39 @@
 
 
         #modal-search-rig .select2-container {
-            width: 250px !important;
+            width: 168px !important;
         }
 
-        #modal-search-str-cars .select2-container {
-            width: 260px !important;
+{#        #modal-search-str-cars .select2-container {
+            width: 290px !important;
+        }#}
+        #modal-search-str-cars .select-cars-region-cls .select2-container {
+            width: 227px !important;
+        }
+                #modal-search-str-cars .select-cars-locals-cls .select2-container {
+            width: 282px !important;
         }
 
         #modal-search-str-cars .select-cars-pasp-cls .select2-container {
-            width: 360px !important;
+            width: 500px !important;
         }
 
         #modal-search-str-cars .select-cars-cls .select2-container {
-            width: 550px !important;
+            width: 500px !important;
         }
 
 
-        #modal-search-str-inf  .select2-container {
+{#        #modal-search-str-inf  .select2-container {
             width: 350px !important;
-        }
+        }#}
         #modal-search-str-inf .select-pasp-cls .select2-container {
-            width: 550px !important;
+            width: 500px !important;
+        }
+                #modal-search-str-inf .select-regions-cls .select2-container {
+            width: 227px !important;
+        }
+                        #modal-search-str-inf .select-locals-cls .select2-container {
+            width: 282px !important;
         }
 
 
@@ -261,7 +274,7 @@
         }
 
         #innerservice-table .td_innerservice_name .select2-container {
-            width: 290px !important;
+            width: 225px !important;
         }
                 #water-source-table .td_water-source-type .select2-container {
             width: 290px !important;
@@ -1194,6 +1207,20 @@
             }
 
         }
+
+                {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_not_involved_silymchs == 1 %}
+        $('#div-silymchs').find('.card-body').hide();
+        $('#div-silymchs').find('#a-search-str-cars').hide();
+                {%endif%}
+                {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_not_involved_innerservice == 1 %}
+        $('#div-innerservice').find('.card-body').hide();
+                {%endif%}
+                {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_not_involved_informing == 1 %}
+        $('#div-informing').find('.card-body').hide();
+                {%endif%}
+                {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_not_involved_trunks == 1 %}
+        $('#div-trunks').find('.card-body').hide();
+                {%endif%}
 
 
     </script>

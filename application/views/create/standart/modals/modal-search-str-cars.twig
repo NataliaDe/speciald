@@ -1,8 +1,8 @@
 <!-- Modal Delele-->
 
 <div class="modal fade" id="modal-search-str-cars"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog" style="  margin-left: 390px;">
-        <div class="modal-content" style="width:230%; ">
+    <div class="modal-dialog modal-lg" >
+        <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title ff-l" id="myModalLabel">Поиск техники в строевой записке</h4>
 
@@ -22,10 +22,10 @@
 
                     <div class="row">
 
-                        <div class="col-lg-3">
+                        <div class="col-lg-4">
                             <label for="id_region">Область</label>
-                            <div class="form-group">
-                                <select multiple class="form-control select2-multi-not-clear" name="id_region" id="id_region_str_cars"  >
+                            <div class="form-group select-cars-region-cls">
+                                <select multiple class="form-control select2-multi-not-clear " name="id_region" id="id_region_str_cars"  >
 
                                     {% for region in regions_cp_list %}
                                         <option  value="{{ region.id }}" {% if user is defined and user.id_region == region.id%} selected {%endif%}>{{ region.name }}</option>
@@ -34,11 +34,11 @@
                             </div>
                         </div>
 
-                        <div class="col-lg-3">
+                        <div class="col-lg-5">
                             <label for="id_local">ГРОЧС</label>
-                            <div class="form-group">
+                            <div class="form-group select-cars-locals-cls">
 
-                                <select multiple class="form-control select2-multi-not-clear" name="id_local" id="id_local_str_cars"  >
+                                <select multiple class="form-control select2-multi-not-clear " name="id_local" id="id_local_str_cars"  >
                                     {#                                         {% for local in locorg_cp_list %}
                                                                             <option value="{{ local.id_loc_org }}" class="{{local.id_region}}" >{{ local.locorg_name }}</option>
                                                                         {% endfor %}#}
@@ -48,7 +48,7 @@
 
 
 
-                        <div class="col-lg-4">
+                        <div class="col-lg-9">
                             <label for="id_pasp">ПАСЧ</label>
                             <div class="form-group select-cars-pasp-cls">
 
@@ -60,17 +60,12 @@
                             </div>
                         </div>
 
-                        <div class="col-lg-2">
-                            <label for="btn-search-str-cars-clear-filter"></label>
-                            <div class="form-group " style="margin-top:8px">
-                                <button  type="button" class="btn btn-outline-primary" id="btn-search-str-cars-clear-filter" >Сбросить фильтр</button>
-                            </div>
-                        </div>
+
 
                     </div>
 
                     <div class="row">
-                        <div class="col-lg-6">
+                        <div class="col-lg-9">
                             <label for="id_cars">Техника</label>
                             <div class="form-group select-cars-cls" >
 
@@ -79,6 +74,14 @@
                                                                             <option value="{{ local.id_loc_org }}" class="{{local.id_region}}" >{{ local.locorg_name }}</option>
                                                                         {% endfor %}#}
                                 </select>
+                            </div>
+                        </div>
+
+
+                                                        <div class="col-lg-3">
+                            <label for="btn-search-str-cars-clear-filter"></label>
+                            <div class="form-group " style="margin-top:8px">
+                                <button  type="button" class="btn btn-outline-primary" id="btn-search-str-cars-clear-filter" >Сбросить фильтр</button>
                             </div>
                         </div>
                     </div>

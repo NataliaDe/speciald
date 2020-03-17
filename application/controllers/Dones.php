@@ -22,13 +22,13 @@ class Dones extends My_Controller
 
 
 
-    const actions = [
-        'create_sd' => 1,
-        'edit_sd'   => 2,
-        'delete_sd' => 3,
-        'prove_sd'  => 4,
-        'refuse_sd' => 5,
-    ];
+//    const actions = [
+//        'create_sd' => 1,
+//        'edit_sd'   => 2,
+//        'delete_sd' => 3,
+//        'prove_sd'  => 4,
+//        'refuse_sd' => 5,
+//    ];
 
     public function __construct()
     {
@@ -1233,11 +1233,11 @@ class Dones extends My_Controller
 
 
         /* is involved or no */
-        $dones['is_not_involved_silymchs'] = (isset($post['is_not_involved_silymchs']) && !empty($post['is_not_involved_silymchs'])) ? intval($post['is_not_involved_silymchs']) : 0;
-        $dones['is_not_involved_innerservice'] = (isset($post['is_not_involved_innerservice']) && !empty($post['is_not_involved_innerservice'])) ? intval($post['is_not_involved_innerservice']) : 0;
-        $dones['is_not_involved_informing'] = (isset($post['is_not_involved_informing']) && !empty($post['is_not_involved_informing'])) ? intval($post['is_not_involved_informing']) : 0;
-        $dones['is_not_involved_trunks'] = (isset($post['is_not_involved_trunks']) && !empty($post['is_not_involved_trunks'])) ? intval($post['is_not_involved_trunks']) : 0;
-        $dones['is_wide_table_trunks'] = (isset($post['is_wide_table_trunks']) && !empty($post['is_wide_table_trunks'])) ? intval($post['is_wide_table_trunks']) : 0;
+        $dones['is_not_involved_silymchs'] = (isset($post['is_not_involved_silymchs']) && !empty($post['is_not_involved_silymchs'])) ? 1 : 0;
+        $dones['is_not_involved_innerservice'] = (isset($post['is_not_involved_innerservice']) && !empty($post['is_not_involved_innerservice'])) ? 1 : 0;
+        $dones['is_not_involved_informing'] = (isset($post['is_not_involved_informing']) && !empty($post['is_not_involved_informing'])) ? 1 : 0;
+        $dones['is_not_involved_trunks'] = (isset($post['is_not_involved_trunks']) && !empty($post['is_not_involved_trunks'])) ? 1 : 0;
+        $dones['is_wide_table_trunks'] = (isset($post['is_wide_table_trunks']) && !empty($post['is_wide_table_trunks'])) ? 1 : 0;
 
 
         /* insert/edit dones */
@@ -1247,7 +1247,8 @@ class Dones extends My_Controller
             //logs
             $logs['id_user']= $this->data['active_user']['id_user'];
             $logs['id_dones']=$id_dones_new;
-            $logs['id_action']=self::actions['create_sd'];
+            //$logs['id_action']=self::actions['create_sd'];
+            $logs['id_action']=Logs_model::ACTION_CREATE_SD;
             $logs['date_action']=date("Y-m-d H:i:s");
             $this->logs_model->add_logs($logs);
         } else {//edit
@@ -1256,7 +1257,8 @@ class Dones extends My_Controller
              //logs
             $logs['id_user']= $this->data['active_user']['id_user'];
             $logs['id_dones']=$id_dones_new;
-            $logs['id_action']=self::actions['edit_sd'];
+            //$logs['id_action']=self::actions['edit_sd'];
+            $logs['id_action']=Logs_model::ACTION_EDIT_SD;
             $logs['date_action']=date("Y-m-d H:i:s");
             $this->logs_model->add_logs($logs);
         }
@@ -1620,7 +1622,7 @@ class Dones extends My_Controller
         }
 
 
-         redirect('dones/catalog');
+         redirect('/catalog');
     }
 
 
@@ -1692,7 +1694,8 @@ class Dones extends My_Controller
                         //logs
             $logs['id_user']= $this->data['active_user']['id_user'];
             $logs['id_dones']=$id_dones;
-            $logs['id_action']=self::actions['delete_sd'];
+            //$logs['id_action']=self::actions['delete_sd'];
+            $logs['id_action']= Logs_model::ACTION_DELETE_SD;
             $logs['date_action']=date("Y-m-d H:i:s");
             $this->logs_model->add_logs($logs);
 

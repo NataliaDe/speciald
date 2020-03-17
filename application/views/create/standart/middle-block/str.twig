@@ -78,7 +78,7 @@
                                     <input type="hidden" class="sort" name="str[{{x}}][sort]" value="{{x}}">
                                 </td>
 
-                                <td style="width:200px">
+                                <td>
                                     {%set podr_name=''%}
                                     {%if st.pasp_name_spec is defined and st.pasp_name_spec is not empty %}
                                         {%set podr_name=st.pasp_name_spec%}
@@ -87,71 +87,71 @@
                                         {%set podr_name=podr_name~' '~st.locorg_name_spec%}
                                     {%endif%}
 
-                                    <input type="text" class="form-control  str_pasp_name "   placeholder="ПАСЧ-1" name="str[{{x}}][pasp_name]" value="{%if str.table is defined and st.pasp_name_spec is defined and st.pasp_name_spec is not empty %}{{st.pasp_name_spec|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and st.pasp_name is defined%}{{st.pasp_name|trim}}{%endif%}">
-
-                                </td>
-
-
-                                <td style="width:350px">
-                                    <input type="text" class="form-control  str_locorg_name "   placeholder="Ленинского РОЧС" name="str[{{x}}][locorg_name]" value="{%if str.table is defined and st.locorg_name_spec is defined and st.locorg_name_spec is not empty %}{{st.locorg_name_spec|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and st.locorg_name is defined%}{{st.locorg_name|trim}}{%endif%}">
-
-                                </td>
-
-                                <td>
-                                    <input type="number" class="form-control str_shtat"   placeholder="" name="str[{{x}}][shtat]" value="{%if st.shtat is defined and st.shtat is not empty %}{{st.shtat}}{%endif%}">
-
-                                </td>
-
-                                <td>
-                                    <input type="number" class="form-control str_vacant"   placeholder="" name="str[{{x}}][vacant]" value="{%if st.vacant is defined and st.vacant is not empty %}{{st.vacant}}{%endif%}">
-                                </td>
-
-                                <td>
-                                    <input type="number" class="form-control str_on_list_ch"   placeholder="" name="str[{{x}}][on_list_ch]" value="{%if st.on_list_ch is defined and st.on_list_ch is not empty %}{{st.on_list_ch}}{%endif%}">
-
-                                </td>
-                                <td>
-                                    <input type="number" class="form-control str_vacant_ch"   placeholder="" name="str[{{x}}][vacant_ch]" value="{%if st.vacant_ch is defined and st.vacant_ch is not empty %}{{st.vacant_ch}}{%endif%}">
-
-                                </td>
-
-                                <td>
-                                    <input type="number" class="form-control str_face_ch"   placeholder="" name="str[{{x}}][face_ch]" value="{%if st.face_ch is defined and st.face_ch is not empty %}{{st.face_ch}}{%endif%}">
-
-                                </td>
-
-                                <td>
-                                    <input type="number" class="form-control str_br_ch"   placeholder="" name="str[{{x}}][br_ch]" value="{%if st.br_ch is defined and st.br_ch is not empty %}{{st.br_ch}}{%endif%}">
-
-                                </td>
-
-                                <td>
-                                    <input type="number" class="form-control str_trip_ch"   placeholder="" name="str[{{x}}][cnt_trip_man]" value="{%if st.cnt_trip_man is defined and st.cnt_trip_man is not empty %}{{st.cnt_trip_man}}{%endif%}">
-
-                                </td>
-                                <td>
-                                    <input type="number" class="form-control str_holiday_ch"   placeholder="" name="str[{{x}}][cnt_holiday_man]" value="{%if st.cnt_holiday_man is defined and st.cnt_holiday_man is not empty %}{{st.cnt_holiday_man}}{%endif%}">
-
-                                </td>
-
-                                <td>
-                                    <input type="number" class="form-control str_ill_ch"   placeholder="" name="str[{{x}}][cnt_ill_man]" value="{%if st.cnt_ill_man is defined and st.cnt_ill_man is not empty %}{{st.cnt_ill_man}}{%endif%}">
-
-                                </td>
-
-                                <td>
-                                    <input  type="number" class="form-control str_duty_ch"   placeholder="" name="str[{{x}}][cnt_naryd]" value="{%if st.cnt_naryd is defined and st.cnt_naryd is not empty %}{{st.cnt_naryd}}{%endif%}">
-
-                                </td>
-
-                                <td>
-                                    <input type="number" class="form-control str_other_ch"   placeholder="" name="str[{{x}}][cnt_other_man]" value="{%if st.cnt_other_man is defined and st.cnt_other_man is not empty %}{{st.cnt_other_man}}{%endif%}">
+                                    <input style="width: 120px" type="text" class="form-control  str_pasp_name "   placeholder="ПАСЧ-1" name="str[{{x}}][pasp_name]" value="{%if str.table is defined and st.pasp_name_spec is defined and st.pasp_name_spec is not empty %}{{st.pasp_name_spec|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and st.pasp_name is defined%}{{st.pasp_name|trim}}{%endif%}">
 
                                 </td>
 
 
                                 <td>
-                                    <input type="number" class="form-control str_gdzs_ch"   placeholder="" name="str[{{x}}][gas]" value="{%if st.gas is defined and st.gas is not empty %}{{st.gas}}{%endif%}">
+                                    <input style="width: 190px" type="text" class="form-control  str_locorg_name "   placeholder="Ленинского РОЧС" name="str[{{x}}][locorg_name]" value="{%if str.table is defined and st.locorg_name_spec is defined and st.locorg_name_spec is not empty %}{{st.locorg_name_spec|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and st.locorg_name is defined%}{{st.locorg_name|trim}}{%endif%}">
+
+                                </td>
+
+                                <td>
+                                    <input type="number" min="0" class="form-control str_shtat"   placeholder="" name="str[{{x}}][shtat]" value="{%if st.shtat is defined and st.shtat is not empty %}{{st.shtat}}{%endif%}">
+
+                                </td>
+
+                                <td>
+                                    <input type="number" min="0" class="form-control str_vacant"   placeholder="" name="str[{{x}}][vacant]" value="{%if st.vacant is defined and st.vacant is not empty %}{{st.vacant}}{%endif%}">
+                                </td>
+
+                                <td>
+                                    <input type="number" min="0" class="form-control str_on_list_ch"   placeholder="" name="str[{{x}}][on_list_ch]" value="{%if st.on_list_ch is defined and st.on_list_ch is not empty %}{{st.on_list_ch}}{%endif%}">
+
+                                </td>
+                                <td>
+                                    <input type="number" min="0" class="form-control str_vacant_ch"   placeholder="" name="str[{{x}}][vacant_ch]" value="{%if st.vacant_ch is defined and st.vacant_ch is not empty %}{{st.vacant_ch}}{%endif%}">
+
+                                </td>
+
+                                <td>
+                                    <input type="number" min="0" class="form-control str_face_ch"   placeholder="" name="str[{{x}}][face_ch]" value="{%if st.face_ch is defined and st.face_ch is not empty %}{{st.face_ch}}{%endif%}">
+
+                                </td>
+
+                                <td>
+                                    <input type="number" min="0" class="form-control str_br_ch"   placeholder="" name="str[{{x}}][br_ch]" value="{%if st.br_ch is defined and st.br_ch is not empty %}{{st.br_ch}}{%endif%}">
+
+                                </td>
+
+                                <td>
+                                    <input type="number" min="0" class="form-control str_trip_ch"   placeholder="" name="str[{{x}}][cnt_trip_man]" value="{%if st.cnt_trip_man is defined and st.cnt_trip_man is not empty %}{{st.cnt_trip_man}}{%endif%}">
+
+                                </td>
+                                <td>
+                                    <input type="number" min="0" class="form-control str_holiday_ch"   placeholder="" name="str[{{x}}][cnt_holiday_man]" value="{%if st.cnt_holiday_man is defined and st.cnt_holiday_man is not empty %}{{st.cnt_holiday_man}}{%endif%}">
+
+                                </td>
+
+                                <td>
+                                    <input type="number" min="0" class="form-control str_ill_ch"   placeholder="" name="str[{{x}}][cnt_ill_man]" value="{%if st.cnt_ill_man is defined and st.cnt_ill_man is not empty %}{{st.cnt_ill_man}}{%endif%}">
+
+                                </td>
+
+                                <td>
+                                    <input  type="number" min="0" class="form-control str_duty_ch"   placeholder="" name="str[{{x}}][cnt_naryd]" value="{%if st.cnt_naryd is defined and st.cnt_naryd is not empty %}{{st.cnt_naryd}}{%endif%}">
+
+                                </td>
+
+                                <td>
+                                    <input type="number" min="0" class="form-control str_other_ch"   placeholder="" name="str[{{x}}][cnt_other_man]" value="{%if st.cnt_other_man is defined and st.cnt_other_man is not empty %}{{st.cnt_other_man}}{%endif%}">
+
+                                </td>
+
+
+                                <td>
+                                    <input type="number" min="0" class="form-control str_gdzs_ch"   placeholder="" name="str[{{x}}][gas]" value="{%if st.gas is defined and st.gas is not empty %}{{st.gas}}{%endif%}">
 
                                 </td>
 
@@ -187,73 +187,73 @@
                                 <input type="hidden" class="sort" name="str[{{i}}][sort]" value="{{i}}">
                             </td>
 
-                            <td style="width:200px">
+                            <td>
 
-                                <input type="text" class="form-control  str_pasp_name str-list"   placeholder="ПАСЧ-1" name="str[{{i}}][pasp_name]" >
+                                <input style="width: 120px" type="text" class="form-control  str_pasp_name str-list"   placeholder="ПАСЧ-1" name="str[{{i}}][pasp_name]" >
 
                             </td>
 
 
-                            <td style="width:350px">
+                            <td>
 
-                                <input type="text" class="form-control  str_locorg_name str-list"   placeholder="Ленинского РОЧС" name="str[{{i}}][locorg_name]" >
+                                <input style="width: 190px" type="text" class="form-control  str_locorg_name str-list"   placeholder="Ленинского РОЧС" name="str[{{i}}][locorg_name]" >
 
                             </td>
 
                             <td>
-                                <input type="number" class="form-control str_shtat"   placeholder="" name="str[{{i}}][shtat]" >
+                                <input type="number" min="0" class="form-control str_shtat"   placeholder="" name="str[{{i}}][shtat]" >
 
                             </td>
 
                             <td>
-                                <input type="number" class="form-control str_vacant"   placeholder="" name="str[{{i}}][vacant]" >
+                                <input type="number" min="0" class="form-control str_vacant"   placeholder="" name="str[{{i}}][vacant]" >
                             </td>
 
                             <td>
-                                <input type="number" class="form-control str_on_list_ch"   placeholder="" name="str[{{i}}][on_list_ch]" >
+                                <input type="number" min="0" class="form-control str_on_list_ch"   placeholder="" name="str[{{i}}][on_list_ch]" >
 
                             </td>
                             <td>
-                                <input type="number" class="form-control str_vacant_ch"   placeholder="" name="str[{{i}}][vacant_ch]" >
-
-                            </td>
-
-                            <td>
-                                <input type="number" class="form-control str_face_ch"   placeholder="" name="str[{{i}}][face_ch]" >
+                                <input type="number" min="0" class="form-control str_vacant_ch"   placeholder="" name="str[{{i}}][vacant_ch]" >
 
                             </td>
 
                             <td>
-                                <input type="number" class="form-control str_br_ch"   placeholder="" name="str[{{i}}][br_ch]" >
+                                <input type="number" min="0" class="form-control str_face_ch"   placeholder="" name="str[{{i}}][face_ch]" >
 
                             </td>
 
                             <td>
-                                <input type="number" class="form-control str_trip_ch"   placeholder="" name="str[{{i}}][trip_ch]" >
-
-                            </td>
-                            <td>
-                                <input type="number" class="form-control str_holiday_ch"   placeholder="" name="str[{{i}}][holiday_ch]" >
+                                <input type="number" min="0" class="form-control str_br_ch"   placeholder="" name="str[{{i}}][br_ch]" >
 
                             </td>
 
                             <td>
-                                <input type="number" class="form-control str_ill_ch"   placeholder="" name="str[{{i}}][ill_ch]" >
+                                <input type="number" min="0" class="form-control str_trip_ch"   placeholder="" name="str[{{i}}][trip_ch]" >
+
+                            </td>
+                            <td>
+                                <input type="number" min="0" class="form-control str_holiday_ch"   placeholder="" name="str[{{i}}][holiday_ch]" >
 
                             </td>
 
                             <td>
-                                <input type="number" class="form-control str_duty_ch"   placeholder="" name="str[{{i}}][duty_ch]" >
+                                <input type="number" min="0" class="form-control str_ill_ch"   placeholder="" name="str[{{i}}][ill_ch]" >
 
                             </td>
 
                             <td>
-                                <input type="number" class="form-control str_other_ch"   placeholder="" name="str[{{i}}][other_ch]" >
+                                <input type="number" min="0" class="form-control str_duty_ch"   placeholder="" name="str[{{i}}][duty_ch]" >
 
                             </td>
 
                             <td>
-                                <input type="number" class="form-control str_gdzs_ch"   placeholder="" name="str[{{i}}][gdzs_ch]" >
+                                <input type="number" min="0" class="form-control str_other_ch"   placeholder="" name="str[{{i}}][other_ch]" >
+
+                            </td>
+
+                            <td>
+                                <input type="number" min="0" class="form-control str_gdzs_ch"   placeholder="" name="str[{{i}}][gdzs_ch]" >
 
                             </td>
 

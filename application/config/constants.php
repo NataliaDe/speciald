@@ -90,25 +90,25 @@ defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest auto
 
 
 
-        defined('LEVEL_ID_RCU') OR define('LEVEL_ID_RCU', 1); //RCU
-        define('LEVEL_ID_UMCHS', 2); //UMCHS
-        define('LEVEL_ID_ROCHS', 3); //ROCHS
-
-        /* each level has property 'can_edit' and 'is_admin'.
-          UMCHS level : umchs, rosn g.Minsk(all rosn), ugz g.Minsk(all), avia g.Minsk(all).
-          ROCHS level: rochs, rosn, ugz, avia.
-         */
-
-        defined('ORGAN_ID_RCU') OR define('ORGAN_ID_RCU', 5); //RCU
-        define('ORGAN_ID_UMCHS', 4); //UMCHS
-
-        define('ORGAN_ID_PASO', 6); //PASO
-        define('ORGAN_ID_PASO_OBJECT', 7); //PASO OBJECT
-
-        define('ORGAN_ID_GOCHS', 1); //GOCHS
-        define('ORGAN_ID_ROCHS', 2); //ROCHS
-        define('ORGAN_ID_GROCHS', 3); //GROCHS
-
-        define('ORGAN_ID_ROSN', 8); //ROSN
-        define('ORGAN_ID_UGZ', 9); //UGZ
-        define('ORGAN_ID_AVIA', 12); //AVIA
+//        defined('LEVEL_ID_RCU') OR define('LEVEL_ID_RCU', 1); //RCU
+//        define('LEVEL_ID_UMCHS', 2); //UMCHS
+//        define('LEVEL_ID_ROCHS', 3); //ROCHS
+//
+//        /* each level has property 'can_edit' and 'is_admin'.
+//          UMCHS level : umchs, rosn g.Minsk(all rosn), ugz g.Minsk(all), avia g.Minsk(all).
+//          ROCHS level: rochs, rosn, ugz, avia.
+//         */
+//
+//        defined('ORGAN_ID_RCU') OR define('ORGAN_ID_RCU', 5); //RCU
+//        define('ORGAN_ID_UMCHS', 4); //UMCHS
+//
+//        define('ORGAN_ID_PASO', 6); //PASO
+//        define('ORGAN_ID_PASO_OBJECT', 7); //PASO OBJECT
+//
+//        define('ORGAN_ID_GOCHS', 1); //GOCHS
+//        define('ORGAN_ID_ROCHS', 2); //ROCHS
+//        define('ORGAN_ID_GROCHS', 3); //GROCHS
+//
+//        define('ORGAN_ID_ROSN', 8); //ROSN
+//        define('ORGAN_ID_UGZ', 9); //UGZ
+//        define('ORGAN_ID_AVIA', 12); //AVIA

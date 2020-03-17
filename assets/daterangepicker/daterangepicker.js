@@ -917,12 +917,17 @@
                 if (maxDate && time.minute(0).isAfter(maxDate))
                     disabled = true;
 
+                if (i == 0 || i == 1 || i == 2 || i == 3 || i == 4 || i == 5 || i == 6 || i == 7 || i == 8 || i == 9)
+                    var show_i='0'+i;
+                else
+                     var show_i=i;
+
                 if (i_in_24 == selected.hour() && !disabled) {
-                    html += '<option value="' + i + '" selected="selected">' + i + '</option>';
+                    html += '<option value="' + i + '" selected="selected">' + show_i + '</option>';
                 } else if (disabled) {
-                    html += '<option value="' + i + '" disabled="disabled" class="disabled">' + i + '</option>';
+                    html += '<option value="' + i + '" disabled="disabled" class="disabled">' + show_i + '</option>';
                 } else {
-                    html += '<option value="' + i + '">' + i + '</option>';
+                    html += '<option value="' + i + '">' + show_i + '</option>';
                 }
             }
 

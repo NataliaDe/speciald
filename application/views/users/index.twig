@@ -8,10 +8,11 @@
     <a href="{{ base_url('/users/form_add/') }}" class="new-user">
         <button class="btn btn-xs btn-success " type="button"><i class="fa fa-plus" aria-hidden="true"></i> Добавить пользователя</button>
     </a>
+        <br>
 
     <center>
         <caption>Активные пользователи</caption>
-        <table class="table table-condensed   table-bordered table-custom" id="userTable" >
+        <table class="table table-condensed table-hover  table-bordered table-custom" id="userTable" >
             <!-- строка 1 -->
             <thead>
                 <tr>
@@ -69,7 +70,7 @@
                         <td>
                             {% if user.id_user != session_id_user%}
                                 <a href="{% if user.is_guest == 1%} {{ base_url('/users/form_edit_guest/'~user.id_user) }} {%else%}{{ base_url('/users/form_edit/'~user.id_user) }}{%endif%}">
-                                    <button class="btn btn-xs btn-warning " type="button"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                                    <button class="btn btn-sm btn-warning " type="button"><i class="fa fa-pencil" aria-hidden="true"></i></button>
                                 </a>
                             {%endif%}
                         </td>
@@ -79,7 +80,7 @@
                         <td>
                             {% if user.id_user != session_id_user%}
                                 <a href="#" data-toggle="modal"  data-target="#delete-user-modal" data-url="{{ base_url('/users/delete/'~user.id_user) }}" data-userid="{{user.id_user}}" data-userfio="{% if user.is_guest == 1%}Гость{%else%}{{user.fio}}{%endif%}">
-                                    <button class="btn btn-xs btn-danger "  type="button"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                                    <button class="btn btn-sm btn-danger "  type="button"><i class="fa fa-trash" aria-hidden="true"></i></button>
                                 </a>
                             {%endif%}
                         </td>
@@ -114,8 +115,14 @@
         #inptuserForm8, #inptuserForm5{
             width: 150px !important;
         }
-        #seluserForm7{
+        #seluserForm7, #seluserForm8, #seluserForm3, #seluserForm4{
             width: 90px !important;
+        }
+        #inptuserForm6{
+            width: 100px !important;
+        }
+                #inptuserForm2, #inptuserForm1, #inptuserForm0{
+            width: 140px !important;
         }
     </style>
 
@@ -182,7 +189,7 @@
 
                         var x = $('#userTable tfoot th').index($(this));
                         table.column(i).data().unique().sort().each(function (d, j) {
-                            select.append('<option value="' + d + '" >' + d + '</option>');
+                            select.append('<option   value="' + d + '" >' + d + '</option>');
                         });
 
 

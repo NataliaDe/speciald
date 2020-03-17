@@ -3,7 +3,7 @@
         Сведения по подаче стволов
         <label for="trunks_is_not_involved" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
         <div class="checkbox checkbox-danger" style='display:inline'>
-            <input  type="checkbox" name="trunks[is_not_involved]" value="1"  id='trunks_is_not_involved' onChange='notEnvolve("div-trunks", this);' {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_not_involved_trunks == 1 %}checked{%endif%}>
+            <input  type="checkbox" name="is_not_involved_trunks" value="1"  id='trunks_is_not_involved' onChange='notEnvolve("div-trunks", this);' {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_not_involved_trunks == 1 %}checked{%endif%}>
             <label for="trunks_is_not_involved">
                 Подача стволов не выполнялось
             </label>
@@ -12,7 +12,7 @@
 
         <label for="trunks_is_wide_table" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
         <div class="checkbox checkbox-warning" style='display:inline'>
-            <input  type="checkbox" name="trunks[is_wide_table]" value="1"  id='trunks_is_wide_table' {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_wide_table_trunks == 1 %}checked{%endif%} {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_not_involved_trunks == 1 %}disabled{%endif%}>
+            <input  type="checkbox" name="is_wide_table_trunks" value="1"  id='trunks_is_wide_table' {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_wide_table_trunks == 1 %}checked{%endif%} {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_not_involved_trunks == 1 %}disabled{%endif%}>
             <label for="trunks_is_wide_table">
                 Расширенная таблица в Word
             </label>
@@ -29,7 +29,7 @@
                 <thead>
                     <tr >
                         <th rowspan="2" >#</th>
-                        <th rowspan="2"  style="width: 20px"></th>
+                        <th rowspan="2" ></th>
                         <th rowspan="2">Техника</th>
                         <th rowspan="2" colspan="2" >Наименование подразделения</th>
                         <th rowspan="2" >Объем цистерны<br>(тонн)</th>
@@ -93,20 +93,20 @@
                                 </td>
 
 
-                                <td style="width: 550px">
+                                <td>
 
-                                    <input type="text" class="form-control  mark_trunks"   placeholder="АЦ 5,0-50/4(533702)" name="trunks[{{x}}][mark]" value="{%if trunk.mark is defined %}{{trunk.mark|trim}}{%endif%}">
-
-                                </td>
-                                <td style="width: 350px">
-
-                                    <input type="text" class="form-control pasp_name_trunks"   placeholder="ПАСЧ-1" name="trunks[{{x}}][pasp_name]" value="{%if rig is defined and trunk.pasp_name_spec is defined and trunk.pasp_name_spec is not empty %}{{trunk.pasp_name_spec|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and trunk.pasp_name is defined%}{{trunk.pasp_name|trim}}{%endif%}">
+                                    <input  style="width: 190px" type="text" class="form-control  mark_trunks"   placeholder="АЦ 5,0-50/4(533702)" name="trunks[{{x}}][mark]" value="{%if trunk.mark is defined %}{{trunk.mark|trim}}{%endif%}">
 
                                 </td>
+                                <td>
 
-                                <td style="width: 550px">
+                                    <input  style="width: 120px" type="text" class="form-control pasp_name_trunks"   placeholder="ПАСЧ-1" name="trunks[{{x}}][pasp_name]" value="{%if rig is defined and trunk.pasp_name_spec is defined and trunk.pasp_name_spec is not empty %}{{trunk.pasp_name_spec|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and trunk.pasp_name is defined%}{{trunk.pasp_name|trim}}{%endif%}">
 
-                                    <input type="text" class="form-control locorg_name_trunks"   placeholder="Ленинского РОЧС" name="trunks[{{x}}][locorg_name]" value="{%if rig is defined and trunk.locorg_name_spec is defined and trunk.locorg_name_spec is not empty %}{{trunk.locorg_name_spec|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and trunk.locorg_name is defined%}{{trunk.locorg_name|trim}}{%endif%}">
+                                </td>
+
+                                <td>
+
+                                    <input type="text"  style="width: 190px" class="form-control locorg_name_trunks"   placeholder="Ленинского РОЧС" name="trunks[{{x}}][locorg_name]" value="{%if rig is defined and trunk.locorg_name_spec is defined and trunk.locorg_name_spec is not empty %}{{trunk.locorg_name_spec|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and trunk.locorg_name is defined%}{{trunk.locorg_name|trim}}{%endif%}">
 
                                 </td>
 
@@ -117,7 +117,7 @@
 
 
                                 <td>
-                                    <input type="number" class="form-control man_per_car_trunks"   placeholder="" name="trunks[{{x}}][man_per_car]" value="{%if trunk.man_per_car is defined and trunk.man_per_car is not empty%}{{trunk.man_per_car}}{%endif%}">
+                                    <input type="number" min="0" class="form-control man_per_car_trunks"   placeholder="" name="trunks[{{x}}][man_per_car]" value="{%if trunk.man_per_car is defined and trunk.man_per_car is not empty%}{{trunk.man_per_car}}{%endif%}">
                                 </td>
 
 
@@ -132,7 +132,7 @@
 
 
                                 <td>
-                                    <input type="text" class="form-control s_fire_arrival_trunks" onkeypress="allowFloat();" onkeyup="setSFire(this);" onchange="setSFire(this);"  placeholder="" name="trunks[{{x}}][s_fire_arrival]" value="{%if rig is defined and trunk.s_bef is defined and trunk.s_bef is not empty %}{{trunk.s_bef|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and trunk.s_fire_arrival is defined%}{{trunk.s_fire_arrival|trim}}{%endif%}">
+                                    <input style="width: 80px" type="text" type="text" class="form-control s_fire_arrival_trunks" onkeypress="allowFloat();" onkeyup="setSFire(this);" onchange="setSFire(this);"  placeholder="" name="trunks[{{x}}][s_fire_arrival]" value="{%if rig is defined and trunk.s_bef is defined and trunk.s_bef is not empty %}{{trunk.s_bef|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and trunk.s_fire_arrival is defined%}{{trunk.s_fire_arrival|trim}}{%endif%}">
                                 </td>
 
                                 <td>
@@ -153,7 +153,7 @@
                                         {%set means=trunk.means_trunks|trim%}
                                     {%endif%}
 
-                                    <input type="text" class="form-control means_trunks"   placeholder="" name="trunks[{{x}}][means_trunks]" value="{%if means is not empty%}{{means|trim}}{%endif%}">
+                                    <input style="width: 190px" type="text" class="form-control means_trunks"   placeholder="" name="trunks[{{x}}][means_trunks]" value="{%if means is not empty%}{{means|trim}}{%endif%}">
                                 </td>
 
                                 <td>
@@ -168,7 +168,7 @@
 
 
                                 <td>
-                                    <input type="text" class="form-control s_fire_loc_trunks" onkeyup="setSFireLoc(this);" onchange="setSFireLoc(this);" onkeypress="allowFloat();"  placeholder="" name="trunks[{{x}}][s_fire_loc]" value="{%if rig.s_loc is defined %}{{rig.s_loc|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and trunk.s_fire_loc is defined%}{{trunk.s_fire_loc|trim}}{%endif%}">
+                                    <input style="width: 80px" type="text" class="form-control s_fire_loc_trunks" onkeyup="setSFireLoc(this);" onchange="setSFireLoc(this);" onkeypress="allowFloat();"  placeholder="" name="trunks[{{x}}][s_fire_loc]" value="{%if rig.s_loc is defined %}{{rig.s_loc|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and trunk.s_fire_loc is defined%}{{trunk.s_fire_loc|trim}}{%endif%}">
                                 </td>
 
 
@@ -210,21 +210,21 @@
                                 <input type="hidden" class="sort" name="trunks[{{i}}][sort]" value="{{i}}">
                             </td>
 
-                            <td style="width: 550px">
+                            <td>
 
-                                <input type="text" class="form-control  mark_trunks"   placeholder="АЦ 5,0-50/4(533702)" name="trunks[{{i}}][mark]" value="">
-
-                            </td>
-                            <td style="width: 350px">
-
-                                <input type="text" class="form-control pasp_name_trunks"   placeholder="ПАСЧ-1" name="trunks[{{i}}][pasp_name]" value="">
+                                <input  style="width: 190px" type="text" class="form-control  mark_trunks"   placeholder="АЦ 5,0-50/4(533702)" name="trunks[{{i}}][mark]" value="">
 
                             </td>
+                            <td>
+
+                                <input  style="width: 120px" type="text" class="form-control pasp_name_trunks"   placeholder="ПАСЧ-1" name="trunks[{{i}}][pasp_name]" value="">
+
+                            </td>
 
 
-                            <td style="width: 550px">
+                            <td>
 
-                                <input type="text" class="form-control locorg_name_trunks"   placeholder="Ленинского РОЧС" name="trunks[{{i}}][locorg_name]" value="">
+                                <input  style="width: 190px" type="text" class="form-control locorg_name_trunks"   placeholder="Ленинского РОЧС" name="trunks[{{i}}][locorg_name]" value="">
 
                             </td>
 
@@ -235,7 +235,7 @@
 
 
                             <td>
-                                <input type="number" class="form-control man_per_car_trunks"   placeholder="" name="trunks[{{i}}][man_per_car]" value="">
+                                <input type="number" min="0" class="form-control man_per_car_trunks"   placeholder="" name="trunks[{{i}}][man_per_car]" value="">
                             </td>
 
 
@@ -246,7 +246,7 @@
 
 
                             <td>
-                                <input type="text" class="form-control s_fire_arrival_trunks" onkeypress="allowFloat();" onkeyup="setSFire(this);" onchange="setSFire(this);"  placeholder="" name="trunks[{{i}}][s_fire_arrival]" value="">
+                                <input style="width: 80px" type="text" type="text" class="form-control s_fire_arrival_trunks" onkeypress="allowFloat();" onkeyup="setSFire(this);" onchange="setSFire(this);"  placeholder="" name="trunks[{{i}}][s_fire_arrival]" value="">
                             </td>
 
                             <td>
@@ -255,7 +255,7 @@
                             </td>
 
                             <td>
-                                <input type="text" class="form-control means_trunks"   placeholder="" name="trunks[{{i}}][means_trunks]" value="">
+                                <input style="width: 140px" type="text" class="form-control means_trunks"   placeholder="" name="trunks[{{i}}][means_trunks]" value="">
                             </td>
 
                             <td>
@@ -270,7 +270,7 @@
 
 
                             <td>
-                                <input type="text" class="form-control s_fire_loc_trunks" onkeyup="setSFireLoc(this);" onchange="setSFireLoc(this);" onkeypress="allowFloat();"  placeholder="" name="trunks[{{i}}][s_fire_loc]" value="">
+                                <input style="width: 80px" type="text" type="text" class="form-control s_fire_loc_trunks" onkeyup="setSFireLoc(this);" onchange="setSFireLoc(this);" onkeypress="allowFloat();"  placeholder="" name="trunks[{{i}}][s_fire_loc]" value="">
                             </td>
 
 

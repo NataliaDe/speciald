@@ -21,12 +21,13 @@ class MY_Controller extends CI_Controller
         parent::__construct();
 
         $this->load->model('user_model');
+        $this->load->model('main_model');
 
         //TWIG
         $this->load->library('twig');
 
         //$this->twig->addGlobal('sitename', 'My Awesome Site');
-        $this->twig->addGlobal('ORGAN_ID_RCU', ORGAN_ID_RCU);
+        $this->twig->addGlobal('ORGAN_ID_RCU', Main_model::ORGAN_ID_RCU);
     }
 
     public function re_login()

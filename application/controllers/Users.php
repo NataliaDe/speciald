@@ -24,10 +24,11 @@ class Users extends My_Controller
         parent::__construct();
 
         $this->re_login();
+        $this->load->model('main_model');
 
-        if ($this->session->userdata('is_admin') == 1 && $this->session->userdata('level') == 1) {//superadmin rcu
+        if ($this->session->userdata('is_admin') == 1 && $this->session->userdata('level') == Main_model::LEVEL_ID_RCU) {//superadmin rcu
             $this->load->model('user_model');
-            $this->load->model('main_model');
+
 
             $this->data['regions'] = $this->main_model->get_regions();
             $this->data['locals'] = $this->main_model->get_locals();
@@ -87,29 +88,29 @@ class Users extends My_Controller
                 $data['login'] = trim($post['login']);
                 $data['password'] = trim($post['password']);
 
-                if (isset($post['id_organ']) && $post['id_organ'] == ORGAN_ID_RCU) {
+                if (isset($post['id_organ']) && $post['id_organ'] == Main_model::ORGAN_ID_RCU) {
 
                     $data['sub'] = 1;
-                    $data['level'] = 1;
+                    $data['level'] = Main_model::LEVEL_ID_RCU;
                     $data['id_organ'] = $post['id_organ'];
-                } elseif (isset($post['id_organ']) && in_array($post['id_organ'], array(ORGAN_ID_ROSN, ORGAN_ID_UGZ, ORGAN_ID_AVIA))) {
+                } elseif (isset($post['id_organ']) && in_array($post['id_organ'], array(Main_model::ORGAN_ID_ROSN, Main_model::ORGAN_ID_UGZ, Main_model::ORGAN_ID_AVIA))) {
 
                     $data['sub'] = 2;
                     $data['id_organ'] = $post['id_organ'];
 
                     if ($post['id_region'] == 3 && $post['id_local'] == 123) {
-                        $data['level'] = 2;
+                        $data['level'] = Main_model::LEVEL_ID_UMCHS;
                     } else {
-                        $data['level'] = 3;
+                        $data['level'] = Main_model::LEVEL_ID_ROCHS;
                     }
                 } else {
                     $data['id_organ'] = 0;
                     $data['sub'] = 0;
 
                     if (isset($post['id_local']) && $post['id_local'] != 0) {
-                        $data['level'] = 3;
+                        $data['level'] = Main_model::LEVEL_ID_ROCHS;
                     } else {
-                        $data['level'] = 2;
+                        $data['level'] = Main_model::LEVEL_ID_UMCHS;
                     }
                 }
 
