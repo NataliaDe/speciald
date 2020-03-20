@@ -40,6 +40,13 @@ $('#searchStrCarsForm #id_region_str_cars').on('change', function (event) {
             data: {
                 ids_region: ids_region
             },
+
+            statusCode: {
+                307: function () {
+                    alert("Время сессии истекло");
+                }
+            },
+
             success: function (data) {
 
                 $(data).each(function (index, value) {
@@ -60,6 +67,9 @@ $('#searchStrCarsForm #id_region_str_cars').on('change', function (event) {
             error: function () {
                 console.log('jj');
             }
+//                complete: function(xhr, textStatus) {
+//        console.log(xhr.status);
+//    }
         });
 
 

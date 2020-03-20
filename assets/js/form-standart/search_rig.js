@@ -40,6 +40,11 @@ function update(url) {
 //        } else {
 //            $('#btn-get-data-rig').attr('disabled', true);
 //        }
+    }).fail(function (data, textStatus, xhr) {
+        //This shows status code eg. 403
+        console.log("error", data.status);
+        //This shows status message eg. Forbidden
+        console.log("STATUS: " + xhr);
     });
 }
 
