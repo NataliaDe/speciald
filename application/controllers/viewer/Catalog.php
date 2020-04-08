@@ -25,21 +25,22 @@ class Catalog extends My_Controller
 
         $this->re_login();
 
-        $this->load->model('user_model');
+        if ($this->data['active_user']['can_edit'] == 0) {
+            $this->load->model('user_model');
 
-        $this->data['active_item_menu'] ='catalog';
+            $this->data['active_item_menu'] = 'catalog';
 
-        //TWIG
-        //$this->load->library('twig');
-
-        //$this->twig->addGlobal('sitename', 'My Awesome Site');
-
-
+            //TWIG
+            //$this->load->library('twig');
+            //$this->twig->addGlobal('sitename', 'My Awesome Site');
+        } else {
+            redirect('auth');
+        }
     }
 
     public function index()
     {
-       // print_r($this->session->userdata);
+        // print_r($this->session->userdata);
         $this->data['title'] = 'Спец.донесения. Список';
         $this->twig->display('catalog/index', $this->data);
     }

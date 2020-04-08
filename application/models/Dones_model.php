@@ -7,7 +7,7 @@ if (!defined('BASEPATH')) {
  * Class User_model
  * @property CI_DB_query_builder $db
  */
-class Create_model extends CI_Model
+class Dones_model extends CI_Model
 {
 
 //	const LEVEL_ID_RCU=1;//RCU
@@ -38,286 +38,172 @@ class Create_model extends CI_Model
         parent::__construct();
     }
 
-    public function add_new_dones($data)
+    /* catalog table.
+     * level 3
+     *      */
+    public function get_dones_by_grochs($filter, $id_organ = false)
     {
-        $this->db->insert('speciald.dones', $data);
-        return $this->db->insert_id();
+
+        $this->db->select('d.*, author.id_local as author_local_id, vid.name as specd_vid_name');
+        $this->db->join('permissions as author', 'author.id_user=d.created_by', 'left');
+        $this->db->join('vid_specd as vid', 'vid.id=d.specd_vid', 'left');
+
+        //who created SD
+        if (isset($filter['author_local_id']))
+            $this->db->where('author.id_local', $filter['author_local_id']);
+
+        if ($id_organ != FALSE)
+            $this->db->where('author.id_organ', $id_organ);
+
+        if (isset($filter['without_cp']))
+             $this->db->where_not_in('author.id_organ', $filter['without_cp']);
+
+
+        if (isset($filter['is_delete']))
+            $this->db->where('d.is_delete', $filter['is_delete']);
+
+        $this->db->order_by('d.specd_date');
+
+
+        $result = $this->db->get('speciald.dones as d')->result_array();
+        return $result;
     }
+    /*
 
-    public function edit_dones($id, $data)
-    {
-        $this->db->where('id', $id);
-        $this->db->update('speciald.dones', $data);
-    }
+     * $is_history=3 - get all statuses
+     * $is_history=1 - get statuses in history
+     * $is_history=0 - get statuses active
+     *      */
 
-    public function add_new_dones_silymchs($data)
-    {
-        $this->db->insert('speciald.dones_silymchs', $data);
-        return $this->db->insert_id();
-    }
-
-    public function edit_new_dones_silymchs($id, $data)
-    {
-        $this->db->where('id', $id);
-        $this->db->update('speciald.dones_silymchs', $data);
-    }
-
-    public function get_dones_silymchs($id_dones)
-    {
-        return $this->db->select('*')
-                ->from('speciald.dones_silymchs')
-                ->where('id_dones', $id_dones)
-                ->order_by('sort', 'asc')
-                ->get()
-                ->result_array();
-    }
-
-    public function delete_dones_silymchs_by_ids($id_dones, $ids)
+    public function get_statuses_by_id_dones($id_dones, $is_history = 3, $status = false)
     {
 
-        $this->db->where('id_dones', $id_dones);
-        $this->db->where_in('id', $ids);
-        $this->db->delete('speciald.dones_silymchs');
-    }
+        $this->db->select('dl.*, dl.id_user as id_user_action, a.*, act.name as action_name');
+        $this->db->where('dl.id_dones', $id_dones);
+        $this->db->join('permissions as a', 'a.id_user=dl.id_user', 'left');
+        $this->db->join('actions as act', 'act.id=dl.id_action', 'left');
 
-    public function get_dones_innerservice($id_dones)
-    {
-        return $this->db->select('*')
-                ->from('speciald.dones_innerservice')
-                ->where('id_dones', $id_dones)
-                ->order_by('sort', 'asc')
-                ->get()
-                ->result_array();
-    }
+        if ($status != FALSE) {
+            if (is_array($status))
+                $this->db->where_in('dl.id_action', $status);
+            else {
+                $this->db->where('dl.id_action', $status);
+            }
+        }
 
-    public function add_new_dones_innerservice($data)
-    {
-        $this->db->insert('speciald.dones_innerservice', $data);
-        return $this->db->insert_id();
-    }
+        if ($is_history != 3)
+            $this->db->where('dl.is_history', $is_history);
 
-    public function edit_dones_innerservice($id, $data)
-    {
-        $this->db->where('id', $id);
-        $this->db->update('speciald.dones_innerservice', $data);
-    }
+        $this->db->order_by('dl.date_action', 'desc');
 
-    public function delete_dones_innerservice_by_ids($id_dones, $ids)
-    {
-        $this->db->where('id_dones', $id_dones);
-        $this->db->where_in('id', $ids);
-        $this->db->delete('speciald.dones_innerservice');
-    }
-
-    public function get_dones_innerservice_work($id_dones_innerservice)
-    {
-        return $this->db->select('*')
-                ->from('speciald.dones_innerservice_work')
-                ->where('id_dones_innerservice', $id_dones_innerservice)
-                ->get()
-                ->result_array();
-    }
-
-    public function add_new_dones_innerservice_work($data)
-    {
-        $this->db->insert('speciald.dones_innerservice_work', $data);
-        return $this->db->insert_id();
-    }
-
-    public function delete_dones_innerservice_work($id_dones_innerservice)
-    {
-        $this->db->where('id_dones_innerservice', $id_dones_innerservice)->delete('speciald.dones_innerservice_work');
-    }
-
-    public function get_dones_informing($id_dones)
-    {
-        return $this->db->select('*')
-                ->from('speciald.dones_informing')
-                ->where('id_dones', $id_dones)
-                ->order_by('sort', 'asc')
-                ->get()
-                ->result_array();
-    }
-
-    public function add_new_dones_informing($data)
-    {
-        $this->db->insert('speciald.dones_informing', $data);
-        return $this->db->insert_id();
-    }
-
-    public function edit_dones_informing($id, $data)
-    {
-        $this->db->where('id', $id);
-        $this->db->update('speciald.dones_informing', $data);
-    }
-
-    public function delete_dones_informing_by_ids($id_dones, $ids)
-    {
-
-        $this->db->where('id_dones', $id_dones);
-        $this->db->where_in('id', $ids);
-        $this->db->delete('speciald.dones_informing');
-    }
-
-    public function get_dones_str($id_dones)
-    {
-        return $this->db->select('*')
-                ->from('speciald.dones_str')
-                ->where('id_dones', $id_dones)
-                ->order_by('sort', 'asc')
-                ->get()
-                ->result_array();
-    }
-
-    public function add_new_dones_str($data)
-    {
-        $this->db->insert('speciald.dones_str', $data);
-        return $this->db->insert_id();
-    }
-
-    public function edit_dones_str($id, $data)
-    {
-        $this->db->where('id', $id);
-        $this->db->update('speciald.dones_str', $data);
-    }
-
-    public function delete_dones_str_by_ids($id_dones, $ids)
-    {
-
-        $this->db->where('id_dones', $id_dones);
-        $this->db->where_in('id', $ids);
-        $this->db->delete('speciald.dones_str');
-    }
-
-    public function get_dones_str_text($id_dones)
-    {
-        return $this->db->select('*')
-                ->from('speciald.dones_str_text')
-                ->where('id_dones', $id_dones)
-                ->order_by('sort', 'asc')
-                ->get()
-                ->result_array();
-    }
-
-    public function add_new_dones_str_text($data)
-    {
-        $this->db->insert('speciald.dones_str_text', $data);
-        return $this->db->insert_id();
-    }
-
-    public function edit_dones_str_text($id, $data)
-    {
-        $this->db->where('id', $id);
-        $this->db->update('speciald.dones_str_text', $data);
-    }
-
-    public function delete_dones_str_text_by_ids($id_dones, $ids)
-    {
-
-        $this->db->where('id_dones', $id_dones);
-        $this->db->where_in('id', $ids);
-        $this->db->delete('speciald.dones_str_text');
-    }
-
-    public function get_dones_trunks($id_dones)
-    {
-        return $this->db->select('*')
-                ->from('speciald.dones_trunks')
-                ->where('id_dones', $id_dones)
-                ->order_by('sort', 'asc')
-                ->get()
-                ->result_array();
-    }
-
-    public function add_new_dones_trunks($data)
-    {
-        $this->db->insert('speciald.dones_trunks', $data);
-        return $this->db->insert_id();
-    }
-
-    public function edit_dones_trunks($id, $data)
-    {
-        $this->db->where('id', $id);
-        $this->db->update('speciald.dones_trunks', $data);
-    }
-
-    public function delete_dones_trunks_by_ids($id_dones, $ids)
-    {
-
-        $this->db->where('id_dones', $id_dones);
-        $this->db->where_in('id', $ids);
-        $this->db->delete('speciald.dones_trunks');
-    }
-
-    public function get_dones_water_source($id_dones)
-    {
-        return $this->db->select('*')
-                ->from('speciald.dones_water_source')
-                ->where('id_dones', $id_dones)
-            ->order_by('sort', 'asc')
-                ->get()
-                ->result_array();
-    }
-
-    public function add_new_dones_water_source($data)
-    {
-        $this->db->insert('speciald.dones_water_source', $data);
-        return $this->db->insert_id();
-    }
-
-    public function edit_dones_water_source($id, $data)
-    {
-        $this->db->where('id', $id);
-        $this->db->update('speciald.dones_water_source', $data);
-    }
-
-    public function delete_dones_water_source_by_ids($id_dones, $ids)
-    {
-
-        $this->db->where('id_dones', $id_dones);
-        $this->db->where_in('id', $ids);
-        $this->db->delete('speciald.dones_water_source');
-    }
-
-    public function add_new_dones_object($data)
-    {
-        $this->db->insert('speciald.dones_object', $data);
-        return $this->db->insert_id();
-    }
-
-    public function edit_dones_object($id, $data)
-    {
-        $this->db->where('id', $id);
-        $this->db->update('speciald.dones_object', $data);
-    }
-
-    public function get_dones_by_id($id_dones)
-    {
-        return $this->db->select('*')
-                ->from('speciald.dones')
-                ->where('id', $id_dones)
-                ->get()
-                ->row_array();
+        $result = $this->db->get('speciald.dones_logs as dl')->result_array();
+        return $result;
     }
 
 
-        public function get_dones_object($id_dones)
-    {
-        return $this->db->select('*')
-                ->from('speciald.dones_object')
-                ->where('id_dones', $id_dones)
-                ->get()
-                ->row_array();
-    }
 
-
-    public function delete_dones($id_dones)
+    public function set_number_dones($id_dones, $number)
     {
         $this->db->where('id', $id_dones);
-        $this->db->set('is_delete', 1);
+        $this->db->set('specd_number', $number);
         $this->db->update('speciald.dones');
 
-//        $this->db->where('id', $id_dones);
-//        $this->db->delete('speciald.dones');
+    }
+
+
+    /* catalog table.
+     * level 2
+     *      */
+        public function get_dones_by_region($filter, $id_organ = false)
+    {
+
+        $this->db->select('d.*, author.id_local as author_local_id,author.id_region as author_region_id, vid.name as specd_vid_name, author.auth_organ');
+        $this->db->join('permissions as author', 'author.id_user=d.created_by', 'left');
+        $this->db->join('vid_specd as vid', 'vid.id=d.specd_vid', 'left');
+
+        //who created SD
+        if (isset($filter['author_region_id']))
+            $this->db->where('author.id_region', $filter['author_region_id']);
+
+        if ($id_organ != FALSE)
+            $this->db->where('author.id_organ', $id_organ);
+
+        if (isset($filter['without_cp']))
+             $this->db->where_not_in('author.id_organ', $filter['without_cp']);
+
+
+        if (isset($filter['is_delete']))
+            $this->db->where('d.is_delete', $filter['is_delete']);
+
+        $this->db->order_by('d.specd_date');
+
+
+        $result = $this->db->get('speciald.dones as d')->result_array();
+        return $result;
+    }
+
+
+
+
+        public function is_status_by_id_dones($id_dones, $status)
+    {
+
+        $this->db->select('dl.*');
+        $this->db->where('dl.id_dones', $id_dones);
+
+        $this->db->where('dl.id_action', $status);
+
+
+        $this->db->where('dl.is_history', 0);
+
+        $this->db->order_by('dl.date_action', 'desc');
+
+        $result = $this->db->get('speciald.dones_logs as dl')->result_array();
+        return $result;
+    }
+
+
+
+    /* catalog table.
+     * level 1 RCU
+     *      */
+        public function get_dones_for_rcu($filter)
+    {
+
+        $this->db->select('d.*, author.id_local as author_local_id,author.id_region as author_region_id,author.level as author_level,'
+            . 'author.id_organ as author_id_organ,author.auth_organ, vid.name as specd_vid_name');
+        $this->db->join('permissions as author', 'author.id_user=d.created_by', 'left');
+        $this->db->join('vid_specd as vid', 'vid.id=d.specd_vid', 'left');
+
+
+        if (isset($filter['is_delete']))
+            $this->db->where('d.is_delete', $filter['is_delete']);
+
+        $this->db->order_by('d.specd_date');
+
+
+        $result = $this->db->get('speciald.dones as d')->result_array();
+        return $result;
+    }
+
+
+        public function set_open_update($id_dones, $is_open_update)
+    {
+        $this->db->where('id', $id_dones);
+        $this->db->set('is_open_update', $is_open_update);
+        $this->db->update('speciald.dones');
+
+    }
+
+
+
+
+        public function get_dones_by_id($id_dones)
+    {
+        return $this->db->select('d.*')
+                ->from('speciald.dones as d')
+                ->where('d.id', $id_dones)
+                ->get()
+                ->row_array();
     }
 }

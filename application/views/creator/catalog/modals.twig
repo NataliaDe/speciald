@@ -1,21 +1,190 @@
-     <!-- Modal Delele-->
-        <div class="modal fade" id="delete-user-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title ff-l" id="myModalLabel">Удалить</h4>
-                        <button class="close danger" type="button" data-dismiss="modal" style="font-weight: bolder;">×</button>
+
+<div class="modal fade" id="delete-sd-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title ff-l" id="myModalLabel">Удалить</h4>
+                <button class="close danger" type="button" data-dismiss="modal" style="font-weight: bolder;">×</button>
 
 
-                    </div>
-                    <div class="modal-body">
-                        <p>Удалить пользователя <b><span></span></b> ?</p>
-                    </div>
-                    <div class="modal-footer">
+            </div>
+            <div class="modal-body">
+                <p>Удалить специальное донесение<br> <b><span></span></b> ?</p>
+            </div>
+            <div class="modal-footer">
 
-                        <button id="delete-user-btn"  type="button" class="btn btn-danger"   >Удалить</button>
-                        <button  type="button" class="btn btn-secondary close-window" >Отмена</button>
-                    </div>
-                </div>
+                <button id="delete-sd-btn"  type="button" class="btn btn-danger"   >Удалить</button>
+                <button  type="button" class="btn btn-secondary " id="close-delete-sd-modal" >Отмена</button>
             </div>
         </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="history-sd-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title ff-l header-name" id="myModalLabel">Действия со СД <span></span></h5>
+                <button class="close danger" type="button" data-dismiss="modal" style="font-weight: bolder;">×</button>
+
+
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button  type="button" class="btn btn-secondary " id="close-history-sd-modal" >Закрыть</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="modal fade" id="set-number-sd-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title ff-l" id="myModalLabel">Редактировать номер специального донесения</h5>
+                <button class="close danger" type="button" data-dismiss="modal" style="font-weight: bolder;">×</button>
+
+
+            </div>
+            <div class="modal-body">
+                <p>Введите новый номер для специального донесения с <b>ID =</b> <b><span></span></b></p>
+                <input type="text" class="form-control" placeholder="" name="number_sd" id="number_sd">
+                <input type="hidden" class="form-control" placeholder="" name="sd_id" id="sd_id">
+            </div>
+            <div class="modal-footer">
+
+                <button id="set-number-sd-btn"  type="button" class="btn btn-success" data-url="{{base_url('dones/set_number_sd/')}}"  >Сохранить</button>
+                <button  type="button" class="btn btn-secondary " id="close-set-number-sd-modal" >Отмена</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="prove-sd-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title ff-l" id="myModalLabel">Подтвердить СД</h5>
+                <button class="close danger" type="button" data-dismiss="modal" style="font-weight: bolder;">×</button>
+
+
+            </div>
+            <div class="modal-body">
+                <p>Подтвердить специальное донесение<br> <b><span></span></b> ?</p>
+            </div>
+            <div class="modal-footer">
+
+                <button id="prove-sd-btn"  type="button" class="btn btn-success">Подтвердить</button>
+                <button  type="button" class="btn btn-secondary " id="close-prove-sd-modal" >Отмена</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="detail-prove-sd-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title ff-l prove-info" id="myModalLabel"><i class="fa fa-check" aria-hidden="true"></i> <span></span></h5>
+                <button class="close danger" type="button" data-dismiss="modal" style="font-weight: bolder;">×</button>
+
+
+            </div>
+            <div class="modal-body">
+                <p>Специальное донесение <b><span></span></b> подтверждено: </p>
+                <b><span id="time"></span></b><br>
+                <span id="who"></span>
+            </div>
+            <div class="modal-footer">
+
+                <button  type="button" class="btn btn-secondary" data-dismiss="modal" id="close-modal" >Отмена</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="detail-refuse-sd-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title ff-l  refuse-info" id="myModalLabel">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                    <span></span>
+
+
+                </h5><br>
+
+                <button class="close danger" type="button" data-dismiss="modal" style="font-weight: bolder;">×</button>
+
+
+            </div>
+
+            <div class="modal-body">
+                <p class="number"> Номер: <b></b></p><br>
+                <div class="ajax">
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button  type="button" class="btn btn-secondary " data-dismiss="modal" id="close-history-sd-modal" >Закрыть</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="open-update-sd-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title ff-l" id="myModalLabel">Открыть доступ на редактирование СД</h4>
+                <button class="close danger" type="button" data-dismiss="modal" style="font-weight: bolder;">×</button>
+
+
+            </div>
+            <div class="modal-body">
+                <p>Специальное донесение <b><span></span></b> станет <u>доступно</u> для редактирования всем пользователям.<br>Открыть доступ?</p>
+            </div>
+            <div class="modal-footer">
+
+                <button id="open-update-sd-btn"  type="button" class="btn btn-success"   >Открыть</button>
+                <button  type="button" class="btn btn-secondary " data-dismiss="modal" >Отмена</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="close-update-sd-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title ff-l" id="myModalLabel">Закрыть доступ на редактирование СД</h4>
+                <button class="close danger" type="button" data-dismiss="modal" style="font-weight: bolder;">×</button>
+
+
+            </div>
+            <div class="modal-body">
+                <p>Специальное донесение <b><span></span></b> станет <u>недоступно</u> для редактирования всем пользователям.<br>Закрыть доступ?</p>
+            </div>
+            <div class="modal-footer">
+
+                <button id="close-update-sd-btn"  type="button" class="btn btn-danger"   >Закрыть</button>
+                <button  type="button" class="btn btn-secondary " data-dismiss="modal" >Отмена</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,26 +1,399 @@
-{% extends 'layout.twig' %}
-
-{% block title %}{{title}}{% endblock %}
-
-{% block content %}
-    <!-- content -->
-    <br> <br>
- <br>catalog
-<button type="button" class="btn btn-lg btn-danger" data-toggle="popover" title="Popover title" data-content="And here's some amazing content. It's very engaging. Right?">Click to toggle popover</button>
-    <!-- .content -->
-
-{% endblock %}
-
-
-
-
-{% block head %}{% endblock %}
-
-{% block footer %}
+{#{{dump(outs)}}#}
+<table class="table table-condensed table-hover  table-bordered table-custom"  id="catalogUmchsTable">
+    <!-- строка 1 -->
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Дата, номер</th>
+            <th>Кр. описание</th>
+            <th>Вид</th>
+            <th>Ред.</th>
+            <th>Уд.</th>
+            <th>УМЧС</th>
+            <th>РЦУРЧС</th>
+            <th><i class="fa fa-download" aria-hidden="true"></i></th>
 
 
+        </tr>
+    </thead>
+    <tfoot>
+        <tr>
+            <th>ID</th>
+            <th>Дата, номер</th>
+            <th>Кр. описание</th>
+            <th>Вид</th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
 
-{% include 'copyright_footer.twig' %}
 
-{% endblock %}
 
+        </tr>
+    </tfoot>
+    {%if outs is defined and outs is not empty%}
+        <tbody>
+
+            {% for out in outs %}
+
+                <tr>
+                    <td><a href="#" class="a-custom" data-toggle="modal"  data-target="#history-sd-modal" data-url="{{base_url('history')}}" data-id="{{out.id}}" data-number-sd="{{out.specd_date ? out.specd_date|date('d.m.Y') : ''}} {{out.specd_number ? '№ '~out.specd_number : ''}}" >{{out.id}}</a></td>
+
+                    <td> {{out.specd_date ? out.specd_date|date('d.m.Y') : ''}}<br>{{out.specd_number ? '№ '~out.specd_number : ''}}
+
+
+                        {%if out.author_local_id == active_user.id_local %}
+
+                            <a data-toggle="modal"  data-target="#set-number-sd-modal"
+                               data-id="{{out.id}}" data-number="{{out.specd_number}}">
+                                <i class="fa fa-pencil" aria-hidden="true" style="cursor: pointer; color: #007bff"></i>
+                            </a>
+
+                        {%endif%}
+
+
+                    </td>
+                    <td>
+                        {%if out.short_description is defined and out.short_description is not empty %}
+                            {{out.short_description}}
+                        {%else%}
+                            {{out.opening_description}}
+                        {%endif%}
+
+                    </td>
+                    <td>{{out.specd_vid_name}}</td>
+                    <td>
+
+                        {%if out.is_open_update == 0 and out.statuses_id is defined and  6 in out.statuses_id %}
+                              <a href="{{base_url('dones/edit_form_standart/'~out.id)}}" class="a-non-dec" data-toggle="tooltip" data-placement="top" title="Просмотреть СД">
+                                <button class="btn btn-sm btn-disabled" type="button"><i class="fa fa-eye" aria-hidden="true"  style="color:blue"></i></button>
+                            </a>
+
+                        {%elseif out.author_local_id != active_user.id_local %}
+                            <i class="fa fa-ban" style="color: red" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Функция не доступна. Вы не являетесь автором."></i>
+
+                        {%else%}
+                            <a href="{{base_url('dones/edit_form_standart/'~out.id)}}" class="a-non-dec">
+                                <button class="btn btn-sm {%if out.is_open_update == 1%}btn-warning{%else%}btn-success {%endif%} " type="button"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                            </a>
+
+                        {%endif%}
+                    </td>
+
+
+
+                    <td>
+
+                        {%if out.is_open_update == 0 and out.statuses_id is defined and  6 in out.statuses_id %}
+                           <i class="fa fa-ban" style="color: red" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Функция не доступна. СД подтверждено."></i>
+
+                        {%elseif out.author_local_id != active_user.id_local %}
+                           <i class="fa fa-ban" style="color: red" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Функция не доступна. Вы не являетесь автором."></i>
+                        {%else%}
+                            <a href="#" data-toggle="modal"  data-target="#delete-sd-modal" data-url="{{base_url('dones/delete_sd/'~out.id)}}" data-sd-id="{{out.id}}" data-number-sd="{{out.specd_date ? out.specd_date|date('d.m.Y') : ''}} {{out.specd_number ? '№ '~out.specd_number : ''}}" >
+                                <button class="btn btn-sm btn-danger "  type="button"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                            </a>
+                        {%endif%}
+
+
+                    </td>
+
+
+
+                    {%if out.statuses_id is defined and out.statuses_id is not empty %}
+
+                        {%set who=[]%}
+
+                        {%if 4 in out.statuses_id %}
+
+                            {%set detail=out.statuses_detail[4]%}
+
+                        {%elseif 5 in out.statuses_id%}
+                            {%set detail=out.statuses_detail[5]%}
+
+                        {%endif%}
+
+                        {%if detail.is_guest == 1%}
+
+                            {%if detail.fio_jour is not empty%}
+                                {%set who=who|merge([detail.fio_jour])%}
+                            {%endif%}
+
+                            {%if detail.rank_name_jour is not empty%}
+                                {%set who=who|merge([detail.rank_name_jour|lower])%}
+                            {%endif%}
+
+                            {%if detail.position_name_jour is not empty%}
+                                {%set who=who|merge([detail.position_name_jour|lower])%}
+                            {%endif%}
+
+                        {%else%}
+                            {%if detail.fio is not empty%}
+                                {%set who=who|merge([detail.fio])%}
+                            {%endif%}
+
+                            {%if detail.rank_name is not empty%}
+                                {%set who=who|merge([detail.rank_name|lower])%}
+                            {%endif%}
+
+                            {%if detail.position_name is not empty%}
+                                {%set who=who|merge([detail.position_name|lower])%}
+                            {%endif%}
+
+                        {%endif%}
+
+                    {%endif%}
+
+
+
+
+
+                    <td>
+
+                        {%if out.statuses_id is defined and out.statuses_id is not empty %}
+
+
+                            {%if 4 in out.statuses_id %}
+
+                                <a href="#" class="prove-info" data-toggle="modal"  data-target="#detail-prove-sd-modal"
+
+                                   data-level="2"
+                                   data-time="{{out.statuses_detail[4].date_action|date('d.m.Y H:i')}}"
+                                   data-who="{{who is not empty ? who|join(', ') : ''}}"
+                                   data-number-sd="{{out.specd_date ? out.specd_date|date('d.m.Y') : ''}} {{out.specd_number ? '№ '~out.specd_number : ''}}" >
+                                    <i class="fa fa-check" aria-hidden="true"></i>
+                                    Подтверждено
+                                </a>
+                            {%elseif 5 in out.statuses_id%}
+                                <a href="#" class="refuse-info" data-toggle="modal"  data-target="#detail-refuse-sd-modal"
+                                   data-id="{{out.id}}"
+                                   data-number-sd="{{out.specd_date ? out.specd_date|date('d.m.Y') : ''}} {{out.specd_number ? '№ '~out.specd_number : ''}}"
+                                   data-url="{{base_url('history/detail_refuse_sd')}}" data-level="2">
+                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                    Замечания
+                                </a>
+                            {%else%}
+                                <i class="fa fa-clock-o" aria-hidden="true"></i>
+                                Ожидает исполнения
+
+                            {%endif%}
+
+                        {%endif%}
+
+                    </td>
+
+
+
+
+
+                    <td>
+
+
+
+                        {%if out.statuses_id is defined and out.statuses_id is not empty %}
+
+
+                            {%set who=[]%}
+
+
+                            {%if 6 in out.statuses_id %}
+
+                                {%set detail=out.statuses_detail[6]%}
+
+                            {%elseif 7 in out.statuses_id%}
+                                {%set detail=out.statuses_detail[7][active_user.id_user]%}
+
+                            {%endif%}
+
+                            {%if detail.is_guest == 1%}
+
+                                {%if detail.fio_jour is not empty%}
+                                    {%set who=who|merge([detail.fio_jour])%}
+                                {%endif%}
+
+                                {%if detail.rank_name_jour is not empty%}
+                                    {%set who=who|merge([detail.rank_name_jour|lower])%}
+                                {%endif%}
+
+                                {%if detail.position_name_jour is not empty%}
+                                    {%set who=who|merge([detail.position_name_jour|lower])%}
+                                {%endif%}
+
+                            {%else%}
+                                {%if detail.fio is not empty%}
+                                    {%set who=who|merge([detail.fio])%}
+                                {%endif%}
+
+                                {%if detail.rank_name is not empty%}
+                                    {%set who=who|merge([detail.rank_name|lower])%}
+                                {%endif%}
+
+                                {%if detail.position_name is not empty%}
+                                    {%set who=who|merge([detail.position_name|lower])%}
+                                {%endif%}
+
+                            {%endif%}
+
+
+                        {%endif%}
+
+
+
+                        {%if out.statuses_id is defined and 6 in out.statuses_id  %}
+                            {#Функция не доступна. СД подтверждено.#}
+
+                            <a href="#" class="prove-info" data-toggle="modal"  data-target="#detail-prove-sd-modal"
+                               data-level="1"
+                               data-time="{{out.detail.date_action|date('d.m.Y H:i')}}"
+                               data-who="{{who is not empty ? who|join(', ') : ''}}"
+                               data-number-sd="{{out.specd_date ? out.specd_date|date('d.m.Y') : ''}} {{out.specd_number ? '№ '~out.specd_number : ''}}" >
+                                <i class="fa fa-check" aria-hidden="true"></i>
+                                Подтверждено
+                            </a>
+
+                        {%elseif 7 in out.statuses_id%}
+
+                            <a href="#" class="refuse-info" data-toggle="modal"  data-target="#detail-refuse-sd-modal"
+                               data-level="1"
+                               data-id="{{out.id}}"
+                               data-number-sd="{{out.specd_date ? out.specd_date|date('d.m.Y') : ''}} {{out.specd_number ? '№ '~out.specd_number : ''}}"
+                               data-url="{{base_url('history/detail_refuse_sd')}}">
+                                <i class="fa fa-times" aria-hidden="true"></i>
+                                Замечания
+                            </a>
+                        {%else%}
+                            <i class="fa fa-clock-o" aria-hidden="true"></i>
+                            Ожидает исполнения
+
+
+                        {%endif%}
+
+
+                        {#{%if out.statuses_id is defined and out.statuses_id is not empty %}
+
+                            {%if 6 in out.statuses_id %}
+
+                                <i class="fa fa-check" aria-hidden="true"></i>
+                                Подтверждено
+                            {%elseif 7 in out.statuses_id%}
+                                <i class="fa fa-times" aria-hidden="true"></i>
+                                Отклонил
+                            {%else%}
+                                <i class="fa fa-clock-o" aria-hidden="true"></i>
+                                Ожидает исполнения
+
+                            {%endif%}
+
+                        {%endif%}#}
+
+                    </td>
+
+                    <td>
+                        <i class="fa fa-file-word-o" aria-hidden="true"></i>
+
+                        <a href="{{base_url('dones/copy_standart_sd/'~out.id)}}" >
+                        <i class="fa fa-clone" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Создать по шаблону."></i>
+                        </a>
+                    </td>
+
+                </tr>
+
+
+            {%endfor%}
+
+        </tbody>
+    {%endif%}
+</table>
+
+
+<script src="{{ base_url('/assets/libs/jquery/jquery/dist/jquery.js')}}"></script>
+
+<script>
+    $(document).ready(function () {
+
+        var table = $('#catalogUmchsTable').DataTable({
+            "pageLength": 50,
+            "order": [[0, "desc"]],
+            language: {
+                "processing": "Подождите...",
+                "search": "Поиск:",
+                "lengthMenu": "Показать _MENU_ записей",
+                "info": "Записи с _START_ до _END_ из _TOTAL_ записей",
+                "infoEmpty": "Записи с 0 до 0 из 0 записей",
+                "infoFiltered": "(отфильтровано из _MAX_ записей)",
+                "infoPostFix": "",
+                "loadingRecords": "Загрузка записей...",
+                "zeroRecords": "Записи отсутствуют.",
+                "emptyTable": "В таблице отсутствуют данные",
+                "paginate": {
+                    "first": "Первая",
+                    "previous": "Предыдущая",
+                    "next": "Следующая",
+                    "last": "Последняя"
+                },
+                "aria": {
+                    "sortAscending": ": активировать для сортировки столбца по возрастанию",
+                    "sortDescending": ": активировать для сортировки столбца по убыванию"
+                }
+
+            }
+        });
+
+
+        $('#catalogUmchsTable tfoot th').each(function (i) {
+
+            if (i !== 6 && i !== 7 && i !== 4 && i !== 5 && i !== 8) {
+
+
+                if (i === 3) {
+
+                    var y = 'catalogUmchsTable';
+                    var select = $('<select class="' + i + '  noprint" id="sel' + y + i + '"><option value=""></option></select>')
+                            .appendTo($(this).empty())
+                            .on('change', function () {
+
+                                var val = $(this).val();
+
+                                table.column(i) //Only the first column
+                                        .search(val ? '^' + $(this).val() + '$' : val, true, false)
+                                        .draw();
+                            });
+
+                    var x = $('#catalogUmchsTable tfoot th').index($(this));
+                    table.column(i).data().unique().sort().each(function (d, j) {
+                        select.append('<option   value="' + d + '" >' + d + '</option>');
+                    });
+
+                } else {
+
+                    var title = $('#catalogUmchsTable tfoot th').eq($(this).index()).text();
+                    var x = $('#catalogUmchsTable tfoot th').index($(this));
+                    var y = 'catalogUmchsTable';
+                    //$(this).html( '<input type="text" placeholder="Поиск '+title+'" />' );
+                    $(this).html('<input type="text" class="noprint" id="inpt' + y + x + '" placeholder="Поиск"  />');
+                    // document.getElementById("inpt11").html('placeholder="<i class="fa fa-search" aria-hidden="true"></i>"');
+                }
+
+            }
+        });
+
+        $("#catalogUmchsTable tfoot input").on('keyup change', function () {
+            table
+                    .column($(this).parent().index() + ':visible')
+                    .search(this.value)
+                    .draw();
+        });
+
+    });
+
+
+
+
+
+
+
+
+
+
+</script>

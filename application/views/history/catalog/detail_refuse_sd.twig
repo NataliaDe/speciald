@@ -1,26 +1,64 @@
-{% extends 'layout.twig' %}
+<ul class="history">
+    {#{{dump(statuses)}}#}
+    {% for status in statuses %}
+        <li class=" pearson-li ">
+            <span class="date-time-history">
+                {{status.date_action|date('d.m.Y')}} {{status.date_action|date('H:i')}}
+            </span>
 
-{% block title %}{{title}}{% endblock %}
+            <p><b>
+                    {{status.action_name}}
+                    {%if status.id_user_action == data.active_user.id_user%}
+                        (Вы)
+                    {%endif%}
+                </b>
+            </p>
+            <p><i>
+                    <u>Замечание:</u> {{status.description_refuse}}
 
-{% block content %}
-    <!-- content -->
-    <br> <br>
- <br>catalog
-<button type="button" class="btn btn-lg btn-danger" data-toggle="popover" title="Popover title" data-content="And here's some amazing content. It's very engaging. Right?">Click to toggle popover</button>
-    <!-- .content -->
-
-{% endblock %}
-
-
-
-
-{% block head %}{% endblock %}
-
-{% block footer %}
-
+                </i>
+            </p>
+            <p>
+                <small>{{status.auth_organ}}<br>
+                    {%set who=[]%}
+                    {%if status.is_guest == 1%}
 
 
-{% include 'copyright_footer.twig' %}
+                        {%if status.fio_jour is not empty%}
+                            {%set who=who|merge([status.fio_jour])%}
+                        {%endif%}
 
-{% endblock %}
+                        {%if status.rank_name_jour is not empty%}
+                            {%set who=who|merge([status.rank_name_jour|lower])%}
+                        {%endif%}
 
+                        {%if status.position_name_jour is not empty%}
+                            {%set who=who|merge([status.position_name_jour|lower])%}
+                        {%endif%}
+
+                        {{who is not empty ? who|join(', ') : ''}}
+
+                    {%else%}
+                        {%if status.fio is not empty%}
+                            {%set who=who|merge([status.fio])%}
+                        {%endif%}
+
+                        {%if status.rank_name is not empty%}
+                            {%set who=who|merge([status.rank_name|lower])%}
+                        {%endif%}
+
+                        {%if status.position_name is not empty%}
+                            {%set who=who|merge([status.position_name|lower])%}
+                        {%endif%}
+
+                        {{who is not empty ? who|join(', ') : ''}}
+
+
+                    {%endif%}
+                </small>
+            </p>
+
+        </li>
+    {% endfor %}
+
+</ul>

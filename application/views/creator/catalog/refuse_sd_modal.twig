@@ -1,21 +1,32 @@
-     <!-- Modal Delele-->
-        <div class="modal fade" id="delete-user-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+
+
+
+        <div class="modal fade" id="refuse-sd-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title ff-l" id="myModalLabel">Удалить</h4>
+                        <h5 class="modal-title ff-l" id="myModalLabel">Отклонить СД</h5>
                         <button class="close danger" type="button" data-dismiss="modal" style="font-weight: bolder;">×</button>
 
 
                     </div>
                     <div class="modal-body">
-                        <p>Удалить пользователя <b><span></span></b> ?</p>
+                        <p>Специальное донесение <br> <b><span></span></b> будет отправлено  на доработку.</p>
+
+
+                        <p>Укажите свои замечания:</p>
+                        <textarea class="form-control" name="description_refuse" id="description_refuse"></textarea>
+                        <input type="hidden" class="form-control" placeholder="" name="sd_id" id="sd_id">
+                        <input type="hidden" class="form-control" placeholder="" name="is_refresh" id="is_refresh">
+
                     </div>
                     <div class="modal-footer">
 
-                        <button id="delete-user-btn"  type="button" class="btn btn-danger"   >Удалить</button>
-                        <button  type="button" class="btn btn-secondary close-window" >Отмена</button>
+                        <button id="refuse-sd-btn"  type="button" class="btn btn-danger"data-url="{{base_url('dones/refuse/')}}" >Отправить на доработку</button>
+                        <button  type="button" class="btn btn-secondary " data-dismiss="modal" >Отмена</button>
                     </div>
                 </div>
             </div>
         </div>
+

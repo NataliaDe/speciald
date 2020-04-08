@@ -4,23 +4,45 @@
 
 {% block content %}
     <!-- content -->
-    <br> <br>
- <br>catalog
-<button type="button" class="btn btn-lg btn-danger" data-toggle="popover" title="Popover title" data-content="And here's some amazing content. It's very engaging. Right?">Click to toggle popover</button>
-    <!-- .content -->
+
+
+
+
+
+{% include 'creator/catalog/rcu/list_filter.twig' %}
+
+
+{% include 'creator/catalog/rcu/list.twig' %}
+
+
+
+<!-- .content -->
+
+
+
+{% include 'creator/catalog/modals.twig' %}
+{% include 'creator/catalog/refuse_sd_modal.twig' %}
 
 {% endblock %}
 
 
 
 
-{% block head %}{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="{{ base_url('assets/datatables/jquery.dataTables.css') }}">
+<link rel="stylesheet" href="{{ base_url('assets/css/history/history.css') }}">
+{% endblock %}
 
 {% block footer %}
 
-
-
 {% include 'copyright_footer.twig' %}
+
+
+  <script src="{{ base_url('/assets/datatables/jquery.dataTables.js')}}"></script>
+
+
+  <script src="{{ base_url('/assets/js/creator/catalog.js')}}"></script>
+
 
 {% endblock %}
 
