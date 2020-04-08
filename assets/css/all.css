@@ -154,3 +154,49 @@ table.dataTable tbody td {
 .accordion-content-official{
     border: solid 1px #999999 !important;
 }
+
+ .a-non-dec:hover {
+   text-decoration: none;
+   }
+
+
+.a-custom{
+    text-decoration: underline;
+}
+
+
+.prove-info{
+    text-decoration: underline;
+    color: #039e03;
+    font-weight: 600;
+}
+
+.refuse-info{
+    text-decoration: underline;
+    color: red;
+    font-weight: 600;
+}
+
+
+#detail-refuse-sd-modal .modal-header{
+  border-bottom: none;
+}
+#detail-refuse-sd-modal .modal-footer {
+    border-top: none;
+}
+
+.copy-sd{
+    font-size: 16px;
+    color: red;
+    font-weight: 800;
+     text-transform: uppercase; /* Заглавные буквы */
+}
+
+.hide{
+    display: none;
+}
+
+.actions_ls_btn_trunks{
+    cursor: pointer;
+}
+

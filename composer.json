@@ -12,7 +12,9 @@
 	},
 	"require": {
 		"php": ">=5.3.7",
-		"kenjis/codeigniter-ss-twig": "^0.4.0"
+		"kenjis/codeigniter-ss-twig": "^0.4.0",
+		"phpoffice/phpword": "^0.17.0",
+		"rkorebrits/htmltoopenxml": "^0.1.9"
 	},
 	"suggest": {
 		"paragonie/random_compat": "Provides better randomness in PHP 5.x"

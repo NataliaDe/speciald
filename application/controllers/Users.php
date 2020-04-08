@@ -48,7 +48,7 @@ class Users extends My_Controller
 //            //$this->twig->addGlobal('sitename', 'My Awesome Site');
 //            $this->twig->addGlobal('ORGAN_ID_RCU', 5);
         } else {
-            redirect('catalog');
+            redirect('creator/catalog');
         }
     }
 
@@ -99,7 +99,8 @@ class Users extends My_Controller
                     $data['id_organ'] = $post['id_organ'];
 
                     if ($post['id_region'] == 3 && $post['id_local'] == 123) {
-                        $data['level'] = Main_model::LEVEL_ID_UMCHS;
+                        //$data['level'] = Main_model::LEVEL_ID_UMCHS;
+                        $data['level'] = Main_model::LEVEL_ID_ROCHS;
                     } else {
                         $data['level'] = Main_model::LEVEL_ID_ROCHS;
                     }

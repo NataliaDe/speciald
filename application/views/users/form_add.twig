@@ -45,7 +45,7 @@
                 <label for="id_organ">Подразд.</label>
                 <div class="form-group">
 
-                    <select class="form-control select2-select" name="id_organ" id="id_organ"  >
+                    <select class="form-control select2-select-deselect" name="id_organ" id="id_organ"  >
                         <option value="0">Не выбрано</option>
                         {% for organ in organs %}
                             <option value="{{ organ.id }}" class="{{organ.id_local}}" {% if user is defined and user.id_organ == organ.id%} selected {%endif%}>{{ organ.name }}</option>
@@ -189,7 +189,18 @@
 {% block footer %}
     <script>
         $(document).ready(function () {
-        $('.select2-select').select2();
+
+             $('.select2-select').select2();
+
+        $('.select2-select-deselect').select2({
+                placeholder: "Выберите из списка",
+                allowClear: true,
+                "language": {
+                    "noResults": function () {
+                        return "Ничего не найдено";
+                    }
+                }
+            });
         jQuery("#id_local").chained("#id_region");
         jQuery("#id_organ").chained("#id_local");
         {% if user is defined and user.id_organ == ORGAN_ID_RCU %}
@@ -293,8 +304,8 @@
                                                 message: 'от 3 до 30 символов'
                                             },#}
                                                     regexp: {
-                                                    regexp: /^[а-яА-Я0-9\s-.]+$/,
-                                                            message: 'буквы русск.алфавита, пробел,- '
+                                                    regexp: /^[а-яА-Я]/,
+                                                            message: 'буквы русск.алфавита '
                                                     }
                                             }
                                     }

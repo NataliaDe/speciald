@@ -293,9 +293,12 @@ class Create_model extends CI_Model
 
     public function get_dones_by_id($id_dones)
     {
-        return $this->db->select('*')
-                ->from('speciald.dones')
-                ->where('id', $id_dones)
+        return $this->db->select('d.*, author.id_local as author_local_id, author.id_region as author_region_id, author.fio as author_fio,'
+            . 'author.position_name as author_position_name,'
+            . 'author.rank_name as author_rank_name')
+                ->from('speciald.dones as d')
+                ->join('permissions as author', 'author.id_user=d.created_by', 'left')
+                ->where('d.id', $id_dones)
                 ->get()
                 ->row_array();
     }
@@ -319,5 +322,17 @@ class Create_model extends CI_Model
 
 //        $this->db->where('id', $id_dones);
 //        $this->db->delete('speciald.dones');
+    }
+
+
+        public function get_dones_innerservice_name($id_dones)
+    {
+        return $this->db->select('d.*, sn.name as innerservice_name')
+                ->from('speciald.dones_innerservice as d')
+             ->join('journal.service as sn', 'sn.id=d.service_id', 'left')
+                ->where('d.id_dones', $id_dones)
+                ->order_by('d.sort', 'asc')
+                ->get()
+                ->result_array();
     }
 }

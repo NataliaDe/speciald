@@ -68,7 +68,7 @@ class Guest extends CI_Controller
             redirect('dones/form_standart');
         } else {
 
-            redirect('catalog');
+            redirect($this->session->userdata('role').'/catalog');
         }
     }
 

@@ -7,181 +7,192 @@
     {%include '/parts/bread_crumb.twig'%}
     <br> <br>
     <!-- content -->
+
     <form role="form" id="createStandart" method="POST" action="{{base_url('/dones/standart_save')}}" >
         {#<div class="container">#}
 
+        {%if is_edit_dones is defined and dones is defined and dones.is_see == 1  %}
+
+            <fieldset disabled>
+            {%endif%}
 
 
-        <div class="form-group row create-form-row">
-            <div class="col-sm-3">
-                <h4 class="heading-primary" style="float: left">Специальное донесение</h4>
+
+            <div class="form-group row create-form-row">
+                <div class="col-sm-3">
+                    <h4 class="heading-primary" style="float: left">Специальное донесение {%if is_edit_dones is defined and dones is defined and dones.is_copy == 1  %} <span class="copy-sd">копия (ID = {{dones.copy_parent_id}})</span>{%endif%}</h4>
                     {#<a href="#" data-toggle="modal"  data-target="#modal-search-rig" data-url="" >
     <i class="fa fa-search" aria-hidden="true" id="search-rig"></i></h4>
 </a>#}
-            </div>
-            <label for="specd_date" class="col-form-label">от &nbsp</label>
-            <div class="col-sm-2 input-group">
+                </div>
+                <label for="specd_date" class="col-form-label">от &nbsp</label>
+                <div class="col-sm-2 input-group">
 
-                <input type="text" class="form-control date-cal"  placeholder="" name="specd_date" value="{%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.specd_date is not empty%}{{dones.specd_date|date('d.m.Y')}}{%endif%}">
-            </div>
+                    <input type="text" class="form-control date-cal"  placeholder="" name="specd_date" value="{%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.specd_date is not empty%}{{dones.specd_date|date('d.m.Y')}}{%endif%}">
+                </div>
 
 
-            <div class="col-sm-2 input-group ">
-                <label for="specd_number" class="col-form-label">№ &nbsp</label>
-                <input type="text" class="form-control "  placeholder="00/00-00/0000" name="specd_number" value="{%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.specd_number is not empty%}{{dones.specd_number|trim}}{%endif%}">
-            </div>
+                <div class="col-sm-2 input-group ">
+                    <label for="specd_number" class="col-form-label">№ &nbsp</label>
+                    <input type="text" class="form-control "  placeholder="00/00-00/0000" name="specd_number" value="{%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.specd_number is not empty%}{{dones.specd_number|trim}}{%endif%}">
+                </div>
 
                 {%if is_edit_dones is not defined  %}
                     <div class="col-sm-4">
-                      {%include '/create/timer.twig'%}
+                        {%include '/create/timer.twig'%}
                     </div>
                 {%endif%}
-        </div>
+            </div>
 
-        <div class="accordion">
-            <dl>
-                <dt class="dt-class">
-                    <a  href="#accordion1" aria-expanded="true" aria-controls="accordion1" class="accordion-title accordionTitle js-accordionTrigger custom-a is-collapsed is-expanded accordion-a-official" >Специальная служебная информация</a>
-                </dt>
-                <dd class="accordion-content accordionItem is-expanded animateIn accordion-content-official" id="accordion1" aria-hidden="false">
-                    {%include '/create/standart/official_block.twig'%}
-                </dd>
-                <dt class="dt-class">
-                    <a style="background-color:#428bca; color: white;border-color: #428bca; " href="#accordion2" aria-expanded="false" aria-controls="accordion2" class="accordion-title accordionTitle js-accordionTrigger custom-a is-collapsed is-expanded">
-                        Начальный текст (ручной набор данных)</a>
-                </dt>
-                <dd class="accordion-content accordionItem is-expanded animateIn" id="accordion2" aria-hidden="false">
-                    {%include '/create/standart/opening_block.twig'%}
-                </dd>
+            <div class="accordion">
+                <dl>
+                    <dt class="dt-class">
+                        <a  href="#accordion1" aria-expanded="true" aria-controls="accordion1" class="accordion-title accordionTitle js-accordionTrigger custom-a is-collapsed is-expanded accordion-a-official" >Специальная служебная информация</a>
+                    </dt>
+                    <dd class="accordion-content accordionItem is-expanded animateIn accordion-content-official" id="accordion1" aria-hidden="false">
+                        {%include '/create/standart/official_block.twig'%}
+                    </dd>
+                    <dt class="dt-class">
+                        <a style="background-color:#428bca; color: white;border-color: #428bca; " href="#accordion2" aria-expanded="false" aria-controls="accordion2" class="accordion-title accordionTitle js-accordionTrigger custom-a is-collapsed is-expanded">
+                            Начальный текст (ручной набор данных)</a>
+                    </dt>
+                    <dd class="accordion-content accordionItem is-expanded animateIn" id="accordion2" aria-hidden="false">
+                        {%include '/create/standart/opening_block.twig'%}
+                    </dd>
 
-                <dt class="dt-class">
-                    <a style="background-color:#428bca; color: white;border-color: #428bca; " href="#accordion3" aria-expanded="false" aria-controls="accordion3" class="accordion-title accordionTitle js-accordionTrigger custom-a is-collapsed is-expanded">
-                        Описание выезда и базовые таблицы
-                    </a>
-                </dt>
-                <dd class="accordion-content accordionItem is-expanded animateIn" id="accordion3" aria-hidden="false">
+                    <dt class="dt-class">
+                        <a style="background-color:#428bca; color: white;border-color: #428bca; " href="#accordion3" aria-expanded="false" aria-controls="accordion3" class="accordion-title accordionTitle js-accordionTrigger custom-a is-collapsed is-expanded">
+                            Описание выезда и базовые таблицы
+                        </a>
+                    </dt>
+                    <dd class="accordion-content accordionItem is-expanded animateIn" id="accordion3" aria-hidden="false">
 
-                    <div  id="middle-block-div">
-                        {%include '/create/standart/middle_block.twig'%}
-                    </div>
-
-                    <div  id="silymchs-block-div">
-                        {%include '/create/standart/middle-block/silymchs.twig'%}
-                    </div>
-
-                    <br>
-
-                    <div  id="innerservice-block-div">
-                        {%include '/create/standart/middle-block/innerservice.twig'%}
-                    </div>
-
-                    <br>
-
-                    <div  id="informing-block-div">
-                        {%include '/create/standart/middle-block/informing.twig'%}
-                    </div>
-
-                    <br>
-                    <div  id="str-block-div">
-                        {%include '/create/standart/middle-block/str.twig'%}
-                    </div>
-
-                    <br>
-                    <div  id="trunks_data-block-div">
-                        {%include '/create/standart/middle-block/trunks.twig'%}
-                    </div>
-
-
-                    <br>
-                    <div  id="gdzs_data-block-div">
-                        {%include '/create/standart/middle-block/gdzs.twig'%}
-                    </div>
-
-
-                    {#                    <div  id="additional_data-block-div">
-                                            {%include '/create/standart/middle-block/additional_data.twig'%}
-                                        </div>
-                                        <br>#}
-
-                </dd>
-
-
-
-                <dt class="dt-class">
-                    <a style="background-color:#428bca; color: white;border-color: #428bca; " href="#accordion5" aria-expanded="false" aria-controls="accordion5" class="accordion-title accordionTitle js-accordionTrigger custom-a is-collapsed is-expanded">
-                        Объект
-                    </a>
-                </dt>
-                <dd class="accordion-content accordionItem is-expanded animateIn" id="accordion5" aria-hidden="false">
-                    {%include '/create/standart/object_block.twig'%}
-                </dd>
-
-
-                <dt class="dt-class">
-                    <a style="background-color:#428bca; color: white;border-color: #428bca; " href="#accordion6" aria-expanded="false" aria-controls="accordion6" class="accordion-title accordionTitle js-accordionTrigger custom-a is-collapsed is-expanded">
-                        Данные по заявителю
-                    </a>
-                </dt>
-                <dd class="accordion-content accordionItem is-expanded animateIn" id="accordion6" aria-hidden="false">
-                    {%include '/create/standart/people_block.twig'%}
-                </dd>
-
-
-                <dt class="dt-class">
-                    <a style="background-color:#428bca; color: white;border-color: #428bca; " href="#accordion4" aria-expanded="false" aria-controls="accordion4" class="accordion-title accordionTitle js-accordionTrigger custom-a is-collapsed is-expanded">
-                        Финальный текст (ручной набор данных)
-                    </a>
-                </dt>
-                <dd class="accordion-content accordionItem is-expanded animateIn" id="accordion4" aria-hidden="false">
-                    {%include '/create/standart/final_block.twig'%}
-                </dd>
-
-
-
-                <dt class="dt-class" style="position: relative;z-index: 100;">
-                    <a style="background-color:#428bca; color: white;border-color: #428bca; " href="#accordion7" aria-expanded="false" aria-controls="accordion7" class="accordion-title accordionTitle js-accordionTrigger custom-a is-collapsed is-expanded">
-                        Сведения о надзорной и профилактической деятельности
-                    </a>
-                </dt>
-                <dd class="accordion-content accordionItem is-expanded animateIn" id="accordion7" aria-hidden="false" style="position: relative;z-index: 500;">
-                    {%include '/create/standart/prevention_block.twig'%}
-
-                </dd>
-
-
-
-            </dl>
-
-
-
-        </div>
-                    <center>
-
-                        <button type="submit" class="btn btn-danger">Сохранить</button>
-                        <a href="{{base_url('/catalog')}}"><button type="button" class="btn btn-secondary" >Отмена</button></a>
-                    </center>
-
-{#                    <div class="form-row create-form-row ">
-
-
-                        <div class="form-group col-md-4" >
-
+                        <div  id="middle-block-div">
+                            {%include '/create/standart/middle_block.twig'%}
                         </div>
 
-                        <div class="form-group col-md-1" >
-                            <button type="submit" class="btn btn-danger">Сохранить</button>
+                        <div  id="silymchs-block-div">
+                            {%include '/create/standart/middle-block/silymchs.twig'%}
+                        </div>
+
+                        <br>
+
+                        <div  id="innerservice-block-div">
+                            {%include '/create/standart/middle-block/innerservice.twig'%}
+                        </div>
+
+                        <br>
+
+                        <div  id="informing-block-div">
+                            {%include '/create/standart/middle-block/informing.twig'%}
+                        </div>
+
+                        <br>
+                        <div  id="str-block-div">
+                            {%include '/create/standart/middle-block/str.twig'%}
+                        </div>
+
+                        <br>
+                        <div  id="trunks_data-block-div">
+                            {%include '/create/standart/middle-block/trunks.twig'%}
                         </div>
 
 
-                       <div class="form-group col-md-2">
-                            <button type="submit" class="btn btn-primary">Сформировать для Microsoft Word &raquo;</button>
+                        <br>
+                        <div  id="gdzs_data-block-div">
+                            {%include '/create/standart/middle-block/gdzs.twig'%}
                         </div>
 
-                    </div>#}
+
+                        {#                    <div  id="additional_data-block-div">
+                                                {%include '/create/standart/middle-block/additional_data.twig'%}
+                                            </div>
+                                            <br>#}
+
+                    </dd>
 
 
-        {# </div>#}
+
+                    <dt class="dt-class">
+                        <a style="background-color:#428bca; color: white;border-color: #428bca; " href="#accordion5" aria-expanded="false" aria-controls="accordion5" class="accordion-title accordionTitle js-accordionTrigger custom-a is-collapsed is-expanded">
+                            Объект
+                        </a>
+                    </dt>
+                    <dd class="accordion-content accordionItem is-expanded animateIn" id="accordion5" aria-hidden="false">
+                        {%include '/create/standart/object_block.twig'%}
+                    </dd>
+
+
+                    <dt class="dt-class">
+                        <a style="background-color:#428bca; color: white;border-color: #428bca; " href="#accordion6" aria-expanded="false" aria-controls="accordion6" class="accordion-title accordionTitle js-accordionTrigger custom-a is-collapsed is-expanded">
+                            Данные по заявителю
+                        </a>
+                    </dt>
+                    <dd class="accordion-content accordionItem is-expanded animateIn" id="accordion6" aria-hidden="false">
+                        {%include '/create/standart/people_block.twig'%}
+                    </dd>
+
+
+                    <dt class="dt-class">
+                        <a style="background-color:#428bca; color: white;border-color: #428bca; " href="#accordion4" aria-expanded="false" aria-controls="accordion4" class="accordion-title accordionTitle js-accordionTrigger custom-a is-collapsed is-expanded">
+                            Финальный текст (ручной набор данных)
+                        </a>
+                    </dt>
+                    <dd class="accordion-content accordionItem is-expanded animateIn" id="accordion4" aria-hidden="false">
+                        {%include '/create/standart/final_block.twig'%}
+                    </dd>
+
+
+
+                    <dt class="dt-class" style="position: relative;z-index: 100;">
+                        <a style="background-color:#428bca; color: white;border-color: #428bca; " href="#accordion7" aria-expanded="false" aria-controls="accordion7" class="accordion-title accordionTitle js-accordionTrigger custom-a is-collapsed is-expanded">
+                            Сведения о надзорной и профилактической деятельности
+                        </a>
+                    </dt>
+                    <dd class="accordion-content accordionItem is-expanded animateIn" id="accordion7" aria-hidden="false" style="position: relative;z-index: 500;">
+                        {%include '/create/standart/prevention_block.twig'%}
+
+                    </dd>
+
+
+
+                </dl>
+
+
+
+            </div>
+            <center>
+
+                <button type="submit" class="btn btn-danger">Сохранить</button>
+                <a href="{{base_url('/creator/catalog')}}"><button type="button" class="btn btn-secondary" >Отмена</button></a>
+            </center>
+
+            {#                    <div class="form-row create-form-row ">
+
+
+                                    <div class="form-group col-md-4" >
+
+                                    </div>
+
+                                    <div class="form-group col-md-1" >
+                                        <button type="submit" class="btn btn-danger">Сохранить</button>
+                                    </div>
+
+
+                                   <div class="form-group col-md-2">
+                                        <button type="submit" class="btn btn-primary">Сформировать для Microsoft Word &raquo;</button>
+                                    </div>
+
+                                </div>#}
+
+
+            {# </div>#}
+            {%if is_edit_dones is defined and dones is defined and dones.is_see == 1  %}
+
+            </fieldset>
+        {%endif%}
     </form>
+
     <!-- .content -->
 
 
@@ -213,7 +224,7 @@
 
     {#<link rel="stylesheet" href="{{ base_url('assets/js/dd/css/bootstrap-datetimepicker.min.css') }}">#}
 
- <link href="{{ base_url('/assets/daterangepicker/daterangepicker.css') }}" rel="stylesheet">
+    <link href="{{ base_url('/assets/daterangepicker/daterangepicker.css') }}" rel="stylesheet">
 
 
 
@@ -235,13 +246,13 @@
             width: 168px !important;
         }
 
-{#        #modal-search-str-cars .select2-container {
-            width: 290px !important;
-        }#}
+        {#        #modal-search-str-cars .select2-container {
+                    width: 290px !important;
+                }#}
         #modal-search-str-cars .select-cars-region-cls .select2-container {
             width: 227px !important;
         }
-                #modal-search-str-cars .select-cars-locals-cls .select2-container {
+        #modal-search-str-cars .select-cars-locals-cls .select2-container {
             width: 282px !important;
         }
 
@@ -254,16 +265,16 @@
         }
 
 
-{#        #modal-search-str-inf  .select2-container {
-            width: 350px !important;
-        }#}
+        {#        #modal-search-str-inf  .select2-container {
+                    width: 350px !important;
+                }#}
         #modal-search-str-inf .select-pasp-cls .select2-container {
             width: 500px !important;
         }
-                #modal-search-str-inf .select-regions-cls .select2-container {
+        #modal-search-str-inf .select-regions-cls .select2-container {
             width: 227px !important;
         }
-                        #modal-search-str-inf .select-locals-cls .select2-container {
+        #modal-search-str-inf .select-locals-cls .select2-container {
             width: 282px !important;
         }
 
@@ -276,25 +287,28 @@
         #innerservice-table .td_innerservice_name .select2-container {
             width: 225px !important;
         }
-                #water-source-table .td_water-source-type .select2-container {
+        #water-source-table .td_water-source-type .select2-container {
             width: 290px !important;
         }
 
 
-{#       #div-silymchs table {
-            counter-reset: row-num;
-        }
-       #div-silymchs table tr {
-            counter-increment: row-num;
-        }
-       #div-silymchs table tr td:first-child::before {
-            content: counter(row-num);
-        }#}
+        {#       #div-silymchs table {
+                    counter-reset: row-num;
+                }
+               #div-silymchs table tr {
+                    counter-increment: row-num;
+                }
+               #div-silymchs table tr td:first-child::before {
+                    content: counter(row-num);
+                }#}
 
 
         {#        .select2-results .select2-results__option[aria-disabled=true] {
                     display: none;
                 }#}
+
+
+
 
 
     </style>
@@ -310,15 +324,15 @@
 
 
 
-        <script type="text/javascript"
-            src="{{ base_url('assets/daterangepicker/moment.min.js') }}"></script>
     <script type="text/javascript"
-            src="{{ base_url('assets/daterangepicker/daterangepicker.js') }}"></script>
+    src="{{ base_url('assets/daterangepicker/moment.min.js') }}"></script>
+    <script type="text/javascript"
+    src="{{ base_url('assets/daterangepicker/daterangepicker.js') }}"></script>
 
     {#<script src="{{ base_url('/assets/js/dd/moment.min.js')}}"></script>#}
 
     {#<script src="{{ base_url('/assets/js/dd/locale/ru.js')}}"></script>#}
-{#    <script src="{{ base_url('/assets/js/dd/js/bootstrap-datetimepicker.min.js')}}"></script>#}
+    {#    <script src="{{ base_url('/assets/js/dd/js/bootstrap-datetimepicker.min.js')}}"></script>#}
     <script src="{{ base_url('/assets/js/manual_datetimepicker.js')}}"></script>
 
 
@@ -350,878 +364,913 @@
         {%if is_edit_dones is not defined  %}
 // здесь нужная дата в формате гггг-мм-дд чч:мм:сс
 //var deadline='2020-01-20 00:00:00';
-        function dateAdd(date, interval, units) {
-            if (!(date instanceof Date))
-                return undefined;
-            var ret = new Date(date); //don't change original date
-            var checkRollover = function () {
-                if (ret.getDate() != date.getDate())
-                    ret.setDate(0);
-            };
-            switch (String(interval).toLowerCase()) {
-                case 'year'   :
-                    ret.setFullYear(ret.getFullYear() + units);
-                    checkRollover();
-                    break;
-                case 'quarter':
-                    ret.setMonth(ret.getMonth() + 3 * units);
-                    checkRollover();
-                    break;
-                case 'month'  :
-                    ret.setMonth(ret.getMonth() + units);
-                    checkRollover();
-                    break;
-                case 'week'   :
-                    ret.setDate(ret.getDate() + 7 * units);
-                    break;
-                case 'day'    :
-                    ret.setDate(ret.getDate() + units);
-                    break;
-                case 'hour'   :
-                    ret.setTime(ret.getTime() + units * 3600000);
-                    break;
-                case 'minute' :
-                    ret.setTime(ret.getTime() + units * 60000);
-                    break;
-                case 'second' :
-                    ret.setTime(ret.getTime() + units * 1000);
-                    break;
-                default       :
-                    ret = undefined;
-                    break;
+            function dateAdd(date, interval, units) {
+                if (!(date instanceof Date))
+                    return undefined;
+                var ret = new Date(date); //don't change original date
+                var checkRollover = function () {
+                    if (ret.getDate() != date.getDate())
+                        ret.setDate(0);
+                };
+                switch (String(interval).toLowerCase()) {
+                    case 'year'   :
+                        ret.setFullYear(ret.getFullYear() + units);
+                        checkRollover();
+                        break;
+                    case 'quarter':
+                        ret.setMonth(ret.getMonth() + 3 * units);
+                        checkRollover();
+                        break;
+                    case 'month'  :
+                        ret.setMonth(ret.getMonth() + units);
+                        checkRollover();
+                        break;
+                    case 'week'   :
+                        ret.setDate(ret.getDate() + 7 * units);
+                        break;
+                    case 'day'    :
+                        ret.setDate(ret.getDate() + units);
+                        break;
+                    case 'hour'   :
+                        ret.setTime(ret.getTime() + units * 3600000);
+                        break;
+                    case 'minute' :
+                        ret.setTime(ret.getTime() + units * 60000);
+                        break;
+                    case 'second' :
+                        ret.setTime(ret.getTime() + units * 1000);
+                        break;
+                    default       :
+                        ret = undefined;
+                        break;
+                }
+                return ret;
             }
-            return ret;
-        }
 
-        var deadline = dateAdd(new Date(), 'minute', 25);
+            var deadline = dateAdd(new Date(), 'minute', 25);
 //alert(deadline);
-        $('.countdown').downCount({
-            date: deadline,
-        },
-                function () {
-                    /* действие после завершения таймера */
-                    alert("Время истекло!");
-                });
+            $('.countdown').downCount({
+                date: deadline,
+            },
+                    function () {
+                        /* действие после завершения таймера */
+                        alert("Время истекло!");
+                    });
 
         {%endif%}
 
 
 
-        /* add Add Work Innerservice to bd */
-        function AddWorkInnerservice() {//add in modal
-            $.ajax({
-                dataType: "json",
-                url: '{{ base_url('/dones/add_work_innerservice_ajax')}}',
-                method: 'POST',
-                data: {
-                    name: $('#modal-add-new-work-innerservice').find('#new_name_work_innerservice').val()
-                }
-            }).done(function (data) {
+            /* add Add Work Innerservice to bd */
+            function AddWorkInnerservice() {//add in modal
+                $.ajax({
+                    dataType: "json",
+                    url: '{{ base_url('/dones/add_work_innerservice_ajax')}}',
+                    method: 'POST',
+                    data: {
+                        name: $('#modal-add-new-work-innerservice').find('#new_name_work_innerservice').val()
+                    }
+                }).done(function (data) {
+
+                    if (data.is_success === 1) {
+                        $('.work_innerservice').append('<option value="' + data.id + '">' + data.work_name + '</option>');
+                        $('.work_innerservice ').trigger("change");
+
+                        $('#name_work_innerservice_for_edit').append('<option value="' + data.id + '">' + data.work_name + '</option>');
+                        $('#name_work_innerservice_for_edit').trigger("change");
+
+
+                        $('#name_work_innerservice_for_delete').append('<option value="' + data.id + '">' + data.work_name + '</option>');
+                        $('#name_work_innerservice_for_delete').trigger("change");
+
+                        $('#new_name_work_innerservice').val('');
+
+                        $('.md-close').click();
+                        toastr.success(data.message, 'Успех:', {timeOut: 5000});
+                    } else {
+                        toastr.warning(data.message, 'Внимание:', {timeOut: 5000});
+                    }
+                });
 
-                if (data.is_success === 1) {
-                    $('.work_innerservice').append('<option value="' + data.id + '">' + data.work_name + '</option>');
-                    $('.work_innerservice ').trigger("change");
-
-                    $('#name_work_innerservice_for_edit').append('<option value="' + data.id + '">' + data.work_name + '</option>');
-                    $('#name_work_innerservice_for_edit').trigger("change");
-
-
-                    $('#name_work_innerservice_for_delete').append('<option value="' + data.id + '">' + data.work_name + '</option>');
-                    $('#name_work_innerservice_for_delete').trigger("change");
-
-                    $('#new_name_work_innerservice').val('');
-
-                    $('.md-close').click();
-                    toastr.success(data.message, 'Успех:', {timeOut: 5000});
-                } else {
-                    toastr.warning(data.message, 'Внимание:', {timeOut: 5000});
-                }
-            });
-
-        }
-
-        /* edit Work Innerservice to bd */
-        function EditWorkInnerservice() {//edit in modal
-
-            var id_edit = $('#modal-add-new-work-innerservice').find('#name_work_innerservice_for_edit').val();
-
-            $.ajax({
-                dataType: "json",
-                url: '{{ base_url('/dones/edit_work_innerservice_ajax')}}',
-                method: 'POST',
-                data: {
-                    name: $('#modal-add-new-work-innerservice').find('#edit_name_work_innerservice').val(),
-                    id_edit: id_edit
-                }
-            }).done(function (data) {
-
-                if (data.is_success === 1) {
-
-                    /*  set data*/
-                    $('#name_work_innerservice_for_edit option[value=' + id_edit + ']').text(data.work_name);//select edit
-                    $('#name_work_innerservice_for_delete option[value=' + id_edit + ']').text(data.work_name);//select delete
-                    $('.work_innerservice option[value=' + id_edit + ']').text(data.work_name);//select on form
-
-
-                    /* refresh update select */
-                    $('#name_work_innerservice_for_edit').select2('destroy');
-                    $('#name_work_innerservice_for_edit').select2();
-                    $('#name_work_innerservice_for_edit').trigger("change");//select edit
-
-
-                    /* refresh delete select */
-                    $('#name_work_innerservice_for_delete').select2('destroy');
-                    $('#name_work_innerservice_for_delete').select2();
-                    $('#name_work_innerservice_for_delete').trigger("change");
-
-                    /* refresh select on form */
-                    $('.work_innerservice').select2('destroy');
-                    $('.work_innerservice').select2({
-                        placeholder: "Выберите из списка",
-                        allowClear: true,
-                        "language": {
-                            "noResults": function () {
-                                return "Ничего не найдено";
-                            }
-                        }
-                    });
-                    $('.work_innerservice').trigger("change");// on form
-
-
-                    $('#edit_name_work_innerservice').val('');
-
-                    $('.md-close').click();
-                    toastr.success(data.message, 'Успех:', {timeOut: 5000});
-                } else {
-                    toastr.warning(data.message, 'Внимание:', {timeOut: 5000});
-                }
-            });
-
-        }
-
-
-
-
-        /* delete work innerservice from bd */
-        function deleteWorkInnerservice() {//delete in modal
-
-            var id = $('#name_work_innerservice_for_delete option:selected').val();
-
-            $.ajax({
-                dataType: "json",
-                url: '{{ base_url('/dones/delete_work_innerservice_ajax')}}',
-                method: 'POST',
-                data: {
-                    id: id
-                }
-            });
-            $('.work_innerservice option[value=' + id + ']').remove();
-            $('#name_work_innerservice_for_edit option[value=' + id + ']').remove();//edit select
-            $('#name_work_innerservice_for_delete option[value=' + id + ']').remove();
-            toastr.success('Тип был удален из БД', 'Info:', {timeOut: 5000});
-
-
-
-            /* refresh update select */
-            //$('#name_work_innerservice_for_edit').select2('destroy');
-            //$('#name_work_innerservice_for_edit').select2();
-            $('#name_work_innerservice_for_edit').trigger("change");//select edit
-
-
-            /* refresh delete select */
-            //$('#name_work_innerservice_for_delete').select2('destroy');
-            //$('#name_work_innerservice_for_delete').select2();
-            $('#name_work_innerservice_for_delete').trigger("change");
-
-            /* refresh select on form */
-            //$('.work_innerservice').select2('destroy');
-            //$('.work_innerservice').select2();
-            $('.work_innerservice').trigger("change");// on form
-        }
-
-
-
-
-
-        /* add Add new vid of house object to bd */
-        function AddObjectHouse() {//add in modal
-            $.ajax({
-                dataType: "json",
-                url: '{{ base_url('/dones/add_object_house_ajax')}}',
-                method: 'POST',
-                data: {
-                    name: $('#modal-add-new-vid-object-house').find('#new_object_house').val()
-                }
-            }).done(function (data) {
-
-                if (data.is_success === 1) {
-                    $('#object_house_id').append('<option value="' + data.id + '">' + data.name + '</option>');
-                    $('#object_house_id').trigger("change");
-
-                    $('#object_house_for_edit').append('<option value="' + data.id + '">' + data.name + '</option>');
-                    $('#object_house_for_edit').trigger("change");
-
-
-                    $('#object_house_for_delete').append('<option value="' + data.id + '">' + data.name + '</option>');
-                    $('#object_house_for_delete').trigger("change");
-
-                    $('#modal-add-new-vid-object-house').find('#new_object_house').val('');
-
-                    $('.md-close').click();
-                    toastr.success(data.message, 'Успех:', {timeOut: 5000});
-                } else {
-                    toastr.warning(data.message, 'Внимание:', {timeOut: 5000});
-                }
-            });
-
-        }
-
-
-
-        /* edit object house vid to bd */
-        function EditObjectHouse() {//edit in modal
-
-            var id_edit = $('#modal-add-new-vid-object-house').find('#object_house_for_edit').val();
-
-            $.ajax({
-                dataType: "json",
-                url: '{{ base_url('/dones/edit_object_house_ajax')}}',
-                method: 'POST',
-                data: {
-                    name: $('#modal-add-new-vid-object-house').find('#new_name_object_house').val(),
-                    id_edit: id_edit
-                }
-            }).done(function (data) {
-
-                if (data.is_success === 1) {
-
-                    /*  set data*/
-                    $('#modal-add-new-vid-object-house').find('#object_house_for_edit option[value=' + id_edit + ']').text(data.name);//select edit
-                    $('#modal-add-new-vid-object-house').find('#object_house_for_delete option[value=' + id_edit + ']').text(data.name);//select delete
-                    $('#object_house_id option[value=' + id_edit + ']').text(data.name);//select on form
-
-                    /* refresh update select */
-                    $('#modal-add-new-vid-object-house').find('#object_house_for_edit').select2('destroy');
-                    $('#modal-add-new-vid-object-house').find('#object_house_for_edit').select2();
-
-                    /* refresh delete select */
-                    $('#modal-add-new-vid-object-house').find('#object_house_for_delete').select2('destroy');
-                    $('#modal-add-new-vid-object-house').find('#object_house_for_delete').select2();
-
-                    /* refresh select on form */
-                    $('#object_house_id').select2('destroy');
-                    $('#object_house_id').select2({
-                        placeholder: "Выберите из списка",
-                        allowClear: true,
-                        "language": {
-                            "noResults": function () {
-                                return "Ничего не найдено";
-                            }
-                        }
-                    });
-
-
-                    $('#modal-add-new-vid-object-house').find('#new_name_object_house').val('');
-
-                    $('.md-close').click();
-                    toastr.success(data.message, 'Успех:', {timeOut: 5000});
-                } else {
-                    toastr.warning(data.message, 'Внимание:', {timeOut: 5000});
-                }
-            });
-
-        }
-
-
-
-        /* delete object house vid from bd */
-        function deleteObjectHouse() {//delete in modal
-
-            var id = $('#modal-add-new-vid-object-house').find('#object_house_for_delete').val();
-
-            $.ajax({
-                dataType: "json",
-                url: '{{ base_url('/dones/delete_object_house_ajax')}}',
-                method: 'POST',
-                data: {
-                    id: id
-                }
-            });
-            $('#object_house_id option[value=' + id + ']').remove();
-            $('#modal-add-new-vid-object-house').find('#object_house_for_edit option[value=' + id + ']').remove();//edit select
-            $('#modal-add-new-vid-object-house').find('#object_house_for_delete option[value=' + id + ']').remove();
-            toastr.success('Тип был удален из БД', 'Info:', {timeOut: 5000});
-
-
-
-            /* refresh update select */
-            $('#modal-add-new-vid-object-house').find('#object_house_for_edit').trigger("change");//select edit
-
-
-            /* refresh delete select */
-            $('#modal-add-new-vid-object-house').find('#object_house_for_delete').trigger("change");
-
-            /* refresh select on form */
-            $('#object_house_id').trigger("change");// on form
-        }
-
-
-
-        /* add Add new vid material of house object to bd */
-        function AddObjectMaterial() {//add in modal
-            $.ajax({
-                dataType: "json",
-                url: '{{ base_url('/dones/add_object_material_ajax')}}',
-                method: 'POST',
-                data: {
-                    name: $('#modal-add-new-vid-object-material').find('#new_object_material').val()
-                }
-            }).done(function (data) {
-
-                if (data.is_success === 1) {
-                    $('#object_material_id').append('<option value="' + data.id + '">' + data.name + '</option>');
-                    $('#object_material_id').trigger("change");
-
-                    $('#object_material_for_edit').append('<option value="' + data.id + '">' + data.name + '</option>');
-                    $('#object_material_for_edit').trigger("change");
-
-
-                    $('#object_material_for_delete').append('<option value="' + data.id + '">' + data.name + '</option>');
-                    $('#object_material_for_delete').trigger("change");
-
-                    $('#modal-add-new-vid-object-material').find('#new_object_material').val('');
-
-                    $('.md-close').click();
-                    toastr.success(data.message, 'Успех:', {timeOut: 5000});
-                } else {
-                    toastr.warning(data.message, 'Внимание:', {timeOut: 5000});
-                }
-            });
-
-        }
-
-
-        /* edit object material vid to bd */
-        function EditObjectMaterial() {//edit in modal
-
-            var id_edit = $('#modal-add-new-vid-object-material').find('#object_material_for_edit').val();
-
-            $.ajax({
-                dataType: "json",
-                url: '{{ base_url('/dones/edit_object_material_ajax')}}',
-                method: 'POST',
-                data: {
-                    name: $('#modal-add-new-vid-object-material').find('#new_name_object_material').val(),
-                    id_edit: id_edit
-                }
-            }).done(function (data) {
-
-                if (data.is_success === 1) {
-
-                    /*  set data*/
-                    $('#modal-add-new-vid-object-material').find('#object_material_for_edit option[value=' + id_edit + ']').text(data.name);//select edit
-                    $('#modal-add-new-vid-object-material').find('#object_material_for_delete option[value=' + id_edit + ']').text(data.name);//select delete
-                    $('#object_material_id option[value=' + id_edit + ']').text(data.name);//select on form
-
-                    /* refresh update select */
-                    $('#modal-add-new-vid-object-material').find('#object_material_for_edit').select2('destroy');
-                    $('#modal-add-new-vid-object-material').find('#object_material_for_edit').select2();
-
-                    /* refresh delete select */
-                    $('#modal-add-new-vid-object-material').find('#object_material_for_delete').select2('destroy');
-                    $('#modal-add-new-vid-object-material').find('#object_material_for_delete').select2();
-
-                    /* refresh select on form */
-                    $('#object_material_id').select2('destroy');
-                    $('#object_material_id').select2({
-                        placeholder: "Выберите из списка",
-                        allowClear: true,
-                        "language": {
-                            "noResults": function () {
-                                return "Ничего не найдено";
-                            }
-                        }
-                    });
-
-
-                    $('#modal-add-new-vid-object-material').find('#new_name_object_material').val('');
-
-                    $('.md-close').click();
-                    toastr.success(data.message, 'Успех:', {timeOut: 5000});
-                } else {
-                    toastr.warning(data.message, 'Внимание:', {timeOut: 5000});
-                }
-            });
-
-        }
-
-
-        /* delete object material vid from bd */
-        function deleteObjectMaterial() {//delete in modal
-
-            var id = $('#modal-add-new-vid-object-material').find('#object_material_for_delete').val();
-
-            $.ajax({
-                dataType: "json",
-                url: '{{ base_url('/dones/delete_object_material_ajax')}}',
-                method: 'POST',
-                data: {
-                    id: id
-                }
-            });
-            $('#object_material_id option[value=' + id + ']').remove();
-            $('#modal-add-new-vid-object-material').find('#object_material_for_edit option[value=' + id + ']').remove();//edit select
-            $('#modal-add-new-vid-object-material').find('#object_material_for_delete option[value=' + id + ']').remove();
-            toastr.success('Тип был удален из БД', 'Info:', {timeOut: 5000});
-
-
-
-            /* refresh update select */
-            $('#modal-add-new-vid-object-material').find('#object_material_for_edit').trigger("change");//select edit
-
-
-            /* refresh delete select */
-            $('#modal-add-new-vid-object-material').find('#object_material_for_delete').trigger("change");
-
-            /* refresh select on form */
-            $('#object_material_id').trigger("change");// on form
-        }
-
-
-
-        /* add Add new vid roof of house object to bd */
-        function AddObjectRoof() {//add in modal
-            $.ajax({
-                dataType: "json",
-                url: '{{ base_url('/dones/add_object_roof_ajax')}}',
-                method: 'POST',
-                data: {
-                    name: $('#modal-add-new-vid-object-roof').find('#new_object_roof').val()
-                }
-            }).done(function (data) {
-
-                if (data.is_success === 1) {
-                    $('#object_roof_id').append('<option value="' + data.id + '">' + data.name + '</option>');
-                    $('#object_roof_id').trigger("change");
-
-                    $('#object_roof_for_edit').append('<option value="' + data.id + '">' + data.name + '</option>');
-                    $('#object_roof_for_edit').trigger("change");
-
-
-                    $('#object_roof_for_delete').append('<option value="' + data.id + '">' + data.name + '</option>');
-                    $('#object_roof_for_delete').trigger("change");
-
-                    $('#modal-add-new-vid-object-roof').find('#new_object_roof').val('');
-
-                    $('.md-close').click();
-                    toastr.success(data.message, 'Успех:', {timeOut: 5000});
-                } else {
-                    toastr.warning(data.message, 'Внимание:', {timeOut: 5000});
-                }
-            });
-
-        }
-
-
-
-        /* edit object roof vid to bd */
-        function EditObjectRoof() {//edit in modal
-
-            var id_edit = $('#modal-add-new-vid-object-roof').find('#object_roof_for_edit').val();
-
-            $.ajax({
-                dataType: "json",
-                url: '{{ base_url('/dones/edit_object_roof_ajax')}}',
-                method: 'POST',
-                data: {
-                    name: $('#modal-add-new-vid-object-roof').find('#new_name_object_roof').val(),
-                    id_edit: id_edit
-                }
-            }).done(function (data) {
-
-                if (data.is_success === 1) {
-
-                    /*  set data*/
-                    $('#modal-add-new-vid-object-roof').find('#object_roof_for_edit option[value=' + id_edit + ']').text(data.name);//select edit
-                    $('#modal-add-new-vid-object-roof').find('#object_roof_for_delete option[value=' + id_edit + ']').text(data.name);//select delete
-                    $('#object_roof_id option[value=' + id_edit + ']').text(data.name);//select on form
-
-                    /* refresh update select */
-                    $('#modal-add-new-vid-object-roof').find('#object_roof_for_edit').select2('destroy');
-                    $('#modal-add-new-vid-object-roof').find('#object_roof_for_edit').select2();
-
-                    /* refresh delete select */
-                    $('#modal-add-new-vid-object-roof').find('#object_roof_for_delete').select2('destroy');
-                    $('#modal-add-new-vid-object-roof').find('#object_roof_for_delete').select2();
-
-                    /* refresh select on form */
-                    $('#object_roof_id').select2('destroy');
-                    $('#object_roof_id').select2({
-                        placeholder: "Выберите из списка",
-                        allowClear: true,
-                        "language": {
-                            "noResults": function () {
-                                return "Ничего не найдено";
-                            }
-                        }
-                    });
-
-
-                    $('#modal-add-new-vid-object-roof').find('#new_name_object_roof').val('');
-
-                    $('.md-close').click();
-                    toastr.success(data.message, 'Успех:', {timeOut: 5000});
-                } else {
-                    toastr.warning(data.message, 'Внимание:', {timeOut: 5000});
-                }
-            });
-
-        }
-
-
-
-        /* delete object roof vid from bd */
-        function deleteObjectRoof() {//delete in modal
-
-            var id = $('#modal-add-new-vid-object-roof').find('#object_roof_for_delete').val();
-
-            $.ajax({
-                dataType: "json",
-                url: '{{ base_url('/dones/delete_object_roof_ajax')}}',
-                method: 'POST',
-                data: {
-                    id: id
-                }
-            });
-            $('#object_roof_id option[value=' + id + ']').remove();
-            $('#modal-add-new-vid-object-roof').find('#object_roof_for_edit option[value=' + id + ']').remove();//edit select
-            $('#modal-add-new-vid-object-roof').find('#object_roof_for_delete option[value=' + id + ']').remove();
-            toastr.success('Тип был удален из БД', 'Info:', {timeOut: 5000});
-
-
-
-            /* refresh update select */
-            $('#modal-add-new-vid-object-roof').find('#object_roof_for_edit').trigger("change");//select edit
-
-
-            /* refresh delete select */
-            $('#modal-add-new-vid-object-roof').find('#object_roof_for_delete').trigger("change");
-
-            /* refresh select on form */
-            $('#object_roof_id').trigger("change");// on form
-        }
-
-
-
-
-        /* add Add new vid people status to bd */
-        function AddPeopleStatus() {//add in modal
-            $.ajax({
-                dataType: "json",
-                url: '{{ base_url('/dones/add_people_status_ajax')}}',
-                method: 'POST',
-                data: {
-                    name: $('#modal-add-new-vid-people-status').find('#new_people_status').val()
-                }
-            }).done(function (data) {
-
-                if (data.is_success === 1) {
-                    $('#people_status_id').append('<option value="' + data.id + '">' + data.name + '</option>');
-                    $('#people_status_id').trigger("change");
-
-                    $('#people_status_for_edit').append('<option value="' + data.id + '">' + data.name + '</option>');
-                    $('#people_status_for_edit').trigger("change");
-
-
-                    $('#people_status_for_delete').append('<option value="' + data.id + '">' + data.name + '</option>');
-                    $('#people_status_for_delete').trigger("change");
-
-                    $('#modal-add-new-vid-people-status').find('#new_people_status').val('');
-
-                    $('.md-close').click();
-                    toastr.success(data.message, 'Успех:', {timeOut: 5000});
-                } else {
-                    toastr.warning(data.message, 'Внимание:', {timeOut: 5000});
-                }
-            });
-
-        }
-
-
-
-        /* edit people status vid to bd */
-        function EditPeopleStatus() {//edit in modal
-
-            var id_edit = $('#modal-add-new-vid-people-status').find('#people_status_for_edit').val();
-
-            $.ajax({
-                dataType: "json",
-                url: '{{ base_url('/dones/edit_people_status_ajax')}}',
-                method: 'POST',
-                data: {
-                    name: $('#modal-add-new-vid-people-status').find('#new_name_people_status').val(),
-                    id_edit: id_edit
-                }
-            }).done(function (data) {
-
-                if (data.is_success === 1) {
-
-                    /*  set data*/
-                    $('#modal-add-new-vid-people-status').find('#people_status_for_edit option[value=' + id_edit + ']').text(data.name);//select edit
-                    $('#modal-add-new-vid-people-status').find('#people_status_for_delete option[value=' + id_edit + ']').text(data.name);//select delete
-                    $('#people_status_id option[value=' + id_edit + ']').text(data.name);//select on form
-
-                    /* refresh update select */
-                    $('#modal-add-new-vid-people-status').find('#people_status_for_edit').select2('destroy');
-                    $('#modal-add-new-vid-people-status').find('#people_status_for_edit').select2();
-
-                    /* refresh delete select */
-                    $('#modal-add-new-vid-people-status').find('#people_status_for_delete').select2('destroy');
-                    $('#modal-add-new-vid-people-status').find('#people_status_for_delete').select2();
-
-                    /* refresh select on form */
-                    $('#people_status_id').select2('destroy');
-                    $('#people_status_id').select2({
-                        placeholder: "Выберите из списка",
-                        allowClear: true,
-                        "language": {
-                            "noResults": function () {
-                                return "Ничего не найдено";
-                            }
-                        }
-                    });
-
-
-                    $('#modal-add-new-vid-people-status').find('#new_name_people_status').val('');
-
-                    $('.md-close').click();
-                    toastr.success(data.message, 'Успех:', {timeOut: 5000});
-                } else {
-                    toastr.warning(data.message, 'Внимание:', {timeOut: 5000});
-                }
-            });
-
-        }
-
-
-
-
-        /* delete people status vid from bd */
-        function deletePeopleStatus() {//delete in modal
-
-            var id = $('#modal-add-new-vid-people-status').find('#people_status_for_delete').val();
-
-            $.ajax({
-                dataType: "json",
-                url: '{{ base_url('/dones/delete_people_status_ajax')}}',
-                method: 'POST',
-                data: {
-                    id: id
-                }
-            });
-            $('#people_status_id option[value=' + id + ']').remove();
-            $('#modal-add-new-vid-people-status').find('#people_status_for_edit option[value=' + id + ']').remove();//edit select
-            $('#modal-add-new-vid-people-status').find('#people_status_for_delete option[value=' + id + ']').remove();
-            toastr.success('Тип был удален из БД', 'Info:', {timeOut: 5000});
-
-
-
-            /* refresh update select */
-            $('#modal-add-new-vid-people-status').find('#people_status_for_edit').trigger("change");//select edit
-
-
-            /* refresh delete select */
-            $('#modal-add-new-vid-people-status').find('#people_status_for_delete').trigger("change");
-
-            /* refresh select on form */
-            $('#people_status_id').trigger("change");// on form
-        }
-
-
-
-
-
-
-        /* add Add new vid water source to bd */
-        function AddWaterSource() {//add in modal
-            $.ajax({
-                dataType: "json",
-                url: '{{ base_url('/dones/add_water_source_ajax')}}',
-                method: 'POST',
-                data: {
-                    name: $('#modal-add-new-vid-type-water-source').find('#new_type_water_source').val()
-                }
-            }).done(function (data) {
-
-                if (data.is_success === 1) {
-                    $('#div-water-source #water-source-table .water_source_type').append('<option value="' + data.id + '">' + data.name + '</option>');
-                    $('#div-water-source #water-source-table .water_source_type').trigger("change");
-
-                    $('#type_water_source_for_edit').append('<option value="' + data.id + '">' + data.name + '</option>');
-                    $('#type_water_source_for_edit').trigger("change");
-
-
-                    $('#type_water_source_for_delete').append('<option value="' + data.id + '">' + data.name + '</option>');
-                    $('#type_water_source_for_delete').trigger("change");
-
-                    $('#modal-add-new-vid-type-water-source').find('#new_type_water_source').val('');
-
-                    $('.md-close').click();
-                    toastr.success(data.message, 'Успех:', {timeOut: 5000});
-                } else {
-                    toastr.warning(data.message, 'Внимание:', {timeOut: 5000});
-                }
-            });
-
-        }
-
-
-
-
-
-        /* edit water source vid to bd */
-        function EditWaterSource() {//edit in modal
-
-            var id_edit = $('#modal-add-new-vid-type-water-source').find('#type_water_source_for_edit').val();
-
-            $.ajax({
-                dataType: "json",
-                url: '{{ base_url('/dones/edit_water_source_ajax')}}',
-                method: 'POST',
-                data: {
-                    name: $('#modal-add-new-vid-type-water-source').find('#new_name_type_water_source').val(),
-                    id_edit: id_edit
-                }
-            }).done(function (data) {
-
-                if (data.is_success === 1) {
-
-                    /*  set data*/
-                    $('#modal-add-new-vid-type-water-source').find('#type_water_source_for_edit option[value=' + id_edit + ']').text(data.name);//select edit
-                    $('#modal-add-new-vid-type-water-source').find('#type_water_source_for_delete option[value=' + id_edit + ']').text(data.name);//select delete
-                    $('#div-water-source #water-source-table').find('.water_source_type option[value=' + id_edit + ']').text(data.name);//select on form
-
-                    /* refresh update select */
-                    $('#modal-add-new-vid-type-water-source').find('#type_water_source_for_edit').select2('destroy');
-                    $('#modal-add-new-vid-type-water-source').find('#type_water_source_for_edit').select2();
-
-                    /* refresh delete select */
-                    $('#modal-add-new-vid-type-water-source').find('#type_water_source_for_delete').select2('destroy');
-                    $('#modal-add-new-vid-type-water-source').find('#type_water_source_for_delete').select2();
-
-                    /* refresh select on form */
-                    $('#div-water-source #water-source-table .water_source_type').select2('destroy');
-                    $('#div-water-source #water-source-table .water_source_type').select2({
-                        placeholder: "Выберите из списка",
-                        allowClear: true,
-                        "language": {
-                            "noResults": function () {
-                                return "Ничего не найдено";
-                            }
-                        }
-                    });
-
-
-                    $('#modal-add-new-vid-type-water-source').find('#new_name_type_water_source').val('');
-
-                    $('.md-close').click();
-                    toastr.success(data.message, 'Успех:', {timeOut: 5000});
-                } else {
-                    toastr.warning(data.message, 'Внимание:', {timeOut: 5000});
-                }
-            });
-
-        }
-
-
-
-
-
-        /* delete water source vid from bd */
-        function deleteWaterSource() {//delete in modal
-
-            var id = $('#modal-add-new-vid-type-water-source').find('#type_water_source_for_delete').val();
-
-            $.ajax({
-                dataType: "json",
-                url: '{{ base_url('/dones/delete_water_source_ajax')}}',
-                method: 'POST',
-                data: {
-                    id: id
-                }
-            });
-            $('#div-water-source #water-source-table .water_source_type option[value=' + id + ']').remove();
-            $('#modal-add-new-vid-type-water-source').find('#type_water_source_for_edit option[value=' + id + ']').remove();//edit select
-            $('#modal-add-new-vid-type-water-source').find('#type_water_source_for_delete option[value=' + id + ']').remove();
-            toastr.success('Тип был удален из БД', 'Info:', {timeOut: 5000});
-
-
-
-            /* refresh update select */
-            $('#modal-add-new-vid-type-water-source').find('#type_water_source_for_edit').trigger("change");//select edit
-
-
-            /* refresh delete select */
-            $('#modal-add-new-vid-type-water-source').find('#type_water_source_for_delete').trigger("change");
-
-            /* refresh select on form */
-            $('#div-water-source #water-source-table .water_source_type').trigger("change");// on form
-        }
-
-
-
-
-        function notEnvolve(what, t) {
-            var is_check = $(t).is(":checked");
-
-            if (is_check === true) {
-
-                $('#' + what).find('.card-body').hide();
-
-                if (what === 'div-silymchs') {// silymchs - don't show serach cars
-                    $('#' + what).find('#a-search-str-cars').hide();
-
-                }
-
-
-
-                if (what === 'div-trunks') {// wide table for trunks block
-                    $('#' + what).find('#trunks_is_wide_table').prop('disabled', true);
-                    $('#' + what).find('#trunks_is_wide_table').prop('checked', false);
-                }
-
-            } else {
-
-                $('#' + what).find('.card-body').show();
-
-
-                if (what === 'div-silymchs') {// silymchs - don't show serach cars
-                    $('#' + what).find('#a-search-str-cars').show();
-
-                }
-
-                if (what === 'div-trunks') {// wide table for trunks block
-                    $('#' + what).find('#trunks_is_wide_table').prop('disabled', false);
-
-                }
             }
 
-        }
+            /* edit Work Innerservice to bd */
+            function EditWorkInnerservice() {//edit in modal
 
-                {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_not_involved_silymchs == 1 %}
-        $('#div-silymchs').find('.card-body').hide();
-        $('#div-silymchs').find('#a-search-str-cars').hide();
-                {%endif%}
-                {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_not_involved_innerservice == 1 %}
-        $('#div-innerservice').find('.card-body').hide();
-                {%endif%}
-                {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_not_involved_informing == 1 %}
-        $('#div-informing').find('.card-body').hide();
-                {%endif%}
-                {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_not_involved_trunks == 1 %}
-        $('#div-trunks').find('.card-body').hide();
-                {%endif%}
+                var id_edit = $('#modal-add-new-work-innerservice').find('#name_work_innerservice_for_edit').val();
 
+                $.ajax({
+                    dataType: "json",
+                    url: '{{ base_url('/dones/edit_work_innerservice_ajax')}}',
+                    method: 'POST',
+                    data: {
+                        name: $('#modal-add-new-work-innerservice').find('#edit_name_work_innerservice').val(),
+                        id_edit: id_edit
+                    }
+                }).done(function (data) {
+
+                    if (data.is_success === 1) {
+
+                        /*  set data*/
+                        $('#name_work_innerservice_for_edit option[value=' + id_edit + ']').text(data.work_name);//select edit
+                        $('#name_work_innerservice_for_delete option[value=' + id_edit + ']').text(data.work_name);//select delete
+                        $('.work_innerservice option[value=' + id_edit + ']').text(data.work_name);//select on form
+
+
+                        /* refresh update select */
+                        $('#name_work_innerservice_for_edit').select2('destroy');
+                        $('#name_work_innerservice_for_edit').select2();
+                        $('#name_work_innerservice_for_edit').trigger("change");//select edit
+
+
+                        /* refresh delete select */
+                        $('#name_work_innerservice_for_delete').select2('destroy');
+                        $('#name_work_innerservice_for_delete').select2();
+                        $('#name_work_innerservice_for_delete').trigger("change");
+
+                        /* refresh select on form */
+                        $('.work_innerservice').select2('destroy');
+                        $('.work_innerservice').select2({
+                            placeholder: "Выберите из списка",
+                            allowClear: true,
+                            "language": {
+                                "noResults": function () {
+                                    return "Ничего не найдено";
+                                }
+                            }
+                        });
+                        $('.work_innerservice').trigger("change");// on form
+
+
+                        $('#edit_name_work_innerservice').val('');
+
+                        $('.md-close').click();
+                        toastr.success(data.message, 'Успех:', {timeOut: 5000});
+                    } else {
+                        toastr.warning(data.message, 'Внимание:', {timeOut: 5000});
+                    }
+                });
+
+            }
+
+
+
+
+            /* delete work innerservice from bd */
+            function deleteWorkInnerservice() {//delete in modal
+
+                var id = $('#name_work_innerservice_for_delete option:selected').val();
+
+                $.ajax({
+                    dataType: "json",
+                    url: '{{ base_url('/dones/delete_work_innerservice_ajax')}}',
+                    method: 'POST',
+                    data: {
+                        id: id
+                    }
+                });
+                $('.work_innerservice option[value=' + id + ']').remove();
+                $('#name_work_innerservice_for_edit option[value=' + id + ']').remove();//edit select
+                $('#name_work_innerservice_for_delete option[value=' + id + ']').remove();
+                toastr.success('Тип был удален из БД', 'Info:', {timeOut: 5000});
+
+
+
+                /* refresh update select */
+                //$('#name_work_innerservice_for_edit').select2('destroy');
+                //$('#name_work_innerservice_for_edit').select2();
+                $('#name_work_innerservice_for_edit').trigger("change");//select edit
+
+
+                /* refresh delete select */
+                //$('#name_work_innerservice_for_delete').select2('destroy');
+                //$('#name_work_innerservice_for_delete').select2();
+                $('#name_work_innerservice_for_delete').trigger("change");
+
+                /* refresh select on form */
+                //$('.work_innerservice').select2('destroy');
+                //$('.work_innerservice').select2();
+                $('.work_innerservice').trigger("change");// on form
+            }
+
+
+
+
+
+            /* add Add new vid of house object to bd */
+            function AddObjectHouse() {//add in modal
+                $.ajax({
+                    dataType: "json",
+                    url: '{{ base_url('/dones/add_object_house_ajax')}}',
+                    method: 'POST',
+                    data: {
+                        name: $('#modal-add-new-vid-object-house').find('#new_object_house').val()
+                    }
+                }).done(function (data) {
+
+                    if (data.is_success === 1) {
+                        $('#object_house_id').append('<option value="' + data.id + '">' + data.name + '</option>');
+                        $('#object_house_id').trigger("change");
+
+                        $('#object_house_for_edit').append('<option value="' + data.id + '">' + data.name + '</option>');
+                        $('#object_house_for_edit').trigger("change");
+
+
+                        $('#object_house_for_delete').append('<option value="' + data.id + '">' + data.name + '</option>');
+                        $('#object_house_for_delete').trigger("change");
+
+                        $('#modal-add-new-vid-object-house').find('#new_object_house').val('');
+
+                        $('.md-close').click();
+                        toastr.success(data.message, 'Успех:', {timeOut: 5000});
+                    } else {
+                        toastr.warning(data.message, 'Внимание:', {timeOut: 5000});
+                    }
+                });
+
+            }
+
+
+
+            /* edit object house vid to bd */
+            function EditObjectHouse() {//edit in modal
+
+                var id_edit = $('#modal-add-new-vid-object-house').find('#object_house_for_edit').val();
+
+                $.ajax({
+                    dataType: "json",
+                    url: '{{ base_url('/dones/edit_object_house_ajax')}}',
+                    method: 'POST',
+                    data: {
+                        name: $('#modal-add-new-vid-object-house').find('#new_name_object_house').val(),
+                        id_edit: id_edit
+                    }
+                }).done(function (data) {
+
+                    if (data.is_success === 1) {
+
+                        /*  set data*/
+                        $('#modal-add-new-vid-object-house').find('#object_house_for_edit option[value=' + id_edit + ']').text(data.name);//select edit
+                        $('#modal-add-new-vid-object-house').find('#object_house_for_delete option[value=' + id_edit + ']').text(data.name);//select delete
+                        $('#object_house_id option[value=' + id_edit + ']').text(data.name);//select on form
+
+                        /* refresh update select */
+                        $('#modal-add-new-vid-object-house').find('#object_house_for_edit').select2('destroy');
+                        $('#modal-add-new-vid-object-house').find('#object_house_for_edit').select2();
+
+                        /* refresh delete select */
+                        $('#modal-add-new-vid-object-house').find('#object_house_for_delete').select2('destroy');
+                        $('#modal-add-new-vid-object-house').find('#object_house_for_delete').select2();
+
+                        /* refresh select on form */
+                        $('#object_house_id').select2('destroy');
+                        $('#object_house_id').select2({
+                            placeholder: "Выберите из списка",
+                            allowClear: true,
+                            "language": {
+                                "noResults": function () {
+                                    return "Ничего не найдено";
+                                }
+                            }
+                        });
+
+
+                        $('#modal-add-new-vid-object-house').find('#new_name_object_house').val('');
+
+                        $('.md-close').click();
+                        toastr.success(data.message, 'Успех:', {timeOut: 5000});
+                    } else {
+                        toastr.warning(data.message, 'Внимание:', {timeOut: 5000});
+                    }
+                });
+
+            }
+
+
+
+            /* delete object house vid from bd */
+            function deleteObjectHouse() {//delete in modal
+
+                var id = $('#modal-add-new-vid-object-house').find('#object_house_for_delete').val();
+
+                $.ajax({
+                    dataType: "json",
+                    url: '{{ base_url('/dones/delete_object_house_ajax')}}',
+                    method: 'POST',
+                    data: {
+                        id: id
+                    }
+                });
+                $('#object_house_id option[value=' + id + ']').remove();
+                $('#modal-add-new-vid-object-house').find('#object_house_for_edit option[value=' + id + ']').remove();//edit select
+                $('#modal-add-new-vid-object-house').find('#object_house_for_delete option[value=' + id + ']').remove();
+                toastr.success('Тип был удален из БД', 'Info:', {timeOut: 5000});
+
+
+
+                /* refresh update select */
+                $('#modal-add-new-vid-object-house').find('#object_house_for_edit').trigger("change");//select edit
+
+
+                /* refresh delete select */
+                $('#modal-add-new-vid-object-house').find('#object_house_for_delete').trigger("change");
+
+                /* refresh select on form */
+                $('#object_house_id').trigger("change");// on form
+            }
+
+
+
+            /* add Add new vid material of house object to bd */
+            function AddObjectMaterial() {//add in modal
+                $.ajax({
+                    dataType: "json",
+                    url: '{{ base_url('/dones/add_object_material_ajax')}}',
+                    method: 'POST',
+                    data: {
+                        name: $('#modal-add-new-vid-object-material').find('#new_object_material').val()
+                    }
+                }).done(function (data) {
+
+                    if (data.is_success === 1) {
+                        $('#object_material_id').append('<option value="' + data.id + '">' + data.name + '</option>');
+                        $('#object_material_id').trigger("change");
+
+                        $('#object_material_for_edit').append('<option value="' + data.id + '">' + data.name + '</option>');
+                        $('#object_material_for_edit').trigger("change");
+
+
+                        $('#object_material_for_delete').append('<option value="' + data.id + '">' + data.name + '</option>');
+                        $('#object_material_for_delete').trigger("change");
+
+                        $('#modal-add-new-vid-object-material').find('#new_object_material').val('');
+
+                        $('.md-close').click();
+                        toastr.success(data.message, 'Успех:', {timeOut: 5000});
+                    } else {
+                        toastr.warning(data.message, 'Внимание:', {timeOut: 5000});
+                    }
+                });
+
+            }
+
+
+            /* edit object material vid to bd */
+            function EditObjectMaterial() {//edit in modal
+
+                var id_edit = $('#modal-add-new-vid-object-material').find('#object_material_for_edit').val();
+
+                $.ajax({
+                    dataType: "json",
+                    url: '{{ base_url('/dones/edit_object_material_ajax')}}',
+                    method: 'POST',
+                    data: {
+                        name: $('#modal-add-new-vid-object-material').find('#new_name_object_material').val(),
+                        id_edit: id_edit
+                    }
+                }).done(function (data) {
+
+                    if (data.is_success === 1) {
+
+                        /*  set data*/
+                        $('#modal-add-new-vid-object-material').find('#object_material_for_edit option[value=' + id_edit + ']').text(data.name);//select edit
+                        $('#modal-add-new-vid-object-material').find('#object_material_for_delete option[value=' + id_edit + ']').text(data.name);//select delete
+                        $('#object_material_id option[value=' + id_edit + ']').text(data.name);//select on form
+
+                        /* refresh update select */
+                        $('#modal-add-new-vid-object-material').find('#object_material_for_edit').select2('destroy');
+                        $('#modal-add-new-vid-object-material').find('#object_material_for_edit').select2();
+
+                        /* refresh delete select */
+                        $('#modal-add-new-vid-object-material').find('#object_material_for_delete').select2('destroy');
+                        $('#modal-add-new-vid-object-material').find('#object_material_for_delete').select2();
+
+                        /* refresh select on form */
+                        $('#object_material_id').select2('destroy');
+                        $('#object_material_id').select2({
+                            placeholder: "Выберите из списка",
+                            allowClear: true,
+                            "language": {
+                                "noResults": function () {
+                                    return "Ничего не найдено";
+                                }
+                            }
+                        });
+
+
+                        $('#modal-add-new-vid-object-material').find('#new_name_object_material').val('');
+
+                        $('.md-close').click();
+                        toastr.success(data.message, 'Успех:', {timeOut: 5000});
+                    } else {
+                        toastr.warning(data.message, 'Внимание:', {timeOut: 5000});
+                    }
+                });
+
+            }
+
+
+            /* delete object material vid from bd */
+            function deleteObjectMaterial() {//delete in modal
+
+                var id = $('#modal-add-new-vid-object-material').find('#object_material_for_delete').val();
+
+                $.ajax({
+                    dataType: "json",
+                    url: '{{ base_url('/dones/delete_object_material_ajax')}}',
+                    method: 'POST',
+                    data: {
+                        id: id
+                    }
+                });
+                $('#object_material_id option[value=' + id + ']').remove();
+                $('#modal-add-new-vid-object-material').find('#object_material_for_edit option[value=' + id + ']').remove();//edit select
+                $('#modal-add-new-vid-object-material').find('#object_material_for_delete option[value=' + id + ']').remove();
+                toastr.success('Тип был удален из БД', 'Info:', {timeOut: 5000});
+
+
+
+                /* refresh update select */
+                $('#modal-add-new-vid-object-material').find('#object_material_for_edit').trigger("change");//select edit
+
+
+                /* refresh delete select */
+                $('#modal-add-new-vid-object-material').find('#object_material_for_delete').trigger("change");
+
+                /* refresh select on form */
+                $('#object_material_id').trigger("change");// on form
+            }
+
+
+
+            /* add Add new vid roof of house object to bd */
+            function AddObjectRoof() {//add in modal
+                $.ajax({
+                    dataType: "json",
+                    url: '{{ base_url('/dones/add_object_roof_ajax')}}',
+                    method: 'POST',
+                    data: {
+                        name: $('#modal-add-new-vid-object-roof').find('#new_object_roof').val()
+                    }
+                }).done(function (data) {
+
+                    if (data.is_success === 1) {
+                        $('#object_roof_id').append('<option value="' + data.id + '">' + data.name + '</option>');
+                        $('#object_roof_id').trigger("change");
+
+                        $('#object_roof_for_edit').append('<option value="' + data.id + '">' + data.name + '</option>');
+                        $('#object_roof_for_edit').trigger("change");
+
+
+                        $('#object_roof_for_delete').append('<option value="' + data.id + '">' + data.name + '</option>');
+                        $('#object_roof_for_delete').trigger("change");
+
+                        $('#modal-add-new-vid-object-roof').find('#new_object_roof').val('');
+
+                        $('.md-close').click();
+                        toastr.success(data.message, 'Успех:', {timeOut: 5000});
+                    } else {
+                        toastr.warning(data.message, 'Внимание:', {timeOut: 5000});
+                    }
+                });
+
+            }
+
+
+
+            /* edit object roof vid to bd */
+            function EditObjectRoof() {//edit in modal
+
+                var id_edit = $('#modal-add-new-vid-object-roof').find('#object_roof_for_edit').val();
+
+                $.ajax({
+                    dataType: "json",
+                    url: '{{ base_url('/dones/edit_object_roof_ajax')}}',
+                    method: 'POST',
+                    data: {
+                        name: $('#modal-add-new-vid-object-roof').find('#new_name_object_roof').val(),
+                        id_edit: id_edit
+                    }
+                }).done(function (data) {
+
+                    if (data.is_success === 1) {
+
+                        /*  set data*/
+                        $('#modal-add-new-vid-object-roof').find('#object_roof_for_edit option[value=' + id_edit + ']').text(data.name);//select edit
+                        $('#modal-add-new-vid-object-roof').find('#object_roof_for_delete option[value=' + id_edit + ']').text(data.name);//select delete
+                        $('#object_roof_id option[value=' + id_edit + ']').text(data.name);//select on form
+
+                        /* refresh update select */
+                        $('#modal-add-new-vid-object-roof').find('#object_roof_for_edit').select2('destroy');
+                        $('#modal-add-new-vid-object-roof').find('#object_roof_for_edit').select2();
+
+                        /* refresh delete select */
+                        $('#modal-add-new-vid-object-roof').find('#object_roof_for_delete').select2('destroy');
+                        $('#modal-add-new-vid-object-roof').find('#object_roof_for_delete').select2();
+
+                        /* refresh select on form */
+                        $('#object_roof_id').select2('destroy');
+                        $('#object_roof_id').select2({
+                            placeholder: "Выберите из списка",
+                            allowClear: true,
+                            "language": {
+                                "noResults": function () {
+                                    return "Ничего не найдено";
+                                }
+                            }
+                        });
+
+
+                        $('#modal-add-new-vid-object-roof').find('#new_name_object_roof').val('');
+
+                        $('.md-close').click();
+                        toastr.success(data.message, 'Успех:', {timeOut: 5000});
+                    } else {
+                        toastr.warning(data.message, 'Внимание:', {timeOut: 5000});
+                    }
+                });
+
+            }
+
+
+
+            /* delete object roof vid from bd */
+            function deleteObjectRoof() {//delete in modal
+
+                var id = $('#modal-add-new-vid-object-roof').find('#object_roof_for_delete').val();
+
+                $.ajax({
+                    dataType: "json",
+                    url: '{{ base_url('/dones/delete_object_roof_ajax')}}',
+                    method: 'POST',
+                    data: {
+                        id: id
+                    }
+                });
+                $('#object_roof_id option[value=' + id + ']').remove();
+                $('#modal-add-new-vid-object-roof').find('#object_roof_for_edit option[value=' + id + ']').remove();//edit select
+                $('#modal-add-new-vid-object-roof').find('#object_roof_for_delete option[value=' + id + ']').remove();
+                toastr.success('Тип был удален из БД', 'Info:', {timeOut: 5000});
+
+
+
+                /* refresh update select */
+                $('#modal-add-new-vid-object-roof').find('#object_roof_for_edit').trigger("change");//select edit
+
+
+                /* refresh delete select */
+                $('#modal-add-new-vid-object-roof').find('#object_roof_for_delete').trigger("change");
+
+                /* refresh select on form */
+                $('#object_roof_id').trigger("change");// on form
+            }
+
+
+
+
+            /* add Add new vid people status to bd */
+            function AddPeopleStatus() {//add in modal
+                $.ajax({
+                    dataType: "json",
+                    url: '{{ base_url('/dones/add_people_status_ajax')}}',
+                    method: 'POST',
+                    data: {
+                        name: $('#modal-add-new-vid-people-status').find('#new_people_status').val()
+                    }
+                }).done(function (data) {
+
+                    if (data.is_success === 1) {
+                        $('#people_status_id').append('<option value="' + data.id + '">' + data.name + '</option>');
+                        $('#people_status_id').trigger("change");
+
+                        $('#people_status_for_edit').append('<option value="' + data.id + '">' + data.name + '</option>');
+                        $('#people_status_for_edit').trigger("change");
+
+
+                        $('#people_status_for_delete').append('<option value="' + data.id + '">' + data.name + '</option>');
+                        $('#people_status_for_delete').trigger("change");
+
+                        $('#modal-add-new-vid-people-status').find('#new_people_status').val('');
+
+                        $('.md-close').click();
+                        toastr.success(data.message, 'Успех:', {timeOut: 5000});
+                    } else {
+                        toastr.warning(data.message, 'Внимание:', {timeOut: 5000});
+                    }
+                });
+
+            }
+
+
+
+            /* edit people status vid to bd */
+            function EditPeopleStatus() {//edit in modal
+
+                var id_edit = $('#modal-add-new-vid-people-status').find('#people_status_for_edit').val();
+
+                $.ajax({
+                    dataType: "json",
+                    url: '{{ base_url('/dones/edit_people_status_ajax')}}',
+                    method: 'POST',
+                    data: {
+                        name: $('#modal-add-new-vid-people-status').find('#new_name_people_status').val(),
+                        id_edit: id_edit
+                    }
+                }).done(function (data) {
+
+                    if (data.is_success === 1) {
+
+                        /*  set data*/
+                        $('#modal-add-new-vid-people-status').find('#people_status_for_edit option[value=' + id_edit + ']').text(data.name);//select edit
+                        $('#modal-add-new-vid-people-status').find('#people_status_for_delete option[value=' + id_edit + ']').text(data.name);//select delete
+                        $('#people_status_id option[value=' + id_edit + ']').text(data.name);//select on form
+
+                        /* refresh update select */
+                        $('#modal-add-new-vid-people-status').find('#people_status_for_edit').select2('destroy');
+                        $('#modal-add-new-vid-people-status').find('#people_status_for_edit').select2();
+
+                        /* refresh delete select */
+                        $('#modal-add-new-vid-people-status').find('#people_status_for_delete').select2('destroy');
+                        $('#modal-add-new-vid-people-status').find('#people_status_for_delete').select2();
+
+                        /* refresh select on form */
+                        $('#people_status_id').select2('destroy');
+                        $('#people_status_id').select2({
+                            placeholder: "Выберите из списка",
+                            allowClear: true,
+                            "language": {
+                                "noResults": function () {
+                                    return "Ничего не найдено";
+                                }
+                            }
+                        });
+
+
+                        $('#modal-add-new-vid-people-status').find('#new_name_people_status').val('');
+
+                        $('.md-close').click();
+                        toastr.success(data.message, 'Успех:', {timeOut: 5000});
+                    } else {
+                        toastr.warning(data.message, 'Внимание:', {timeOut: 5000});
+                    }
+                });
+
+            }
+
+
+
+
+            /* delete people status vid from bd */
+            function deletePeopleStatus() {//delete in modal
+
+                var id = $('#modal-add-new-vid-people-status').find('#people_status_for_delete').val();
+
+                $.ajax({
+                    dataType: "json",
+                    url: '{{ base_url('/dones/delete_people_status_ajax')}}',
+                    method: 'POST',
+                    data: {
+                        id: id
+                    }
+                });
+                $('#people_status_id option[value=' + id + ']').remove();
+                $('#modal-add-new-vid-people-status').find('#people_status_for_edit option[value=' + id + ']').remove();//edit select
+                $('#modal-add-new-vid-people-status').find('#people_status_for_delete option[value=' + id + ']').remove();
+                toastr.success('Тип был удален из БД', 'Info:', {timeOut: 5000});
+
+
+
+                /* refresh update select */
+                $('#modal-add-new-vid-people-status').find('#people_status_for_edit').trigger("change");//select edit
+
+
+                /* refresh delete select */
+                $('#modal-add-new-vid-people-status').find('#people_status_for_delete').trigger("change");
+
+                /* refresh select on form */
+                $('#people_status_id').trigger("change");// on form
+            }
+
+
+
+
+
+
+            /* add Add new vid water source to bd */
+            function AddWaterSource() {//add in modal
+                $.ajax({
+                    dataType: "json",
+                    url: '{{ base_url('/dones/add_water_source_ajax')}}',
+                    method: 'POST',
+                    data: {
+                        name: $('#modal-add-new-vid-type-water-source').find('#new_type_water_source').val()
+                    }
+                }).done(function (data) {
+
+                    if (data.is_success === 1) {
+                        $('#div-water-source #water-source-table .water_source_type').append('<option value="' + data.id + '">' + data.name + '</option>');
+                        $('#div-water-source #water-source-table .water_source_type').trigger("change");
+
+                        $('#type_water_source_for_edit').append('<option value="' + data.id + '">' + data.name + '</option>');
+                        $('#type_water_source_for_edit').trigger("change");
+
+
+                        $('#type_water_source_for_delete').append('<option value="' + data.id + '">' + data.name + '</option>');
+                        $('#type_water_source_for_delete').trigger("change");
+
+                        $('#modal-add-new-vid-type-water-source').find('#new_type_water_source').val('');
+
+                        $('.md-close').click();
+                        toastr.success(data.message, 'Успех:', {timeOut: 5000});
+                    } else {
+                        toastr.warning(data.message, 'Внимание:', {timeOut: 5000});
+                    }
+                });
+
+            }
+
+
+
+
+
+            /* edit water source vid to bd */
+            function EditWaterSource() {//edit in modal
+
+                var id_edit = $('#modal-add-new-vid-type-water-source').find('#type_water_source_for_edit').val();
+
+                $.ajax({
+                    dataType: "json",
+                    url: '{{ base_url('/dones/edit_water_source_ajax')}}',
+                    method: 'POST',
+                    data: {
+                        name: $('#modal-add-new-vid-type-water-source').find('#new_name_type_water_source').val(),
+                        id_edit: id_edit
+                    }
+                }).done(function (data) {
+
+                    if (data.is_success === 1) {
+
+                        /*  set data*/
+                        $('#modal-add-new-vid-type-water-source').find('#type_water_source_for_edit option[value=' + id_edit + ']').text(data.name);//select edit
+                        $('#modal-add-new-vid-type-water-source').find('#type_water_source_for_delete option[value=' + id_edit + ']').text(data.name);//select delete
+                        $('#div-water-source #water-source-table').find('.water_source_type option[value=' + id_edit + ']').text(data.name);//select on form
+
+                        /* refresh update select */
+                        $('#modal-add-new-vid-type-water-source').find('#type_water_source_for_edit').select2('destroy');
+                        $('#modal-add-new-vid-type-water-source').find('#type_water_source_for_edit').select2();
+
+                        /* refresh delete select */
+                        $('#modal-add-new-vid-type-water-source').find('#type_water_source_for_delete').select2('destroy');
+                        $('#modal-add-new-vid-type-water-source').find('#type_water_source_for_delete').select2();
+
+                        /* refresh select on form */
+                        $('#div-water-source #water-source-table .water_source_type').select2('destroy');
+                        $('#div-water-source #water-source-table .water_source_type').select2({
+                            placeholder: "Выберите из списка",
+                            allowClear: true,
+                            "language": {
+                                "noResults": function () {
+                                    return "Ничего не найдено";
+                                }
+                            }
+                        });
+
+
+                        $('#modal-add-new-vid-type-water-source').find('#new_name_type_water_source').val('');
+
+                        $('.md-close').click();
+                        toastr.success(data.message, 'Успех:', {timeOut: 5000});
+                    } else {
+                        toastr.warning(data.message, 'Внимание:', {timeOut: 5000});
+                    }
+                });
+
+            }
+
+
+
+
+
+            /* delete water source vid from bd */
+            function deleteWaterSource() {//delete in modal
+
+                var id = $('#modal-add-new-vid-type-water-source').find('#type_water_source_for_delete').val();
+
+                $.ajax({
+                    dataType: "json",
+                    url: '{{ base_url('/dones/delete_water_source_ajax')}}',
+                    method: 'POST',
+                    data: {
+                        id: id
+                    }
+                });
+                $('#div-water-source #water-source-table .water_source_type option[value=' + id + ']').remove();
+                $('#modal-add-new-vid-type-water-source').find('#type_water_source_for_edit option[value=' + id + ']').remove();//edit select
+                $('#modal-add-new-vid-type-water-source').find('#type_water_source_for_delete option[value=' + id + ']').remove();
+                toastr.success('Тип был удален из БД', 'Info:', {timeOut: 5000});
+
+
+
+                /* refresh update select */
+                $('#modal-add-new-vid-type-water-source').find('#type_water_source_for_edit').trigger("change");//select edit
+
+
+                /* refresh delete select */
+                $('#modal-add-new-vid-type-water-source').find('#type_water_source_for_delete').trigger("change");
+
+                /* refresh select on form */
+                $('#div-water-source #water-source-table .water_source_type').trigger("change");// on form
+            }
+
+
+
+
+            function notEnvolve(what, t) {
+                var is_check = $(t).is(":checked");
+
+                if (is_check === true) {
+
+                    $('#' + what).find('.card-body').hide();
+
+                    if (what === 'div-silymchs') {// silymchs - don't show serach cars
+                        $('#' + what).find('#a-search-str-cars').hide();
+
+                    }
+
+
+
+                    if (what === 'div-trunks') {// wide table for trunks block
+                        $('#' + what).find('#trunks_is_wide_table').prop('disabled', true);
+                        $('#' + what).find('#trunks_is_wide_table').prop('checked', false);
+
+                        hide_actions_ls();
+
+                    }
+
+                } else {
+
+                    $('#' + what).find('.card-body').show();
+
+
+                    if (what === 'div-silymchs') {// silymchs - don't show serach cars
+                        $('#' + what).find('#a-search-str-cars').show();
+
+                    }
+
+                    if (what === 'div-trunks') {// wide table for trunks block
+                        $('#' + what).find('#trunks_is_wide_table').prop('disabled', false);
+
+                    }
+                }
+
+            }
+
+        {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_not_involved_silymchs == 1 %}
+                    $('#div-silymchs').find('.card-body').hide();
+                    $('#div-silymchs').find('#a-search-str-cars').hide();
+        {%endif%}
+        {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_not_involved_innerservice == 1 %}
+                    $('#div-innerservice').find('.card-body').hide();
+        {%endif%}
+        {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_not_involved_informing == 1 %}
+                    $('#div-informing').find('.card-body').hide();
+        {%endif%}
+        {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_not_involved_trunks == 1 %}
+                    $('#div-trunks').find('.card-body').hide();
+        {%endif%}
+
+
+                    $(document).ready(function () {
+                        $('body').on('change', '#trunks_is_wide_table', function (e) {
+
+                            e.preventDefault();
+
+                            var is_check = $(this).is(":checked");
+                            var actions_ls = $('.actions_ls_btn_trunks');
+                            var actions_ls_field = $('.actions_ls_trunks');
+
+                            if (is_check === true) {
+                                show_actions_ls();
+
+                            } else {
+                                hide_actions_ls();
+                            }
+
+                            // return false;
+                        });
+                    });
+
+                    function hide_actions_ls() {
+                        var actions_ls = $('.actions_ls_btn_trunks');
+                        var actions_ls_field = $('.actions_ls_trunks');
+                        actions_ls.addClass('hide');
+                        actions_ls_field.addClass('hide');
+                    }
+                    function show_actions_ls() {
+                        var actions_ls = $('.actions_ls_btn_trunks');
+                        var actions_ls_field = $('.actions_ls_trunks');
+                        actions_ls.removeClass('hide');
+                    }
 
     </script>
 

@@ -44,6 +44,7 @@ class Dones extends My_Controller
             $this->load->model('ss_model');
             $this->load->model('create_model');
             $this->load->model('logs_model');
+            $this->load->model('dones_model');
 
             $this->data['regions'] = $this->main_model->get_regions();
             $this->data['locals'] = $this->main_model->get_locals();
@@ -65,7 +66,7 @@ class Dones extends My_Controller
 //            //$this->twig->addGlobal('sitename', 'My Awesome Site');
 //            $this->twig->addGlobal('ORGAN_ID_RCU', 5);
         } else {
-            redirect('catalog');
+            redirect('auth');
         }
     }
 
@@ -1151,17 +1152,57 @@ class Dones extends My_Controller
     {
 
         $post = $this->input->post();
-//print_r($post);
-//echo '<br><br>';
-//        echo $post['specd_number'];echo '<br><br>';
-        //echo (\DateTime::createFromFormat('d.m.Y H:i:s', $post['official_date_start'])->format('Y-m-d H:i:s'));
-//exit();
+
         $dones = array();
 
         $id_dones = (isset($post['id_dones']) && !empty($post['id_dones'])) ? intval($post['id_dones']) : 0; //id of edit dones
 
-        $dones['specd_date'] = (isset($post['specd_date']) && !empty($post['specd_date'])) ? (\DateTime::createFromFormat('d.m.Y', $post['specd_date'])->format('Y-m-d')) : '';
+
+        if ($id_dones != 0) {// edit SD
+
+            /* ROSN, UGZ, AVIA */
+            if ($this->data['active_user']['level'] == 3 &&
+                (in_array($this->data['active_user']['id_organ'], [Main_model::ORGAN_ID_ROSN, Main_model::ORGAN_ID_UGZ, Main_model::ORGAN_ID_AVIA]))) {
+
+                if (($this->data['active_user']['id_local'] !== $this->data['dones']['author_local_id']) && $this->data['active_user']['id_region'] != Main_model::REGION_MINSK) {
+
+                    redirect('creator/catalog');
+                    die();
+                } elseif ($this->data['dones']['is_open_update'] == 0 && in_array(Logs_model::ACTION_PROVE_SD_RCU, $statuses_id)) {
+                    redirect('creator/catalog');
+                    die();
+                }
+            } else {
+                /*  author SD = current user
+                 * proved umchs and proved rcu and not open update
+                 * proved rcu and not open update
+                 *          */
+                if ($this->data['active_user']['level'] == 3 && (($this->data['active_user']['id_local'] != $this->data['dones']['author_local_id']) ||
+                    ($this->data['dones']['is_open_update'] == 0 && in_array(Logs_model::ACTION_PROVE_SD_UMCHS, $statuses_id) &&
+                    in_array(Logs_model::ACTION_PROVE_SD_RCU, $statuses_id)) ||
+                    ($this->data['dones']['is_open_update'] == 0 && in_array(Logs_model::ACTION_PROVE_SD_RCU, $statuses_id)))) {
+
+                    redirect('creator/catalog');
+                    die();
+                } elseif ($this->data['active_user']['level'] == 2 && (($this->data['active_user']['id_region'] != $this->data['dones']['author_region_id']) ||
+                    ($this->data['dones']['is_open_update'] == 0 && in_array(Logs_model::ACTION_PROVE_SD_UMCHS, $statuses_id) &&
+                    in_array(Logs_model::ACTION_PROVE_SD_RCU, $statuses_id)) ||
+                    ($this->data['dones']['is_open_update'] == 0 && in_array(Logs_model::ACTION_PROVE_SD_RCU, $statuses_id)))) {
+
+                    redirect('creator/catalog');
+                    die();
+                }
+            }
+        }
+
+
+
+        $dones['is_copy']=0;
+        $dones['copy_parent_id']=0;
+
+        $dones['specd_date'] = (isset($post['specd_date']) && !empty($post['specd_date'])) ? (\DateTime::createFromFormat('d.m.Y', $post['specd_date'])->format('Y-m-d')) : null;
         $dones['specd_number'] = (isset($post['specd_number']) && !empty($post['specd_number'])) ? trim($post['specd_number']) : '';
+        $dones['short_description'] = (isset($post['short_description']) && !empty($post['short_description'])) ? trim($post['short_description']) : '';
 
         /* who creates/last updates and when */
         if ($id_dones == 0) {//create a new
@@ -1175,10 +1216,10 @@ class Dones extends My_Controller
         $dones['specd_vid'] = (isset($post['specd_vid']) && !empty($post['specd_vid'])) ? intval($post['specd_vid']) : 0;
 
         if ($id_dones == 0) {//create a new
-            $dones['official_date_start'] = (isset($post['official_date_start']) && !empty($post['official_date_start'])) ? (\DateTime::createFromFormat('d.m.Y H:i:s', $post['official_date_start'])->format('Y-m-d H:i:s')) : '';
+            $dones['official_date_start'] = (isset($post['official_date_start']) && !empty($post['official_date_start'])) ? (\DateTime::createFromFormat('d.m.Y H:i:s', $post['official_date_start'])->format('Y-m-d H:i:s')) : null;
             $dones['official_date_end'] = date("Y-m-d H:i:s"); // if create new dones
         } else {//edit dones
-            $dones['official_date_start_edit'] = (isset($post['official_date_start_edit']) && !empty($post['official_date_start_edit'])) ? (\DateTime::createFromFormat('d.m.Y H:i:s', $post['official_date_start_edit'])->format('Y-m-d H:i:s')) : '';
+            $dones['official_date_start_edit'] = (isset($post['official_date_start_edit']) && !empty($post['official_date_start_edit'])) ? (\DateTime::createFromFormat('d.m.Y H:i:s', $post['official_date_start_edit'])->format('Y-m-d H:i:s')) : null;
             $dones['official_date_end_edit'] = date("Y-m-d H:i:s");
         }
 
@@ -1190,9 +1231,9 @@ class Dones extends My_Controller
 
         /* description of RIG */
         $dones['id_rig'] = (isset($post['id_rig_current']) && !empty($post['id_rig_current'])) ? intval($post['id_rig_current']) : 0;
-        $dones['time_msg'] = (isset($post['time_msg']) && !empty($post['time_msg'])) ? (\DateTime::createFromFormat('d.m.Y H:i:s', $post['time_msg'])->format('Y-m-d H:i:s')) : '';
-        $dones['time_loc'] = (isset($post['time_loc']) && !empty($post['time_loc'])) ? (\DateTime::createFromFormat('d.m.Y H:i:s', $post['time_loc'])->format('Y-m-d H:i:s')) : '';
-        $dones['time_likv'] = (isset($post['time_likv']) && !empty($post['time_likv'])) ? (\DateTime::createFromFormat('d.m.Y H:i:s', $post['time_likv'])->format('Y-m-d H:i:s')) : '';
+        $dones['time_msg'] = (isset($post['time_msg']) && !empty($post['time_msg'])) ? (\DateTime::createFromFormat('d.m.Y H:i:s', $post['time_msg'])->format('Y-m-d H:i:s')) : NULL;
+        $dones['time_loc'] = (isset($post['time_loc']) && !empty($post['time_loc'])) ? (\DateTime::createFromFormat('d.m.Y H:i:s', $post['time_loc'])->format('Y-m-d H:i:s')) : null;
+        $dones['time_likv'] = (isset($post['time_likv']) && !empty($post['time_likv'])) ? (\DateTime::createFromFormat('d.m.Y H:i:s', $post['time_likv'])->format('Y-m-d H:i:s')) : null;
         $dones['podr_take_msg'] = (isset($post['podr_take_msg']) && !empty($post['podr_take_msg'])) ? trim($post['podr_take_msg']) : '';
         $dones['disp_take_msg'] = (isset($post['disp_take_msg']) && !empty($post['disp_take_msg'])) ? trim($post['disp_take_msg']) : '';
         $dones['address'] = (isset($post['address']) && !empty($post['address'])) ? trim($post['address']) : '';
@@ -1207,9 +1248,9 @@ class Dones extends My_Controller
 
         /* gdzs block */
         $dones['spec_cnt_gdzs'] = (isset($post['spec_cnt_gdzs']) && !empty($post['spec_cnt_gdzs'])) ? intval($post['spec_cnt_gdzs']) : 0;
-        $dones['spec_time_work_gdzs'] = (isset($post['spec_time_work_gdzs']) && !empty($post['spec_time_work_gdzs'])) ? (\DateTime::createFromFormat('H:i', $post['spec_time_work_gdzs'])->format('H:i')) : '';
-        $dones['spec_time_work_bef_inj_gdzs'] = (isset($post['spec_time_work_bef_inj_gdzs']) && !empty($post['spec_time_work_bef_inj_gdzs'])) ? (\DateTime::createFromFormat('H:i', $post['spec_time_work_bef_inj_gdzs'])->format('H:i')) : '';
-        $dones['spec_time_shtab_gdzs'] = (isset($post['spec_time_shtab_gdzs']) && !empty($post['spec_time_shtab_gdzs'])) ? (\DateTime::createFromFormat('H:i', $post['spec_time_shtab_gdzs'])->format('H:i')) : '';
+        $dones['spec_time_work_gdzs'] = (isset($post['spec_time_work_gdzs']) && !empty($post['spec_time_work_gdzs'])) ? (\DateTime::createFromFormat('H:i', $post['spec_time_work_gdzs'])->format('H:i')) : null;
+        $dones['spec_time_work_bef_inj_gdzs'] = (isset($post['spec_time_work_bef_inj_gdzs']) && !empty($post['spec_time_work_bef_inj_gdzs'])) ? (\DateTime::createFromFormat('H:i', $post['spec_time_work_bef_inj_gdzs'])->format('H:i')) : null;
+        $dones['spec_time_shtab_gdzs'] = (isset($post['spec_time_shtab_gdzs']) && !empty($post['spec_time_shtab_gdzs'])) ? (\DateTime::createFromFormat('H:i', $post['spec_time_shtab_gdzs'])->format('H:i')) : null;
 
 
         /* people data block */
@@ -1226,7 +1267,7 @@ class Dones extends My_Controller
 
 
         /* prevention block */
-        $dones['prevention_time'] = (isset($post['prevention_time']) && !empty($post['prevention_time'])) ? (\DateTime::createFromFormat('d.m.Y', $post['prevention_time'])->format('Y-m-d')) : '';
+        $dones['prevention_time'] = (isset($post['prevention_time']) && !empty($post['prevention_time'])) ? (\DateTime::createFromFormat('d.m.Y', $post['prevention_time'])->format('Y-m-d')) : NULL;
         $dones['prevention_who'] = (isset($post['prevention_who']) && !empty($post['prevention_who'])) ? trim($post['prevention_who']) : '';
         $dones['prevention_result'] = (isset($post['prevention_result']) && !empty($post['prevention_result'])) ? trim($post['prevention_result']) : '';
         $dones['prevention_events'] = (isset($post['prevention_events']) && !empty($post['prevention_events'])) ? trim($post['prevention_events']) : '';
@@ -1246,20 +1287,45 @@ class Dones extends My_Controller
 
             //logs
             $logs['id_user']= $this->data['active_user']['id_user'];
+            if ($this->data['active_user']['is_guest'] == 1) {
+                $logs['fio_jour'] = $this->data['active_user']['auth_fio'];
+                $logs['position_name_jour'] = $this->data['active_user']['position_name'];
+                $logs['rank_name_jour'] = $this->data['active_user']['rank_name'];
+                $logs['creator_name_jour'] = $this->data['active_user']['creator_name'];
+            }
             $logs['id_dones']=$id_dones_new;
             //$logs['id_action']=self::actions['create_sd'];
             $logs['id_action']=Logs_model::ACTION_CREATE_SD;
             $logs['date_action']=date("Y-m-d H:i:s");
             $this->logs_model->add_logs($logs);
+
         } else {//edit
             $this->create_model->edit_dones($id_dones, $dones);
             $id_dones_new = $id_dones;
-             //logs
-            $logs['id_user']= $this->data['active_user']['id_user'];
-            $logs['id_dones']=$id_dones_new;
-            //$logs['id_action']=self::actions['edit_sd'];
-            $logs['id_action']=Logs_model::ACTION_EDIT_SD;
-            $logs['date_action']=date("Y-m-d H:i:s");
+
+            //status
+            if ($this->data['active_user']['level'] == 3) {//grochs
+                //statuses to history
+                $history_actions['history_actions'] = array(Logs_model::ACTION_EDIT_SD, Logs_model::ACTION_PROVE_SD_UMCHS, Logs_model::ACTION_PROVE_SD_RCU);
+            } else {
+                //statuses to history
+                $history_actions['history_actions'] = array(Logs_model::ACTION_EDIT_SD);
+            }
+
+            $history_actions['id_dones'] = $id_dones_new;
+            $this->logs_model->delete_dones_statuses($history_actions);
+
+            //set new status
+            $logs['id_user'] = $this->data['active_user']['id_user'];
+            if ($this->data['active_user']['is_guest'] == 1) {
+                $logs['fio_jour'] = $this->data['active_user']['auth_fio'];
+                $logs['position_name_jour'] = $this->data['active_user']['position_name'];
+                $logs['rank_name_jour'] = $this->data['active_user']['rank_name'];
+                $logs['creator_name_jour'] = $this->data['active_user']['creator_name'];
+            }
+            $logs['id_dones'] = $id_dones_new;
+            $logs['id_action'] = Logs_model::ACTION_EDIT_SD;
+            $logs['date_action'] = date("Y-m-d H:i:s");
             $this->logs_model->add_logs($logs);
         }
 
@@ -1283,12 +1349,12 @@ class Dones extends My_Controller
                     $dones_silymchs['locorg_name'] = (isset($row['locorg_name']) && !empty($row['locorg_name'])) ? trim($row['locorg_name']) : '';
                     $dones_silymchs['v_ac'] = (isset($row['v_ac']) && !empty($row['v_ac'])) ? trim($row['v_ac']) : '';
                     $dones_silymchs['man_per_car'] = (isset($row['man_per_car']) && !empty($row['man_per_car'])) ? intval($row['man_per_car']) : 0;
-                    $dones_silymchs['time_exit'] = (isset($row['time_exit']) && !empty($row['time_exit'])) ? (\DateTime::createFromFormat('H:i', $row['time_exit'])->format('H:i')) : '';
-                    $dones_silymchs['time_arrival'] = (isset($row['time_arrival']) && !empty($row['time_arrival'])) ? (\DateTime::createFromFormat('H:i', $row['time_arrival'])->format('H:i')) : '';
+                    $dones_silymchs['time_exit'] = (isset($row['time_exit']) && !empty($row['time_exit'])) ? (\DateTime::createFromFormat('H:i', $row['time_exit'])->format('H:i')) : null;
+                    $dones_silymchs['time_arrival'] = (isset($row['time_arrival']) && !empty($row['time_arrival'])) ? (\DateTime::createFromFormat('H:i', $row['time_arrival'])->format('H:i')) : null;
                     $dones_silymchs['time_follow'] = (isset($row['time_follow']) && !empty($row['time_follow'])) ? intval($row['time_follow']) : 0;
                     $dones_silymchs['distance'] = (isset($row['distance']) && !empty($row['distance'])) ? trim($row['distance']) : '';
-                    $dones_silymchs['time_end'] = (isset($row['time_end']) && !empty($row['time_end'])) ? (\DateTime::createFromFormat('H:i', $row['time_end'])->format('H:i')) : '';
-                    $dones_silymchs['time_return'] = (isset($row['time_return']) && !empty($row['time_return'])) ? (\DateTime::createFromFormat('H:i', $row['time_return'])->format('H:i')) : '';
+                    $dones_silymchs['time_end'] = (isset($row['time_end']) && !empty($row['time_end'])) ? (\DateTime::createFromFormat('H:i', $row['time_end'])->format('H:i')) : NULL;
+                    $dones_silymchs['time_return'] = (isset($row['time_return']) && !empty($row['time_return'])) ? (\DateTime::createFromFormat('H:i', $row['time_return'])->format('H:i')) : null;
                     $dones_silymchs['sort'] = (isset($row['sort']) && !empty($row['sort'])) ? intval($row['sort']) : 0;
 
                     $id_silymchs = (isset($row['id_silymchs']) && !empty($row['id_silymchs'])) ? intval($row['id_silymchs']) : 0; //edit id of table silymchs
@@ -1325,8 +1391,8 @@ class Dones extends My_Controller
 
                     $dones_innerservice['id_dones'] = $id_dones_new;
                     $dones_innerservice['service_id'] = intval($row['service_id']);
-                    $dones_innerservice['time_msg'] = (isset($row['time_msg']) && !empty($row['time_msg'])) ? (\DateTime::createFromFormat('H:i', $row['time_msg'])->format('H:i')) : '';
-                    $dones_innerservice['time_arrival'] = (isset($row['time_arrival']) && !empty($row['time_arrival'])) ? (\DateTime::createFromFormat('H:i', $row['time_arrival'])->format('H:i')) : '';
+                    $dones_innerservice['time_msg'] = (isset($row['time_msg']) && !empty($row['time_msg'])) ? (\DateTime::createFromFormat('H:i', $row['time_msg'])->format('H:i')) : NULL;
+                    $dones_innerservice['time_arrival'] = (isset($row['time_arrival']) && !empty($row['time_arrival'])) ? (\DateTime::createFromFormat('H:i', $row['time_arrival'])->format('H:i')) : NULL;
                     $dones_innerservice['distance'] = (isset($row['distance']) && !empty($row['distance'])) ? trim($row['distance']) : '';
                     $dones_innerservice['note'] = (isset($row['note']) && !empty($row['note'])) ? trim($row['note']) : '';
                     $dones_innerservice['sort'] = (isset($row['sort']) && !empty($row['sort'])) ? intval($row['sort']) : 0;
@@ -1386,9 +1452,9 @@ class Dones extends My_Controller
 
                     $dones_informing['id_dones'] = $id_dones_new;
                     $dones_informing['fio'] = trim($row['fio']);
-                    $dones_informing['time_msg'] = (isset($row['time_msg']) && !empty($row['time_msg'])) ? (\DateTime::createFromFormat('H:i', $row['time_msg'])->format('H:i')) : '';
-                    $dones_informing['time_exit'] = (isset($row['time_exit']) && !empty($row['time_exit'])) ? (\DateTime::createFromFormat('H:i', $row['time_exit'])->format('H:i')) : '';
-                    $dones_informing['time_arrival'] = (isset($row['time_arrival']) && !empty($row['time_arrival'])) ? (\DateTime::createFromFormat('H:i', $row['time_arrival'])->format('H:i')) : '';
+                    $dones_informing['time_msg'] = (isset($row['time_msg']) && !empty($row['time_msg'])) ? (\DateTime::createFromFormat('H:i', $row['time_msg'])->format('H:i')) : NULL;
+                    $dones_informing['time_exit'] = (isset($row['time_exit']) && !empty($row['time_exit'])) ? (\DateTime::createFromFormat('H:i', $row['time_exit'])->format('H:i')) : NULL;
+                    $dones_informing['time_arrival'] = (isset($row['time_arrival']) && !empty($row['time_arrival'])) ? (\DateTime::createFromFormat('H:i', $row['time_arrival'])->format('H:i')) : NULL;
                     $dones_informing['sort'] = (isset($row['sort']) && !empty($row['sort'])) ? intval($row['sort']) : 0;
 
                     $id_informing = (isset($row['id_informing']) && !empty($row['id_informing'])) ? intval($row['id_informing']) : 0; //edit id of table informing
@@ -1511,6 +1577,9 @@ class Dones extends My_Controller
         $trunks_by_dones = $this->create_model->get_dones_trunks($id_dones_new); // trunks of dones
         $prev_ids_trunks_by_dones = (isset($trunks_by_dones) && !empty($trunks_by_dones)) ? array_unique(array_column($trunks_by_dones, 'id')) : array();
 
+        //$trunks = (isset($post['trunks']) && !empty($post['trunks'])) ? $post['trunks'] : array();
+//print_r($trunks);exit();
+
         if (isset($trunks) && !empty($trunks)) {
             foreach ($trunks as $k => $row) {
                 $dones_trunks = array();
@@ -1522,14 +1591,23 @@ class Dones extends My_Controller
                     $dones_trunks['locorg_name'] = (isset($row['locorg_name']) && !empty($row['locorg_name'])) ? trim($row['locorg_name']) : '';
                     $dones_trunks['v_ac'] = (isset($row['v_ac']) && !empty($row['v_ac'])) ? trim($row['v_ac']) : 0;
                     $dones_trunks['man_per_car'] = (isset($row['man_per_car']) && !empty($row['man_per_car'])) ? intval($row['man_per_car']) : 0;
-                    $dones_trunks['time_arrival'] = (isset($row['time_arrival']) && !empty($row['time_arrival'])) ? (\DateTime::createFromFormat('H:i', $row['time_arrival'])->format('H:i')) : '';
+                    $dones_trunks['time_arrival'] = (isset($row['time_arrival']) && !empty($row['time_arrival'])) ? (\DateTime::createFromFormat('H:i', $row['time_arrival'])->format('H:i')) : NULL;
                     $dones_trunks['s_fire_arrival'] = (isset($row['s_fire_arrival']) && !empty($row['s_fire_arrival'])) ? trim($row['s_fire_arrival']) : '';
-                    $dones_trunks['time_pod'] = (isset($row['time_pod']) && !empty($row['time_pod'])) ? (\DateTime::createFromFormat('H:i', $row['time_pod'])->format('H:i')) : '';
+                    $dones_trunks['time_pod'] = (isset($row['time_pod']) && !empty($row['time_pod'])) ? (\DateTime::createFromFormat('H:i', $row['time_pod'])->format('H:i')) : NULL;
                     $dones_trunks['means_trunks'] = (isset($row['means_trunks']) && !empty($row['means_trunks'])) ? trim($row['means_trunks']) : '';
                     $dones_trunks['water_po_out'] = (isset($row['water_po_out']) && !empty($row['water_po_out'])) ? trim($row['water_po_out']) : '';
-                    $dones_trunks['time_loc'] = (isset($row['time_loc']) && !empty($row['time_loc'])) ? (\DateTime::createFromFormat('H:i', $row['time_loc'])->format('H:i')) : '';
+                    $dones_trunks['time_loc'] = (isset($row['time_loc']) && !empty($row['time_loc'])) ? (\DateTime::createFromFormat('H:i', $row['time_loc'])->format('H:i')) : NULL;
                     $dones_trunks['s_fire_loc'] = (isset($row['s_fire_loc']) && !empty($row['s_fire_loc'])) ? trim($row['s_fire_loc']) : '';
-                    $dones_trunks['time_likv'] = (isset($row['time_likv']) && !empty($row['time_likv'])) ? (\DateTime::createFromFormat('H:i', $row['time_likv'])->format('H:i')) : '';
+                    $dones_trunks['time_likv'] = (isset($row['time_likv']) && !empty($row['time_likv'])) ? (\DateTime::createFromFormat('H:i', $row['time_likv'])->format('H:i')) : NULL;
+
+                    if ($dones['is_wide_table_trunks'] == 1) {
+                        $dones_trunks['actions_ls'] = (isset($row['actions_ls']) && !empty($row['actions_ls'])) ? trim($row['actions_ls']) : '';
+                    } else {
+                        $dones_trunks['actions_ls'] = '';
+                    }
+
+
+
                     $dones_trunks['sort'] = (isset($row['sort']) && !empty($row['sort'])) ? intval($row['sort']) : 0;
 
 
@@ -1622,7 +1700,7 @@ class Dones extends My_Controller
         }
 
 
-         redirect('/catalog');
+         redirect('/creator/catalog');
     }
 
 
@@ -1630,6 +1708,50 @@ class Dones extends My_Controller
 
         public function edit_form_standart($id_dones = 0)
     {
+
+        $this->data['dones'] = $this->create_model->get_dones_by_id($id_dones);
+
+        $statuses=$this->dones_model->get_statuses_by_id_dones($id_dones, 0, false);
+        $statuses_id=array_column($statuses, 'id_action');
+
+
+        /* ROSN, UGZ, AVIA */
+        if ($this->data['active_user']['level'] == 3 &&
+            (in_array($this->data['active_user']['id_organ'], [Main_model::ORGAN_ID_ROSN, Main_model::ORGAN_ID_UGZ, Main_model::ORGAN_ID_AVIA]))) {
+
+            if (($this->data['active_user']['id_local'] !== $this->data['dones']['author_local_id']) && $this->data['active_user']['id_region'] != Main_model::REGION_MINSK) {
+                $this->data['dones']['is_see'] = 1; //only see form not possible save!!!
+            } elseif ($this->data['dones']['is_open_update'] == 0 && in_array(Logs_model::ACTION_PROVE_SD_RCU, $statuses_id)) {
+                $this->data['dones']['is_see'] = 1; //only see form not possible save!!!
+            }
+        }
+
+        elseif($this->data['active_user']['level'] == Main_model::LEVEL_ID_RCU &&
+            $this->data['dones']['is_open_update'] == 0 && in_array(Logs_model::ACTION_PROVE_SD_RCU, $statuses_id)){
+ $this->data['dones']['is_see'] = 1; //only see form not possible save!!!
+        }
+        else {
+            /*  author SD = current user
+             * proved umchs and proved rcu and not open update
+             * proved rcu and not open update
+             *          */
+            if ($this->data['active_user']['level'] == 3 && (($this->data['active_user']['id_local'] != $this->data['dones']['author_local_id']) ||
+                ($this->data['dones']['is_open_update'] == 0 && in_array(Logs_model::ACTION_PROVE_SD_UMCHS, $statuses_id) &&
+                in_array(Logs_model::ACTION_PROVE_SD_RCU, $statuses_id)) ||
+                ($this->data['dones']['is_open_update'] == 0 && in_array(Logs_model::ACTION_PROVE_SD_RCU, $statuses_id)))) {
+
+                $this->data['dones']['is_see'] = 1; //only see form not possible save!!!
+            } elseif ($this->data['active_user']['level'] == 2 && (($this->data['active_user']['id_region'] != $this->data['dones']['author_region_id']) ||
+                ($this->data['dones']['is_open_update'] == 0 && in_array(Logs_model::ACTION_PROVE_SD_UMCHS, $statuses_id) &&
+                in_array(Logs_model::ACTION_PROVE_SD_RCU, $statuses_id)) ||
+                ($this->data['dones']['is_open_update'] == 0 && in_array(Logs_model::ACTION_PROVE_SD_RCU, $statuses_id)))) {
+
+                $this->data['dones']['is_see'] = 1; //only see form not possible save!!!
+            }
+        }
+
+
+
         $this->data['title'] = 'Ред. спец.донесение';
         $this->data['is_show_btn_search_rig'] = 1; //show btn "search rig"
         $this->data['bread_crumb'] = array('/' => 'Редактировать специальное донесение', 'ID = ' . $id_dones);
@@ -1656,7 +1778,6 @@ class Dones extends My_Controller
         $this->data['id_dones'] = $id_dones; //ID of dones
 
         /* data of edit dones */
-        $this->data['dones'] = $this->create_model->get_dones_by_id($id_dones);
         $this->data['dones']['silymchs'] = $this->create_model->get_dones_silymchs($id_dones);
         $innerservice= $this->create_model->get_dones_innerservice($id_dones);
         if(isset($innerservice) && !empty($innerservice)){//works of each innerservice row
@@ -1689,17 +1810,704 @@ class Dones extends My_Controller
     public function delete_sd($id_dones = 0)
     {
 
+        if ($this->input->is_ajax_request()) {
+
+            $this->data['dones'] = $this->create_model->get_dones_by_id($id_dones);
+
+            $statuses = $this->dones_model->get_statuses_by_id_dones($id_dones, 0, false);
+            $statuses_id = array_column($statuses, 'id_action');
+
+
+            /* ROSN, UGZ, AVIA */
+            if ($this->data['active_user']['level'] == 3 &&
+                (in_array($this->data['active_user']['id_organ'], [Main_model::ORGAN_ID_ROSN, Main_model::ORGAN_ID_UGZ, Main_model::ORGAN_ID_AVIA]))) {
+
+                if (($this->data['active_user']['id_local'] !== $this->data['dones']['author_local_id']) && $this->data['active_user']['id_region'] != Main_model::REGION_MINSK) {
+
+                    redirect('creator/catalog');
+                    die();
+                } elseif ($this->data['dones']['is_open_update'] == 0 && in_array(Logs_model::ACTION_PROVE_SD_RCU, $statuses_id)) {
+                    redirect('creator/catalog');
+                    die();
+                }
+            } else {
+
+                /*  author SD = current user
+                 * proved umchs and proved rcu and not open update
+                 * proved rcu and not open update
+                 *          */
+                if ($this->data['active_user']['level'] == 3 && (($this->data['active_user']['id_local'] != $this->data['dones']['author_local_id']) ||
+                    ($this->data['dones']['is_open_update'] == 0 && in_array(Logs_model::ACTION_PROVE_SD_UMCHS, $statuses_id) &&
+                    in_array(Logs_model::ACTION_PROVE_SD_RCU, $statuses_id)) ||
+                    ($this->data['dones']['is_open_update'] == 0 && in_array(Logs_model::ACTION_PROVE_SD_RCU, $statuses_id)))) {
+
+                    echo json_encode(array('error' => 'Удаление недоступно'));
+                    //redirect('creator/catalog');
+                    die();
+                } elseif ($this->data['active_user']['level'] == 2 && (($this->data['active_user']['id_region'] != $this->data['dones']['author_region_id']) ||
+                    ($this->data['dones']['is_open_update'] == 0 && in_array(Logs_model::ACTION_PROVE_SD_UMCHS, $statuses_id) &&
+                    in_array(Logs_model::ACTION_PROVE_SD_RCU, $statuses_id)) ||
+                    ($this->data['dones']['is_open_update'] == 0 && in_array(Logs_model::ACTION_PROVE_SD_RCU, $statuses_id)))) {
+
+                    redirect('creator/catalog');
+                    die();
+                }
+            }
+
+            if (isset($id_dones) && !empty($id_dones)) {
+
+                //logs
+                $logs['id_user'] = $this->data['active_user']['id_user'];
+                if ($this->data['active_user']['is_guest'] == 1) {
+                    $logs['fio_jour'] = $this->data['active_user']['auth_fio'];
+                    $logs['position_name_jour'] = $this->data['active_user']['position_name'];
+                    $logs['rank_name_jour'] = $this->data['active_user']['rank_name'];
+                    $logs['creator_name_jour'] = $this->data['active_user']['creator_name'];
+                }
+                $logs['id_dones'] = $id_dones;
+                $logs['id_action'] = Logs_model::ACTION_DELETE_SD;
+                $logs['date_action'] = date("Y-m-d H:i:s");
+                $this->logs_model->add_logs($logs);
+
+                $this->create_model->delete_dones($id_dones);
+
+                echo json_encode(array('success' => 'Специальное донесение удалено'));
+            }
+        }
+    }
+
+    public function set_number_sd($id_dones = 0)
+    {
+        if ($this->input->is_ajax_request()) {
+
+            $post = $this->input->post();
+            $id_dones = $post['sd_id'];
+            $sd_number = (isset($post['sd_number']) && !empty($post['sd_number'])) ? trim($post['sd_number']) : '';
+
+            $this->data['dones'] = $this->create_model->get_dones_by_id($id_dones);
+
+            /*  author SD = current user
+             *          */
+            if (($this->data['active_user']['level'] == 3 && $this->data['active_user']['id_local'] != $this->data['dones']['author_local_id']) ||
+                ($this->data['active_user']['level'] == 2 && $this->data['active_user']['id_region'] != $this->data['dones']['author_region_id'])){
+
+                echo json_encode(array('error' => 'Функция не доступна. Вы не являетесь автором.'));
+                die();
+            }
+
+
+            if (isset($id_dones) && !empty($id_dones) && isset($sd_number) && !empty($sd_number)) {
+
+                //logs
+                $logs['id_user'] = $this->data['active_user']['id_user'];
+                if ($this->data['active_user']['is_guest'] == 1) {
+                    $logs['fio_jour'] = $this->data['active_user']['auth_fio'];
+                    $logs['position_name_jour'] = $this->data['active_user']['position_name'];
+                    $logs['rank_name_jour'] = $this->data['active_user']['rank_name'];
+                    $logs['creator_name_jour'] = $this->data['active_user']['creator_name'];
+                }
+                $logs['id_dones'] = $id_dones;
+                $logs['id_action'] = Logs_model::ACTION_SET_NUMBER_SD;
+                $logs['date_action'] = date("Y-m-d H:i:s");
+                $this->logs_model->add_logs($logs);
+
+                $this->dones_model->set_number_dones($id_dones, $sd_number);
+
+                echo json_encode(array('success' => 1));
+            }
+        }
+    }
+
+
+
+    public function prove($id_dones=0)
+    {
+
+
+         if ($this->input->is_ajax_request()) {
+
+            $this->data['dones'] = $this->create_model->get_dones_by_id($id_dones);
+
+            /*  author SD = current user
+             *          */
+            if (($this->data['active_user']['level'] == 3) ||
+                ($this->data['active_user']['level'] == 2 && $this->data['active_user']['id_region'] != $this->data['dones']['author_region_id'])){
+
+                echo json_encode(array('error' => 'Функция не доступна. Вы не являетесь автором.'));
+                die();
+            }
+
+
+            $is_proved_sd = $this->dones_model->is_status_by_id_dones($id_dones, ($this->data['active_user']['level'] == Main_model::LEVEL_ID_UMCHS) ? Logs_model::ACTION_PROVE_SD_UMCHS : (($this->data['active_user']['level'] == Main_model::LEVEL_ID_RCU) ? Logs_model::ACTION_PROVE_SD_RCU : 0));
+
+
+            if (isset($is_proved_sd) && !empty($is_proved_sd)) {
+                echo json_encode(array('error' => 'Функция не доступна. СД уже было подтверждено.'));
+                die();
+            }
+
+
+            if (isset($id_dones) && !empty($id_dones)) {
+
+
+            //set statuses to history
+            if ($this->data['active_user']['level'] == Main_model::LEVEL_ID_UMCHS) {//umchs
+                $history_actions['history_actions'] = array(Logs_model::ACTION_REFUSE_SD_UMCHS, Logs_model::ACTION_PROVE_SD_UMCHS, Logs_model::ACTION_UPDATE_REFUSE_UMCHS);
+            } elseif ($this->data['active_user']['level'] == Main_model::LEVEL_ID_RCU) {//rcu
+                $history_actions['history_actions'] = array(Logs_model::ACTION_REFUSE_SD_RCU, Logs_model::ACTION_PROVE_SD_RCU, Logs_model::ACTION_UPDATE_REFUSE_RCU);
+            }
+
+            $history_actions['id_dones'] = $id_dones;
+            $this->logs_model->delete_dones_statuses($history_actions);
+
+                //logs
+                $logs['id_user'] = $this->data['active_user']['id_user'];
+                if ($this->data['active_user']['is_guest'] == 1) {
+                    $logs['fio_jour'] = $this->data['active_user']['auth_fio'];
+                    $logs['position_name_jour'] = $this->data['active_user']['position_name'];
+                    $logs['rank_name_jour'] = $this->data['active_user']['rank_name'];
+                    $logs['creator_name_jour'] = $this->data['active_user']['creator_name'];
+                }
+                $logs['id_dones'] = $id_dones;
+                $logs['id_action'] = ($this->data['active_user']['level'] == Main_model::LEVEL_ID_UMCHS) ? Logs_model::ACTION_PROVE_SD_UMCHS : (($this->data['active_user']['level'] == Main_model::LEVEL_ID_RCU) ? Logs_model::ACTION_PROVE_SD_RCU : 0);
+                $logs['date_action'] = date("Y-m-d H:i:s");
+                $this->logs_model->add_logs($logs);
+
+                echo json_encode(array('success' => 'СД успешно подтверждено'));
+            }
+        }
+
+    }
+
+
+        public function refuse()
+    {
+
+        if ($this->input->is_ajax_request()) {
+
+            $post = $this->input->post();
+            $is_refresh = (isset($post['is_refresh']) && !empty($post['is_refresh'])) ? intval($post['is_refresh']) : 0;
+            $id_dones = $post['sd_id'];
+            $description_refuse = (isset($post['description_refuse']) && !empty($post['description_refuse'])) ? trim($post['description_refuse']) : '';
+
+            $this->data['dones'] = $this->create_model->get_dones_by_id($id_dones);
+
+            /*  author SD = current user
+             *          */
+            if (($this->data['active_user']['level'] == Main_model::LEVEL_ID_ROCHS) ||
+                ($this->data['active_user']['level'] == Main_model::LEVEL_ID_UMCHS && $this->data['active_user']['id_region'] != $this->data['dones']['author_region_id'])) {
+
+                echo json_encode(array('error' => 'Функция не доступна. Вы не являетесь автором.'));
+                die();
+            }
+
+
+            $is_proved_sd = $this->dones_model->is_status_by_id_dones($id_dones, ($this->data['active_user']['level'] == 2) ? Logs_model::ACTION_PROVE_SD_UMCHS : (($this->data['active_user']['level'] == 1) ? Logs_model::ACTION_PROVE_SD_RCU : 0));
+
+
+                if (isset($is_proved_sd) && !empty($is_proved_sd)) {
+                echo json_encode(array('error' => 'Функция не доступна. СД было подтверждено.'));
+                die();
+            }
+
+
+
+            /* is refused by this user  */
+            $stat['id_dones']=$id_dones;
+            $stat['id_user']=$this->data['active_user']['id_user'];
+            $stat['id_action']=($this->data['active_user']['level'] == Main_model::LEVEL_ID_UMCHS) ? Logs_model::ACTION_REFUSE_SD_UMCHS : (($this->data['active_user']['level'] == Main_model::LEVEL_ID_RCU) ? Logs_model::ACTION_REFUSE_SD_RCU : 0);
+            $is_refused_sd = $this->logs_model->get_dones_satatus_by_user($stat);
+
+
+            if (isset($id_dones) && !empty($id_dones) && isset($description_refuse) && !empty($description_refuse)) {
+
+                if ($is_refresh == 0 && empty($is_refused_sd)) {//new refuse
+                    //status
+                    if ($this->data['active_user']['level'] == Main_model::LEVEL_ID_UMCHS) {//umchs
+                        //statuses to history
+                        $history_actions['history_actions'] = array(Logs_model::ACTION_REFUSE_SD_UMCHS, Logs_model::ACTION_PROVE_SD_UMCHS);
+                    } elseif ($this->data['active_user']['level'] == Main_model::LEVEL_ID_RCU) {//rcu
+                        //statuses to history
+                        $history_actions['history_actions'] = array(Logs_model::ACTION_REFUSE_SD_RCU, Logs_model::ACTION_PROVE_SD_RCU);
+                    }
+
+                    $history_actions['id_dones'] = $id_dones;
+                    $this->logs_model->delete_dones_statuses($history_actions);
+                }
+
+
+                //logs
+                $logs['id_user'] = $this->data['active_user']['id_user'];
+                if ($this->data['active_user']['is_guest'] == 1) {
+                    $logs['fio_jour'] = $this->data['active_user']['auth_fio'];
+                    $logs['position_name_jour'] = $this->data['active_user']['position_name'];
+                    $logs['rank_name_jour'] = $this->data['active_user']['rank_name'];
+                    $logs['creator_name_jour'] = $this->data['active_user']['creator_name'];
+                }
+                $logs['id_dones'] = $id_dones;
+
+
+                if ($is_refresh == 1 || !empty($is_refused_sd)) {//refresh refuse text
+
+                    //$logs['is_service'] = 1;
+
+                    $prev['id_dones'] = $id_dones;
+                    $prev['id_user'] = $this->data['active_user']['id_user'];
+                    $prev['id_action'] = ($this->data['active_user']['level'] == Main_model::LEVEL_ID_UMCHS) ? Logs_model::ACTION_REFUSE_SD_UMCHS : (($this->data['active_user']['level'] == Main_model::LEVEL_ID_RCU) ? Logs_model::ACTION_REFUSE_SD_RCU : 0);
+                    $prev_description_refuse = $this->logs_model->get_dones_description_refuse($prev);
+
+                    $logs['description_refuse'] = 'предыдущее: '.$prev_description_refuse['description_refuse'].' новое: '.$description_refuse;
+
+                    $logs['id_action'] = ($this->data['active_user']['level'] == Main_model::LEVEL_ID_UMCHS) ? Logs_model::ACTION_UPDATE_REFUSE_UMCHS : (($this->data['active_user']['level'] == Main_model::LEVEL_ID_RCU) ? Logs_model::ACTION_UPDATE_REFUSE_RCU : 0);
+                    $logs['date_action'] = date("Y-m-d H:i:s");
+                    $this->logs_model->add_logs($logs);
+
+                    //update refuse text
+                    $logs['description_refuse'] = $description_refuse;
+                    $logs['id_action'] = ($this->data['active_user']['level'] == Main_model::LEVEL_ID_UMCHS) ? Logs_model::ACTION_REFUSE_SD_UMCHS : (($this->data['active_user']['level'] == Main_model::LEVEL_ID_RCU) ? Logs_model::ACTION_REFUSE_SD_RCU : 0);
+                    $this->logs_model->update_dones_description_refuse($logs);
+                } else {
+
+                    $logs['description_refuse'] = $description_refuse;
+                    $logs['id_action'] = ($this->data['active_user']['level'] == Main_model::LEVEL_ID_UMCHS) ? Logs_model::ACTION_REFUSE_SD_UMCHS : (($this->data['active_user']['level'] == Main_model::LEVEL_ID_RCU) ? Logs_model::ACTION_REFUSE_SD_RCU : 0);
+                    $logs['date_action'] = date("Y-m-d H:i:s");
+                    $this->logs_model->add_logs($logs);
+                }
+
+
+
+
+                echo json_encode(array('success' => 1));
+            } else {
+                echo json_encode(array('error' => 'Укажите замечания'));
+            }
+        }
+    }
+
+
+    public function open_update_sd($id_dones = 0)
+    {
+        if ($this->input->is_ajax_request()) {
+
+            $this->data['dones'] = $this->create_model->get_dones_by_id($id_dones);
+
+            if ($this->data['active_user']['level'] != Main_model::LEVEL_ID_RCU) {
+
+                echo json_encode(array('error' => 'Функция не доступна. У Вас нет прав.'));
+                die();
+            } elseif ($this->data['dones']['is_open_update'] == 1) {
+
+                echo json_encode(array('error' => 'Функция не доступна. Доступ уже открыт.'));
+                die();
+            }
+
+
+            if (isset($id_dones) && !empty($id_dones)) {
+                $this->dones_model->set_open_update($id_dones, 1);
+
+                //logs
+                $logs['id_user'] = $this->data['active_user']['id_user'];
+                if ($this->data['active_user']['is_guest'] == 1) {
+                    $logs['fio_jour'] = $this->data['active_user']['auth_fio'];
+                    $logs['position_name_jour'] = $this->data['active_user']['position_name'];
+                    $logs['rank_name_jour'] = $this->data['active_user']['rank_name'];
+                    $logs['creator_name_jour'] = $this->data['active_user']['creator_name'];
+                }
+                $logs['id_dones'] = $id_dones;
+                $logs['id_action'] = Logs_model::ACTION_OPEN;
+                $logs['date_action'] = date("Y-m-d H:i:s");
+                $this->logs_model->add_logs($logs);
+
+                echo json_encode(array('success' => 'Доступ на редактирование СД успешно открыт'));
+            }
+            else{
+                echo json_encode(array('error' => 'СД не найдено'));
+            }
+        }
+    }
+
+    public function close_update_sd($id_dones = 0)
+    {
+        if ($this->input->is_ajax_request()) {
+
+            $this->data['dones'] = $this->create_model->get_dones_by_id($id_dones);
+
+            if ($this->data['active_user']['level'] != Main_model::LEVEL_ID_RCU) {
+
+                echo json_encode(array('error' => 'Функция не доступна. У Вас нет прав.'));
+                die();
+            } elseif ($this->data['dones']['is_open_update'] == 0) {
+
+                echo json_encode(array('error' => 'Функция не доступна. Доступ уже закрыт.'));
+                die();
+            }
+
+
+            if (isset($id_dones) && !empty($id_dones)) {
+                $this->dones_model->set_open_update($id_dones, 0);
+
+                //logs
+                $logs['id_user'] = $this->data['active_user']['id_user'];
+                if ($this->data['active_user']['is_guest'] == 1) {
+                    $logs['fio_jour'] = $this->data['active_user']['auth_fio'];
+                    $logs['position_name_jour'] = $this->data['active_user']['position_name'];
+                    $logs['rank_name_jour'] = $this->data['active_user']['rank_name'];
+                    $logs['creator_name_jour'] = $this->data['active_user']['creator_name'];
+                }
+                $logs['id_dones'] = $id_dones;
+                $logs['id_action'] = Logs_model::ACTION_CLOSE;
+                $logs['date_action'] = date("Y-m-d H:i:s");
+                $this->logs_model->add_logs($logs);
+
+                echo json_encode(array('success' => 'Доступ на редактирование СД успешно закрыт'));
+            }
+            else{
+                echo json_encode(array('error' => 'СД не найдено'));
+            }
+        }
+    }
+
+
+
+
+    public function copy_standart_sd($id_dones = 0)
+    {
+
         if (isset($id_dones) && !empty($id_dones)) {
 
-                        //logs
-            $logs['id_user']= $this->data['active_user']['id_user'];
-            $logs['id_dones']=$id_dones;
-            //$logs['id_action']=self::actions['delete_sd'];
-            $logs['id_action']= Logs_model::ACTION_DELETE_SD;
-            $logs['date_action']=date("Y-m-d H:i:s");
+            /* dones */
+            $dones = $this->create_model->get_dones_by_id($id_dones);
+
+            /* data of  dones */
+            $silymchs = $this->create_model->get_dones_silymchs($id_dones);
+            $innerservice = $this->create_model->get_dones_innerservice($id_dones);
+            if (isset($innerservice) && !empty($innerservice)) {//works of each innerservice row
+                foreach ($innerservice as $key => $row) {
+                    $works = $this->create_model->get_dones_innerservice_work($row['id']);
+                    $ids_work = (isset($works) && !empty($works)) ? array_column($works, 'id_work_innerservice') : array();
+                    $innerservice[$key]['works'] = $ids_work;
+                }
+            }
+            $informing = $this->create_model->get_dones_informing($id_dones);
+            $str = $this->create_model->get_dones_str($id_dones);
+            $str_text = $this->create_model->get_dones_str_text($id_dones);
+            $trunks = $this->create_model->get_dones_trunks($id_dones);
+
+            $water_source = $this->create_model->get_dones_water_source($id_dones);
+            $object = $this->create_model->get_dones_object($id_dones);
+
+
+
+            $new_dones = array();
+            $new_dones['is_copy']=1;
+            $new_dones['copy_parent_id']=$id_dones;
+
+            $new_dones['specd_date'] = date("Y-m-d H:i:s");
+            $new_dones['short_description'] = (isset($dones['short_description']) && !empty($dones['short_description'])) ? trim($dones['short_description']) : '';
+
+            $new_dones['created_by'] = $this->data['active_user']['id_user'];
+            $new_dones['date_insert'] = date("Y-m-d H:i:s");
+
+            $new_dones['last_updated_by'] = $this->data['active_user']['id_user'];
+            $new_dones['date_last_update'] = date("Y-m-d H:i:s");
+
+            /* official block */
+            $new_dones['specd_vid'] = (isset($dones['specd_vid']) && !empty($dones['specd_vid'])) ? intval($dones['specd_vid']) : 0;
+
+            $new_dones['official_creator_name'] = (isset($dones['official_creator_name']) && !empty($dones['official_creator_name'])) ? trim($dones['official_creator_name']) : '';
+            $new_dones['official_creator_position'] = (isset($dones['official_creator_position']) && !empty($dones['official_creator_position'])) ? trim($dones['official_creator_position']) : '';
+            $new_dones['official_destination'] = (isset($dones['official_destination']) && !empty($dones['official_destination'])) ? trim($dones['official_destination']) : '';
+
+            $new_dones['opening_description'] = (isset($dones['opening_description']) && !empty($dones['opening_description'])) ? trim($dones['opening_description']) : '';
+
+
+            /* description of RIG */
+            $new_dones['id_rig'] = (isset($dones['id_rig_current']) && !empty($dones['id_rig_current'])) ? intval($dones['id_rig_current']) : 0;
+            $new_dones['time_msg'] = (isset($dones['time_msg']) && !empty($dones['time_msg'])) ? $dones['time_msg'] : '';
+            $new_dones['time_loc'] = (isset($dones['time_loc']) && !empty($dones['time_loc'])) ? $dones['time_loc'] : '';
+            $new_dones['time_likv'] = (isset($dones['time_likv']) && !empty($dones['time_likv'])) ? $dones['time_likv'] : '';
+            $new_dones['podr_take_msg'] = (isset($dones['podr_take_msg']) && !empty($dones['podr_take_msg'])) ? trim($dones['podr_take_msg']) : '';
+            $new_dones['disp_take_msg'] = (isset($dones['disp_take_msg']) && !empty($dones['disp_take_msg'])) ? trim($dones['disp_take_msg']) : '';
+            $new_dones['address'] = (isset($dones['address']) && !empty($dones['address'])) ? trim($dones['address']) : '';
+            $new_dones['latitude'] = (isset($dones['latitude']) && !empty($dones['latitude'])) ? trim($dones['latitude']) : '';
+            $new_dones['longitude'] = (isset($dones['longitude']) && !empty($dones['longitude'])) ? trim($dones['longitude']) : '';
+            $new_dones['vid_hs_1'] = (isset($dones['vid_hs_1']) && !empty($dones['vid_hs_1'])) ? intval($dones['vid_hs_1']) : 0;
+            $new_dones['vid_hs_2'] = (isset($dones['vid_hs_2']) && !empty($dones['vid_hs_2'])) ? intval($dones['vid_hs_2']) : 0;
+            $new_dones['reason_rig'] = (isset($dones['reason_rig']) && !empty($dones['reason_rig'])) ? trim($dones['reason_rig']) : '';
+            $new_dones['firereason_rig'] = (isset($dones['firereason_rig']) && !empty($dones['firereason_rig'])) ? trim($dones['firereason_rig']) : '';
+            $new_dones['inspector'] = (isset($dones['inspector']) && !empty($dones['inspector'])) ? trim($dones['inspector']) : '';
+
+
+
+            /* gdzs block */
+            $new_dones['spec_cnt_gdzs'] = (isset($dones['spec_cnt_gdzs']) && !empty($dones['spec_cnt_gdzs'])) ? intval($dones['spec_cnt_gdzs']) : 0;
+            $new_dones['spec_time_work_gdzs'] = (isset($dones['spec_time_work_gdzs']) && !empty($dones['spec_time_work_gdzs'])) ? $dones['spec_time_work_gdzs'] : '';
+            $new_dones['spec_time_work_bef_inj_gdzs'] = (isset($dones['spec_time_work_bef_inj_gdzs']) && !empty($dones['spec_time_work_bef_inj_gdzs'])) ? $dones['spec_time_work_bef_inj_gdzs'] : '';
+            $new_dones['spec_time_shtab_gdzs'] = (isset($dones['spec_time_shtab_gdzs']) && !empty($dones['spec_time_shtab_gdzs'])) ? $dones['spec_time_shtab_gdzs'] : '';
+
+
+            /* people data block */
+            $new_dones['people_fio'] = (isset($dones['people_fio']) && !empty($dones['people_fio'])) ? trim($dones['people_fio']) : '';
+            $new_dones['people_phone'] = (isset($dones['people_phone']) && !empty($dones['people_phone'])) ? trim($dones['people_phone']) : '';
+            $new_dones['people_address'] = (isset($dones['people_address']) && !empty($dones['people_address'])) ? trim($dones['people_address']) : '';
+            $new_dones['people_position'] = (isset($dones['people_position']) && !empty($dones['people_position'])) ? trim($dones['people_position']) : '';
+            $new_dones['people_status'] = (isset($dones['people_status']) && !empty($dones['people_status'])) ? intval($dones['people_status']) : 0;
+            $new_dones['people_is_uhet'] = (isset($dones['people_is_uhet']) && !empty($dones['people_is_uhet'])) ? intval($dones['people_is_uhet']) : 0;
+
+
+            /* detail inf block */
+            $new_dones['detail_inf'] = (isset($dones['detail_inf']) && !empty($dones['detail_inf'])) ? trim($dones['detail_inf']) : '';
+
+
+            /* prevention block */
+            $new_dones['prevention_time'] = (isset($dones['prevention_time']) && !empty($dones['prevention_time'])) ? $dones['prevention_time'] : '';
+            $new_dones['prevention_who'] = (isset($dones['prevention_who']) && !empty($dones['prevention_who'])) ? trim($dones['prevention_who']) : '';
+            $new_dones['prevention_result'] = (isset($dones['prevention_result']) && !empty($dones['prevention_result'])) ? trim($dones['prevention_result']) : '';
+            $new_dones['prevention_events'] = (isset($dones['prevention_events']) && !empty($dones['prevention_events'])) ? trim($dones['prevention_events']) : '';
+
+
+            /* is involved or no */
+            $new_dones['is_not_involved_silymchs'] = (isset($dones['is_not_involved_silymchs']) && !empty($dones['is_not_involved_silymchs'])) ? 1 : 0;
+            $new_dones['is_not_involved_innerservice'] = (isset($dones['is_not_involved_innerservice']) && !empty($dones['is_not_involved_innerservice'])) ? 1 : 0;
+            $new_dones['is_not_involved_informing'] = (isset($dones['is_not_involved_informing']) && !empty($dones['is_not_involved_informing'])) ? 1 : 0;
+            $new_dones['is_not_involved_trunks'] = (isset($dones['is_not_involved_trunks']) && !empty($dones['is_not_involved_trunks'])) ? 1 : 0;
+            $new_dones['is_wide_table_trunks'] = (isset($dones['is_wide_table_trunks']) && !empty($dones['is_wide_table_trunks'])) ? 1 : 0;
+
+
+            $id_dones_new = $this->create_model->add_new_dones($new_dones);
+
+            //logs
+            $logs['id_user'] = $this->data['active_user']['id_user'];
+            if ($this->data['active_user']['is_guest'] == 1) {
+                $logs['fio_jour'] = $this->data['active_user']['auth_fio'];
+                $logs['position_name_jour'] = $this->data['active_user']['position_name'];
+                $logs['rank_name_jour'] = $this->data['active_user']['rank_name'];
+                $logs['creator_name_jour'] = $this->data['active_user']['creator_name'];
+            }
+            $logs['id_dones'] = $id_dones_new;
+            $logs['is_service'] = 1;
+            $logs['id_action'] = Logs_model::ACTION_COPY_SD;
+            $logs['date_action'] = date("Y-m-d H:i:s");
             $this->logs_model->add_logs($logs);
 
-            $this->create_model->delete_dones($id_dones);
+
+
+
+
+
+            /* ------------ silymchs of dones 1-∞ ------------- */
+            if (isset($silymchs) && !empty($silymchs) && $dones['is_not_involved_silymchs'] == 0) {
+                foreach ($silymchs as $k => $row) {
+                    $dones_silymchs = array();
+                    if (isset($row['mark']) && !empty(trim($row['mark']))) {
+
+                        $dones_silymchs['id_dones'] = $id_dones_new;
+                        $dones_silymchs['mark'] = trim($row['mark']);
+                        $dones_silymchs['id_teh'] = (isset($row['id_teh']) && !empty($row['id_teh'])) ? intval($row['id_teh']) : 0;
+                        $dones_silymchs['pasp_name'] = (isset($row['pasp_name']) && !empty($row['pasp_name'])) ? trim($row['pasp_name']) : '';
+                        $dones_silymchs['locorg_name'] = (isset($row['locorg_name']) && !empty($row['locorg_name'])) ? trim($row['locorg_name']) : '';
+                        $dones_silymchs['v_ac'] = (isset($row['v_ac']) && !empty($row['v_ac'])) ? trim($row['v_ac']) : '';
+                        $dones_silymchs['man_per_car'] = (isset($row['man_per_car']) && !empty($row['man_per_car'])) ? intval($row['man_per_car']) : 0;
+                        $dones_silymchs['time_exit'] = (isset($row['time_exit']) && !empty($row['time_exit'])) ? $row['time_exit'] : '';
+                        $dones_silymchs['time_arrival'] = (isset($row['time_arrival']) && !empty($row['time_arrival'])) ? $row['time_arrival'] : '';
+                        $dones_silymchs['time_follow'] = (isset($row['time_follow']) && !empty($row['time_follow'])) ? intval($row['time_follow']) : 0;
+                        $dones_silymchs['distance'] = (isset($row['distance']) && !empty($row['distance'])) ? trim($row['distance']) : '';
+                        $dones_silymchs['time_end'] = (isset($row['time_end']) && !empty($row['time_end'])) ? $row['time_end'] : '';
+                        $dones_silymchs['time_return'] = (isset($row['time_return']) && !empty($row['time_return'])) ? $row['time_return'] : '';
+                        $dones_silymchs['sort'] = (isset($row['sort']) && !empty($row['sort'])) ? intval($row['sort']) : 0;
+
+                        $this->create_model->add_new_dones_silymchs($dones_silymchs);
+                    }
+                }
+            }
+
+
+
+            /* ------------ innerservice of dones 1-∞ ------------- */
+            if (isset($innerservice) && !empty($innerservice) && $dones['is_not_involved_innerservice'] == 0) {
+                foreach ($innerservice as $k => $row) {
+                    $dones_innerservice = array();
+                    if (isset($row['service_id']) && !empty(intval($row['service_id']))) {
+
+                        $dones_innerservice['id_dones'] = $id_dones_new;
+                        $dones_innerservice['service_id'] = intval($row['service_id']);
+                        $dones_innerservice['time_msg'] = (isset($row['time_msg']) && !empty($row['time_msg'])) ? $row['time_msg'] : '';
+                        $dones_innerservice['time_arrival'] = (isset($row['time_arrival']) && !empty($row['time_arrival'])) ? $row['time_arrival'] : '';
+                        $dones_innerservice['distance'] = (isset($row['distance']) && !empty($row['distance'])) ? trim($row['distance']) : '';
+                        $dones_innerservice['note'] = (isset($row['note']) && !empty($row['note'])) ? trim($row['note']) : '';
+                        $dones_innerservice['sort'] = (isset($row['sort']) && !empty($row['sort'])) ? intval($row['sort']) : 0;
+
+                        $id_dones_innerservice_new = $this->create_model->add_new_dones_innerservice($dones_innerservice);
+                        //add work innerservice
+                        if (isset($row['works']) && !empty($row['works'])) {
+                            foreach ($row['works'] as $value) {
+                                $arr['id_dones_innerservice'] = $id_dones_innerservice_new;
+                                $arr['id_work_innerservice'] = $value;
+                                $this->create_model->add_new_dones_innerservice_work($arr);
+                            }
+                        }
+                    }
+                }
+            }
+
+
+
+
+
+
+            /* ------------ informing of dones 1-∞ ------------- */
+
+            if (isset($informing) && !empty($informing) && $dones['is_not_involved_informing'] == 0) {
+                foreach ($informing as $k => $row) {
+                    $dones_informing = array();
+                    if (isset($row['fio']) && !empty(trim($row['fio']))) {
+
+                        $dones_informing['id_dones'] = $id_dones_new;
+                        $dones_informing['fio'] = trim($row['fio']);
+                        $dones_informing['time_msg'] = (isset($row['time_msg']) && !empty($row['time_msg'])) ? $row['time_msg'] : '';
+                        $dones_informing['time_exit'] = (isset($row['time_exit']) && !empty($row['time_exit'])) ? $row['time_exit'] : '';
+                        $dones_informing['time_arrival'] = (isset($row['time_arrival']) && !empty($row['time_arrival'])) ? $row['time_arrival'] : '';
+                        $dones_informing['sort'] = (isset($row['sort']) && !empty($row['sort'])) ? intval($row['sort']) : 0;
+
+                        $this->create_model->add_new_dones_informing($dones_informing);
+                    }
+                }
+            }
         }
+
+
+
+
+
+
+
+
+        /* ------------ str of dones 1-∞ ------------- */
+        if (isset($str) && !empty($str)) {
+            foreach ($str as $k => $row) {
+                $dones_str = array();
+                if (isset($row['pasp_name']) && !empty(trim($row['pasp_name']))) {
+
+                    $dones_str['id_dones'] = $id_dones_new;
+                    $dones_str['id_pasp'] = (isset($row['id_pasp']) && !empty($row['id_pasp'])) ? intval($row['id_pasp']) : 0;
+                    $dones_str['pasp_name'] = (isset($row['pasp_name']) && !empty($row['pasp_name'])) ? trim($row['pasp_name']) : '';
+                    $dones_str['locorg_name'] = (isset($row['locorg_name']) && !empty($row['locorg_name'])) ? trim($row['locorg_name']) : '';
+                    $dones_str['shtat'] = (isset($row['shtat']) && !empty($row['shtat'])) ? intval($row['shtat']) : 0;
+                    $dones_str['vacant'] = (isset($row['vacant']) && !empty($row['vacant'])) ? intval($row['vacant']) : 0;
+                    $dones_str['on_list_ch'] = (isset($row['on_list_ch']) && !empty($row['on_list_ch'])) ? intval($row['on_list_ch']) : 0;
+                    $dones_str['vacant_ch'] = (isset($row['vacant_ch']) && !empty($row['vacant_ch'])) ? intval($row['vacant_ch']) : 0;
+                    $dones_str['face_ch'] = (isset($row['face_ch']) && !empty($row['face_ch'])) ? intval($row['face_ch']) : 0;
+                    $dones_str['br_ch'] = (isset($row['br_ch']) && !empty($row['br_ch'])) ? intval($row['br_ch']) : 0;
+                    $dones_str['cnt_trip_man'] = (isset($row['cnt_trip_man']) && !empty($row['cnt_trip_man'])) ? intval($row['cnt_trip_man']) : 0;
+                    $dones_str['cnt_holiday_man'] = (isset($row['cnt_holiday_man']) && !empty($row['cnt_holiday_man'])) ? intval($row['cnt_holiday_man']) : 0;
+                    $dones_str['cnt_ill_man'] = (isset($row['cnt_ill_man']) && !empty($row['cnt_ill_man'])) ? intval($row['cnt_ill_man']) : 0;
+                    $dones_str['cnt_naryd'] = (isset($row['cnt_naryd']) && !empty($row['cnt_naryd'])) ? intval($row['cnt_naryd']) : 0;
+                    $dones_str['cnt_other_man'] = (isset($row['cnt_other_man']) && !empty($row['cnt_other_man'])) ? intval($row['cnt_other_man']) : 0;
+                    $dones_str['gas'] = (isset($row['gas']) && !empty($row['gas'])) ? intval($row['gas']) : 0;
+                    $dones_str['sort'] = (isset($row['sort']) && !empty($row['sort'])) ? intval($row['sort']) : 0;
+
+                    $this->create_model->add_new_dones_str($dones_str);
+                }
+            }
+        }
+
+
+
+        /* ------------ str text of dones 1-∞ ------------- */
+
+        if (isset($str_text) && !empty($str_text)) {
+            foreach ($str_text as $k => $row) {
+                $dones_str_text = array();
+                if (isset($row['str_text_podr_name']) && !empty(trim($row['str_text_podr_name']))) {
+
+                    $dones_str_text['id_dones'] = $id_dones_new;
+                    $dones_str_text['id_pasp'] = (isset($row['id_pasp']) && !empty($row['id_pasp'])) ? intval($row['id_pasp']) : 0;
+                    $dones_str_text['str_text_podr_name'] = (isset($row['str_text_podr_name']) && !empty($row['str_text_podr_name'])) ? trim($row['str_text_podr_name']) : '';
+                    $dones_str_text['str_text_description'] = (isset($row['str_text_description']) && !empty($row['str_text_description'])) ? trim($row['str_text_description']) : '';
+                    $dones_str_text['sort'] = (isset($row['sort']) && !empty($row['sort'])) ? intval($row['sort']) : 0;
+
+                    $this->create_model->add_new_dones_str_text($dones_str_text);
+                }
+            }
+        }
+
+
+
+
+
+        /* ------------ trunks of dones 1-∞ ------------- */
+
+        if (isset($trunks) && !empty($trunks)) {
+            foreach ($trunks as $k => $row) {
+                $dones_trunks = array();
+                if (isset($row['mark']) && !empty(trim($row['mark']))) {
+
+                    $dones_trunks['id_dones'] = $id_dones_new;
+                    $dones_trunks['mark'] = trim($row['mark']);
+                    $dones_trunks['pasp_name'] = (isset($row['pasp_name']) && !empty($row['pasp_name'])) ? trim($row['pasp_name']) : '';
+                    $dones_trunks['locorg_name'] = (isset($row['locorg_name']) && !empty($row['locorg_name'])) ? trim($row['locorg_name']) : '';
+                    $dones_trunks['v_ac'] = (isset($row['v_ac']) && !empty($row['v_ac'])) ? trim($row['v_ac']) : 0;
+                    $dones_trunks['man_per_car'] = (isset($row['man_per_car']) && !empty($row['man_per_car'])) ? intval($row['man_per_car']) : 0;
+                    $dones_trunks['time_arrival'] = (isset($row['time_arrival']) && !empty($row['time_arrival'])) ? $row['time_arrival'] : '';
+                    $dones_trunks['s_fire_arrival'] = (isset($row['s_fire_arrival']) && !empty($row['s_fire_arrival'])) ? trim($row['s_fire_arrival']) : '';
+                    $dones_trunks['time_pod'] = (isset($row['time_pod']) && !empty($row['time_pod'])) ? $row['time_pod'] : NULL;
+                    $dones_trunks['means_trunks'] = (isset($row['means_trunks']) && !empty($row['means_trunks'])) ? trim($row['means_trunks']) : '';
+                    $dones_trunks['water_po_out'] = (isset($row['water_po_out']) && !empty($row['water_po_out'])) ? trim($row['water_po_out']) : '';
+                    $dones_trunks['time_loc'] = (isset($row['time_loc']) && !empty($row['time_loc'])) ? $row['time_loc'] : '';
+                    $dones_trunks['s_fire_loc'] = (isset($row['s_fire_loc']) && !empty($row['s_fire_loc'])) ? trim($row['s_fire_loc']) : '';
+                    $dones_trunks['time_likv'] = (isset($row['time_likv']) && !empty($row['time_likv'])) ? $row['time_likv'] : '';
+                    $dones_trunks['actions_ls'] = (isset($row['actions_ls']) && !empty($row['actions_ls'])) ? trim($row['actions_ls']) : '';
+                    $dones_trunks['sort'] = (isset($row['sort']) && !empty($row['sort'])) ? intval($row['sort']) : 0;
+
+                    $this->create_model->add_new_dones_trunks($dones_trunks);
+                }
+            }
+        }
+
+
+
+
+
+
+        /* ------------ water source of dones 1-∞ ------------- */
+
+        if (isset($water_source) && !empty($water_source)) {
+            foreach ($water_source as $k => $row) {
+                $dones_water_source = array();
+                if (isset($row['water_source_type']) && !empty(intval($row['water_source_type']))) {
+
+                    $dones_water_source['id_dones'] = $id_dones_new;
+                    $dones_water_source['water_source_type'] = intval($row['water_source_type']);
+                    $dones_water_source['water_source_distance'] = (isset($row['water_source_distance']) && !empty($row['water_source_distance'])) ? trim($row['water_source_distance']) : '';
+                    $dones_water_source['water_source_use'] = (isset($row['water_source_use']) && !empty($row['water_source_use'])) ? trim($row['water_source_use']) : '';
+                    $dones_water_source['sort'] = (isset($row['sort']) && !empty($row['sort'])) ? intval($row['sort']) : 0;
+
+                    $this->create_model->add_new_dones_water_source($dones_water_source);
+                }
+            }
+        }
+
+
+
+
+
+
+        /* ------------ object of dones 1-1 ------------- */
+        if (isset($object) && !empty($object)) {
+            $dones_object['id_dones'] = $id_dones_new;
+            $dones_object['object'] = (isset($object['object']) && !empty($object['object'])) ? trim($object['object']) : '';
+            $dones_object['object_office_belong'] = (isset($object['object_office_belong']) && !empty($object['object_office_belong'])) ? intval($object['object_office_belong']) : 0;
+            $dones_object['object_house'] = (isset($object['object_house']) && !empty($object['object_house'])) ? intval($object['object_house']) : 0;
+            $dones_object['object_floor'] = (isset($object['object_floor']) && !empty($object['object_floor'])) ? trim($object['object_floor']) : '';
+            $dones_object['object_size'] = (isset($object['object_size']) && !empty($object['object_size'])) ? trim($object['object_size']) : '';
+            $dones_object['object_is_electric'] = (isset($object['object_is_electric']) && !empty($object['object_is_electric'])) ? intval($object['object_is_electric']) : 0;
+            $dones_object['object_is_api'] = (isset($object['object_is_api']) && !empty($object['object_is_api'])) ? intval($object['object_is_api']) : 0;
+            $dones_object['object_material'] = (isset($object['object_material']) && !empty($object['object_material'])) ? intval($object['object_material']) : 0;
+            $dones_object['object_roof'] = (isset($object['object_roof']) && !empty($object['object_roof'])) ? intval($object['object_roof']) : 0;
+
+            $this->create_model->add_new_dones_object($dones_object);
+        }
+
+        redirect('/dones/edit_form_standart/'.$id_dones_new);
     }
 }

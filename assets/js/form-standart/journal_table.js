@@ -295,8 +295,12 @@ $(document).ready(function () {
 
         $div_new.find('td').find('.id_trunks').attr('name','trunks['+num+'][id_trunks]');
 
+        $div_new.find('td').find('.actions_ls_trunks').attr('name','trunks['+num+'][actions_ls]');
+        $div_new.find('td').find('.actions_ls_btn_trunks').attr('id','actions_ls_btn_trunks_'+num);
+        $div_new.find('td').find('.actions_ls_btn_trunks').css('color','black');
+
        // $div_new.find('td').find('input').val('');
-        $div_new.find('td').find('.mark_trunks, .pasp_name_trunks,.locorg_name_trunks, .v_ac_trunks, .man_per_car_trunks, .time_arrival_trunks, .time_pod_trunks, .means_trunks, .water_po_out_trunks, .sort, .id_teh').val('');
+        $div_new.find('td').find('.mark_trunks, .pasp_name_trunks,.locorg_name_trunks, .v_ac_trunks, .man_per_car_trunks, .time_arrival_trunks, .time_pod_trunks, .means_trunks, .water_po_out_trunks, .sort, .id_teh, .actions_ls_trunks, .id_trunks').val('');
         $div_new.find('.loop-index').text(new_loop);
         $div_new.attr('data-loop',new_loop);
 
@@ -327,6 +331,23 @@ $(document).ready(function () {
             });
 
         }
+        return false;
+    });
+
+
+
+    $('body').on('click', '.actions_ls_btn_trunks', function (e) {
+
+        e.preventDefault();
+
+        var field = $(this).parent().parent().find('.actions_ls_trunks');
+
+        if (field.hasClass('hide')) {
+            field.removeClass('hide');
+        } else {
+            field.addClass('hide');
+        }
+
         return false;
     });
 

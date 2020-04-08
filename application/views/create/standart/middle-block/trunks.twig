@@ -97,6 +97,9 @@
 
                                     <input  style="width: 190px" type="text" class="form-control  mark_trunks"   placeholder="АЦ 5,0-50/4(533702)" name="trunks[{{x}}][mark]" value="{%if trunk.mark is defined %}{{trunk.mark|trim}}{%endif%}">
 
+
+                                    <i class="fa fa-paperclip actions_ls_btn_trunks {%if is_edit_dones is defined and is_edit_dones == 1 and dones.is_wide_table_trunks == 0%} hide {%endif%}  " aria-hidden="true" id="actions_ls_btn_trunks-{{x}}" style="color:{%if trunk.actions_ls is defined and trunk.actions_ls is not empty %}green{%endif%}" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="{%if trunk.actions_ls is defined and trunk.actions_ls is not empty %}Действия л/с: {{trunk.actions_ls|trim}}{%else%}Внести действия л/с{%endif%}"></i>
+                                    <input  style="width: 190px" type="text" class="form-control  actions_ls_trunks hide"   placeholder="действия личного состава" name="trunks[{{x}}][actions_ls]" value="{%if trunk.actions_ls is defined %}{{trunk.actions_ls|trim}}{%endif%}">
                                 </td>
                                 <td>
 
@@ -112,7 +115,7 @@
 
 
                                 <td>
-                                    <input type="text" class="form-control v_ac_trunks" onkeypress="allowFloat();"  placeholder="" name="trunks[{{x}}][v_ac]" value="{%if trunk.v_ac is defined and trunk.v_ac is not empty%}{{(trunk.v_ac/1000)|number_format(1)}}{%endif%}">
+                                    <input type="text" class="form-control v_ac_trunks" onkeypress="allowFloat();"  placeholder="" name="trunks[{{x}}][v_ac]" value="{%if trunk.v_ac is defined and trunk.v_ac is not empty%}{{trunk.v_ac}}{%endif%}">
                                 </td>
 
 
@@ -214,6 +217,8 @@
 
                                 <input  style="width: 190px" type="text" class="form-control  mark_trunks"   placeholder="АЦ 5,0-50/4(533702)" name="trunks[{{i}}][mark]" value="">
 
+                                 <i class="fa fa-paperclip actions_ls_btn_trunks hide" aria-hidden="true" id="actions_ls_btn_trunks-{{x}}" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Внести действия л/с"></i>
+                                    <input  style="width: 190px" type="text" class="form-control  actions_ls_trunks hide"   placeholder="действия личного состава" name="trunks[{{x}}][actions_ls]">
                             </td>
                             <td>
 

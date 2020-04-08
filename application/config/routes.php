@@ -54,7 +54,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 //$route['auth']['GET'] = 'auth';
 //$route['speciald/auth/login']['POST'] = 'auth/login';
 
-$route['default_controller'] = 'catalog';
+$route['default_controller'] = 'auth';
 
 
 $route['404_override'] = '';

@@ -34,9 +34,14 @@ class Auth extends MY_Controller
 
     public function index()
     {
+        $role = $this->session->userdata('role');
+        if (isset($role) && !empty($role)) {
+            redirect($this->session->userdata('role') . '/catalog');
+        } else {
 
-        $this->data['title'] = 'Авторизация';
-        $this->twig->display('auth/login', $this->data);
+            $this->data['title'] = 'Авторизация';
+            $this->twig->display('auth/login', $this->data);
+        }
     }
 
     public function login()
@@ -58,7 +63,8 @@ class Auth extends MY_Controller
                 $this->set_cookie($this->session->userdata('id_user'), $this->session->userdata('id_user'));
             }
 
-            redirect('catalog');
+
+            redirect($this->session->userdata('role').'/catalog');
         } else {
             redirect('auth');
         }
