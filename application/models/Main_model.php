@@ -33,6 +33,15 @@ class Main_model extends CI_Model
 	const ORGAN_ID_UGZ=9;//UGZ
 	const ORGAN_ID_AVIA=12;//AVIA
 
+
+        const REGION_BREST=1;
+        const REGION_VITEBSK=2;
+        const REGION_MINSK=3;
+        const REGION_GOMEL=4;
+        const REGION_GRODNO=5;
+        const REGION_MOGILEV=6;
+        const REGION_MINOBL=7;
+
     public function __construct()
     {
         parent::__construct();

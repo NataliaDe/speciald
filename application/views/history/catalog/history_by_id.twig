@@ -1,0 +1,60 @@
+{%if statuses is defined and statuses is not empty%}
+<ul class="history">
+    {#{{dump(statuses)}}#}
+    {% for status in statuses %}
+        <li class=" pearson-li ">
+            <span class="date-time-history">
+                {{status.date_action|date('d.m.Y')}} {{status.date_action|date('H:i')}}
+            </span>
+
+            <p><b>
+                {{status.action_name}}
+
+                </b>
+            </p>
+            <p>
+                <small>{{status.auth_organ}}<br>
+                    {%set who=[]%}
+                    {%if status.is_guest == 1%}
+
+
+                        {%if status.fio_jour is not empty%}
+                            {%set who=who|merge([status.fio_jour])%}
+                        {%endif%}
+
+                        {%if status.rank_name_jour is not empty%}
+                            {%set who=who|merge([status.rank_name_jour|lower])%}
+                        {%endif%}
+
+                        {%if status.position_name_jour is not empty%}
+                            {%set who=who|merge([status.position_name_jour|lower])%}
+                        {%endif%}
+
+                        {{who is not empty ? who|join(', ') : ''}}
+
+                    {%else%}
+                        {%if status.fio is not empty%}
+                            {%set who=who|merge([status.fio])%}
+                        {%endif%}
+
+                        {%if status.rank_name is not empty%}
+                            {%set who=who|merge([status.rank_name|lower])%}
+                        {%endif%}
+
+                        {%if status.position_name is not empty%}
+                            {%set who=who|merge([status.position_name|lower])%}
+                        {%endif%}
+
+                        {{who is not empty ? who|join(', ') : ''}}
+
+
+                    {%endif%}
+                </small>
+            </p>
+
+        </li>
+    {% endfor %}
+
+</ul>
+
+    {%endif%}

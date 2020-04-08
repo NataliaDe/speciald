@@ -1,0 +1,62 @@
+ul.history {
+    list-style-type: none;
+    border-left: 1px solid #dfe4ec;
+    padding-left: 30px;
+    margin-left: 100px;
+}
+
+
+ul.history li {
+    position: relative;
+    margin-bottom: 30px;
+}
+
+
+ul.history {
+    list-style-type: none;
+}
+:root {
+    --mainColor: #0099e6;
+}
+
+ul.history li.pearson-li:before {
+    background-color: var(--mainColor);
+}
+
+
+ul.history li:before {
+    content: '';
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    position: absolute;
+    display: block;
+    left: -37px;
+    top: 1px;
+}
+
+
+ul.history li .date-time-history {
+    font-size: 14px;
+    display: inline-block;
+    margin-bottom: 5px;
+    position: absolute;
+    left: -130px;
+    width: 77px;
+    text-align: right;
+    line-height: 1.4;
+}
+
+#history-sd-modal .modal-header {
+
+    border-bottom: none;
+
+}
+
+#history-sd-modal .modal-footer {
+
+    border-top: none;
+
+}
+
+

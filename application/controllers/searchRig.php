@@ -45,7 +45,7 @@ class SearchRig extends My_Controller
 //            //$this->twig->addGlobal('sitename', 'My Awesome Site');
 //            $this->twig->addGlobal('ORGAN_ID_RCU', 5);
         } else {
-            redirect('catalog');
+            redirect('creator/catalog');
         }
     }
 

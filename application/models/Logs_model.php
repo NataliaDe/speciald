@@ -34,11 +34,20 @@ class Logs_model extends CI_Model
 //	const ORGAN_ID_AVIA=12;//AVIA
 
 
-     const ACTION_CREATE_SD = 1;
-     const ACTION_EDIT_SD = 2;
-     const ACTION_DELETE_SD = 3;
-     const ACTION_PROVE_SD = 4;
-     const ACTION_REFUSE_SD = 5;
+    const ACTION_CREATE_SD = 1;
+    const ACTION_EDIT_SD = 2;
+    const ACTION_DELETE_SD = 3;
+    const ACTION_PROVE_SD_UMCHS = 4;
+    const ACTION_REFUSE_SD_UMCHS = 5;
+    const ACTION_PROVE_SD_RCU = 6;
+    const ACTION_REFUSE_SD_RCU = 7;
+    const ACTION_OPEN = 8;
+    const ACTION_CLOSE = 9;
+    const ACTION_SET_NUMBER_SD = 10;
+    const ACTION_UPDATE_REFUSE_UMCHS = 11;
+    const ACTION_UPDATE_REFUSE_RCU = 12;
+
+    const ACTION_COPY_SD = 13;
 
     public function __construct()
     {
@@ -51,4 +60,54 @@ class Logs_model extends CI_Model
         return $this->db->insert_id();
     }
 
+    public function add_dones_status($data)
+    {
+        $this->db->insert('speciald.dones_status', $data);
+        return $this->db->insert_id();
+    }
+
+    public function delete_dones_statuses($data)
+    {
+        $this->db->where('id_dones', $data['id_dones']);
+        $this->db->where_in('id_action', $data['history_actions']);
+        $this->db->update('speciald.dones_logs', ['is_history' => 1]);
+    }
+
+    public function update_dones_description_refuse($data)
+    {
+        $this->db->where('id_dones', $data['id_dones']);
+        $this->db->where('id_user', $data['id_user']);
+        $this->db->where('id_action', $data['id_action']);
+        $this->db->update('speciald.dones_logs', ['description_refuse' => $data['description_refuse']]);
+    }
+
+    public function delete_dones_statuses_of_user($data)
+    {
+        $this->db->where('id_dones', $data['id_dones']);
+        $this->db->where('id_dones', $data['id_user']);
+        $this->db->where_in('id_action', $data['history_actions']);
+        $this->db->update('speciald.dones_logs', ['is_history' => 1]);
+    }
+
+    public function get_dones_description_refuse($data)
+    {
+        $this->db->where('id_dones', $data['id_dones']);
+        $this->db->where('id_user', $data['id_user']);
+        $this->db->where('id_action', $data['id_action']);
+        $this->db->where('is_history', 0);
+        $this->db->limit(1);
+        return $this->db->get('speciald.dones_logs')->row_array();
+
+    }
+
+
+        public function get_dones_satatus_by_user($data)
+    {
+        $this->db->where('id_dones', $data['id_dones']);
+        $this->db->where('id_user', $data['id_user']);
+        $this->db->where('id_action', $data['id_action']);
+        $this->db->where('is_history', 0);
+        $this->db->limit(1);
+        $this->db->get('speciald.dones_logs')->row_array();
+    }
 }
