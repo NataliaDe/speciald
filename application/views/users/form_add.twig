@@ -91,8 +91,8 @@
 
             <div class="col-lg-2">
                 <div class="form-group">
-                    <label for="name">Ф.И.О. пользователя</label>
-                    <input type="text" class="form-control"  placeholder="Ф.И.О." name="fio" value="{% if user is defined %}{{user.fio|trim}}{%endif%}">
+                    <label for="name">Ф.И.О. пользователя <i class="fa fa-info-circle info-all" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Указывать в формате: И.И. Иванов"></i></label>
+                    <input type="text" class="form-control"  placeholder="И.И. Иванов" name="fio" value="{% if user is defined %}{{user.fio|trim}}{%endif%}">
                 </div>
             </div>
 
@@ -151,9 +151,21 @@
                 </div>
             </div>
 
-
-
         </div>
+
+
+
+                <div class="row">
+                    <div class="form-group col-md-3">
+                        <label for="hs_vid" >Связать с пользователем ЖЦ <i class="fa fa-info-circle info-all" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Это позволит автоматически авторизовываться из ЖЦ"></i></label>
+                        <select class="form-control select2-single" name="id_user_journal" id="id_user_journal"  >
+                            <option></option>
+                        {% for uj in users_journal %}
+                            <option value="{{ uj.id_user }}" {% if user is defined and user.id == uj.id_user_sd%} selected {%endif%}>{{ uj.user_name }} {{ uj.locorg_name }}</option>
+                        {% endfor %}
+                        </select>
+                    </div>
+                </div>
 
         <br>
         <div class="row">

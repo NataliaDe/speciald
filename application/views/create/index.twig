@@ -22,31 +22,39 @@
 <!-- видеоурок -->
 
 
-    <div class="container">
-      <h1 class="display-3">Специальные донесения!</h1>
-      <p>Программное средство предназначено для автоматизированной подготовки специальных донесений на основе информации из программных средств <i>"Журнал ЦОУ", "Строевая записка", "Учет сил и средств ОПЧС". </i></p>
-      <p><a class="btn btn-primary btn-lg" href="#" role="button">Узнать больше &raquo;</a></p>
+    <div class="container" style="margin-left: 21px;">
+      <h4>Программное средство &laquo;Специальные донесения&raquo;</h4>
+
+      {#<p><a class="btn btn-primary btn-lg" href="#" role="button">Узнать больше &raquo;</a></p>#}
     </div>
+    <p style="margin-left: 35px;">предназначено для автоматизированной подготовки специальных донесений на основе информации из программных средств <i>"Журнал ЦОУ", "Строевая записка", "Учет сил и средств ОПЧС". </i></p>
   </div>
 
   <div class="container">
     <!-- Example row of columns -->
     <div class="row">
-      <div class="col-md-4">
-        <h2>Стандартное</h2>
+      <div class="col-md-6">
+        <h3>Стандартное</h3>
         <p>Данный вид специального донесения содержит стандартные таблицы по боевой работе, строевой записке, информированию, привлечению служб взаимодействия с возможностью ручной корректировки</p>
-        <p><a class="btn btn-secondary" href="{{ base_url('/dones/form_standart/1')}}" role="button">Перейти &raquo;</a></p>
+
+
+        <img  src="{{ base_url('/assets/images/dones/02_2.png')}}" style="width:345px;">
+        <br> <br>
+        <p><a class="btn btn-primary" href="{{ base_url('/dones/form_standart/1')}}" role="button">Перейти &raquo;</a></p>
       </div>
-      <div class="col-md-4">
-        <h2>Простое</h2>
+      <div class="col-md-6">
+        <h3>Простое</h3>
         <p>Данный вид специального донесения содержит только текст (без базовых блоков из стандартного вида)</p>
-        <p><a class="btn btn-secondary" href="{{ base_url('/dones/form_simple')}}" role="button">Перейти &raquo;</a></p>
+<br>
+        <img  src="{{ base_url('/assets/images/dones/02_1.png')}}" style="width:345px;height: 457px; ">
+        <br> <br>
+        <p><a class="btn btn-primary" href="{{ base_url('/dones/form_simple')}}" role="button">Перейти &raquo;</a></p>
       </div>
-      <div class="col-md-4">
+{#      <div class="col-md-4">
         <h2>Мои шаблоны</h2>
         <p>Раздел предназначен для первичного ввода шаблонов-заготовок для вставки больших кусков уже набранного текста при подгототвке специального донесения</p>
         <p><a class="btn btn-secondary" href="#" role="button">Перейти &raquo;</a></p>
-      </div>
+      </div>#}
     </div>
 
     <hr>
@@ -61,7 +69,18 @@
 
 
 
-{% block head %}{% endblock %}
+{% block head %}
+    <style>
+.jumbotron {
+    padding-bottom: 1px;
+    margin-bottom: 2px;
+    padding-top: 69px;
+}
+
+
+</style>
+
+{% endblock %}
 
 {% block footer %}
 

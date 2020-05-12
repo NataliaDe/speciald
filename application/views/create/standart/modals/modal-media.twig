@@ -1,0 +1,365 @@
+{%set thumb_img="Параметры файла для загрузки: JPG, PNG, JPEG | 1024x768px | не более 1Мб"%}
+{%set thumb_video="Параметры файла для загрузки: MP4, MPEG4 | не более 10Mб"%}
+{%set thumb_doc="Параметры файла для загрузки: doc, docx | не более 1Mб"%}
+<div class="modal fade" id="modal-media" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title ff-l" id="myModalLabel">Медиа</h4>
+                <button class="close danger" type="button" data-dismiss="modal" style="font-weight: bolder;">×</button>
+
+            </div>
+
+
+            <div class="modal-body">
+
+
+                {%if is_edit_dones is defined and dones is defined and dones.is_see == 1  %}
+
+                    <fieldset disabled>
+                    {%endif%}
+
+
+                    <ul class="nav nav-tabs">
+                        {%set start_photo=1%}
+                        {%set start_video=1%}
+
+
+                        {#PHOTO EDIT#}
+                        {%if is_edit_dones is  defined and dones.media is defined and dones.media is not empty  %}
+
+                            {%for media in dones.media%}
+
+                                {%if media.type == 'photo'%}
+                                    <li class="nav-item {%if start_photo == 1%}active{%endif%}" id="li-tab-photo-{{start_photo}}">
+                                        <a class="nav-link {%if start_photo == 1%}active{%endif%}" data-toggle="tab" href="#photo_sd_{{start_photo}}" style='color:green'>Фото {{start_photo}}</a>
+                                    </li>
+                                    {%set start_photo=start_photo+1%}
+                                {%endif%}
+
+                            {%endfor%}
+
+                        {%endif%}
+
+                        {#PHOTO NEW#}
+
+                        {%if start_photo <= PHOTO_CNT_PER_SD  %}
+
+                            {%for number_p in start_photo..PHOTO_CNT_PER_SD%}
+                                <li class="nav-item {%if number_p == 1%}active{%endif%}" id="li-tab-photo-{{number_p}}">
+                                    <a class="nav-link {%if number_p == 1%}active{%endif%}" data-toggle="tab" href="#photo_sd_{{number_p}}">Фото {{number_p}}</a>
+                                </li>
+                            {%endfor%}
+
+                        {%endif%}
+
+                        {#VIDEO EDIT#}
+                        {%if is_edit_dones is  defined and dones.media is defined and dones.media is not empty  %}
+                            {%for media in dones.media%}
+
+                                {%if media.type == 'video'%}
+
+                                    <li class="nav-item " id="li-tab-video-{{start_video}}">
+                                        <a class="nav-link " data-toggle="tab" href="#video_sd_{{start_video}}" style='color:green'>Видео {{start_video}}</a>
+                                    </li>
+                                    {%set start_video=start_video+1%}
+                                {%endif%}
+
+                            {%endfor%}
+
+                        {%endif%}
+
+                        {#VIDEO NEW#}
+                        {%if start_video <= VIDEO_CNT_PER_SD  %}
+                            {%for number_p in start_video..VIDEO_CNT_PER_SD%}
+
+                                <li class="nav-item " id="li-tab-video-{{number_p}}">
+                                    <a class="nav-link " data-toggle="tab" href="#video_sd_{{number_p}}">Видео {{number_p}}</a>
+                                </li>
+
+                            {%endfor%}
+
+                        {%endif%}
+
+
+
+                        <li class="nav-item" id="li-tab-doc" >
+                            <a class="nav-link" data-toggle="tab" href="#sd_doc" {% if is_edit_dones is defined and is_edit_dones == 1 and dones.file_doc is not empty %} style="color:green"{% endif %}>Word</a>
+                        </li>
+
+                    </ul>
+
+
+
+
+
+
+
+                    <div class="tab-content">
+
+                        {%set start_photo=1%}
+                        {%set start_video=1%}
+
+                        {#PHOTO EDIT#}
+                        {%if is_edit_dones is  defined and dones.media is defined and dones.media is not empty  %}
+
+                            {%for media in dones.media%}
+
+                                {%if media.type == 'photo'%}
+                                    <div class="tab-pane fade {%if start_photo == 1%}show{%endif%} {%if start_photo == 1%}active{%endif%}" id="photo_sd_{{start_photo}}">
+                                        <br>
+                                        <div class="row form-group" id="upload-img">
+
+                                            <div class="col-md-12 col-sm-12">
+
+                                                <div class="form-control" id="upload-input">
+                                                    <input type="hidden" name="sd_media[photo][]" id="image-file-event-{{start_photo}}" value="{% if media.file is not empty %}{{ media.file }}{%endif%}">
+                                                    {% if media.file is not empty %}
+                                                        <img src="{{ base_url("/data/sd_photo/"~media.file) }}" class="issue-img">
+                                                    {% endif %}
+                                                    <input {% if media.file is not empty  %} style="display:none"{% endif %} type="file" class="adapt-img"  data-api-url="{{ base_url('creator/media/loadApi/sd_photo') }}" data-inp-name="image-file-event-{{start_photo}}" title="Файл не выбран">
+                                                    <div class="upload-info">
+                                                        <span class="upload-info-text video-file-span" data-text="{{thumb_img}}">
+                                                            {% if media.file is not empty %}{{ media.file }}
+                                                                <p><a class="upload-info-clear"
+                                                                      href="#">
+                                                                        {%if dones.is_see == 0  %}
+                                                                            удалить файл
+                                                                        {%endif%}
+                                                                    </a>
+                                                                </p>{% else %}{{thumb_img}}{% endif %}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="progress" style="display: none">
+                                                        <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+                                                        </div>
+                                                    </div>
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {%set start_photo=start_photo+1%}
+                                    {%endif%}
+
+                                    {%endfor%}
+
+                                        {%endif%}
+
+
+
+                                            {#PHOTO NEW#}
+                                            {%if start_photo <= PHOTO_CNT_PER_SD  %}
+
+                                                {%for number_p in start_photo..PHOTO_CNT_PER_SD%}
+                                                    <div class="tab-pane fade {%if number_p == 1%}show{%endif%} {%if number_p == 1%}active{%endif%}" id="photo_sd_{{number_p}}">
+                                                        <br>
+                                                        <div class="row form-group" id="upload-img">
+
+                                                            <div class="col-md-12 col-sm-12">
+
+                                                                <div class="form-control" id="upload-input">
+                                                                    <input type="hidden" name="sd_media[photo][]" id="image-file-event-{{number_p}}" >
+
+                                                                    <input type="file" class="adapt-img"  data-api-url="{{ base_url('creator/media/loadApi/sd_photo') }}" data-inp-name="image-file-event-{{number_p}}" title="Файл не выбран">
+                                                                    <div class="upload-info">
+                                                                        <span class="upload-info-text video-file-span" data-text="{{thumb_img}}">
+                                                                            {{thumb_img}}
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="progress" style="display: none">
+                                                                        <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+                                                                        </div>
+                                                                    </div>
+
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        {%endfor%}
+
+                                                            {%endif%}
+
+
+
+                                                                {#VIDEO EDIT#}
+                                                                {%if is_edit_dones is  defined and dones.media is defined and dones.media is not empty  %}
+                                                                    {%for media in dones.media%}
+
+                                                                        {%if media.type == 'video'%}
+                                                                            <div class="tab-pane fade " id="video_sd_{{start_video}}">
+
+                                                                                <div class="row form-group" id="upload-img">
+
+                                                                                    <div class="col-md-12 col-sm-12">
+
+                                                                                        <div class="form-control video " id="upload-input">
+                                                                                            <input type="hidden" id="video-sd-{{start_video}}" name="sd_media[video][]"
+                                                                                                   {% if media.file is not empty %}value="{{ media.file }}"{% endif %}
+                                                                                                   >
+                                                                                            {% set hasFile = false %}
+                                                                                            {% if media.file is not empty %}
+                                                                                                {% set hasFile = true %}
+                                                                                                <video controls class="issue-video">
+                                                                                                    <source src="{{ base_url("/data/sd_video/"~media.file) }}">
+                                                                                                </video>
+                                                                                            {% endif %}
+                                                                                            <input type="file" class="adapt-img-cloud adapts" accept="video/*"
+                                                                                                   data-api-url="{{ base_url('creator/media/loadApi/sd_video') }}"
+                                                                                                   data-inp-name="video-sd-{{start_video}}"
+
+                                                                                                   {% if hasFile %} style="display:none"{% endif %}>
+                                                                                            <div class="upload-info">
+                                                                                                <span class="upload-info-text video-file-span"
+                                                                                                      data-text="{{thumb_video}}">
+                                                                                                    {% if hasFile %}
+                                                                                                        <p class="upload-info-name">{{ media.file }}</p>
+                                                                                                        <p><a class="upload-info-clear" href="#">
+                                                                                                                {%if dones.is_see == 0  %}
+                                                                                                                    удалить файл
+                                                                                                                {%endif%}
+                                                                                                            </a></p>
+                                                                                                        {% else %}
+                                                                                                            {{thumb_video}}
+                                                                                                        {% endif %}
+                                                                                                </span>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="progress" style="display: none">
+                                                                                            <div class="progress-bar" role="progressbar" aria-valuenow="0"
+                                                                                                 aria-valuemin="0" aria-valuemax="100"
+                                                                                                 style="width: 0">
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                            </div>
+                                                                            {%set start_video=start_video+1%}
+                                                                        {%endif%}
+
+                                                                    {%endfor%}
+
+                                                                {%endif%}
+
+
+
+                                                                {#VIDEO NEW#}
+                                                                {%if start_video <= VIDEO_CNT_PER_SD  %}
+
+                                                                    {%for number_p in start..VIDEO_CNT_PER_SD%}
+
+                                                                        <div class="tab-pane fade " id="video_sd_{{number_p}}">
+
+
+                                                                            <div class="row form-group" id="upload-img">
+
+                                                                                <div class="col-md-12 col-sm-12">
+                                                                                    <br>
+                                                                                    <div class="form-control video " id="upload-input">
+                                                                                        <input type="hidden" id="video-sd-{{number_p}}" name="sd_media[video][]">
+
+
+                                                                                        <input type="file" class="adapt-img-cloud adapts" accept="video/*"
+                                                                                               data-api-url="{{ base_url('creator/media/loadApi/sd_video') }}"
+                                                                                               data-inp-name="video-sd-{{number_p}}">
+                                                                                        <div class="upload-info">
+                                                                                            <span class="upload-info-text video-file-span"
+                                                                                                  data-text="{{thumb_video}}">
+                                                                                                {{thumb_video}}
+                                                                                            </span>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="progress" style="display: none">
+                                                                                        <div class="progress-bar" role="progressbar" aria-valuenow="0"
+                                                                                             aria-valuemin="0" aria-valuemax="100"
+                                                                                             style="width: 0">
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+
+                                                                        </div>
+
+
+                                                                    {%endfor%}
+                                                                {%endif%}
+
+
+
+                                                                <div class="tab-pane fade " id="sd_doc">
+
+                                                                    <br>
+                                                                    <div class="row form-group" id="upload-img">
+
+                                                                        <div class="col-md-12 col-sm-12">
+
+                                                                            <div class="form-control" id="upload-input">
+
+
+                                                                                        <input type="hidden" name="file_doc" id="image-file-doc" value="{% if is_edit_dones is defined and is_edit_dones == 1 and dones.file_doc is not empty %}{{ dones.file_doc }}{%endif%}">
+
+                                                                                        <input {% if is_edit_dones is defined and is_edit_dones == 1 and dones.file_doc is not empty %} style="display:none"{% endif %} type="file" class="adapt-img"  data-api-url="{{ base_url('creator/media/loadApi/sd_doc') }}" data-inp-name="image-file-doc" title="Файл не выбран">
+                                                                                        <div class="upload-info">
+                                                                                            <span class="upload-info-text video-file-span" data-text="{{thumb_doc}}">
+                                                                                                {% if is_edit_dones is defined and is_edit_dones == 1 and dones.file_doc is not empty %}{{ dones.file_doc }}
+                                                                                                    <p><a class="upload-info-clear"
+                                                                                                          href="#">
+                                                                                                            {%if dones.is_see == 0  %}
+                                                                                                                удалить файл
+                                                                                                            {%endif%}
+                                                                                                        </a>
+                                                                                                    </p>{% else %}{{thumb_doc}}{% endif %}
+                                                                                                </span>
+                                                                                            </div>
+
+
+                                                                            </div>
+                                                                            <div class="progress" style="display: none">
+                                                                                <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+                                                                                </div>
+                                                                            </div>
+
+
+                                                                        </div>
+                                                                    </div>
+
+                                                                </div>
+
+
+                                                            </div>
+
+
+                                                            {%if is_edit_dones is defined and dones is defined and dones.is_see == 1  %}
+                                                            </fieldset>
+                                                        {%endif%}
+
+
+                                                        <div class="btn-modal">
+                                                            <center>
+                                                                <button type="button" class="btn btn-success"  id="save-sd-media" data-dismiss="modal">
+                                                                    Прикрепить
+                                                                </button>
+                                                            </center>
+                                                        </div>
+
+                                                    </div>
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+
+
+
+
+
+
+
+
+

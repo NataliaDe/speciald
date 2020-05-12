@@ -99,7 +99,7 @@ class Catalog extends My_Controller
 //                $this->data['outs'] = $this->dones_model->get_dones_by_region($filter, $this->data['active_user']['id_organ']);
 //            } else {
 
-                $filter['without_cp'] = [Main_model::ORGAN_ID_ROSN, Main_model::ORGAN_ID_UGZ, Main_model::ORGAN_ID_AVIA];
+                $filter['without_cp'] = [Main_model::ORGAN_ID_ROSN, Main_model::ORGAN_ID_UGZ, Main_model::ORGAN_ID_AVIA, Main_model::ORGAN_ID_RCU];
                 $this->data['outs'] = $this->dones_model->get_dones_by_region($filter, FALSE);
             //}
 
@@ -169,6 +169,14 @@ class Catalog extends My_Controller
         }
         }
 
+        //media
+        if (isset($this->data['outs']) && !empty($this->data['outs'])) {
+            foreach ($this->data['outs'] as $key => $value) {
+
+                $media = $this->dones_model->get_dones_media($value['id']);
+                $this->data['outs'][$key]['media'] = $media;
+            }
+        }
 
 
 

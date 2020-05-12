@@ -1,0 +1,52 @@
+{% extends 'layout.twig' %}
+
+{% block title %}{{title}}{% endblock %}
+
+{% block content %}
+    <!-- content -->
+
+
+
+{% include 'viewer/catalog/catalog_head.twig' %}
+
+{% include 'viewer/catalog/rcu/list_filter.twig' %}
+
+
+{% include 'viewer/catalog/rcu/list.twig' %}
+
+
+
+<!-- .content -->
+
+
+
+{% include 'creator/catalog/modals.twig' %}
+
+ {% include 'common/catalog/modal-catalog-media.twig' %}
+
+{% endblock %}
+
+
+
+
+{% block head %}
+<link rel="stylesheet" href="{{ base_url('assets/datatables/jquery.dataTables.css') }}">
+<link rel="stylesheet" href="{{ base_url('assets/css/history/history.css') }}">
+<link rel="stylesheet" href="{{ base_url('/assets/css/catalog/media.css') }}">
+{% endblock %}
+
+{% block footer %}
+
+{% include 'copyright_footer.twig' %}
+
+
+  <script src="{{ base_url('/assets/datatables/jquery.dataTables.js')}}"></script>
+
+
+  <script src="{{ base_url('/assets/js/creator/catalog.js')}}"></script>
+
+      <script src="{{ base_url('/assets/js/catalog/slider_media_manual.js')}}"></script>
+
+
+{% endblock %}
+

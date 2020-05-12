@@ -1,0 +1,86 @@
+{% extends 'layout.twig' %}
+
+{% block title %}{{title}}{% endblock %}
+
+{% block content %}
+    <!-- content -->
+    <br>
+
+{#<button type="button" class="btn btn-lg btn-danger" data-toggle="popover" title="Popover title" data-content="And here's some amazing content. It's very engaging. Right?">Click to toggle popover</button>#}
+
+
+
+
+
+
+
+
+{% include 'viewer/catalog/catalog_head.twig' %}
+
+{%if active_user.id_organ in [8,9,12]%}
+
+    {% include 'viewer/catalog/grochs/list_filter.twig' %}
+
+{%else%}
+    {% include 'viewer/catalog/grochs/list_filter.twig' %}
+{%endif%}
+
+
+
+{%if active_user.id_organ in [8,9,12]%}
+
+    {% include 'viewer/catalog/grochs/rosn/list.twig' %}
+
+{%else%}
+    {% include 'viewer/catalog/grochs/list.twig' %}
+{%endif%}
+
+
+{% include 'creator/catalog/modals.twig' %}
+
+{% include 'common/catalog/modal-catalog-media.twig' %}
+
+{#{%if active_user.id_organ == 8%}
+
+    {% include 'creator/catalog/grochs/rosn/list.twig' %}
+{%elseif active_user.id_organ == 9%}
+    {% include 'creator/catalog/grochs/ugz/list.twig' %}
+{%elseif active_user.id_organ == 12%}
+    {% include 'creator/catalog/grochs/avia/list.twig' %}
+{%else%}
+    {% include 'creator/catalog/grochs/list.twig' %}
+{%endif%}#}
+
+
+
+<!-- .content -->
+
+
+
+
+
+{% endblock %}
+
+
+
+
+{% block head %}
+<link rel="stylesheet" href="{{ base_url('assets/datatables/jquery.dataTables.css') }}">
+<link rel="stylesheet" href="{{ base_url('assets/css/history/history.css') }}">
+    <link rel="stylesheet" href="{{ base_url('/assets/css/catalog/media.css') }}">
+{% endblock %}
+
+{% block footer %}
+
+{% include 'copyright_footer.twig' %}
+
+
+  <script src="{{ base_url('/assets/datatables/jquery.dataTables.js')}}"></script>
+
+
+  <script src="{{ base_url('/assets/js/creator/catalog.js')}}"></script>
+      <script src="{{ base_url('/assets/js/catalog/slider_media_manual.js')}}"></script>
+
+
+{% endblock %}
+

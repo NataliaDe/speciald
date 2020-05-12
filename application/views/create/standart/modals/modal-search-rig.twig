@@ -10,116 +10,129 @@
 
             </div>
 
-            <div class="modal-body" style="padding-top:5px;">
+
+            {%if is_edit_dones is defined and dones is defined and dones.is_see == 1  %}
+
+                <fieldset disabled>
+                {%endif%}
+
+                <div class="modal-body" style="padding-top:5px;">
 
 
-                <p>Поиск осуществляется в <a href="/journal" target="_blank">ПС &laquo;Журнал ЦОУ&raquo;</a> по указанным ниже параметрам.<br>
-                    После того как найден нужный выезд - необходимо его выбрать, установив отметку <img src="{{base_url('assets/images/onebit_34.png')}}" style="width:25px">, и нажать кнопку &laquo;Получить данные&raquo;.<br>
-                    Форма создания специального донесения автоматически заполнится данными из выезда.
-                </p>
+                    <p>Поиск осуществляется в <a href="/journal" target="_blank">ПС &laquo;Журнал ЦОУ&raquo;</a> по указанным ниже параметрам.<br>
+                        После того как найден нужный выезд - необходимо его выбрать, установив отметку <img src="{{base_url('assets/images/onebit_34.png')}}" style="width:25px">, и нажать кнопку &laquo;Получить данные&raquo;.<br>
+                        Форма создания специального донесения автоматически заполнится данными из выезда.
+                    </p>
 
 
-                <form role="form" id="searchRigForm" method="POST"  >
+                    <form role="form" id="searchRigForm" method="POST"  >
 
-                    <div class="row">
+                        <div class="row">
 
-                        <div class="col-lg-3">
-                            <label for="id_region">Область</label>
-                            <div class="form-group">
-                                <select class="form-control select2-select" name="id_region" id="id_region"  >
+                            <div class="col-lg-3">
+                                <label for="id_region">Область</label>
+                                <div class="form-group">
+                                    <select class="form-control select2-select" name="id_region" id="id_region"  >
 
-                                    {% for region in regions %}
-                                        <option value="{{ region.id }}" {% if user is defined and user.id_region == region.id%} selected {%endif%}>{{ region.name }}</option>
-                                    {% endfor %}
-                                </select>
+                                        {% for region in regions %}
+                                            <option value="{{ region.id }}" {% if user is defined and user.id_region == region.id%} selected {%endif%}>{{ region.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
                             </div>
+
+                            <div class="col-lg-3" id="id_local_block">
+                                <label for="id_local">Район</label>
+                                <div class="form-group">
+
+                                    <select class="form-control select2-select" name="id_local" id="id_local"  >
+                                        <option value="0" class="1" selected>Не выбран</option>
+                                        <option value="0" class="2" selected>Не выбран</option>
+                                        <option value="0" class="3" selected>Не выбран</option>
+                                        <option value="0" class="4" selected>Не выбран</option>
+                                        <option value="0" class="5" selected>Не выбран</option>
+                                        <option value="0" class="6" selected>Не выбран</option>
+                                        <option value="0" class="7" selected>Не выбран</option>
+                                        {% for local in locals %}
+                                            <option value="{{ local.id }}" class="{{local.id_region}}" {% if user is defined and user.id_local == local.id%} selected {%endif%}>{{ local.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+
+
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="name">Адрес выезда</label>
+                                    <input type="text" class="form-control"  placeholder="что помним" name="address" >
+                                </div>
+                            </div>
+
+                            <div class="col-lg-3">
+                                <label for="date_msg" >Дата выезда:</label>
+                                <div class="input-group ">
+
+                                    <input type="text" autocomplete="off" class="form-control date-cal-default-empty"  placeholder="" name="date_msg" value="{{date('now')|date('d.m.Y')}}">
+
+                                </div>
+                            </div>
+
+
+                            <div class="col-lg-3">
+                                <label for="id_reasonrig">Причина выезда</label>
+                                <div class="form-group">
+                                    <select class="form-control select2-single" name="id_reasonrig"  >
+                                        <option></option>
+                                        {% for reason in reasonrig %}
+                                            <option value="{{ reason.id }}" >{{ reason.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+
+                            <div class="col-lg-2">
+                                <div class="form-group">
+                                    <label for="id_rig">ID выезда <i class="fa fa-info-circle" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Остальные параметры не будут учтены при поиске"></i></label>
+                                    <input type="number" class="form-control"  placeholder="" name="id_rig"  aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Остальные параметры не будут учтены при поиске">
+                                </div>
+                            </div>
+
+
+
+                            <div class="col-lg-3">
+                                <label for="btn-search-rig"></label>
+                                <div class="form-group" style="margin-top:8px">
+                                    <button  type="button" class="btn btn-success" id="btn-search-rig" data-url="{{base_url('/searchrig')}}">Искать</button>
+                                </div>
+                            </div>
+
                         </div>
 
-                        <div class="col-lg-3">
-                            <label for="id_local">Район</label>
-                            <div class="form-group">
-
-                                <select class="form-control select2-select" name="id_local" id="id_local"  >
-                                    <option value="0" class="1" selected>Не выбран</option>
-                                    <option value="0" class="2" selected>Не выбран</option>
-                                    <option value="0" class="3" selected>Не выбран</option>
-                                    <option value="0" class="4" selected>Не выбран</option>
-                                    <option value="0" class="5" selected>Не выбран</option>
-                                    <option value="0" class="6" selected>Не выбран</option>
-                                    <option value="0" class="7" selected>Не выбран</option>
-                                    {% for local in locals %}
-                                        <option value="{{ local.id }}" class="{{local.id_region}}" {% if user is defined and user.id_local == local.id%} selected {%endif%}>{{ local.name }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>
+                    </form>
+                    <br><br>
 
 
 
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label for="name">Адрес выезда</label>
-                                <input type="text" class="form-control"  placeholder="что помним" name="address" >
-                            </div>
-                        </div>
+                    {%include 'searchRig/preloader.twig'%}
 
-                        <div class="col-lg-3">
-                            <label for="date_msg" >Дата выезда:</label>
-                            <div class="input-group ">
+                    <div id="result-search-rig">
 
-                                <input type="text" autocomplete="off" class="form-control date-cal-default-empty"  placeholder="" name="date_msg" value="{{date('now')|date('d.m.Y')}}">
-
-                            </div>
-                        </div>
-
-
-                        <div class="col-lg-3">
-                            <label for="id_reasonrig">Причина выезда</label>
-                            <div class="form-group">
-                                <select class="form-control select2-single" name="id_reasonrig"  >
-                                    <option></option>
-                                    {% for reason in reasonrig %}
-                                        <option value="{{ reason.id }}" >{{ reason.name }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>
-
-
-                        <div class="col-lg-2">
-                            <div class="form-group">
-                                <label for="id_rig">ID выезда <i class="fa fa-info-circle" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Остальные параметры не будут учтены при поиске"></i></label>
-                                <input type="number" class="form-control"  placeholder="" name="id_rig"  aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Остальные параметры не будут учтены при поиске">
-                            </div>
-                        </div>
-
-
-
-                        <div class="col-lg-3">
-                            <label for="btn-search-rig"></label>
-                            <div class="form-group" style="margin-top:8px">
-                                <button  type="button" class="btn btn-success" id="btn-search-rig" data-url="{{base_url('/searchRig')}}">Искать</button>
-                            </div>
-                        </div>
 
                     </div>
 
-                </form>
-                <br><br>
-
-
-
-                 {%include 'searchRig/preloader.twig'%}
-
-                <div id="result-search-rig">
+                    {%include 'parts/preloader.twig'%}
 
 
                 </div>
 
-                {%include 'parts/preloader.twig'%}
 
+                {%if is_edit_dones is defined and dones is defined and dones.is_see == 1  %}
 
-            </div>
+                </fieldset>
+            {%endif%}
+
             <div class="modal-footer">
 
                 <button id="btn-get-data-rig"  type="button" class="btn btn-info" disabled  data-toggle="modal"  data-target="#modal-agree-get-rig-data"  data-url="{{base_url('/dones/form_standart/2')}}">Получить данные</button>

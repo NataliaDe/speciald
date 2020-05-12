@@ -88,7 +88,8 @@ class Create extends My_Controller
         $this->data['active_item_menu_type_create'] = 'standart';
         $this->data['is_show_btn_search_rig'] = 1;//show btn "search rig"
 
-        $this->data['bread_crumb'] = array('/create' => 'Создать специальное донесение', 'Стандартное');
+        $this->data['bread_crumb'] = array(array('/create' => 'Создать специальное донесение'),
+            array( 'Стандартное'));
 
 
         /* classification */

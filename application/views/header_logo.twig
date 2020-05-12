@@ -1,5 +1,8 @@
 <img src="{{ base_url('/assets/images/writing-pad.png')}}" width="50" height="50" style="float: left;">
-<a class="navbar-brand" href="#">Специальные донесения</a>
+
+{% set catalog = base_url(sidebar ~ '/catalog')  %}
+
+<a class="navbar-brand" href="{{catalog}}">Специальные донесения</a>
 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
 </button>

@@ -200,3 +200,30 @@ table.dataTable tbody td {
     cursor: pointer;
 }
 
+
+.catalog-head{
+    padding-top:10px
+}
+
+.header_auth_user{
+    color:#ffc107
+}
+
+
+.standart-sd-color>td{
+/*background-color: #e8f7ec !important*/
+background-color: #e0f5e5 !important;
+}
+.standart-sd-color td{
+   border-color: #aed2b6 !important
+
+}
+
+.table-hover > tbody > tr > td.standart-sd-color:hover,
+.table-hover > tbody > tr > th.standart-sd-color:hover,
+.table-hover > tbody > tr.standart-sd-color:hover > td,
+.table-hover > tbody > tr:hover > .standart-sd-color,
+.table-hover > tbody > tr.standart-sd-color:hover > th {
+  background-color: #c7e6cf  !important;
+}
+

@@ -59,7 +59,7 @@ class User_model extends CI_Model
         return $this->db->select('*')
                 ->from('permissions')
                 ->where([
-                    'id_user'         => $cookie,
+                    'id_user'    => $cookie,
                     'key_cookie' => $cookie
                 ])
                 ->get()
@@ -82,8 +82,8 @@ class User_model extends CI_Model
 
     public function add_user($data)
     {
-        $data['created_by']=$this->session->userdata('id_user');
-        $data['date_create']=date('Y-m-d H:i:s');
+        $data['created_by'] = $this->session->userdata('id_user');
+        $data['date_create'] = date('Y-m-d H:i:s');
         $this->db->insert('users', $data);
     }
 
@@ -109,8 +109,8 @@ class User_model extends CI_Model
 
     public function edit_user($id_user, $data)
     {
-        $data['updated_by']=$this->session->userdata('id_user');
-        $data['date_update']=date('Y-m-d H:i:s');
+        $data['updated_by'] = $this->session->userdata('id_user');
+        $data['date_update'] = date('Y-m-d H:i:s');
         $this->db->update('users', $data, ['id' => $id_user]);
     }
 
@@ -124,8 +124,7 @@ class User_model extends CI_Model
         //$this->db->where('id', $id_user)->delete('users');
     }
 
-
-        public function get_permissions_by_user_id($id)
+    public function get_permissions_by_user_id($id)
     {
         return $this->db->select('*')
                 ->from('permissions')
@@ -136,8 +135,7 @@ class User_model extends CI_Model
                 ->row_array();
     }
 
-
-            public function get_journal_permissions_by_user_id($id)
+    public function get_journal_permissions_by_user_id($id)
     {
         return $this->db->select('*')
                 ->from('journal.permissions')
@@ -146,5 +144,72 @@ class User_model extends CI_Model
                 ])
                 ->get()
                 ->row_array();
+    }
+
+    public function get_users_free_journal()
+    {
+        return $this->db->select('*')
+                ->from('journal.permissions')
+                ->where([
+                    'id_user_sd' => null
+                ])
+                ->get()
+                ->result_array();
+    }
+
+
+        public function set_user_sd_to_journal($id_user_journal,$id_user)
+    {
+        $this->db->set('id_user_sd', $id_user)
+            ->where('id', $id_user_journal)
+            ->update('journal.user');
+    }
+
+
+        public function get_users_journal_for_edit($id_user_sd)
+    {
+        return $this->db->select('*')
+                ->from('journal.permissions')
+                ->where([
+                    'id_user_sd' => null
+                ])
+            ->or_where('id_user_sd',$id_user_sd)
+                ->get()
+                ->result_array();
+    }
+
+
+
+            public function get_ids_user_sd_from_journal()
+    {
+        return $this->db->select('id_user_sd')
+                ->from('journal.permissions')
+                ->where('id_user_sd is not null')
+                ->get()
+                ->result_array();
+    }
+
+
+
+        public function reset_user_sd_in_journal($id_user_sd,$id_user_sd_new)
+    {
+        $this->db->set('id_user_sd', $id_user_sd_new)
+            ->where('id_user_sd', $id_user_sd)
+            ->update('journal.user');
+
+    }
+
+
+
+            public function get_user_journal_by_user_sd($id_user_sd)
+    {
+        $res= $this->db->select('id')
+                ->from('journal.user')
+                ->where('id_user_sd', $id_user_sd)
+                ->get()
+                ->row_array();
+
+        return $res['id'];
+
     }
 }

@@ -118,10 +118,7 @@ class Journal_model extends CI_Model
             if (isset($filter['id_local']) && !empty($filter['id_local']) && $filter['id_local'] != 0) {
                 $this->db->where('r.id_local', $filter['id_local']);
             }
-            if (isset($filter['address']) && !empty($filter['address'])) {
-                $this->db->like('r.address', $filter['address']);
-                $this->db->or_like('r.additional_field_address', $filter['address']);
-            }
+
 
             if (isset($filter['date_msg']) && !empty($filter['date_msg']) && $filter['date_msg'] != 0) {
                 $this->db->where('r.date_msg', $filter['date_msg']);
@@ -130,10 +127,17 @@ class Journal_model extends CI_Model
             if (isset($filter['id_reasonrig']) && !empty($filter['id_reasonrig']) && $filter['id_reasonrig'] != 0) {
                 $this->db->where('r.id_reasonrig', $filter['id_reasonrig']);
             }
+
+            if (isset($filter['address']) && !empty($filter['address'])) {
+                $this->db->group_start();
+                $this->db->like('r.address', $filter['address']);
+                $this->db->or_like('r.additional_field_address', $filter['address']);
+                $this->db->group_end();
+            }
         }
 
         $return = $this->db->get('journal.rigtable r');
-
+//print_r($this->db->last_query());
         return $return->result_array();
     }
 

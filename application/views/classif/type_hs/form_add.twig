@@ -1,0 +1,33 @@
+
+<form role="form" id="form_type_hs" method="POST" action="{{base_url('/classif/save_type_hs')}}" >
+    <div class="form-row create-form-row">
+
+
+
+        <div class="form-group col-md-1">
+
+            <input type="number" class="form-control"  placeholder="ID" name="id" value="">
+        </div>
+
+        <div class="form-group col-md-3">
+
+            <input type="text" class="form-control"  placeholder="Название" name="name" value="">
+        </div>
+
+        <div class="form-group col-md-4">
+            <select class="form-control  select2-single" name="vid_hs_1" id="vid_hs_1"  >
+                <option></option>
+                {% for hs in vid_hs %}
+                    <option value="{{ hs.id }}" {%if hs.id == vid.id_vid_hs_1 %}selected{%endif%}>{{ hs.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group col-md-3">
+            <button class="btn btn-xs btn-success " type="submit" id="save_type_hs">Добавить</button>
+
+        </div>
+    </div>
+
+</form>
+

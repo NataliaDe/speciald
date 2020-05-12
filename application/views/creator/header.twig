@@ -7,9 +7,9 @@
 
 <div class="collapse navbar-collapse" id="navbarsExampleDefault">
     <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
+{#        <li class="nav-item active">
             <a class="nav-link {%if active_item_menu is defined and active_item_menu == 'catalog'%} active_item_menu {%endif%}" href="{{ base_url('/creator/catalog')}}">Каталог <span class="sr-only"></span></a>
-        </li>
+        </li>#}
         <li class="nav-item active">
             <a class="nav-link {%if active_item_menu is defined and active_item_menu == 'create'%} active_item_menu {%endif%}" href="{{ base_url('/dones')}}">Создать<span class="sr-only"></span></a>
         </li>
@@ -19,6 +19,16 @@
             <li class="nav-item">
                 <a class="nav-link {%if active_item_menu is defined and active_item_menu == 'users'%} active_item_menu {%endif%}" href="{{ base_url('/users')}}">Пользователи</a>
             </li>
+
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle {%if active_item_menu is defined and active_item_menu == 'classif'%} active_item_menu {%endif%}" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Классификаторы</a>
+                <div class="dropdown-menu" aria-labelledby="dropdown01">
+                  <a class="dropdown-item" href="{{ base_url('/classif/vid_sd')}}">Вид СД</a>
+                  <a class="dropdown-item" href="{{ base_url('/classif/vid_hs')}}">Вид ЧС</a>
+                  <a class="dropdown-item" href="{{ base_url('/classif/type_hs')}}">Тип ЧС</a>
+
+                </div>
+              </li>
         {%endif%}
         {#      <li class="nav-item">
                 <a class="nav-link disabled" href="#">Сервис</a>

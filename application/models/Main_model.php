@@ -42,6 +42,13 @@ class Main_model extends CI_Model
         const REGION_MOGILEV=6;
         const REGION_MINOBL=7;
 
+
+        const PHOTO_CNT_PER_SD=4;
+        const VIDEO_CNT_PER_SD=1;
+
+        const TYPE_SD_STANDART=1;
+        const TYPE_SD_SIMPLE=2;
+
     public function __construct()
     {
         parent::__construct();

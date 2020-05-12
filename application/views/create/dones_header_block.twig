@@ -1,0 +1,25 @@
+            <div class="form-group row create-form-row">
+                <div class="col-sm-3">
+                    <h4 class="heading-primary" style="float: left">Специальное донесение {%if is_edit_dones is defined and dones is defined and dones.is_copy == 1  %} <span class="copy-sd">копия (ID = {{dones.copy_parent_id}})</span>{%endif%}</h4>
+                    {#<a href="#" data-toggle="modal"  data-target="#modal-search-rig" data-url="" >
+    <i class="fa fa-search" aria-hidden="true" id="search-rig"></i></h4>
+</a>#}
+                </div>
+                <label for="specd_date" class="col-form-label">от &nbsp</label>
+                <div class="col-sm-2 input-group">
+
+                    <input type="text" class="form-control date-cal"  placeholder="" name="specd_date" value="{%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.specd_date is not empty%}{{dones.specd_date|date('d.m.Y')}}{%endif%}">
+                </div>
+
+
+                <div class="col-sm-2 input-group ">
+                    <label for="specd_number" class="col-form-label">№ &nbsp</label>
+                    <input type="text" class="form-control "  placeholder="00/00-00/0000" name="specd_number" value="{%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.specd_number is not empty%}{{dones.specd_number|trim}}{%endif%}">
+                </div>
+
+                {%if is_edit_dones is not defined  %}
+                    <div class="col-sm-4">
+                        {%include '/create/timer.twig'%}
+                    </div>
+                {%endif%}
+            </div>

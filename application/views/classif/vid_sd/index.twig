@@ -1,0 +1,344 @@
+{% extends 'layout.twig' %}
+
+{% block title %}{{title}}{% endblock %}
+
+{% block content %}
+
+    {%include '/parts/bread_crumb.twig'%}
+    <br> <br>
+    <!-- content -->
+
+    {%include '/classif/vid_sd/form_add.twig'%}
+
+
+    {#<a href="{{ base_url('/classif/form_add_vid_sd/') }}" class="new-user">
+            <button class="btn btn-xs btn-success " type="button"><i class="fa fa-plus" aria-hidden="true"></i> Добавить новый вид</button>
+        </a>#}
+    <br>
+
+
+
+    <center>
+        <caption>Классификатор &laquo;Вид СД&raquo;</caption>
+        <table class="table table-condensed table-hover  table-bordered table-custom" id="vidsdTable" >
+            <!-- строка 1 -->
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Название</th>
+
+                    <th>Ред.</th>
+                    <th>Уд.</th>
+
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th></th>
+                    <th></th>
+
+                    <th></th>
+                    <th></th>
+
+                </tr>
+            </tfoot>
+            <tbody>
+                {% for vid in vid_sd %}
+
+                    <tr>
+                        <td>{{vid.id}}
+                            <input type="hidden" class="id" value="{{vid.id}}">
+
+
+                        </td>
+                        <td >
+                            <span class="label-name"> {{vid.name}}</span>
+
+                            <input type="text" class="name hide" value="{{vid.name}}">
+                        </td>
+
+                        <td>
+
+                            <a href="#" class="a-edit">
+                                <button class="btn btn-sm btn-warning edit" type="button"><i class="fa fa-pencil btn-edit" aria-hidden="true"></i></button>
+                            </a>
+
+                        </td>
+
+
+
+                        <td>
+
+                            <a href="#" class="a-delete">
+                                <button class="btn btn-sm btn-danger delete"  type="button"><i class="fa fa-trash btn-delete" aria-hidden="true"></i></button>
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+
+                {%endfor%}
+            </tbody>
+
+        </table>
+    </center>
+
+    <!-- .content -->
+
+
+    {#{%include 'users/modals/delete_user_modal.twig'%}#}
+
+{% endblock %}
+
+
+{% block head %}
+    <link rel="stylesheet" href="{{ base_url('assets/datatables/jquery.dataTables.css') }}">
+
+    <style>
+
+        .label-name{
+            cursor:pointer;
+            font-weight:650;
+        }
+        {#        .new-user{
+                    margin-left: 160px;
+                }#}
+        #vidsdTable_wrapper{
+            width: 85% !important;
+        }
+        {#        #inptuserForm8, #inptuserForm5{
+                    width: 150px !important;
+                }
+                #seluserForm7, #seluserForm8, #seluserForm3, #seluserForm4{
+                    width: 90px !important;
+                }
+                #inptuserForm6{
+                    width: 100px !important;
+                }
+                        #inptuserForm2, #inptuserForm1, #inptuserForm0{
+                    width: 140px !important;
+                }#}
+    </style>
+
+{% endblock %}
+
+{% block footer %}
+    <script src="{{ base_url('/assets/datatables/jquery.dataTables.js')}}"></script>
+
+
+    <script>
+        $(function () {
+            var buttonpressed;
+            $('#save_vid_sd').click(function () {
+                buttonpressed = $(this).attr('id');
+
+            });
+
+            $('form#form_vid_sd').submit(function (e) {
+
+                if (buttonpressed === 'save_vid_sd') {
+
+                    // Запрещаем стандартное поведение для кнопки submit
+                    e.preventDefault();
+                    var realArray = $('#form_vid_sd').serializeArray();
+                    $.ajax({
+                        url: '{{base_url('/classif/is_unique_vid_sd')}}',
+                        dataType: 'json',
+                        type: 'POST',
+                        data: realArray,
+                        success: function (data) {
+
+                            if (data.error) {
+                                toastr.error(data.error, 'Ошибка:', {progressBar: true, timeOut: 2500});
+                            } else if (data.success) {
+                                $('form#form_vid_sd').unbind('submit').submit();
+                            }
+                        }
+                    });
+                }
+                buttonpressed = '';
+            });
+
+        });
+
+
+
+        (function ($, undefined) {
+            $(function () {
+                $('#vidsdTable').DataTable({
+                    "pageLength": 50,
+                    // "order": [[2, "desc"]],
+                    language: {
+                        "processing": "Подождите...",
+                        "search": "Поиск:",
+                        "lengthMenu": "Показать _MENU_ записей",
+                        "info": "Записи с _START_ до _END_ из _TOTAL_ записей",
+                        "infoEmpty": "Записи с 0 до 0 из 0 записей",
+                        "infoFiltered": "(отфильтровано из _MAX_ записей)",
+                        "infoPostFix": "",
+                        "loadingRecords": "Загрузка записей...",
+                        "zeroRecords": "Записи отсутствуют.",
+                        "emptyTable": "В таблице отсутствуют данные",
+                        "paginate": {
+                            "first": "Первая",
+                            "previous": "Предыдущая",
+                            "next": "Следующая",
+                            "last": "Последняя"
+                        },
+                        "aria": {
+                            "sortAscending": ": активировать для сортировки столбца по возрастанию",
+                            "sortDescending": ": активировать для сортировки столбца по убыванию"
+                        }
+
+                    }
+                });
+            });
+
+        })(jQuery);
+
+
+        $('body').on('click', '.label-name', function (e) {
+            e.preventDefault();
+
+            var tr = $(this).parent().parent();
+
+            if ($(this).hasClass('non-click')) {
+                return false;
+            } else {
+
+                $(this).addClass('hide');
+
+                tr.find('.name').removeClass('hide');
+                tr.find('.name').addClass('show');
+            }
+
+        });
+
+        $('body').on('click', '.edit', function (e) {
+            e.preventDefault();
+
+
+            var tr = $(this).parent().parent().parent();
+            var name = tr.find('.name').val();
+            var id = tr.find('.id').val();
+
+
+            $.ajax({
+                url: '{{base_url('/classif/edit_vid_sd')}}',
+                dataType: 'json',
+                type: 'POST',
+                data: {id: id, name: name},
+                success: function (data) {
+
+                    if (data.error) {
+                        toastr.error(data.error, 'Ошибка:', {progressBar: true, timeOut: 2500});
+                    } else if (data.success) {
+
+
+                        tr.find('.label-name').text(name);
+                        tr.find('.name').val(name);
+
+
+                        var i = tr.find('.btn-edit');
+                        i.removeClass('fa-pencil');
+                        i.addClass('fa-check');
+
+                        var btn = tr.find('.edit');
+                        btn.removeClass('btn-warning');
+                        btn.addClass('btn-success');
+
+
+
+
+
+                        tr.find('.name').removeClass('show');
+                        tr.find('.name').addClass('hide');
+
+                        tr.find('.label-name').removeClass('hide');
+                        tr.find('.label-name').addClass('show');
+
+
+
+                        tr.addClass('table-success');
+
+
+                        //alert(i);
+
+                        toastr.success(data.success, 'Успех:', {progressBar: true, timeOut: 2500});
+                    }
+                }
+            });
+
+
+            return false;
+        });
+
+
+
+
+
+
+        $('body').on('click', '.delete', function (e) {
+            e.preventDefault();
+
+
+            var tr = $(this).parent().parent().parent();
+            var name = tr.find('.name').val();
+            var id = tr.find('.id').val();
+
+
+            $.ajax({
+                url: '{{base_url('/classif/delete_vid_sd')}}',
+                dataType: 'json',
+                type: 'POST',
+                data: {id: id, name: name},
+                success: function (data) {
+
+                    if (data.error) {
+                        toastr.error(data.error, 'Ошибка:', {progressBar: true, timeOut: 2500});
+                    } else if (data.success) {
+
+                        tr.find('.a-edit').remove();
+
+
+
+                        tr.find('.name').removeClass('show');
+                        tr.find('.name').addClass('hide');
+
+                        tr.find('.label-name').removeClass('hide');
+                        tr.find('.label-name').addClass('show');
+                        tr.find('.label-name').addClass('non-click');
+
+
+                        var i = tr.find('.btn-delete');
+                        i.removeClass('fa-trash');
+                        i.addClass('fa-check');
+
+                        var btn = tr.find('.delete');
+                        btn.removeClass('btn-danger');
+                        btn.addClass('btn-success');
+
+                        btn.prop("disabled", true);
+
+                        tr.addClass('table-danger');
+
+
+
+
+
+
+                        //alert(i);
+
+                        toastr.success(data.success, 'Успех:', {progressBar: true, timeOut: 2500});
+                    }
+                }
+            });
+
+
+            return false;
+        });
+
+    </script>
+{% endblock %}
+

@@ -9,94 +9,103 @@
                 <button class="close danger" type="button" data-dismiss="modal" style="font-weight: bolder;">×</button>
 
             </div>
+            {%if is_edit_dones is defined and dones is defined and dones.is_see == 1  %}
 
-            <div class="modal-body" style="padding-top:5px;">
-
-
-                <p>Поиск осуществляется в <a href="/str" target="_blank">ПС &laquo;Строевая записка&raquo;</a>. Информация берется за последнюю заступившую смену подразделения.<br>
-
-                </p>
+                <fieldset disabled>
+                {%endif%}
+                <div class="modal-body" style="padding-top:5px;">
 
 
-                <form role="form" id="searchStrCarsForm" method="POST"  >
+                    <p>Поиск осуществляется в <a href="/str" target="_blank">ПС &laquo;Строевая записка&raquo;</a>. Информация берется за последнюю заступившую смену подразделения.<br>
 
-                    <div class="row">
+                    </p>
 
-                        <div class="col-lg-4">
-                            <label for="id_region">Область</label>
-                            <div class="form-group select-cars-region-cls">
-                                <select multiple class="form-control select2-multi-not-clear " name="id_region" id="id_region_str_cars"  >
 
-                                    {% for region in regions_cp_list %}
-                                        <option  value="{{ region.id }}" {% if user is defined and user.id_region == region.id%} selected {%endif%}>{{ region.name }}</option>
-                                    {% endfor %}
-                                </select>
+                    <form role="form" id="searchStrCarsForm" method="POST"  >
+
+                        <div class="row">
+
+                            <div class="col-lg-4">
+                                <label for="id_region">Область</label>
+                                <div class="form-group select-cars-region-cls">
+                                    <select multiple class="form-control select2-multi-not-clear " name="id_region" id="id_region_str_cars"
+                                            {%if is_edit_dones is defined and dones is defined and dones.is_see == 1  %} disabled {%endif%}>
+
+                                        {% for region in regions_cp_list %}
+                                            <option  value="{{ region.id }}" {% if user is defined and user.id_region == region.id%} selected {%endif%}>{{ region.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-5">
+                                <label for="id_local">ГРОЧС</label>
+                                <div class="form-group select-cars-locals-cls">
+
+                                    <select multiple class="form-control select2-multi-not-clear " name="id_local" id="id_local_str_cars"  >
+                                        {#                                         {% for local in locorg_cp_list %}
+                                                                                <option value="{{ local.id_loc_org }}" class="{{local.id_region}}" >{{ local.locorg_name }}</option>
+                                                                            {% endfor %}#}
+                                    </select>
+                                </div>
+                            </div>
+
+
+
+                            <div class="col-lg-9">
+                                <label for="id_pasp">ПАСЧ</label>
+                                <div class="form-group select-cars-pasp-cls">
+
+                                    <select multiple class="form-control select2-multi-not-clear" name="id_pasp" id="id_pasp_str_cars"  >
+                                        {#                                         {% for local in locorg_cp_list %}
+                                                                                <option value="{{ local.id_loc_org }}" class="{{local.id_region}}" >{{ local.locorg_name }}</option>
+                                                                            {% endfor %}#}
+                                    </select>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-9">
+                                <label for="id_cars">Техника</label>
+                                <div class="form-group select-cars-cls" >
+
+                                    <select multiple class="form-control select2-multi-not-clear" name="id_cars" id="id_cars_str_cars"  >
+                                        {#                                         {% for local in locorg_cp_list %}
+                                                                                <option value="{{ local.id_loc_org }}" class="{{local.id_region}}" >{{ local.locorg_name }}</option>
+                                                                            {% endfor %}#}
+                                    </select>
+                                </div>
+                            </div>
+
+
+                            <div class="col-lg-3">
+                                <label for="btn-search-str-cars-clear-filter"></label>
+                                <div class="form-group " style="margin-top:8px">
+                                    <button  type="button" class="btn btn-outline-primary" id="btn-search-str-cars-clear-filter" >Сбросить фильтр</button>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="col-lg-5">
-                            <label for="id_local">ГРОЧС</label>
-                            <div class="form-group select-cars-locals-cls">
-
-                                <select multiple class="form-control select2-multi-not-clear " name="id_local" id="id_local_str_cars"  >
-                                    {#                                         {% for local in locorg_cp_list %}
-                                                                            <option value="{{ local.id_loc_org }}" class="{{local.id_region}}" >{{ local.locorg_name }}</option>
-                                                                        {% endfor %}#}
-                                </select>
-                            </div>
-                        </div>
+                    </form>
+                    <br><br>
 
 
 
-                        <div class="col-lg-9">
-                            <label for="id_pasp">ПАСЧ</label>
-                            <div class="form-group select-cars-pasp-cls">
+                    {%include 'searchRig/preloader.twig'%}
 
-                                <select multiple class="form-control select2-multi-not-clear" name="id_pasp" id="id_pasp_str_cars"  >
-                                    {#                                         {% for local in locorg_cp_list %}
-                                                                            <option value="{{ local.id_loc_org }}" class="{{local.id_region}}" >{{ local.locorg_name }}</option>
-                                                                        {% endfor %}#}
-                                </select>
-                            </div>
-                        </div>
+                    {%include 'parts/preloader.twig'%}
 
 
+                </div>
 
-                    </div>
+                {%if is_edit_dones is defined and dones is defined and dones.is_see == 1  %}
 
-                    <div class="row">
-                        <div class="col-lg-9">
-                            <label for="id_cars">Техника</label>
-                            <div class="form-group select-cars-cls" >
-
-                                <select multiple class="form-control select2-multi-not-clear" name="id_cars" id="id_cars_str_cars"  >
-                                    {#                                         {% for local in locorg_cp_list %}
-                                                                            <option value="{{ local.id_loc_org }}" class="{{local.id_region}}" >{{ local.locorg_name }}</option>
-                                                                        {% endfor %}#}
-                                </select>
-                            </div>
-                        </div>
-
-
-                                                        <div class="col-lg-3">
-                            <label for="btn-search-str-cars-clear-filter"></label>
-                            <div class="form-group " style="margin-top:8px">
-                                <button  type="button" class="btn btn-outline-primary" id="btn-search-str-cars-clear-filter" >Сбросить фильтр</button>
-                            </div>
-                        </div>
-                    </div>
-
-                </form>
-                <br><br>
-
-
-
-                {%include 'searchRig/preloader.twig'%}
-
-                {%include 'parts/preloader.twig'%}
-
-
-            </div>
+                </fieldset>
+            {%endif%}
             <div class="modal-footer">
                 <button id="btn-get-data-str-cars"  type="button" class="btn btn-info" disabled  data-toggle="modal"  data-target="#modal-agree-get-str-cars"  >Получить выбранную технику</button>
                 <button  type="button" class="btn btn-secondary" id="close-modal-search-str-cars" >Отмена</button>

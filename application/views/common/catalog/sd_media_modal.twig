@@ -1,0 +1,94 @@
+<ul class="nav nav-tabs">
+    {%set start_photo=1%}
+    {%set start_video=1%}
+    {%set is_elem=0%}
+
+
+    {%if media is  defined and media is not empty  %}
+
+        {%for elem in media%}
+
+            {%if elem.type == 'photo'%}
+                <li class="nav-item {%if start_photo == 1%}active{%endif%}" id="li-tab-photo-{{start_photo}}">
+                    <a class="nav-link {%if start_photo == 1%}active{%endif%}" data-toggle="tab" href="#photo_sd_{{start_photo}}" style='color:green'>Фото {{start_photo}}</a>
+                </li>
+                {%set start_photo=start_photo+1%}
+                {%set is_elem=is_elem+1%}
+            {%endif%}
+
+        {%endfor%}
+
+
+        {%for elem in media%}
+
+            {%if elem.type == 'video'%}
+
+                <li class="nav-item {%if is_elem == 0%}active{%endif%}" id="li-tab-video-{{start_video}}">
+                    <a class="nav-link {%if is_elem == 0%}active{%endif%}" data-toggle="tab" href="#video_sd_{{start_video}}" style='color:green'>Видео {{start_video}}</a>
+                </li>
+                {%set start_video=start_video+1%}
+            {%endif%}
+
+        {%endfor%}
+
+    {%endif%}
+
+
+    {% if dones.file_doc is not empty %}
+
+        <li class="nav-item {%if is_elem == 0%}active{%endif%}" id="li-tab-doc" >
+            <a class="nav-link {%if is_elem == 0%}active{%endif%}" data-toggle="tab" href="#sd_doc" style="color:green">Word</a>
+        </li>
+    {%endif%}
+
+
+
+</ul>
+<div class="tab-content">
+
+
+    {%set start_photo=1%}
+    {%set start_video=1%}
+
+
+
+    {%if media is  defined and media is not empty  %}
+
+        {%for elem in media%}
+
+            {%if elem.type == 'photo'%}
+                <div class="tab-pane fade {%if start_photo == 1%}show{%endif%} {%if start_photo == 1%}active{%endif%}" id="photo_sd_{{start_photo}}">
+                    <img src="{{ base_url("/data/sd_photo/"~elem.file) }}" class="issue-img-catalog">
+                </div>
+                {%set start_photo=start_photo+1%}
+            {%endif%}
+
+        {%endfor%}
+
+
+        {%for elem in media%}
+
+            {%if elem.type == 'video'%}
+                <div class="tab-pane fade {%if is_elem == 0%}active{%endif%} {%if is_elem == 0%}show{%endif%}" id="video_sd_{{start_video}}">
+                    <video controls class="issue-video-catalog">
+                        <source src='{{ base_url("/data/sd_video/"~elem.file) }}' >
+                    </video>
+                </div>
+                {%set start_video=start_video+1%}
+            {%endif%}
+
+        {%endfor%}
+
+    {%endif%}
+
+
+    {% if dones.file_doc is not empty %}
+
+        <div class="tab-pane fade {%if is_elem == 0%}active{%endif%} {%if is_elem == 0%}show{%endif%}" id="sd_doc">
+            <br>
+            К СД прикреплен документ.
+            <a href="{{ base_url("/data/sd_doc/"~dones.file_doc) }}"> <i class="fa fa-file-word-o " aria-hidden="true"></i> Скачать документ</a>
+        </div>
+    {%endif%}
+
+</div>

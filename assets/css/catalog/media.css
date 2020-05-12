@@ -1,0 +1,18 @@
+.issue-img-catalog {
+    width: 824px;
+    /* height: 200px; */
+}
+
+
+.issue-video-catalog {
+    width: 824px;
+    /* height: 200px; */
+}
+
+
+@media (min-width: 576px){
+#modal-catalog-media .modal-dialog {
+    max-width: 860px;
+    margin: 1.75rem auto;
+}
+}

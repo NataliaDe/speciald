@@ -442,10 +442,23 @@
                     </td>
 
                     <td>
-                        <i class="fa fa-file-word-o" aria-hidden="true"></i>
-                                                <a href="{{base_url('dones/copy_standart_sd/'~out.id)}}" >
-                        <i class="fa fa-clone" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Создать по шаблону."></i>
+                        <a href="{{base_url('export/sd_to_word/'~out.id)}}" class="a-non-dec" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Экспорт в Word.">
+                            <i class="fa fa-file-word-o" aria-hidden="true"></i>
                         </a>
+                            &nbsp;|&nbsp;
+                        <a href="{{base_url('dones/copy_standart_sd/'~out.id)}}" >
+                            <i class="fa fa-clone" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Создать по шаблону."></i>
+                        </a>
+
+                        {% if (out.media is defined and out.media is not empty) or out.file_doc is not empty %}
+                            &nbsp;|&nbsp;
+                            <a href="#" class="show-media-catalog" data-toggle="modal" data-target="#modal-catalog-media" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Просмотреть медиаматериалы"
+                               data-number-sd="{{out.specd_date ? out.specd_date|date('d.m.Y') : ''}} {{out.specd_number ? '№ '~out.specd_number : ''}}"
+                               data-id="{{out.id}}"
+                               data-url="{{base_url('common/get_sd_media_modal')}}">
+                                <i class="fa fa-file-image-o " aria-hidden="true"></i>
+                            </a>
+                        {% endif %}
 
                     </td>
 

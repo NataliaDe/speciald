@@ -19,9 +19,6 @@ class Dones extends My_Controller
      * map to /index.php/welcome/<method_name>
      * @see https://codeigniter.com/user_guide/general/urls.html
      */
-
-
-
 //    const actions = [
 //        'create_sd' => 1,
 //        'edit_sd'   => 2,
@@ -36,7 +33,12 @@ class Dones extends My_Controller
 
         $this->re_login();
 
-        if ($this->session->userdata('can_edit') == 1) {
+        $uri = $this->uri->segment('2');
+
+
+        if ($this->session->userdata('can_edit') == 1 ||
+            ($this->session->userdata('can_edit') == 0 && $uri == 'edit_form_standart')||
+            ($this->session->userdata('can_edit') == 0 && $uri == 'edit_form_simple')) {
             $this->load->model('user_model');
             $this->load->model('main_model');
             $this->load->model('journal_model');
@@ -83,16 +85,23 @@ class Dones extends My_Controller
     public function form_standart($is_default = 0)
     {
 
+//         $cookie_from_journal = $this->input->cookie('key_cookie_speciald_from_journal', true);
+//         $cookie_from = $this->input->cookie('key_cookie_speciald', true);
+//         echo $cookie_from_journal;
+//         echo $cookie_from;
+//         exit();
 //        $ids_pasp=array(525,529);
 //         print_r($this->getStrByIdsPasp(array_unique($ids_pasp)));
 //         exit();
 
+        $this->data['type_sd'] = Main_model::TYPE_SD_STANDART;
         $this->data['title'] = 'Новое спец.донесение';
         $this->data['active_item_menu'] = 'create';
         $this->data['active_item_menu_type_create'] = 'standart';
-        $this->data['is_show_btn_search_rig'] = 1;//show btn "search rig"
+        $this->data['is_show_btn_search_rig'] = 1; //show btn "search rig"
 
-        $this->data['bread_crumb'] = array('/dones' => 'Создать специальное донесение', 'Стандартное');
+        $this->data['bread_crumb'] = array(array('/dones' => 'Создать специальное донесение'),
+            array('Стандартное'));
 
 
         /* classification */
@@ -109,7 +118,7 @@ class Dones extends My_Controller
         $this->data['vid_hs_2'] = $this->main_model->get_vid_hs_2();
         $this->data['innerservice_list'] = $this->main_model->get_innerservice_list();
 
-        $this->data['regions_cp_list'] =$this->ss_model->set_regions_cp_list();
+        $this->data['regions_cp_list'] = $this->ss_model->set_regions_cp_list();
 
 
 
@@ -264,8 +273,17 @@ class Dones extends My_Controller
     public function form_simple()
     {
 
+        $this->data['type_sd'] = Main_model::TYPE_SD_SIMPLE;
+        $this->data['title'] = 'Новое спец.донесение (простое)';
         $this->data['active_item_menu'] = 'create';
-        $this->data['title'] = 'Новое спец.донесение';
+        $this->data['is_show_btn_search_rig'] = 0; //don't show btn "search rig"
+
+        $this->data['bread_crumb'] = array(array('/dones' => 'Создать специальное донесение'),
+            array('Простое'));
+
+
+        $this->data['vid_specd'] = $this->main_model->get_vid_specd();
+
         $this->twig->display('create/simple/form_simple', $this->data);
     }
 
@@ -352,7 +370,7 @@ class Dones extends My_Controller
                         if (!empty($trip['fio'])) {
                             $inf = '1 чел. ';
                             $inf = $inf . '(' . mb_strtolower($trip['position']) . ' ' . $trip['fio'] . ') ';
-                            $inf = $inf . '- командировка с ' . $trip['date1'] . (((($trip['date2']) != NULL && $trip['date2']) != '00.00.0000') ? (' по ' . $trip['date2']) : '');
+                            $inf = $inf . '- командировка с ' . $trip['date1'] . ((!empty($trip['date2']) && $trip['date2'] != NULL && $trip['date2'] != '00.00.0000') ? (' по ' . $trip['date2']) : '');
                             $inf = $inf . ((!empty($trip['place'])) ? (', ' . $trip['place']) : '');
                             $inf = $inf . ((!empty($trip['prikaz'])) ? (' (' . $trip['prikaz'] . ')') : '');
 
@@ -373,7 +391,7 @@ class Dones extends My_Controller
                         if (!empty($hol['fio'])) {
                             $inf = '1 чел. ';
                             $inf = $inf . '(' . mb_strtolower($hol['position']) . ' ' . $hol['fio'] . ') ';
-                            $inf = $inf . '- отпуск с ' . $hol['date1'] . (((($hol['date2']) != NULL && $hol['date2']) != '00.00.0000') ? (' по ' . $hol['date2']) : '');
+                            $inf = $inf . '- отпуск с ' . $hol['date1'] . ((!empty($hol['date2']) && $hol['date2'] != NULL && $hol['date2'] != '00.00.0000') ? (' по ' . $hol['date2']) : '');
                             $inf = $inf . ((!empty($hol['prikaz'])) ? (' (' . $hol['prikaz'] . ')') : '');
 
 
@@ -394,7 +412,7 @@ class Dones extends My_Controller
                         if (!empty($ill['fio'])) {
                             $inf = '1 чел. ';
                             $inf = $inf . '(' . mb_strtolower($ill['position']) . ' ' . $ill['fio'] . ') ';
-                            $inf = $inf . '- болен с ' . $ill['date1'] . (((($ill['date2']) != NULL && $ill['date2']) != '00.00.0000') ? (' по ' . $ill['date2']) : '');
+                            $inf = $inf . '- болен с ' . $ill['date1'] . ((!empty($ill['date2']) && $ill['date2'] != NULL && $ill['date2'] != '00.00.0000') ? (' по ' . $ill['date2']) : '');
                             $inf = $inf . ((!empty($ill['diagnosis'])) ? (' (' . $ill['diagnosis'] . ')') : '');
 
 
@@ -416,7 +434,7 @@ class Dones extends My_Controller
                         if (!empty($other['fio'])) {
                             $inf = '1 чел. ';
                             $inf = $inf . '(' . mb_strtolower($other['position']) . ' ' . $other['fio'] . ') ';
-                            $inf = $inf . '- другие причины с ' . $other['date1'] . (((($other['date2']) != NULL && $other['date2']) != '00.00.0000') ? (' по ' . $other['date2']) : '');
+                            $inf = $inf . '- другие причины с ' . $other['date1'] . ((!empty($other['date2']) && $other['date2'] != NULL && $other['date2'] != '00.00.0000') ? (' по ' . $other['date2']) : '');
                             $inf = $inf . ((!empty($other['reason'])) ? (', ' . $other['reason']) : '');
                             $inf = $inf . ((!empty($other['note'])) ? ( '(' . mb_strtolower(mb_substr($other['note'], 0, 1)) . mb_substr($other['note'], 1) . ') ' ) : '');
 
@@ -1152,13 +1170,18 @@ class Dones extends My_Controller
     {
 
         $post = $this->input->post();
-
+        //print_r($post['sd_media']);exit();
         $dones = array();
 
         $id_dones = (isset($post['id_dones']) && !empty($post['id_dones'])) ? intval($post['id_dones']) : 0; //id of edit dones
 
 
         if ($id_dones != 0) {// edit SD
+            $this->data['dones'] = $this->create_model->get_dones_by_id($id_dones);
+
+            $statuses = $this->dones_model->get_statuses_by_id_dones($id_dones, 0, false);
+            $statuses_id = array_column($statuses, 'id_action');
+
 
             /* ROSN, UGZ, AVIA */
             if ($this->data['active_user']['level'] == 3 &&
@@ -1197,8 +1220,8 @@ class Dones extends My_Controller
 
 
 
-        $dones['is_copy']=0;
-        $dones['copy_parent_id']=0;
+        $dones['is_copy'] = 0;
+        $dones['copy_parent_id'] = 0;
 
         $dones['specd_date'] = (isset($post['specd_date']) && !empty($post['specd_date'])) ? (\DateTime::createFromFormat('d.m.Y', $post['specd_date'])->format('Y-m-d')) : null;
         $dones['specd_number'] = (isset($post['specd_number']) && !empty($post['specd_number'])) ? trim($post['specd_number']) : '';
@@ -1221,6 +1244,11 @@ class Dones extends My_Controller
         } else {//edit dones
             $dones['official_date_start_edit'] = (isset($post['official_date_start_edit']) && !empty($post['official_date_start_edit'])) ? (\DateTime::createFromFormat('d.m.Y H:i:s', $post['official_date_start_edit'])->format('Y-m-d H:i:s')) : null;
             $dones['official_date_end_edit'] = date("Y-m-d H:i:s");
+
+            if ($this->data['dones']['is_copy'] == 1) {
+                $dones['official_date_start'] = $dones['official_date_start_edit'];
+                $dones['official_date_end'] = $dones['official_date_end_edit'];
+            }
         }
 
         $dones['official_creator_name'] = (isset($post['official_creator_name']) && !empty($post['official_creator_name'])) ? trim($post['official_creator_name']) : '';
@@ -1279,32 +1307,49 @@ class Dones extends My_Controller
         $dones['is_not_involved_informing'] = (isset($post['is_not_involved_informing']) && !empty($post['is_not_involved_informing'])) ? 1 : 0;
         $dones['is_not_involved_trunks'] = (isset($post['is_not_involved_trunks']) && !empty($post['is_not_involved_trunks'])) ? 1 : 0;
         $dones['is_wide_table_trunks'] = (isset($post['is_wide_table_trunks']) && !empty($post['is_wide_table_trunks'])) ? 1 : 0;
+        $dones['is_not_involved_str'] = (isset($post['is_not_involved_str']) && !empty($post['is_not_involved_str'])) ? 1 : 0;
 
+        $dones['is_test_sd'] = (isset($post['is_test_sd']) && !empty($post['is_test_sd'])) ? 1 : 0;
+
+        $dones['file_doc'] = (isset($post['file_doc']) && !empty($post['file_doc'])) ? $post['file_doc'] : null;
+
+        // type SD
+        $dones['type']= Main_model::TYPE_SD_STANDART;
 
         /* insert/edit dones */
         if ($id_dones == 0) {//create a new
+            if ($this->data['active_user']['is_guest'] == 1) {
+                $dones['fio_jour'] = $this->data['active_user']['auth_fio'];
+                $dones['position_name_jour'] = $this->data['active_user']['position_name'];
+                $dones['rank_name_jour'] = $this->data['active_user']['rank_name'];
+                $dones['creator_name_jour'] = $this->data['active_user']['creator_name'];
+                if (isset($this->data['active_user']['id_user_jour']) && !empty($this->data['active_user']['id_user_jour']))
+                    $dones['id_user_jour'] = $this->data['active_user']['id_user_jour'];
+            }
+
+
+
             $id_dones_new = $this->create_model->add_new_dones($dones);
 
             //logs
-            $logs['id_user']= $this->data['active_user']['id_user'];
+            $logs['id_user'] = $this->data['active_user']['id_user'];
             if ($this->data['active_user']['is_guest'] == 1) {
                 $logs['fio_jour'] = $this->data['active_user']['auth_fio'];
                 $logs['position_name_jour'] = $this->data['active_user']['position_name'];
                 $logs['rank_name_jour'] = $this->data['active_user']['rank_name'];
                 $logs['creator_name_jour'] = $this->data['active_user']['creator_name'];
             }
-            $logs['id_dones']=$id_dones_new;
+            $logs['id_dones'] = $id_dones_new;
             //$logs['id_action']=self::actions['create_sd'];
-            $logs['id_action']=Logs_model::ACTION_CREATE_SD;
-            $logs['date_action']=date("Y-m-d H:i:s");
+            $logs['id_action'] = Logs_model::ACTION_CREATE_SD;
+            $logs['date_action'] = date("Y-m-d H:i:s");
             $this->logs_model->add_logs($logs);
-
         } else {//edit
             $this->create_model->edit_dones($id_dones, $dones);
             $id_dones_new = $id_dones;
 
             //status
-            if ($this->data['active_user']['level'] == 3) {//grochs
+            if ($this->data['active_user']['level'] == Main_model::LEVEL_ID_ROCHS) {//grochs
                 //statuses to history
                 $history_actions['history_actions'] = array(Logs_model::ACTION_EDIT_SD, Logs_model::ACTION_PROVE_SD_UMCHS, Logs_model::ACTION_PROVE_SD_RCU);
             } else {
@@ -1486,7 +1531,7 @@ class Dones extends My_Controller
         $str_by_dones = $this->create_model->get_dones_str($id_dones_new); // str of dones
         $prev_ids_str_by_dones = (isset($str_by_dones) && !empty($str_by_dones)) ? array_unique(array_column($str_by_dones, 'id')) : array();
 
-        if (isset($str) && !empty($str)) {
+        if (isset($str) && !empty($str) && $dones['is_not_involved_str'] == 0) {
             foreach ($str as $k => $row) {
                 $dones_str = array();
                 if (isset($row['pasp_name']) && !empty(trim($row['pasp_name']))) {
@@ -1505,7 +1550,7 @@ class Dones extends My_Controller
                     $dones_str['cnt_holiday_man'] = (isset($row['cnt_holiday_man']) && !empty($row['cnt_holiday_man'])) ? intval($row['cnt_holiday_man']) : 0;
                     $dones_str['cnt_ill_man'] = (isset($row['cnt_ill_man']) && !empty($row['cnt_ill_man'])) ? intval($row['cnt_ill_man']) : 0;
                     $dones_str['cnt_naryd'] = (isset($row['cnt_naryd']) && !empty($row['cnt_naryd'])) ? intval($row['cnt_naryd']) : 0;
-                    $dones_str['cnt_other_man'] = (isset($row['cnt_other_man']) && !empty($row['cnt_other_man'])) ? intval($row['cnt_other_man']) :0;
+                    $dones_str['cnt_other_man'] = (isset($row['cnt_other_man']) && !empty($row['cnt_other_man'])) ? intval($row['cnt_other_man']) : 0;
                     $dones_str['gas'] = (isset($row['gas']) && !empty($row['gas'])) ? intval($row['gas']) : 0;
                     $dones_str['sort'] = (isset($row['sort']) && !empty($row['sort'])) ? intval($row['sort']) : 0;
 
@@ -1538,7 +1583,7 @@ class Dones extends My_Controller
         $str_text_by_dones = $this->create_model->get_dones_str_text($id_dones_new); // str_text of dones
         $prev_ids_str_text_by_dones = (isset($str_text_by_dones) && !empty($str_text_by_dones)) ? array_unique(array_column($str_text_by_dones, 'id')) : array();
 
-        if (isset($str_text) && !empty($str_text)) {
+        if (isset($str_text) && !empty($str_text) && $dones['is_not_involved_str'] == 0) {
             foreach ($str_text as $k => $row) {
                 $dones_str_text = array();
                 if (isset($row['str_text_podr_name']) && !empty(trim($row['str_text_podr_name']))) {
@@ -1546,7 +1591,7 @@ class Dones extends My_Controller
                     $dones_str_text['id_dones'] = $id_dones_new;
                     $dones_str_text['id_pasp'] = (isset($row['id_pasp']) && !empty($row['id_pasp'])) ? intval($row['id_pasp']) : 0;
                     $dones_str_text['str_text_podr_name'] = (isset($row['str_text_podr_name']) && !empty($row['str_text_podr_name'])) ? trim($row['str_text_podr_name']) : '';
-                    $dones_str_text['str_text_description'] = (isset($row['str_text_description']) && !empty($row['str_text_description'])) ?  trim($row['str_text_description']) : '';
+                    $dones_str_text['str_text_description'] = (isset($row['str_text_description']) && !empty($row['str_text_description'])) ? trim($row['str_text_description']) : '';
                     $dones_str_text['sort'] = (isset($row['sort']) && !empty($row['sort'])) ? intval($row['sort']) : 0;
 
                     $id_str_text = (isset($row['id_str_text']) && !empty($row['id_str_text'])) ? intval($row['id_str_text']) : 0; //edit id of table dones_str_text
@@ -1700,61 +1745,104 @@ class Dones extends My_Controller
         }
 
 
-         redirect('/creator/catalog');
+
+
+        /* media */
+        $this->dones_model->delete_dones_media($id_dones_new);
+
+        if (isset($post['sd_media']) && !empty($post['sd_media'])) {
+
+            foreach ($post['sd_media'] as $type => $row) {
+
+                if (!empty($row)) {
+                    foreach ($row as $file) {
+                        $media = [];
+                        if (!empty($file)) {
+                            $media['id_dones'] = $id_dones_new;
+                            $media['file'] = $file;
+                            $media['type'] = $type;
+
+                            $this->dones_model->add_dones_media($media);
+                        }
+                    }
+                }
+            }
+        }
+
+        redirect('/creator/catalog');
     }
 
-
-
-
-        public function edit_form_standart($id_dones = 0)
+    public function edit_form_standart($id_dones = 0)
     {
-
         $this->data['dones'] = $this->create_model->get_dones_by_id($id_dones);
 
-        $statuses=$this->dones_model->get_statuses_by_id_dones($id_dones, 0, false);
-        $statuses_id=array_column($statuses, 'id_action');
 
+        if ($this->data['dones']['type'] == Main_model::TYPE_SD_SIMPLE)
+            redirect('/dones/edit_form_simple/' . $id_dones);
 
-        /* ROSN, UGZ, AVIA */
-        if ($this->data['active_user']['level'] == 3 &&
-            (in_array($this->data['active_user']['id_organ'], [Main_model::ORGAN_ID_ROSN, Main_model::ORGAN_ID_UGZ, Main_model::ORGAN_ID_AVIA]))) {
-
-            if (($this->data['active_user']['id_local'] !== $this->data['dones']['author_local_id']) && $this->data['active_user']['id_region'] != Main_model::REGION_MINSK) {
-                $this->data['dones']['is_see'] = 1; //only see form not possible save!!!
-            } elseif ($this->data['dones']['is_open_update'] == 0 && in_array(Logs_model::ACTION_PROVE_SD_RCU, $statuses_id)) {
-                $this->data['dones']['is_see'] = 1; //only see form not possible save!!!
-            }
-        }
-
-        elseif($this->data['active_user']['level'] == Main_model::LEVEL_ID_RCU &&
-            $this->data['dones']['is_open_update'] == 0 && in_array(Logs_model::ACTION_PROVE_SD_RCU, $statuses_id)){
- $this->data['dones']['is_see'] = 1; //only see form not possible save!!!
-        }
-        else {
-            /*  author SD = current user
-             * proved umchs and proved rcu and not open update
-             * proved rcu and not open update
-             *          */
-            if ($this->data['active_user']['level'] == 3 && (($this->data['active_user']['id_local'] != $this->data['dones']['author_local_id']) ||
-                ($this->data['dones']['is_open_update'] == 0 && in_array(Logs_model::ACTION_PROVE_SD_UMCHS, $statuses_id) &&
-                in_array(Logs_model::ACTION_PROVE_SD_RCU, $statuses_id)) ||
-                ($this->data['dones']['is_open_update'] == 0 && in_array(Logs_model::ACTION_PROVE_SD_RCU, $statuses_id)))) {
-
-                $this->data['dones']['is_see'] = 1; //only see form not possible save!!!
-            } elseif ($this->data['active_user']['level'] == 2 && (($this->data['active_user']['id_region'] != $this->data['dones']['author_region_id']) ||
-                ($this->data['dones']['is_open_update'] == 0 && in_array(Logs_model::ACTION_PROVE_SD_UMCHS, $statuses_id) &&
-                in_array(Logs_model::ACTION_PROVE_SD_RCU, $statuses_id)) ||
-                ($this->data['dones']['is_open_update'] == 0 && in_array(Logs_model::ACTION_PROVE_SD_RCU, $statuses_id)))) {
-
-                $this->data['dones']['is_see'] = 1; //only see form not possible save!!!
-            }
-        }
-
-
-
+        $this->data['type_sd'] = Main_model::TYPE_SD_STANDART;
         $this->data['title'] = 'Ред. спец.донесение';
         $this->data['is_show_btn_search_rig'] = 1; //show btn "search rig"
-        $this->data['bread_crumb'] = array('/' => 'Редактировать специальное донесение', 'ID = ' . $id_dones);
+
+        $this->data['bread_crumb'] = array(array('/' => 'Редактировать специальное донесение'),
+            array('ID = ' . $id_dones)
+        );
+
+
+
+
+        $statuses = $this->dones_model->get_statuses_by_id_dones($id_dones, 0, false);
+        $statuses_id = array_column($statuses, 'id_action');
+
+
+
+        if ($this->session->userdata('can_edit') == 0) {// viewer can see SD
+            $this->data['dones']['is_see'] = 1; //only see form not possible save!!!
+        } else {
+
+
+            /* ROSN, UGZ, AVIA */
+            if ($this->data['active_user']['level'] == 3 &&
+                (in_array($this->data['active_user']['id_organ'], [Main_model::ORGAN_ID_ROSN, Main_model::ORGAN_ID_UGZ, Main_model::ORGAN_ID_AVIA]))) {
+
+                if (($this->data['active_user']['id_local'] !== $this->data['dones']['author_local_id']) && $this->data['active_user']['id_region'] != Main_model::REGION_MINSK) {
+                    $this->data['dones']['is_see'] = 1; //only see form not possible save!!!
+                } elseif ($this->data['dones']['is_open_update'] == 0 && in_array(Logs_model::ACTION_PROVE_SD_RCU, $statuses_id)) {
+                    $this->data['dones']['is_see'] = 1; //only see form not possible save!!!
+                }
+            } elseif ($this->data['active_user']['level'] == Main_model::LEVEL_ID_RCU &&
+                $this->data['dones']['is_open_update'] == 0 && in_array(Logs_model::ACTION_PROVE_SD_RCU, $statuses_id)) {
+                $this->data['dones']['is_see'] = 1; //only see form not possible save!!!
+            } else {
+                /*  author SD = current user
+                 * proved umchs and proved rcu and not open update
+                 * proved rcu and not open update
+                 *          */
+                if ($this->data['active_user']['level'] == 3 && (($this->data['active_user']['id_local'] != $this->data['dones']['author_local_id']) ||
+                    ($this->data['dones']['is_open_update'] == 0 && in_array(Logs_model::ACTION_PROVE_SD_UMCHS, $statuses_id) &&
+                    in_array(Logs_model::ACTION_PROVE_SD_RCU, $statuses_id)) ||
+                    ($this->data['dones']['is_open_update'] == 0 && in_array(Logs_model::ACTION_PROVE_SD_RCU, $statuses_id)))) {
+
+                    $this->data['dones']['is_see'] = 1; //only see form not possible save!!!
+                } elseif ($this->data['active_user']['level'] == 2 && (($this->data['active_user']['id_region'] != $this->data['dones']['author_region_id']) ||
+                    ($this->data['dones']['is_open_update'] == 0 && in_array(Logs_model::ACTION_PROVE_SD_UMCHS, $statuses_id) &&
+                    in_array(Logs_model::ACTION_PROVE_SD_RCU, $statuses_id)) ||
+                    ($this->data['dones']['is_open_update'] == 0 && in_array(Logs_model::ACTION_PROVE_SD_RCU, $statuses_id)))) {
+
+                    $this->data['dones']['is_see'] = 1; //only see form not possible save!!!
+                }
+            }
+        }
+
+        if (isset($this->data['dones']['is_see']) && $this->data['dones']['is_see'] == 1) {
+            $this->data['title'] = 'Прсмотр. спец.донесения';
+            //$this->data['is_show_btn_search_rig'] = 0; //not show btn "search rig"
+
+            $this->data['bread_crumb'] = array(array('/' => 'Просмотреть специальное донесение'),
+                array('ID = ' . $id_dones)
+            );
+        }
+
 
 
         /* classification */
@@ -1779,12 +1867,19 @@ class Dones extends My_Controller
 
         /* data of edit dones */
         $this->data['dones']['silymchs'] = $this->create_model->get_dones_silymchs($id_dones);
-        $innerservice= $this->create_model->get_dones_innerservice($id_dones);
-        if(isset($innerservice) && !empty($innerservice)){//works of each innerservice row
+        if (!empty($this->data['dones']['silymchs'])) {
+            foreach ($this->data['dones']['silymchs'] as $key => $val) {
+                $this->data['dones']['silymchs'][$key]['v_ac'] = $val['v_ac'] * 1000;
+            }
+        }
+
+
+        $innerservice = $this->create_model->get_dones_innerservice($id_dones);
+        if (isset($innerservice) && !empty($innerservice)) {//works of each innerservice row
             foreach ($innerservice as $key => $row) {
-                $works=$this->create_model->get_dones_innerservice_work($row['id']);
-                $ids_work=(isset($works) && !empty($works)) ? array_column($works, 'id_work_innerservice') : array();
-                $innerservice[$key]['works']=$ids_work;
+                $works = $this->create_model->get_dones_innerservice_work($row['id']);
+                $ids_work = (isset($works) && !empty($works)) ? array_column($works, 'id_work_innerservice') : array();
+                $innerservice[$key]['works'] = $ids_work;
             }
         }
         $this->data['dones']['innerservice'] = $innerservice;
@@ -1794,6 +1889,11 @@ class Dones extends My_Controller
         $this->data['dones']['str'] = $this->create_model->get_dones_str($id_dones);
         $this->data['dones']['str_text'] = $this->create_model->get_dones_str_text($id_dones);
         $this->data['dones']['trunks'] = $this->create_model->get_dones_trunks($id_dones);
+        if(!empty($this->data['dones']['trunks'])){
+            foreach($this->data['dones']['trunks'] as $key=>$trunk){
+                $this->data['dones']['trunks'][$key]['v_ac']=$trunk['v_ac']*1000;
+            }
+        }
 
 
         $this->data['dones']['water_source'] = $this->create_model->get_dones_water_source($id_dones);
@@ -1802,10 +1902,22 @@ class Dones extends My_Controller
         $this->data['dones']['object'] = $this->create_model->get_dones_object($id_dones);
 
 
+        //media
+        $media = $this->dones_model->get_dones_media($id_dones);
+        $this->data['dones']['media']=$media;
+//        if (!empty($media)) {
+//            $i = 0;
+//            foreach ($media as $row) {
+//                $i++;
+//                $this->data['dones']['media'][$row['type']][$i] = $row['file'];
+//            }
+//        }
+
+
+
 
         $this->twig->display('create/standart/form_standart', $this->data);
     }
-
 
     public function delete_sd($id_dones = 0)
     {
@@ -1889,7 +2001,7 @@ class Dones extends My_Controller
             /*  author SD = current user
              *          */
             if (($this->data['active_user']['level'] == 3 && $this->data['active_user']['id_local'] != $this->data['dones']['author_local_id']) ||
-                ($this->data['active_user']['level'] == 2 && $this->data['active_user']['id_region'] != $this->data['dones']['author_region_id'])){
+                ($this->data['active_user']['level'] == 2 && $this->data['active_user']['id_region'] != $this->data['dones']['author_region_id'])) {
 
                 echo json_encode(array('error' => 'Функция не доступна. Вы не являетесь автором.'));
                 die();
@@ -1918,20 +2030,18 @@ class Dones extends My_Controller
         }
     }
 
-
-
-    public function prove($id_dones=0)
+    public function prove($id_dones = 0)
     {
 
 
-         if ($this->input->is_ajax_request()) {
+        if ($this->input->is_ajax_request()) {
 
             $this->data['dones'] = $this->create_model->get_dones_by_id($id_dones);
 
             /*  author SD = current user
              *          */
             if (($this->data['active_user']['level'] == 3) ||
-                ($this->data['active_user']['level'] == 2 && $this->data['active_user']['id_region'] != $this->data['dones']['author_region_id'])){
+                ($this->data['active_user']['level'] == 2 && $this->data['active_user']['id_region'] != $this->data['dones']['author_region_id'])) {
 
                 echo json_encode(array('error' => 'Функция не доступна. Вы не являетесь автором.'));
                 die();
@@ -1950,15 +2060,15 @@ class Dones extends My_Controller
             if (isset($id_dones) && !empty($id_dones)) {
 
 
-            //set statuses to history
-            if ($this->data['active_user']['level'] == Main_model::LEVEL_ID_UMCHS) {//umchs
-                $history_actions['history_actions'] = array(Logs_model::ACTION_REFUSE_SD_UMCHS, Logs_model::ACTION_PROVE_SD_UMCHS, Logs_model::ACTION_UPDATE_REFUSE_UMCHS);
-            } elseif ($this->data['active_user']['level'] == Main_model::LEVEL_ID_RCU) {//rcu
-                $history_actions['history_actions'] = array(Logs_model::ACTION_REFUSE_SD_RCU, Logs_model::ACTION_PROVE_SD_RCU, Logs_model::ACTION_UPDATE_REFUSE_RCU);
-            }
+                //set statuses to history
+                if ($this->data['active_user']['level'] == Main_model::LEVEL_ID_UMCHS) {//umchs
+                    $history_actions['history_actions'] = array(Logs_model::ACTION_REFUSE_SD_UMCHS, Logs_model::ACTION_PROVE_SD_UMCHS, Logs_model::ACTION_UPDATE_REFUSE_UMCHS);
+                } elseif ($this->data['active_user']['level'] == Main_model::LEVEL_ID_RCU) {//rcu
+                    $history_actions['history_actions'] = array(Logs_model::ACTION_REFUSE_SD_RCU, Logs_model::ACTION_PROVE_SD_RCU, Logs_model::ACTION_UPDATE_REFUSE_RCU);
+                }
 
-            $history_actions['id_dones'] = $id_dones;
-            $this->logs_model->delete_dones_statuses($history_actions);
+                $history_actions['id_dones'] = $id_dones;
+                $this->logs_model->delete_dones_statuses($history_actions);
 
                 //logs
                 $logs['id_user'] = $this->data['active_user']['id_user'];
@@ -1976,11 +2086,9 @@ class Dones extends My_Controller
                 echo json_encode(array('success' => 'СД успешно подтверждено'));
             }
         }
-
     }
 
-
-        public function refuse()
+    public function refuse()
     {
 
         if ($this->input->is_ajax_request()) {
@@ -2005,7 +2113,7 @@ class Dones extends My_Controller
             $is_proved_sd = $this->dones_model->is_status_by_id_dones($id_dones, ($this->data['active_user']['level'] == 2) ? Logs_model::ACTION_PROVE_SD_UMCHS : (($this->data['active_user']['level'] == 1) ? Logs_model::ACTION_PROVE_SD_RCU : 0));
 
 
-                if (isset($is_proved_sd) && !empty($is_proved_sd)) {
+            if (isset($is_proved_sd) && !empty($is_proved_sd)) {
                 echo json_encode(array('error' => 'Функция не доступна. СД было подтверждено.'));
                 die();
             }
@@ -2013,26 +2121,44 @@ class Dones extends My_Controller
 
 
             /* is refused by this user  */
-            $stat['id_dones']=$id_dones;
-            $stat['id_user']=$this->data['active_user']['id_user'];
-            $stat['id_action']=($this->data['active_user']['level'] == Main_model::LEVEL_ID_UMCHS) ? Logs_model::ACTION_REFUSE_SD_UMCHS : (($this->data['active_user']['level'] == Main_model::LEVEL_ID_RCU) ? Logs_model::ACTION_REFUSE_SD_RCU : 0);
+            $stat['id_dones'] = $id_dones;
+            $stat['id_user'] = $this->data['active_user']['id_user'];
+            $stat['id_action'] = ($this->data['active_user']['level'] == Main_model::LEVEL_ID_UMCHS) ? Logs_model::ACTION_REFUSE_SD_UMCHS : (($this->data['active_user']['level'] == Main_model::LEVEL_ID_RCU) ? Logs_model::ACTION_REFUSE_SD_RCU : 0);
             $is_refused_sd = $this->logs_model->get_dones_satatus_by_user($stat);
 
+
+            $history_actions=array();
 
             if (isset($id_dones) && !empty($id_dones) && isset($description_refuse) && !empty($description_refuse)) {
 
                 if ($is_refresh == 0 && empty($is_refused_sd)) {//new refuse
+                    $history_actions['id_dones'] = $id_dones;
+
                     //status
                     if ($this->data['active_user']['level'] == Main_model::LEVEL_ID_UMCHS) {//umchs
                         //statuses to history
                         $history_actions['history_actions'] = array(Logs_model::ACTION_REFUSE_SD_UMCHS, Logs_model::ACTION_PROVE_SD_UMCHS);
+
+                        $history_actions['history_actions'] = array(Logs_model::ACTION_PROVE_SD_UMCHS);
+                        $this->logs_model->delete_dones_statuses($history_actions);
+
+                        // refuse only current user
+                        $history_actions['history_actions'] = array(Logs_model::ACTION_REFUSE_SD_UMCHS);
+                        $history_actions['id_user'] = $this->data['active_user']['id_user'];
+                        $this->logs_model->delete_dones_statuses_of_user($history_actions);
                     } elseif ($this->data['active_user']['level'] == Main_model::LEVEL_ID_RCU) {//rcu
                         //statuses to history
                         $history_actions['history_actions'] = array(Logs_model::ACTION_REFUSE_SD_RCU, Logs_model::ACTION_PROVE_SD_RCU);
-                    }
 
-                    $history_actions['id_dones'] = $id_dones;
-                    $this->logs_model->delete_dones_statuses($history_actions);
+                        $history_actions['history_actions'] = array(Logs_model::ACTION_PROVE_SD_RCU);
+                        $this->logs_model->delete_dones_statuses($history_actions);
+
+
+                        // refuse only current user
+                        $history_actions['history_actions'] = array(Logs_model::ACTION_REFUSE_SD_RCU);
+                        $history_actions['id_user'] = $this->data['active_user']['id_user'];
+                        $this->logs_model->delete_dones_statuses_of_user($history_actions);
+                    }
                 }
 
 
@@ -2048,15 +2174,13 @@ class Dones extends My_Controller
 
 
                 if ($is_refresh == 1 || !empty($is_refused_sd)) {//refresh refuse text
-
                     //$logs['is_service'] = 1;
-
                     $prev['id_dones'] = $id_dones;
                     $prev['id_user'] = $this->data['active_user']['id_user'];
                     $prev['id_action'] = ($this->data['active_user']['level'] == Main_model::LEVEL_ID_UMCHS) ? Logs_model::ACTION_REFUSE_SD_UMCHS : (($this->data['active_user']['level'] == Main_model::LEVEL_ID_RCU) ? Logs_model::ACTION_REFUSE_SD_RCU : 0);
                     $prev_description_refuse = $this->logs_model->get_dones_description_refuse($prev);
 
-                    $logs['description_refuse'] = 'предыдущее: '.$prev_description_refuse['description_refuse'].' новое: '.$description_refuse;
+                    $logs['description_refuse'] = 'предыдущее: ' . $prev_description_refuse['description_refuse'] . ' новое: ' . $description_refuse;
 
                     $logs['id_action'] = ($this->data['active_user']['level'] == Main_model::LEVEL_ID_UMCHS) ? Logs_model::ACTION_UPDATE_REFUSE_UMCHS : (($this->data['active_user']['level'] == Main_model::LEVEL_ID_RCU) ? Logs_model::ACTION_UPDATE_REFUSE_RCU : 0);
                     $logs['date_action'] = date("Y-m-d H:i:s");
@@ -2083,7 +2207,6 @@ class Dones extends My_Controller
             }
         }
     }
-
 
     public function open_update_sd($id_dones = 0)
     {
@@ -2119,8 +2242,7 @@ class Dones extends My_Controller
                 $this->logs_model->add_logs($logs);
 
                 echo json_encode(array('success' => 'Доступ на редактирование СД успешно открыт'));
-            }
-            else{
+            } else {
                 echo json_encode(array('error' => 'СД не найдено'));
             }
         }
@@ -2160,15 +2282,11 @@ class Dones extends My_Controller
                 $this->logs_model->add_logs($logs);
 
                 echo json_encode(array('success' => 'Доступ на редактирование СД успешно закрыт'));
-            }
-            else{
+            } else {
                 echo json_encode(array('error' => 'СД не найдено'));
             }
         }
     }
-
-
-
 
     public function copy_standart_sd($id_dones = 0)
     {
@@ -2178,29 +2296,32 @@ class Dones extends My_Controller
             /* dones */
             $dones = $this->create_model->get_dones_by_id($id_dones);
 
-            /* data of  dones */
-            $silymchs = $this->create_model->get_dones_silymchs($id_dones);
-            $innerservice = $this->create_model->get_dones_innerservice($id_dones);
-            if (isset($innerservice) && !empty($innerservice)) {//works of each innerservice row
-                foreach ($innerservice as $key => $row) {
-                    $works = $this->create_model->get_dones_innerservice_work($row['id']);
-                    $ids_work = (isset($works) && !empty($works)) ? array_column($works, 'id_work_innerservice') : array();
-                    $innerservice[$key]['works'] = $ids_work;
+            $type_sd=$dones['type'];
+
+            if ($type_sd == Main_model::TYPE_SD_STANDART) {
+                /* data of  dones */
+                $silymchs = $this->create_model->get_dones_silymchs($id_dones);
+                $innerservice = $this->create_model->get_dones_innerservice($id_dones);
+                if (isset($innerservice) && !empty($innerservice)) {//works of each innerservice row
+                    foreach ($innerservice as $key => $row) {
+                        $works = $this->create_model->get_dones_innerservice_work($row['id']);
+                        $ids_work = (isset($works) && !empty($works)) ? array_column($works, 'id_work_innerservice') : array();
+                        $innerservice[$key]['works'] = $ids_work;
+                    }
                 }
+                $informing = $this->create_model->get_dones_informing($id_dones);
+                $str = $this->create_model->get_dones_str($id_dones);
+                $str_text = $this->create_model->get_dones_str_text($id_dones);
+                $trunks = $this->create_model->get_dones_trunks($id_dones);
+
+                $water_source = $this->create_model->get_dones_water_source($id_dones);
+                $object = $this->create_model->get_dones_object($id_dones);
             }
-            $informing = $this->create_model->get_dones_informing($id_dones);
-            $str = $this->create_model->get_dones_str($id_dones);
-            $str_text = $this->create_model->get_dones_str_text($id_dones);
-            $trunks = $this->create_model->get_dones_trunks($id_dones);
-
-            $water_source = $this->create_model->get_dones_water_source($id_dones);
-            $object = $this->create_model->get_dones_object($id_dones);
-
 
 
             $new_dones = array();
-            $new_dones['is_copy']=1;
-            $new_dones['copy_parent_id']=$id_dones;
+            $new_dones['is_copy'] = 1;
+            $new_dones['copy_parent_id'] = $id_dones;
 
             $new_dones['specd_date'] = date("Y-m-d H:i:s");
             $new_dones['short_description'] = (isset($dones['short_description']) && !empty($dones['short_description'])) ? trim($dones['short_description']) : '';
@@ -2223,9 +2344,9 @@ class Dones extends My_Controller
 
             /* description of RIG */
             $new_dones['id_rig'] = (isset($dones['id_rig_current']) && !empty($dones['id_rig_current'])) ? intval($dones['id_rig_current']) : 0;
-            $new_dones['time_msg'] = (isset($dones['time_msg']) && !empty($dones['time_msg'])) ? $dones['time_msg'] : '';
-            $new_dones['time_loc'] = (isset($dones['time_loc']) && !empty($dones['time_loc'])) ? $dones['time_loc'] : '';
-            $new_dones['time_likv'] = (isset($dones['time_likv']) && !empty($dones['time_likv'])) ? $dones['time_likv'] : '';
+            $new_dones['time_msg'] = (isset($dones['time_msg']) && !empty($dones['time_msg'])) ? $dones['time_msg'] : NULL;
+            $new_dones['time_loc'] = (isset($dones['time_loc']) && !empty($dones['time_loc'])) ? $dones['time_loc'] : NULL;
+            $new_dones['time_likv'] = (isset($dones['time_likv']) && !empty($dones['time_likv'])) ? $dones['time_likv'] : NULL;
             $new_dones['podr_take_msg'] = (isset($dones['podr_take_msg']) && !empty($dones['podr_take_msg'])) ? trim($dones['podr_take_msg']) : '';
             $new_dones['disp_take_msg'] = (isset($dones['disp_take_msg']) && !empty($dones['disp_take_msg'])) ? trim($dones['disp_take_msg']) : '';
             $new_dones['address'] = (isset($dones['address']) && !empty($dones['address'])) ? trim($dones['address']) : '';
@@ -2272,6 +2393,21 @@ class Dones extends My_Controller
             $new_dones['is_not_involved_informing'] = (isset($dones['is_not_involved_informing']) && !empty($dones['is_not_involved_informing'])) ? 1 : 0;
             $new_dones['is_not_involved_trunks'] = (isset($dones['is_not_involved_trunks']) && !empty($dones['is_not_involved_trunks'])) ? 1 : 0;
             $new_dones['is_wide_table_trunks'] = (isset($dones['is_wide_table_trunks']) && !empty($dones['is_wide_table_trunks'])) ? 1 : 0;
+            $new_dones['is_not_involved_str'] = (isset($dones['is_not_involved_str']) && !empty($dones['is_not_involved_str'])) ? 1 : 0;
+
+            $new_dones['is_test_sd'] = (isset($dones['is_test_sd']) && !empty($dones['is_test_sd'])) ? 1 : 0;
+            $new_dones['type'] = $dones['type'];
+
+
+
+            if ($this->data['active_user']['is_guest'] == 1) {
+                $new_dones['fio_jour'] = $this->data['active_user']['auth_fio'];
+                $new_dones['position_name_jour'] = $this->data['active_user']['position_name'];
+                $new_dones['rank_name_jour'] = $this->data['active_user']['rank_name'];
+                $new_dones['creator_name_jour'] = $this->data['active_user']['creator_name'];
+                if (isset($this->data['active_user']['id_user_jour']) && !empty($this->data['active_user']['id_user_jour']))
+                    $new_dones['id_user_jour'] = $this->data['active_user']['id_user_jour'];
+            }
 
 
             $id_dones_new = $this->create_model->add_new_dones($new_dones);
@@ -2289,6 +2425,11 @@ class Dones extends My_Controller
             $logs['id_action'] = Logs_model::ACTION_COPY_SD;
             $logs['date_action'] = date("Y-m-d H:i:s");
             $this->logs_model->add_logs($logs);
+
+
+            if($type_sd == Main_model::TYPE_SD_SIMPLE){
+                redirect('/dones/edit_form_simple/' . $id_dones_new);
+            }
 
 
 
@@ -2374,12 +2515,6 @@ class Dones extends My_Controller
                 }
             }
         }
-
-
-
-
-
-
 
 
         /* ------------ str of dones 1-∞ ------------- */
@@ -2508,6 +2643,284 @@ class Dones extends My_Controller
             $this->create_model->add_new_dones_object($dones_object);
         }
 
-        redirect('/dones/edit_form_standart/'.$id_dones_new);
+        redirect('/dones/edit_form_standart/' . $id_dones_new);
+    }
+
+
+
+        public function simple_save()
+    {
+
+        $post = $this->input->post();
+        //print_r($post['sd_media']);exit();
+        $dones = array();
+
+        $id_dones = (isset($post['id_dones']) && !empty($post['id_dones'])) ? intval($post['id_dones']) : 0; //id of edit dones
+
+
+        if ($id_dones != 0) {// edit SD
+            $this->data['dones'] = $this->create_model->get_dones_by_id($id_dones);
+
+            $statuses = $this->dones_model->get_statuses_by_id_dones($id_dones, 0, false);
+            $statuses_id = array_column($statuses, 'id_action');
+
+
+            /* ROSN, UGZ, AVIA */
+            if ($this->data['active_user']['level'] == 3 &&
+                (in_array($this->data['active_user']['id_organ'], [Main_model::ORGAN_ID_ROSN, Main_model::ORGAN_ID_UGZ, Main_model::ORGAN_ID_AVIA]))) {
+
+                if (($this->data['active_user']['id_local'] !== $this->data['dones']['author_local_id']) && $this->data['active_user']['id_region'] != Main_model::REGION_MINSK) {
+
+                    redirect('creator/catalog');
+                    die();
+                } elseif ($this->data['dones']['is_open_update'] == 0 && in_array(Logs_model::ACTION_PROVE_SD_RCU, $statuses_id)) {
+                    redirect('creator/catalog');
+                    die();
+                }
+            } else {
+                /*  author SD = current user
+                 * proved umchs and proved rcu and not open update
+                 * proved rcu and not open update
+                 *          */
+                if ($this->data['active_user']['level'] == 3 && (($this->data['active_user']['id_local'] != $this->data['dones']['author_local_id']) ||
+                    ($this->data['dones']['is_open_update'] == 0 && in_array(Logs_model::ACTION_PROVE_SD_UMCHS, $statuses_id) &&
+                    in_array(Logs_model::ACTION_PROVE_SD_RCU, $statuses_id)) ||
+                    ($this->data['dones']['is_open_update'] == 0 && in_array(Logs_model::ACTION_PROVE_SD_RCU, $statuses_id)))) {
+
+                    redirect('creator/catalog');
+                    die();
+                } elseif ($this->data['active_user']['level'] == 2 && (($this->data['active_user']['id_region'] != $this->data['dones']['author_region_id']) ||
+                    ($this->data['dones']['is_open_update'] == 0 && in_array(Logs_model::ACTION_PROVE_SD_UMCHS, $statuses_id) &&
+                    in_array(Logs_model::ACTION_PROVE_SD_RCU, $statuses_id)) ||
+                    ($this->data['dones']['is_open_update'] == 0 && in_array(Logs_model::ACTION_PROVE_SD_RCU, $statuses_id)))) {
+
+                    redirect('creator/catalog');
+                    die();
+                }
+            }
+        }
+
+
+
+        $dones['is_copy'] = 0;
+        $dones['copy_parent_id'] = 0;
+
+        $dones['specd_date'] = (isset($post['specd_date']) && !empty($post['specd_date'])) ? (\DateTime::createFromFormat('d.m.Y', $post['specd_date'])->format('Y-m-d')) : null;
+        $dones['specd_number'] = (isset($post['specd_number']) && !empty($post['specd_number'])) ? trim($post['specd_number']) : '';
+        $dones['short_description'] = (isset($post['short_description']) && !empty($post['short_description'])) ? trim($post['short_description']) : '';
+
+        /* who creates/last updates and when */
+        if ($id_dones == 0) {//create a new
+            $dones['created_by'] = $this->data['active_user']['id_user'];
+            $dones['date_insert'] = date("Y-m-d H:i:s");
+        }
+        $dones['last_updated_by'] = $this->data['active_user']['id_user'];
+        $dones['date_last_update'] = date("Y-m-d H:i:s");
+
+        /* official block */
+        $dones['specd_vid'] = (isset($post['specd_vid']) && !empty($post['specd_vid'])) ? intval($post['specd_vid']) : 0;
+
+        if ($id_dones == 0) {//create a new
+            $dones['official_date_start'] = (isset($post['official_date_start']) && !empty($post['official_date_start'])) ? (\DateTime::createFromFormat('d.m.Y H:i:s', $post['official_date_start'])->format('Y-m-d H:i:s')) : null;
+            $dones['official_date_end'] = date("Y-m-d H:i:s"); // if create new dones
+        } else {//edit dones
+            $dones['official_date_start_edit'] = (isset($post['official_date_start_edit']) && !empty($post['official_date_start_edit'])) ? (\DateTime::createFromFormat('d.m.Y H:i:s', $post['official_date_start_edit'])->format('Y-m-d H:i:s')) : null;
+            $dones['official_date_end_edit'] = date("Y-m-d H:i:s");
+
+            if ($this->data['dones']['is_copy'] == 1) {
+                $dones['official_date_start'] = $dones['official_date_start_edit'];
+                $dones['official_date_end'] = $dones['official_date_end_edit'];
+            }
+        }
+
+        $dones['official_creator_name'] = (isset($post['official_creator_name']) && !empty($post['official_creator_name'])) ? trim($post['official_creator_name']) : '';
+        $dones['official_creator_position'] = (isset($post['official_creator_position']) && !empty($post['official_creator_position'])) ? trim($post['official_creator_position']) : '';
+        $dones['official_destination'] = (isset($post['official_destination']) && !empty($post['official_destination'])) ? trim($post['official_destination']) : '';
+
+        $dones['opening_description'] = (isset($post['opening_description']) && !empty($post['opening_description'])) ? trim($post['opening_description']) : '';
+
+
+         /* description of RIG */
+        $dones['time_msg'] = (isset($post['time_msg']) && !empty($post['time_msg'])) ? (\DateTime::createFromFormat('d.m.Y H:i:s', $post['time_msg'])->format('Y-m-d H:i:s')) : NULL;
+        $dones['latitude'] = (isset($post['latitude']) && !empty($post['latitude'])) ? trim($post['latitude']) : '';
+        $dones['longitude'] = (isset($post['longitude']) && !empty($post['longitude'])) ? trim($post['longitude']) : '';
+
+
+
+        $dones['is_test_sd'] = (isset($post['is_test_sd']) && !empty($post['is_test_sd'])) ? 1 : 0;
+
+        $dones['file_doc'] = (isset($post['file_doc']) && !empty($post['file_doc'])) ? $post['file_doc'] : null;
+
+        // type SD
+        $dones['type'] = Main_model::TYPE_SD_SIMPLE;
+
+        /* insert/edit dones */
+        if ($id_dones == 0) {//create a new
+            if ($this->data['active_user']['is_guest'] == 1) {
+                $dones['fio_jour'] = $this->data['active_user']['auth_fio'];
+                $dones['position_name_jour'] = $this->data['active_user']['position_name'];
+                $dones['rank_name_jour'] = $this->data['active_user']['rank_name'];
+                $dones['creator_name_jour'] = $this->data['active_user']['creator_name'];
+                if (isset($this->data['active_user']['id_user_jour']) && !empty($this->data['active_user']['id_user_jour']))
+                    $dones['id_user_jour'] = $this->data['active_user']['id_user_jour'];
+            }
+
+
+
+            $id_dones_new = $this->create_model->add_new_dones($dones);
+
+            //logs
+            $logs['id_user'] = $this->data['active_user']['id_user'];
+            if ($this->data['active_user']['is_guest'] == 1) {
+                $logs['fio_jour'] = $this->data['active_user']['auth_fio'];
+                $logs['position_name_jour'] = $this->data['active_user']['position_name'];
+                $logs['rank_name_jour'] = $this->data['active_user']['rank_name'];
+                $logs['creator_name_jour'] = $this->data['active_user']['creator_name'];
+            }
+            $logs['id_dones'] = $id_dones_new;
+            //$logs['id_action']=self::actions['create_sd'];
+            $logs['id_action'] = Logs_model::ACTION_CREATE_SD;
+            $logs['date_action'] = date("Y-m-d H:i:s");
+            $this->logs_model->add_logs($logs);
+        } else {//edit
+            $this->create_model->edit_dones($id_dones, $dones);
+            $id_dones_new = $id_dones;
+
+            //status
+            if ($this->data['active_user']['level'] == Main_model::LEVEL_ID_ROCHS) {//grochs
+                //statuses to history
+                $history_actions['history_actions'] = array(Logs_model::ACTION_EDIT_SD, Logs_model::ACTION_PROVE_SD_UMCHS, Logs_model::ACTION_PROVE_SD_RCU);
+            } else {
+                //statuses to history
+                $history_actions['history_actions'] = array(Logs_model::ACTION_EDIT_SD);
+            }
+
+            $history_actions['id_dones'] = $id_dones_new;
+            $this->logs_model->delete_dones_statuses($history_actions);
+
+            //set new status
+            $logs['id_user'] = $this->data['active_user']['id_user'];
+            if ($this->data['active_user']['is_guest'] == 1) {
+                $logs['fio_jour'] = $this->data['active_user']['auth_fio'];
+                $logs['position_name_jour'] = $this->data['active_user']['position_name'];
+                $logs['rank_name_jour'] = $this->data['active_user']['rank_name'];
+                $logs['creator_name_jour'] = $this->data['active_user']['creator_name'];
+            }
+            $logs['id_dones'] = $id_dones_new;
+            $logs['id_action'] = Logs_model::ACTION_EDIT_SD;
+            $logs['date_action'] = date("Y-m-d H:i:s");
+            $this->logs_model->add_logs($logs);
+        }
+
+
+        /* media */
+        $this->dones_model->delete_dones_media($id_dones_new);
+
+        if (isset($post['sd_media']) && !empty($post['sd_media'])) {
+
+            foreach ($post['sd_media'] as $type => $row) {
+
+                if (!empty($row)) {
+                    foreach ($row as $file) {
+                        $media = [];
+                        if (!empty($file)) {
+                            $media['id_dones'] = $id_dones_new;
+                            $media['file'] = $file;
+                            $media['type'] = $type;
+
+                            $this->dones_model->add_dones_media($media);
+                        }
+                    }
+                }
+            }
+        }
+
+        redirect('/creator/catalog');
+    }
+
+
+        public function edit_form_simple($id_dones = 0)
+    {
+
+        $this->data['type_sd'] = Main_model::TYPE_SD_SIMPLE;
+        $this->data['title'] = 'Ред спец.донесение (простое)';
+        $this->data['active_item_menu'] = 'create';
+        $this->data['is_show_btn_search_rig'] = 0; //don't show btn "search rig"
+
+        $this->data['bread_crumb'] = array(array('/dones' => 'Редактировать специальное донесение'),
+            array('Простое'));
+
+
+        $this->data['vid_specd'] = $this->main_model->get_vid_specd();
+
+        $this->data['dones'] = $this->create_model->get_dones_by_id($id_dones);
+
+        $statuses = $this->dones_model->get_statuses_by_id_dones($id_dones, 0, false);
+        $statuses_id = array_column($statuses, 'id_action');
+
+
+
+        if ($this->session->userdata('can_edit') == 0) {// viewer can see SD
+            $this->data['dones']['is_see'] = 1; //only see form not possible save!!!
+        } else {
+
+
+            /* ROSN, UGZ, AVIA */
+            if ($this->data['active_user']['level'] == 3 &&
+                (in_array($this->data['active_user']['id_organ'], [Main_model::ORGAN_ID_ROSN, Main_model::ORGAN_ID_UGZ, Main_model::ORGAN_ID_AVIA]))) {
+
+                if (($this->data['active_user']['id_local'] !== $this->data['dones']['author_local_id']) && $this->data['active_user']['id_region'] != Main_model::REGION_MINSK) {
+                    $this->data['dones']['is_see'] = 1; //only see form not possible save!!!
+                } elseif ($this->data['dones']['is_open_update'] == 0 && in_array(Logs_model::ACTION_PROVE_SD_RCU, $statuses_id)) {
+                    $this->data['dones']['is_see'] = 1; //only see form not possible save!!!
+                }
+            } elseif ($this->data['active_user']['level'] == Main_model::LEVEL_ID_RCU &&
+                $this->data['dones']['is_open_update'] == 0 && in_array(Logs_model::ACTION_PROVE_SD_RCU, $statuses_id)) {
+                $this->data['dones']['is_see'] = 1; //only see form not possible save!!!
+            } else {
+                /*  author SD = current user
+                 * proved umchs and proved rcu and not open update
+                 * proved rcu and not open update
+                 *          */
+                if ($this->data['active_user']['level'] == 3 && (($this->data['active_user']['id_local'] != $this->data['dones']['author_local_id']) ||
+                    ($this->data['dones']['is_open_update'] == 0 && in_array(Logs_model::ACTION_PROVE_SD_UMCHS, $statuses_id) &&
+                    in_array(Logs_model::ACTION_PROVE_SD_RCU, $statuses_id)) ||
+                    ($this->data['dones']['is_open_update'] == 0 && in_array(Logs_model::ACTION_PROVE_SD_RCU, $statuses_id)))) {
+
+                    $this->data['dones']['is_see'] = 1; //only see form not possible save!!!
+                } elseif ($this->data['active_user']['level'] == 2 && (($this->data['active_user']['id_region'] != $this->data['dones']['author_region_id']) ||
+                    ($this->data['dones']['is_open_update'] == 0 && in_array(Logs_model::ACTION_PROVE_SD_UMCHS, $statuses_id) &&
+                    in_array(Logs_model::ACTION_PROVE_SD_RCU, $statuses_id)) ||
+                    ($this->data['dones']['is_open_update'] == 0 && in_array(Logs_model::ACTION_PROVE_SD_RCU, $statuses_id)))) {
+
+                    $this->data['dones']['is_see'] = 1; //only see form not possible save!!!
+                }
+            }
+        }
+
+        if (isset($this->data['dones']['is_see']) && $this->data['dones']['is_see'] == 1) {
+            $this->data['title'] = 'Прсмотр. спец.донесения (простое)';
+            //$this->data['is_show_btn_search_rig'] = 0; //not show btn "search rig"
+
+            $this->data['bread_crumb'] = array(array('/' => 'Просмотреть специальное донесение (простое)'),
+                array('ID = ' . $id_dones)
+            );
+        }
+
+
+        $this->data['is_edit_dones'] = 1; //sign of edit dones
+        $this->data['id_dones'] = $id_dones; //ID of dones
+
+
+        $this->data['dones']['preview_opening_description'] = explode(PHP_EOL, $this->data['dones']['opening_description']);
+
+
+
+        //media
+        $media = $this->dones_model->get_dones_media($id_dones);
+        $this->data['dones']['media']=$media;
+
+
+        $this->twig->display('create/simple/form_simple', $this->data);
     }
 }

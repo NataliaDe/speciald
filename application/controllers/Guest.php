@@ -42,14 +42,14 @@ class Guest extends CI_Controller
     public function index($id_user_speciald = 0, $id_user_journal = 0, $id_rig = 0)
     {
 
-        $id_user_speciald= intval($id_user_speciald);
-        $id_user_journal= intval($id_user_journal);
-        $id_rig= intval($id_rig);
+        $id_user_speciald = intval($id_user_speciald);
+        $id_user_journal = intval($id_user_journal);
+        $id_rig = intval($id_rig);
 
         $this->id_user_speciald = $id_user_speciald;
         $this->id_user_journal = $id_user_journal;
 
-        $journal_user = $this->user_model->get_journal_permissions_by_user_id($id_user_journal);
+        //$journal_user = $this->user_model->get_journal_permissions_by_user_id($id_user_journal);
 
         $this->fio = $journal_user['fio_for_speciald'];
         $this->position = $journal_user['position_for_speciald'];
@@ -68,7 +68,7 @@ class Guest extends CI_Controller
             redirect('dones/form_standart');
         } else {
 
-            redirect($this->session->userdata('role').'/catalog');
+            redirect($this->session->userdata('role') . '/catalog');
         }
     }
 
@@ -83,13 +83,14 @@ class Guest extends CI_Controller
         $this->session->set_userdata('rank_name', $this->rank);
         $this->session->set_userdata('creator_name', $this->creator_name);
         $this->session->set_userdata('id_rig', $this->id_rig);
+        //$this->session->set_userdata('id_user_jour', $this->id_user_journal);
 
 
         $remember_me = 1;
 
         if (isset($remember_me) && $remember_me == 1) {
             $key = generateSalt(); //назовем ее $key
-            $this->set_cookie($this->session->userdata('id_user'), $this->session->userdata('id_user'));
+            $this->set_cookie($this->session->userdata('id_user'), $this->session->userdata('id_user')); //????????
         }
     }
 
@@ -97,22 +98,40 @@ class Guest extends CI_Controller
     {
 
         $unexpired_cookie_exp_time = 2147483647 - time();
-        $cookie = array(
+//        $cookie = array(
+//            'name'   => 'key_cookie_speciald',
+//            'value'  => $key,
+//            'expire' => $unexpired_cookie_exp_time
+//        );.
+
+        $cookie[0] = array(
             'name'   => 'key_cookie_speciald',
             'value'  => $key,
             'expire' => $unexpired_cookie_exp_time
         );
-        $this->input->set_cookie($cookie);
+
+        $cookie[1] = array(
+            'name'   => 'key_cookie_speciald_from_journal',
+            'value'  => $this->id_user_journal,
+            'expire' => $unexpired_cookie_exp_time
+        );
+
+        $this->input->set_cookie($cookie[0]);
+        $this->input->set_cookie($cookie[1]);
+
+        //print_r($cookie);exit();
         // $this->user_model->set_key_cookie($id_user, $key);
         // echo "Congragulatio Cookie Set";
     }
 
-
-        // log the user out
+    // log the user out
     public function logout()
     {
         $this->session->sess_destroy();
         delete_cookie("key_cookie_speciald");
 
+        $cookie_from_journal = $this->input->cookie('key_cookie_speciald_from_journal', true);
+        if (isset($cookie_from_journal))
+            delete_cookie("key_cookie_speciald_from_journal");
     }
 }

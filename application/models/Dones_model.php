@@ -206,4 +206,30 @@ class Dones_model extends CI_Model
                 ->get()
                 ->row_array();
     }
+
+
+
+        public function delete_dones_media($id_dones)
+    {
+        $this->db->where('id_dones', $id_dones)->delete('dones_media');
+    }
+
+
+        public function add_dones_media($data)
+    {
+        $data['created_by'] = $this->session->userdata('id_user');
+        $data['date_create'] = date('Y-m-d H:i:s');
+        $this->db->insert('dones_media', $data);
+    }
+
+
+            public function get_dones_media($id_dones)
+    {
+
+        $this->db->select('*');
+        $this->db->where('id_dones', $id_dones);
+
+        $result = $this->db->get('dones_media')->result_array();
+        return $result;
+    }
 }

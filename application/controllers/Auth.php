@@ -64,7 +64,7 @@ class Auth extends MY_Controller
             }
 
 
-            redirect($this->session->userdata('role').'/catalog');
+            redirect($this->session->userdata('role') . '/catalog');
         } else {
             redirect('auth');
         }
@@ -80,7 +80,7 @@ class Auth extends MY_Controller
             'expire' => $unexpired_cookie_exp_time
         );
         $this->input->set_cookie($cookie);
-       // $this->user_model->set_key_cookie($id_user, $key);
+        // $this->user_model->set_key_cookie($id_user, $key);
         // echo "Congragulatio Cookie Set";
     }
 
@@ -89,6 +89,10 @@ class Auth extends MY_Controller
     {
         $this->session->sess_destroy();
         delete_cookie("key_cookie_speciald");
+
+        $cookie_from_journal = $this->input->cookie('key_cookie_speciald_from_journal', true);
+        if (isset($cookie_from_journal))
+            delete_cookie("key_cookie_speciald_from_journal");
 
         redirect('auth');
     }

@@ -84,7 +84,7 @@ class Logs_model extends CI_Model
     public function delete_dones_statuses_of_user($data)
     {
         $this->db->where('id_dones', $data['id_dones']);
-        $this->db->where('id_dones', $data['id_user']);
+        $this->db->where('id_user', $data['id_user']);
         $this->db->where_in('id_action', $data['history_actions']);
         $this->db->update('speciald.dones_logs', ['is_history' => 1]);
     }

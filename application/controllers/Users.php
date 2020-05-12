@@ -38,7 +38,7 @@ class Users extends My_Controller
 
             $this->data['session_id_user'] = $this->session->userdata('id_user');
 
-            $this->data['active_item_menu'] ='users';
+            $this->data['active_item_menu'] = 'users';
 
             $this->load->library('form_validation');
 
@@ -54,6 +54,12 @@ class Users extends My_Controller
 
     public function index()
     {
+
+        $ids_user_sd_journal = $this->user_model->get_ids_user_sd_from_journal();
+
+        if(!empty($ids_user_sd_journal))
+        $this->data['ids_user_sd_journal']= array_column ($ids_user_sd_journal, 'id_user_sd');
+
         $this->data['all_users'] = $this->user_model->get_all_active_permissions();
         $this->data['title'] = 'Пользователи';
         $this->twig->display('users/index', $this->data);
@@ -62,6 +68,8 @@ class Users extends My_Controller
     //user form add
     public function form_add()
     {
+
+        $this->data['users_journal'] = $this->user_model->get_users_free_journal();
 
         $this->data['title'] = 'Добавить пользователя';
         $this->twig->display('users/form_add', $this->data);
@@ -75,64 +83,72 @@ class Users extends My_Controller
 
         if (isset($post) && !empty($post)) {
 
-            $id_user=(isset($post['id_user']) && !empty($post['id_user'])) ? $post['id_user'] : 0;
+            $id_user = (isset($post['id_user']) && !empty($post['id_user'])) ? $post['id_user'] : 0;
 
 
-                $data['id_region'] = $post['id_region'];
-                $data['id_local'] = $post['id_local'];
-                $data['fio'] = trim($post['fio']);
-                $data['creator_name'] = trim($post['creator_name']);
-                $data['id_position'] = $post['id_position'];
-                $data['id_rank'] = $post['id_rank'];
+            $data['id_region'] = $post['id_region'];
+            $data['id_local'] = $post['id_local'];
+            $data['fio'] = trim($post['fio']);
+            $data['creator_name'] = trim($post['creator_name']);
+            $data['id_position'] = $post['id_position'];
+            $data['id_rank'] = $post['id_rank'];
 
-                $data['login'] = trim($post['login']);
-                $data['password'] = trim($post['password']);
+            $data['login'] = trim($post['login']);
+            $data['password'] = trim($post['password']);
 
-                if (isset($post['id_organ']) && $post['id_organ'] == Main_model::ORGAN_ID_RCU) {
+            if (isset($post['id_organ']) && $post['id_organ'] == Main_model::ORGAN_ID_RCU) {
 
-                    $data['sub'] = 1;
-                    $data['level'] = Main_model::LEVEL_ID_RCU;
-                    $data['id_organ'] = $post['id_organ'];
-                } elseif (isset($post['id_organ']) && in_array($post['id_organ'], array(Main_model::ORGAN_ID_ROSN, Main_model::ORGAN_ID_UGZ, Main_model::ORGAN_ID_AVIA))) {
+                $data['sub'] = 1;
+                $data['level'] = Main_model::LEVEL_ID_RCU;
+                $data['id_organ'] = $post['id_organ'];
+            } elseif (isset($post['id_organ']) && in_array($post['id_organ'], array(Main_model::ORGAN_ID_ROSN, Main_model::ORGAN_ID_UGZ, Main_model::ORGAN_ID_AVIA))) {
 
-                    $data['sub'] = 2;
-                    $data['id_organ'] = $post['id_organ'];
+                $data['sub'] = 2;
+                $data['id_organ'] = $post['id_organ'];
 
-                    if ($post['id_region'] == 3 && $post['id_local'] == 123) {
-                        //$data['level'] = Main_model::LEVEL_ID_UMCHS;
-                        $data['level'] = Main_model::LEVEL_ID_ROCHS;
-                    } else {
-                        $data['level'] = Main_model::LEVEL_ID_ROCHS;
-                    }
+                if ($post['id_region'] == 3 && $post['id_local'] == 123) {
+                    //$data['level'] = Main_model::LEVEL_ID_UMCHS;
+                    $data['level'] = Main_model::LEVEL_ID_ROCHS;
                 } else {
-                    $data['id_organ'] = 0;
-                    $data['sub'] = 0;
-
-                    if (isset($post['id_local']) && $post['id_local'] != 0) {
-                        $data['level'] = Main_model::LEVEL_ID_ROCHS;
-                    } else {
-                        $data['level'] = Main_model::LEVEL_ID_UMCHS;
-                    }
+                    $data['level'] = Main_model::LEVEL_ID_ROCHS;
                 }
+            } else {
+                $data['id_organ'] = 0;
+                $data['sub'] = 0;
 
-
-
-                $data['can_edit'] = (isset($post['can_edit']) && !empty($post['can_edit'])) ? $post['can_edit'] : 0;
-
-                if ($data['can_edit'] == 1) {
-                    $data['role'] = 'creator';
-                    $data['is_admin'] = $post['is_admin'];
+                if (isset($post['id_local']) && $post['id_local'] != 0) {
+                    $data['level'] = Main_model::LEVEL_ID_ROCHS;
                 } else {
-                    $data['role'] = 'viewer';
-                    $data['is_admin'] = 0;
+                    $data['level'] = Main_model::LEVEL_ID_UMCHS;
                 }
+            }
 
 
-                //edit
-                if($id_user != 0)
-                 $this->user_model->edit_user($id_user,$data);
-                    else
-            $this->user_model->add_user($data);
+
+            $data['can_edit'] = (isset($post['can_edit']) && !empty($post['can_edit'])) ? $post['can_edit'] : 0;
+
+            if ($data['can_edit'] == 1) {
+                $data['role'] = 'creator';
+                $data['is_admin'] = $post['is_admin'];
+            } else {
+                $data['role'] = 'viewer';
+                $data['is_admin'] = 0;
+            }
+
+
+            $id_user_journal = $post['id_user_journal'];
+
+            if (isset($id_user_journal) && !empty($id_user_journal)) {
+                $this->user_model->set_user_sd_to_journal($id_user_journal, $id_user);
+            } else {//reset sd user
+                $this->user_model->set_user_sd_to_journal($id_user_journal, null);
+            }
+
+            //edit
+            if ($id_user != 0)
+                $this->user_model->edit_user($id_user, $data);
+            else
+                $this->user_model->add_user($data);
 
             if ($data['can_edit'] == 1) {
                 $is_user_for_journal = $this->user_model->get_cnt_users_for_is_guest($data);
@@ -181,6 +197,8 @@ class Users extends My_Controller
         if ($id_user != 0) {
 
             $this->data['user'] = $this->user_model->get_user_by_id($id_user);
+
+            $this->data['users_journal'] = $this->user_model->get_users_journal_for_edit($id_user);
 
             if ($this->data['user']['is_guest'] == 0) {
                 $this->data['title'] = 'Редактировать пользователя';
@@ -234,9 +252,11 @@ class Users extends My_Controller
     // delete user ajax
     public function delete($id_user = 0)
     {
-        if (isset($id_user) && !empty($id_user))
-             $this->user_model->delete_user( $id_user);
+        if (isset($id_user) && !empty($id_user)){
+            $this->user_model->delete_user($id_user);
+            $this->user_model->reset_user_sd_in_journal($id_user,null);
+        }
 
-            echo json_encode(array('success' => 'Данные успешно сохранены'));
+        echo json_encode(array('success' => 'Данные успешно сохранены'));
     }
 }

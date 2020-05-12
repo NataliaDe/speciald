@@ -109,7 +109,7 @@ $(document).ready(function () {
         /* new name */
         var $div_new = $('#str_text_id_row'+num);
         $div_new.find('td').find('.str_text_podr_name').attr('name','str_text['+num+'][str_text_podr_name]');
-        $div_new.find('td').find('.str_text_descr').attr('name','str_text['+num+'][str_text_descr]');
+        $div_new.find('td').find('.str_text_descr').attr('name','str_text['+num+'][str_text_description]');
         $div_new.find('td').find('.sort').attr('name','str_text['+num+'][sort]');
         $div_new.find('td').find('.id_pasp_text').attr('name','silymchs['+num+'][id_pasp_text]');
 

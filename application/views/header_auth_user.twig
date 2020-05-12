@@ -19,7 +19,7 @@
               <li class="user-header">
 
                   <p>
-                      {{active_user.auth_organ}}<br><br>
+                      {{active_user.auth_organ}}<br>
 
 
                       <small class="title-user">
@@ -27,10 +27,11 @@
                               <span class="{%if active_user.is_guest == 1%} guest-user {%endif%}" >Вы авторизованы как Гость</span>
                               <br>
                           {%endif%}
-                          Звание: {{active_user.rank_name}}<br>
-                          Должность: {{active_user.position_name}}<br>
-                          Право создавать/ред.спец.донесения: {% if active_user.can_edit == 1 %} да {%else%} нет {%endif%}<br>
-                          Права администратора: {{active_user.admin_name}}
+                          <span class="header_auth_user">Уровень:</span> {{active_user.level_name}}<br>
+                          <span class="header_auth_user">Звание:</span> {{active_user.rank_name}}<br>
+                          <span class="header_auth_user">Должность:</span> {{active_user.position_name}}<br>
+                          <span class="header_auth_user">Право создавать/ред.спец.донесения:</span> {% if active_user.can_edit == 1 %} да {%else%} нет {%endif%}<br>
+                          <span class="header_auth_user">Права администратора:</span> {{active_user.admin_name}}
                       </small>
                   </p>
               </li>

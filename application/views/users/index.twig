@@ -53,7 +53,7 @@
             <tbody>
                 {% for user in all_users %}
 
-                    <tr class="{% if user.is_guest == 1%} info {%endif%}">
+                    <tr class="{% if user.is_guest == 1%} table-info {%elseif ids_user_sd_journal is defined and ids_user_sd_journal is not empty and user.id_user in ids_user_sd_journal %} table-success {%endif%}">
                         <td>{% if user.is_guest == 1%} Гость для аторизации из ЖЦ {%else%}{{user.fio}}{%endif%}<br>
                         {% if user.is_guest == 0%} {{user.rank_name}}{%endif%}</td>
                         <td>{% if user.is_guest == 1%} - {%else%}{{user.position_name}}{%endif%}</td>

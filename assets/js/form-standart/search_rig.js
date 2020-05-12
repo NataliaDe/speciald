@@ -2,7 +2,7 @@ $('#close-modal-search-rig').on('click', function (event) {
     $('#modal-search-rig').click();
 });
 $('#close-modal-agree-get-rig-data').on('click', function (event) {
-    $('#modal-search-rig').css('opacity','');
+    $('#modal-search-rig').css('opacity', '');
     $('#modal-agree-get-rig-data').click();
 });
 
@@ -10,7 +10,7 @@ $('#close-modal-agree-get-rig-data').on('click', function (event) {
 
 $(document).ready(function () {
     $('.select2-select').select2({
-         placeholder: "Выберите из списка",
+        placeholder: "Выберите из списка",
         // allowClear: true,
         "language": {
             "noResults": function () {
@@ -63,32 +63,31 @@ function selectRig(r) {
 
     if ($(r).val() !== '' && $(r).val() !== 0) {
 
-        $('#btn-get-data-rig').attr('data-rig',$(r).val());
+        $('#btn-get-data-rig').attr('data-rig', $(r).val());
         $('#btn-get-data-rig').attr('disabled', false);
-    }
-    else{
-        $('#btn-get-data-rig').attr('data-rig',0);
+    } else {
+        $('#btn-get-data-rig').attr('data-rig', 0);
         $('#btn-get-data-rig').attr('disabled', true);
     }
 }
 
 
-        $('#modal-agree-get-rig-data').on('show.bs.modal', function (event) {
-$('#modal-search-rig').css('opacity','0.8');
-        });
+$('#modal-agree-get-rig-data').on('show.bs.modal', function (event) {
+    $('#modal-search-rig').css('opacity', '0.8');
+});
 
 /*  get data by rig and fill special form with this data */
 $('#btn-fill-form').on('click', function (event) {
 
 
-        $('#preload-update-data-search-rig').css('display', 'block');
-        $('body').css('opacity',0.5);
+    $('#preload-update-data-search-rig').css('display', 'block');
+    $('body').css('opacity', 0.5);
 
     var id_rig = $('#btn-get-data-rig').attr('data-rig');
     var url = $('#btn-get-data-rig').attr('data-url');
 
 
-    var data={'id_rig':id_rig};
+    var data = {'id_rig': id_rig};
 
     $.get(url, data, function (res) {
 
@@ -150,7 +149,7 @@ $('#btn-fill-form').on('click', function (event) {
                 }
             });
 
-                        $('.select2-multi').select2({
+            $('.select2-multi').select2({
                 placeholder: "Выберите из списка",
                 allowClear: true,
                 "language": {
@@ -173,20 +172,33 @@ $('#btn-fill-form').on('click', function (event) {
 
 
             $('#preload-update-data-search-rig').css('display', 'none');
-            $('body').css('opacity',1);
+            $('body').css('opacity', 1);
 
 
             toastr.success('Данные по выезду с ID = ' + id_rig + ' успешно выбраны', 'Успех!', {progressBar: true, timeOut: 2500});
-            $('#modal-search-rig').css('opacity','');
+            $('#modal-search-rig').css('opacity', '');
             $('#modal-search-rig').click();
             $('#modal-agree-get-rig-data').click();
         } else {
 
-            $('body').css('opacity',1);
+            $('body').css('opacity', 1);
             toastr.error('Данные по выезду с ID = ' + id_rig + ' не найдены', 'Ошибка!', {progressBar: true, timeOut: 2500});
 
         }
     });
+
+});
+
+
+$('#modal-search-rig #searchRigForm #id_region').on('change', function (event) {
+
+    var reg = $(this).val();
+
+    if (parseInt(reg) === 3) {
+        $('#modal-search-rig #searchRigForm #id_local_block').addClass('hide');
+    } else {
+        $('#modal-search-rig #searchRigForm #id_local_block').removeClass('hide');
+    }
 
 });
 

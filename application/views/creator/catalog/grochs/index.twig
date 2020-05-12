@@ -13,9 +13,9 @@
 
 
 
-{% include 'creator/catalog/modals.twig' %}
 
 
+{% include 'creator/catalog/catalog_head.twig' %}
 
 {%if active_user.id_organ in [8,9,12]%}
 
@@ -34,6 +34,11 @@
 {%else%}
     {% include 'creator/catalog/grochs/list.twig' %}
 {%endif%}
+
+
+{% include 'creator/catalog/modals.twig' %}
+
+{% include 'common/catalog/modal-catalog-media.twig' %}
 
 {#{%if active_user.id_organ == 8%}
 
@@ -62,6 +67,7 @@
 {% block head %}
 <link rel="stylesheet" href="{{ base_url('assets/datatables/jquery.dataTables.css') }}">
 <link rel="stylesheet" href="{{ base_url('assets/css/history/history.css') }}">
+<link rel="stylesheet" href="{{ base_url('/assets/css/catalog/media.css') }}">
 {% endblock %}
 
 {% block footer %}
@@ -73,6 +79,7 @@
 
 
   <script src="{{ base_url('/assets/js/creator/catalog.js')}}"></script>
+  <script src="{{ base_url('/assets/js/catalog/slider_media_manual.js')}}"></script>
 
 
 {% endblock %}

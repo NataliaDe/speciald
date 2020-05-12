@@ -428,7 +428,6 @@ $('#close-update-sd-modal #close-update-sd-btn').on('click', function (e) {
     e.preventDefault();
 
     var button = $(this);
-    alert(button.data('url'));
     $.ajax({
         type: 'GET',
         url: button.data('url'),
