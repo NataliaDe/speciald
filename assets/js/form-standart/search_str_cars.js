@@ -265,7 +265,7 @@ if(cars !== '' && cars !== null){
                         $row.find('td').find('.mark').val(value.mark);
                         $row.find('td').find('.pasp_name').val(value.pasp_name);
                         $row.find('td').find('.locorg_name').val(value.locorg_name);
-                        $row.find('td').find('.v_ac').val(value.v_ac);
+                        $row.find('td').find('.v_ac').val( Number(value.v_ac/1000).toFixed(1));
                         $row.find('td').find('.man_per_car').val(value.man_per_car);
 
                         $row.find('td').find('.id_teh').val(value.id_teh);
@@ -286,7 +286,7 @@ if(cars !== '' && cars !== null){
                         $row.find('td').find('.mark_trunks').val(value.mark);
                         $row.find('td').find('.pasp_name_trunks').val(value.pasp_name);
                         $row.find('td').find('.locorg_name_trunks').val(value.locorg_name);
-                        $row.find('td').find('.v_ac_trunks').val(value.v_ac);
+                        $row.find('td').find('.v_ac_trunks').val(Number(value.v_ac/1000).toFixed(1));
                         $row.find('td').find('.man_per_car_trunks').val(value.man_per_car);
 
                         $row.find('td').find('.id_teh').val(value.id_teh);

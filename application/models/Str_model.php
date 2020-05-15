@@ -9,6 +9,7 @@ if (!defined('BASEPATH')) {
  */
 class Str_model extends CI_Model
 {
+
 //	const LEVEL_ID_RCU=1;//RCU
 //	const LEVEL_ID_UMCHS=2;//UMCHS
 //	const LEVEL_ID_ROCHS=3;//ROCHS
@@ -35,17 +36,15 @@ class Str_model extends CI_Model
     public function __construct()
     {
         parent::__construct();
-
     }
-
 
     public function is_last_dateduty_car($id_teh)
     {
-         $query = $this->db->where([
-                'id_teh'   => $id_teh
+        $query = $this->db->where([
+                'id_teh' => $id_teh
             ])
             ->where('dateduty IS NOT NULL')
-             ->order_by('dateduty', 'desc')
+            ->order_by('dateduty', 'desc')
             ->limit(1)
             ->get('str.car');
 
@@ -54,51 +53,47 @@ class Str_model extends CI_Model
 
     public function get_last_dateduty_car($id_teh)
     {
-        $query =$this->db->select('dateduty')
+        $query = $this->db->select('dateduty')
                 ->from('str.car')
                 ->where([
-                'id_teh' => $id_teh
-            ])
-            ->order_by('dateduty', 'desc')
-            ->limit(1)
-            ->get()->row_array();
+                    'id_teh' => $id_teh
+                ])
+                ->order_by('dateduty', 'desc')
+                ->limit(1)
+                ->get()->row_array();
 
         return $query['dateduty'];
     }
 
     public function get_man_per_car($id_teh)
     {
-        $dateduty=$this->get_last_dateduty_car($id_teh);
+        $dateduty = $this->get_last_dateduty_car($id_teh);
         $this->db->select('COUNT(fc.`id_fio`) AS cnt_man');
-        $this->db->join('str.fiocar AS fc', 'c.`id`=fc.`id_tehstr`','left');
+        $this->db->join('str.fiocar AS fc', 'c.`id`=fc.`id_tehstr`', 'left');
         $this->db->where('c.id_teh', $id_teh);
         $this->db->where('c.dateduty', $dateduty);
 
         $res = $this->db->get('str.car AS c')->row_array();
         return $res['cnt_man'];
-
     }
 
-
-
-        public function get_man_per_car_by_ch($id_teh,$ch)
+    public function get_man_per_car_by_ch($id_teh, $ch)
     {
         //$dateduty=$this->get_last_dateduty_car($id_teh);
         $this->db->select('COUNT(fc.`id_fio`) AS cnt_man');
-        $this->db->join('str.fiocar AS fc', 'c.`id`=fc.`id_tehstr`','left');
+        $this->db->join('str.fiocar AS fc', 'c.`id`=fc.`id_tehstr`', 'left');
         $this->db->where('c.id_teh', $id_teh);
         $this->db->where('c.ch', $ch);
-        $query=$this->db->get('str.car AS c');
+        $query = $this->db->get('str.car AS c');
 
 
         $num = $query->num_rows();
 
         $res = $query->row_array();
-        return array('cnt_man'=>$res['cnt_man'], 'is_result'=>$num);
+        return array('cnt_man' => $res['cnt_man'], 'is_result' => $num);
     }
 
-
-                       public function get_inf_by_id_pasp($id_pasp)
+    public function get_inf_by_id_pasp($id_pasp)
     {
         return $this->db->select('*, concat(pasp_name_spec," ",locorg_name_spec) as full_name_podr ')
                 ->from('str.spec_tbl_dones')
@@ -116,16 +111,14 @@ class Str_model extends CI_Model
         $this->db->select('m.dateduty,m.ch,m.id_card,m.listls as on_list_ch,m.countls as shtat_ch, m.vacant as vacant_ch,m.face as face_ch,m.calc as br_ch, m.duty as cnt_naryd, m.gas, m.fio_duty');
         $this->db->where('m.id_card', $id_pasp);
         $this->db->where('m.is_duty', 1);
-        $this->db->order_by('m.dateduty','desc');
+        $this->db->order_by('m.dateduty', 'desc');
         $this->db->limit(1);
 
         $res = $this->db->get('str.main AS m')->row_array();
         return $res;
-
     }
 
-
-            public function get_shtat_of_pasp_by_id_pasp($id_pasp)
+    public function get_shtat_of_pasp_by_id_pasp($id_pasp)
     {
         /* all man in pasp */
         $this->db->select('count(l.id) as shtat');
@@ -148,8 +141,7 @@ class Str_model extends CI_Model
         return $res['vacant'];
     }
 
-
-        public function get_cnt_trip_by_id_pasp($id_pasp,$dateduty,$ch)
+    public function get_cnt_trip_by_id_pasp($id_pasp, $dateduty, $ch)
     {
         /* man in trip  */
         $this->db->select('t.id, t.id_fio,date_format(t.date1,"%d.%m.%Y") AS date1,date_format(t.date2,"%d.%m.%Y") AS date2,'
@@ -157,7 +149,7 @@ class Str_model extends CI_Model
         $this->db->join('str.listfio AS l ', 't.id_fio=l.id', 'left');
         $this->db->join('str.position as po ', 'po.id=l.id_position', 'left');
         $this->db->join('str.cardch AS c', 'l.id_cardch=c.id', 'left');
-        $this->db->where('(c.id_card = '.$id_pasp.' AND c.ch = '.$ch.') AND ( (t.date1 <= "'.$dateduty.'" AND t.date2 >= "'.$dateduty.'")  OR ( t.date1 <= "'.$dateduty.'" AND t.date2 is null) )');
+        $this->db->where('(c.id_card = ' . $id_pasp . ' AND c.ch = ' . $ch . ') AND ( (t.date1 <= "' . $dateduty . '" AND t.date2 >= "' . $dateduty . '")  OR ( t.date1 <= "' . $dateduty . '" AND t.date2 is null) )');
 
 
         $res = $this->db->get('str.trip AS t')->result_array();
@@ -170,8 +162,7 @@ class Str_model extends CI_Model
         return $res;
     }
 
-
-            public function get_cnt_holiday_by_id_pasp($id_pasp,$dateduty,$ch)
+    public function get_cnt_holiday_by_id_pasp($id_pasp, $dateduty, $ch)
     {
         /* man on holiday */
         $this->db->select('h.id, h.id_fio,date_format(h.date1,"%d.%m.%Y") AS date1,date_format(h.date2,"%d.%m.%Y") AS date2,'
@@ -179,7 +170,7 @@ class Str_model extends CI_Model
         $this->db->join('str.listfio AS l ', 'h.id_fio=l.id', 'left');
         $this->db->join('str.position as po ', 'po.id=l.id_position', 'left');
         $this->db->join('str.cardch AS c', 'l.id_cardch=c.id', 'left');
-        $this->db->where('(c.id_card = '.$id_pasp.' AND c.ch = '.$ch.') AND ( (h.date1 <= "'.$dateduty.'" AND h.date2 >= "'.$dateduty.'")  OR ( h.date1 <= "'.$dateduty.'" AND h.date2 is null) )');
+        $this->db->where('(c.id_card = ' . $id_pasp . ' AND c.ch = ' . $ch . ') AND ( (h.date1 <= "' . $dateduty . '" AND h.date2 >= "' . $dateduty . '")  OR ( h.date1 <= "' . $dateduty . '" AND h.date2 is null) )');
 
 
         $res = $this->db->get('str.holiday AS h')->result_array();
@@ -192,8 +183,7 @@ class Str_model extends CI_Model
         return $res;
     }
 
-
-                public function get_cnt_ill_by_id_pasp($id_pasp,$dateduty,$ch)
+    public function get_cnt_ill_by_id_pasp($id_pasp, $dateduty, $ch)
     {
         /* man on holiday */
         $this->db->select('i.id, i.id_fio,date_format(i.date1,"%d.%m.%Y") AS date1,date_format(i.date2,"%d.%m.%Y") AS date2,'
@@ -202,7 +192,7 @@ class Str_model extends CI_Model
         $this->db->join('str.position as po ', 'po.id=l.id_position', 'left');
         $this->db->join('str.cardch AS c', 'l.id_cardch=c.id', 'left');
         $this->db->join('str.maim AS ma', 'i.maim=ma.id', 'left');
-        $this->db->where('(c.id_card = '.$id_pasp.' AND c.ch = '.$ch.') AND ( (i.date1 <= "'.$dateduty.'" AND i.date2 >= "'.$dateduty.'")  OR ( i.date1 <= "'.$dateduty.'" AND i.date2 is null) )');
+        $this->db->where('(c.id_card = ' . $id_pasp . ' AND c.ch = ' . $ch . ') AND ( (i.date1 <= "' . $dateduty . '" AND i.date2 >= "' . $dateduty . '")  OR ( i.date1 <= "' . $dateduty . '" AND i.date2 is null) )');
 
 
         $res = $this->db->get('str.ill AS i')->result_array();
@@ -215,9 +205,7 @@ class Str_model extends CI_Model
         return $res;
     }
 
-
-
-                public function get_cnt_other_by_id_pasp($id_pasp,$dateduty,$ch)
+    public function get_cnt_other_by_id_pasp($id_pasp, $dateduty, $ch)
     {
         /* man on holiday */
         $this->db->select('o.id, o.id_fio,date_format(o.date1,"%d.%m.%Y") AS date1, date_format(o.date2,"%d.%m.%Y") AS date2,'
@@ -226,7 +214,7 @@ class Str_model extends CI_Model
         $this->db->join('str.position as po ', 'po.id=l.id_position', 'left');
         $this->db->join('str.cardch AS c', 'l.id_cardch=c.id', 'left');
 
-        $this->db->where('(c.id_card = '.$id_pasp.' AND c.ch = '.$ch.') AND ( (o.date1 <= "'.$dateduty.'" AND o.date2 >= "'.$dateduty.'")  OR ( o.date1 <= "'.$dateduty.'" AND o.date2 is null) )');
+        $this->db->where('(c.id_card = ' . $id_pasp . ' AND c.ch = ' . $ch . ') AND ( (o.date1 <= "' . $dateduty . '" AND o.date2 >= "' . $dateduty . '")  OR ( o.date1 <= "' . $dateduty . '" AND o.date2 is null) )');
 
 
         $res = $this->db->get('str.other AS o')->result_array();
@@ -239,8 +227,7 @@ class Str_model extends CI_Model
         return $res;
     }
 
-
-                    public function get_cnt_vacant_inf_by_id_pasp($id_pasp,$ch)
+    public function get_cnt_vacant_inf_by_id_pasp($id_pasp, $ch)
     {
         /* man on holiday */
         $this->db->select('l.fio, po.name as position');
@@ -248,9 +235,9 @@ class Str_model extends CI_Model
         $this->db->join('str.position as po', 'po.id=l.id_position', 'left');
 
 
-        $this->db->where('c.id_card',$id_pasp);
-        $this->db->where('c.ch',$ch);
-        $this->db->where('l.is_vacant',1);
+        $this->db->where('c.id_card', $id_pasp);
+        $this->db->where('c.ch', $ch);
+        $this->db->where('l.is_vacant', 1);
 
 
         $res = $this->db->get('str.listfio AS l')->result_array();
@@ -263,24 +250,20 @@ class Str_model extends CI_Model
         return $res;
     }
 
-
-            public function get_maincou_by_id_pasp($id_pasp)
+    public function get_maincou_by_id_pasp($id_pasp)
     {
 
         $this->db->select('m.dateduty,m.ch,m.id_card');
         $this->db->where('m.id_card', $id_pasp);
         $this->db->where('m.is_duty', 1);
-        $this->db->order_by('m.dateduty','desc');
+        $this->db->order_by('m.dateduty', 'desc');
         $this->db->limit(1);
 
         $res = $this->db->get('str.maincou AS m')->row_array();
         return $res;
-
     }
 
-
-
-            public function get_vacant_in_ch_cou($id_pasp,$ch)
+    public function get_vacant_in_ch_cou($id_pasp, $ch)
     {
         /* all man in pasp */
         $this->db->select('count(l.id) as vacant_ch');
@@ -293,8 +276,7 @@ class Str_model extends CI_Model
         return $res['vacant_ch'];
     }
 
-
-                public function get_listls_in_ch_cou($id_pasp,$ch)
+    public function get_listls_in_ch_cou($id_pasp, $ch)
     {
         /* all man in pasp */
         $this->db->select('count(l.id) as vacant_ch');
@@ -307,49 +289,44 @@ class Str_model extends CI_Model
         return $res['vacant_ch'];
     }
 
-
-                public function get_all_in_ch_cou($id_pasp,$ch)
+    public function get_all_in_ch_cou($id_pasp, $ch)
     {
 
         $this->db->select('*');
         $this->db->where('m.id_card', $id_pasp);
         $this->db->where('m.ch', $ch);
         $this->db->where('m.is_duty', 1);
-        $this->db->order_by('m.dateduty','desc');
+        $this->db->order_by('m.dateduty', 'desc');
 
         $res = $this->db->get('str.maincou AS m')->result_array();
         return $res;
-
     }
 
-                    public function is_car_in_ch_cou($id_pasp,$ch)
+    public function is_car_in_ch_cou($id_pasp, $ch)
     {
 
         $this->db->select('id');
         $this->db->where('id_card', $id_pasp);
         $this->db->where('ch', $ch);
-        $this->db->order_by('dateduty','desc');
+        $this->db->order_by('dateduty', 'desc');
         $this->db->limit(1);
 
         $res = $this->db->get('str.carcou')->num_rows();
         return $res;
-
     }
 
-      public function br_in_pasp_on_date($id_pasp, $dateduty)
+    public function br_in_pasp_on_date($id_pasp, $dateduty)
     {
 
         $result = $this->db->query("CALL str.`getBrOfPasp`({$id_pasp}, '{$dateduty}')");
         //$this->db->reconnect();
-        mysqli_next_result( $this->db->conn_id );
+        mysqli_next_result($this->db->conn_id);
         $res = $result->result_array();
 
         return array_sum(array_column($res, 'cnt_in_br'));
     }
 
-
-
-                public function get_shtat_in_ch_cou($id_pasp,$ch)
+    public function get_shtat_in_ch_cou($id_pasp, $ch)
     {
         /* all man in pasp */
         $this->db->select('count(l.id) as shtat_ch');
@@ -361,39 +338,33 @@ class Str_model extends CI_Model
         return $res['shtat_ch'];
     }
 
-
-                public function get_mainrcu_by_id_pasp($id_pasp)
+    public function get_mainrcu_by_id_pasp($id_pasp)
     {
 
         $this->db->select('m.dateduty,m.ch,m.id_card');
         $this->db->where('m.id_card', $id_pasp);
         $this->db->where('m.is_duty', 1);
-        $this->db->order_by('m.dateduty','desc');
+        $this->db->order_by('m.dateduty', 'desc');
         $this->db->limit(1);
 
         $res = $this->db->get('str.mainrcu AS m')->row_array();
         return $res;
-
     }
 
-
-                    public function get_all_in_rcu_cou($id_pasp,$ch)
+    public function get_all_in_rcu_cou($id_pasp, $ch)
     {
 
         $this->db->select('*');
         $this->db->where('m.id_card', $id_pasp);
         $this->db->where('m.ch', $ch);
         $this->db->where('m.is_duty', 1);
-        $this->db->order_by('m.dateduty','desc');
+        $this->db->order_by('m.dateduty', 'desc');
 
         $res = $this->db->get('str.mainrcu AS m')->result_array();
         return $res;
-
     }
 
-
-
-                       public function get_locorg_cp_list($ids_region = null)
+    public function get_locorg_cp_list($ids_region = null)
     {
         $this->db->select('distinct (id_loc_org), locorg_name  ');
 
@@ -407,9 +378,7 @@ class Str_model extends CI_Model
         return $this->db->get('str.spec_list_podr_for_search_str_cars')->result_array();
     }
 
-
-
-                       public function get_pasp_cp_list($ids_locorg = null)
+    public function get_pasp_cp_list($ids_locorg = null)
     {
         $this->db->select('*');
 
@@ -425,9 +394,7 @@ class Str_model extends CI_Model
         return $this->db->get('str.spec_list_podr_for_search_str_cars')->result_array();
     }
 
-
-
-        public function get_dutych()
+    public function get_dutych()
     {
         $query = $this->db->select('*')
                 ->from('str.dutych')
@@ -438,17 +405,50 @@ class Str_model extends CI_Model
         return $query;
     }
 
-
-
-
-          public function get_cars_by_pasp($id_pasp, $dateduty,$ch)
+    public function get_cars_by_pasp($id_pasp, $dateduty, $ch)
     {
 
         $result = $this->db->query("CALL str.`getAllCarsInPasp`({$id_pasp}, '{$dateduty}', '{$ch}')");
         //$this->db->reconnect();
-        mysqli_next_result( $this->db->conn_id );
+        mysqli_next_result($this->db->conn_id);
         $res = $result->result_array();
 
+        return $res;
+    }
+
+    public function get_main_by_id_pasp_and_dateduty($id_pasp, $dateduty)
+    {
+
+        $this->db->select('m.dateduty,m.ch,m.id_card,m.listls as on_list_ch,m.countls as shtat_ch, m.vacant as vacant_ch,m.face as face_ch,m.calc as br_ch, m.duty as cnt_naryd, m.gas, m.fio_duty');
+        $this->db->where('m.id_card', $id_pasp);
+        $this->db->where('m.dateduty', $dateduty);
+        $this->db->limit(1);
+
+        $res = $this->db->get('str.main AS m')->row_array();
+        return $res;
+    }
+
+    public function get_maincou_by_id_pasp_and_dateduty($id_pasp, $dateduty)
+    {
+
+        $this->db->select('m.dateduty,m.ch,m.id_card');
+        $this->db->where('m.id_card', $id_pasp);
+        $this->db->where('m.dateduty', $dateduty);
+        $this->db->limit(1);
+
+        $res = $this->db->get('str.maincou AS m')->row_array();
+        return $res;
+    }
+
+    public function get_mainrcu_by_id_pasp_and_dateduty($id_pasp, $dateduty)
+    {
+
+        $this->db->select('m.dateduty,m.ch,m.id_card');
+        $this->db->where('m.id_card', $id_pasp);
+        $this->db->where('m.dateduty', $dateduty);
+        $this->db->limit(1);
+
+        $res = $this->db->get('str.mainrcu AS m')->row_array();
         return $res;
     }
 }

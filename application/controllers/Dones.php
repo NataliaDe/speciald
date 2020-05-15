@@ -37,7 +37,7 @@ class Dones extends My_Controller
 
 
         if ($this->session->userdata('can_edit') == 1 ||
-            ($this->session->userdata('can_edit') == 0 && $uri == 'edit_form_standart')||
+            ($this->session->userdata('can_edit') == 0 && $uri == 'edit_form_standart') ||
             ($this->session->userdata('can_edit') == 0 && $uri == 'edit_form_simple')) {
             $this->load->model('user_model');
             $this->load->model('main_model');
@@ -287,12 +287,11 @@ class Dones extends My_Controller
         $this->twig->display('create/simple/form_simple', $this->data);
     }
 
-    public function getStrByIdsPasp($ids_pasp)
+    public function getStrByIdsPasp($ids_pasp, $dateduty_manual = null)
     {
 
         $diviz_organ_of_pasp = $this->str_model->get_inf_by_id_pasp($ids_pasp);
 
-//print_r($diviz_organ_of_pasp);
         foreach ($diviz_organ_of_pasp as $key => $row) {
 
             $str_table[$row['id_pasp']] = $row;
@@ -300,9 +299,32 @@ class Dones extends My_Controller
             if ($row['diviz_id'] == 8 || $row['id_organ'] == 5) {//cou or rcu
                 /* ch,dateduty, id_card....From table str.maincou */
                 if ($row['diviz_id'] == 8) {
-                    $diviz_organ_of_pasp[$key] = array_merge($row, $this->str_model->get_maincou_by_id_pasp($row['id_pasp'])); //cou
+
+                    if ($dateduty_manual != NULL) {//get data by dateduty
+                        $is_main = $this->str_model->get_maincou_by_id_pasp_and_dateduty($row['id_pasp'], $dateduty_manual);
+
+                        if (isset($is_main) && !empty($is_main))
+                            $diviz_organ_of_pasp[$key] = array_merge($row, $is_main);
+                        else
+                            $diviz_organ_of_pasp[$key] = array_merge($row, $this->str_model->get_maincou_by_id_pasp($row['id_pasp'])); //cou last
+                    }
+                    else {//get data by last duty ch
+                        $diviz_organ_of_pasp[$key] = array_merge($row, $this->str_model->get_maincou_by_id_pasp($row['id_pasp'])); //cou
+                    }
                 } elseif ($row['id_organ'] == 5) {
-                    $diviz_organ_of_pasp[$key] = array_merge($row, $this->str_model->get_mainrcu_by_id_pasp($row['id_pasp'])); //rcu
+
+                    if ($dateduty_manual != NULL) {//get data by dateduty
+                        $is_main = $this->str_model->get_mainrcu_by_id_pasp_and_dateduty($row['id_pasp'], $dateduty_manual);
+
+                        if (isset($is_main) && !empty($is_main))
+                            $diviz_organ_of_pasp[$key] = array_merge($row, $is_main);
+                        else
+                            $diviz_organ_of_pasp[$key] = array_merge($row, $this->str_model->get_mainrcu_by_id_pasp($row['id_pasp'])); //rcu
+                    }
+                    else {//get data by last duty ch
+                        $diviz_organ_of_pasp[$key] = array_merge($row, $this->str_model->get_mainrcu_by_id_pasp($row['id_pasp'])); //rcu
+                    }
+
                 }
 
                 $current_ch = $diviz_organ_of_pasp[$key]['ch'];
@@ -347,7 +369,17 @@ class Dones extends My_Controller
             } else {
 
                 /* listls, face, br of  ch....From table str.main */
-                $diviz_organ_of_pasp[$key] = array_merge($row, $this->str_model->get_main_by_id_pasp($row['id_pasp']));
+                if ($dateduty_manual != NULL) {//get data by dateduty
+                    $is_main = $this->str_model->get_main_by_id_pasp_and_dateduty($row['id_pasp'], $dateduty_manual);
+
+                    if (isset($is_main) && !empty($is_main))
+                        $diviz_organ_of_pasp[$key] = array_merge($row, $is_main);
+                    else
+                        $diviz_organ_of_pasp[$key] = array_merge($row, $this->str_model->get_main_by_id_pasp($row['id_pasp']));
+                }
+                else {//get data by last duty ch
+                    $diviz_organ_of_pasp[$key] = array_merge($row, $this->str_model->get_main_by_id_pasp($row['id_pasp']));
+                }
             }
 
 
@@ -1314,7 +1346,7 @@ class Dones extends My_Controller
         $dones['file_doc'] = (isset($post['file_doc']) && !empty($post['file_doc'])) ? $post['file_doc'] : null;
 
         // type SD
-        $dones['type']= Main_model::TYPE_SD_STANDART;
+        $dones['type'] = Main_model::TYPE_SD_STANDART;
 
         /* insert/edit dones */
         if ($id_dones == 0) {//create a new
@@ -1392,7 +1424,7 @@ class Dones extends My_Controller
                     $dones_silymchs['id_teh'] = (isset($row['id_teh']) && !empty($row['id_teh'])) ? intval($row['id_teh']) : 0;
                     $dones_silymchs['pasp_name'] = (isset($row['pasp_name']) && !empty($row['pasp_name'])) ? trim($row['pasp_name']) : '';
                     $dones_silymchs['locorg_name'] = (isset($row['locorg_name']) && !empty($row['locorg_name'])) ? trim($row['locorg_name']) : '';
-                    $dones_silymchs['v_ac'] = (isset($row['v_ac']) && !empty($row['v_ac'])) ? trim($row['v_ac']) : '';
+                    $dones_silymchs['v_ac'] = (isset($row['v_ac']) && !empty($row['v_ac'])) ? (trim($row['v_ac']) * 1000) : 0;
                     $dones_silymchs['man_per_car'] = (isset($row['man_per_car']) && !empty($row['man_per_car'])) ? intval($row['man_per_car']) : 0;
                     $dones_silymchs['time_exit'] = (isset($row['time_exit']) && !empty($row['time_exit'])) ? (\DateTime::createFromFormat('H:i', $row['time_exit'])->format('H:i')) : null;
                     $dones_silymchs['time_arrival'] = (isset($row['time_arrival']) && !empty($row['time_arrival'])) ? (\DateTime::createFromFormat('H:i', $row['time_arrival'])->format('H:i')) : null;
@@ -1634,7 +1666,7 @@ class Dones extends My_Controller
                     $dones_trunks['mark'] = trim($row['mark']);
                     $dones_trunks['pasp_name'] = (isset($row['pasp_name']) && !empty($row['pasp_name'])) ? trim($row['pasp_name']) : '';
                     $dones_trunks['locorg_name'] = (isset($row['locorg_name']) && !empty($row['locorg_name'])) ? trim($row['locorg_name']) : '';
-                    $dones_trunks['v_ac'] = (isset($row['v_ac']) && !empty($row['v_ac'])) ? trim($row['v_ac']) : 0;
+                    $dones_trunks['v_ac'] = (isset($row['v_ac']) && !empty($row['v_ac'])) ? (trim($row['v_ac']) * 1000) : 0;
                     $dones_trunks['man_per_car'] = (isset($row['man_per_car']) && !empty($row['man_per_car'])) ? intval($row['man_per_car']) : 0;
                     $dones_trunks['time_arrival'] = (isset($row['time_arrival']) && !empty($row['time_arrival'])) ? (\DateTime::createFromFormat('H:i', $row['time_arrival'])->format('H:i')) : NULL;
                     $dones_trunks['s_fire_arrival'] = (isset($row['s_fire_arrival']) && !empty($row['s_fire_arrival'])) ? trim($row['s_fire_arrival']) : '';
@@ -1867,11 +1899,6 @@ class Dones extends My_Controller
 
         /* data of edit dones */
         $this->data['dones']['silymchs'] = $this->create_model->get_dones_silymchs($id_dones);
-        if (!empty($this->data['dones']['silymchs'])) {
-            foreach ($this->data['dones']['silymchs'] as $key => $val) {
-                $this->data['dones']['silymchs'][$key]['v_ac'] = $val['v_ac'] * 1000;
-            }
-        }
 
 
         $innerservice = $this->create_model->get_dones_innerservice($id_dones);
@@ -1889,11 +1916,6 @@ class Dones extends My_Controller
         $this->data['dones']['str'] = $this->create_model->get_dones_str($id_dones);
         $this->data['dones']['str_text'] = $this->create_model->get_dones_str_text($id_dones);
         $this->data['dones']['trunks'] = $this->create_model->get_dones_trunks($id_dones);
-        if(!empty($this->data['dones']['trunks'])){
-            foreach($this->data['dones']['trunks'] as $key=>$trunk){
-                $this->data['dones']['trunks'][$key]['v_ac']=$trunk['v_ac']*1000;
-            }
-        }
 
 
         $this->data['dones']['water_source'] = $this->create_model->get_dones_water_source($id_dones);
@@ -1904,7 +1926,7 @@ class Dones extends My_Controller
 
         //media
         $media = $this->dones_model->get_dones_media($id_dones);
-        $this->data['dones']['media']=$media;
+        $this->data['dones']['media'] = $media;
 //        if (!empty($media)) {
 //            $i = 0;
 //            foreach ($media as $row) {
@@ -2127,7 +2149,7 @@ class Dones extends My_Controller
             $is_refused_sd = $this->logs_model->get_dones_satatus_by_user($stat);
 
 
-            $history_actions=array();
+            $history_actions = array();
 
             if (isset($id_dones) && !empty($id_dones) && isset($description_refuse) && !empty($description_refuse)) {
 
@@ -2296,7 +2318,7 @@ class Dones extends My_Controller
             /* dones */
             $dones = $this->create_model->get_dones_by_id($id_dones);
 
-            $type_sd=$dones['type'];
+            $type_sd = $dones['type'];
 
             if ($type_sd == Main_model::TYPE_SD_STANDART) {
                 /* data of  dones */
@@ -2427,7 +2449,7 @@ class Dones extends My_Controller
             $this->logs_model->add_logs($logs);
 
 
-            if($type_sd == Main_model::TYPE_SD_SIMPLE){
+            if ($type_sd == Main_model::TYPE_SD_SIMPLE) {
                 redirect('/dones/edit_form_simple/' . $id_dones_new);
             }
 
@@ -2447,7 +2469,7 @@ class Dones extends My_Controller
                         $dones_silymchs['id_teh'] = (isset($row['id_teh']) && !empty($row['id_teh'])) ? intval($row['id_teh']) : 0;
                         $dones_silymchs['pasp_name'] = (isset($row['pasp_name']) && !empty($row['pasp_name'])) ? trim($row['pasp_name']) : '';
                         $dones_silymchs['locorg_name'] = (isset($row['locorg_name']) && !empty($row['locorg_name'])) ? trim($row['locorg_name']) : '';
-                        $dones_silymchs['v_ac'] = (isset($row['v_ac']) && !empty($row['v_ac'])) ? trim($row['v_ac']) : '';
+                        $dones_silymchs['v_ac'] = (isset($row['v_ac']) && !empty($row['v_ac'])) ? (trim($row['v_ac']) * 1000) : 0;
                         $dones_silymchs['man_per_car'] = (isset($row['man_per_car']) && !empty($row['man_per_car'])) ? intval($row['man_per_car']) : 0;
                         $dones_silymchs['time_exit'] = (isset($row['time_exit']) && !empty($row['time_exit'])) ? $row['time_exit'] : '';
                         $dones_silymchs['time_arrival'] = (isset($row['time_arrival']) && !empty($row['time_arrival'])) ? $row['time_arrival'] : '';
@@ -2581,7 +2603,7 @@ class Dones extends My_Controller
                     $dones_trunks['mark'] = trim($row['mark']);
                     $dones_trunks['pasp_name'] = (isset($row['pasp_name']) && !empty($row['pasp_name'])) ? trim($row['pasp_name']) : '';
                     $dones_trunks['locorg_name'] = (isset($row['locorg_name']) && !empty($row['locorg_name'])) ? trim($row['locorg_name']) : '';
-                    $dones_trunks['v_ac'] = (isset($row['v_ac']) && !empty($row['v_ac'])) ? trim($row['v_ac']) : 0;
+                    $dones_trunks['v_ac'] = (isset($row['v_ac']) && !empty($row['v_ac'])) ? (trim($row['v_ac']) * 1000) : 0;
                     $dones_trunks['man_per_car'] = (isset($row['man_per_car']) && !empty($row['man_per_car'])) ? intval($row['man_per_car']) : 0;
                     $dones_trunks['time_arrival'] = (isset($row['time_arrival']) && !empty($row['time_arrival'])) ? $row['time_arrival'] : '';
                     $dones_trunks['s_fire_arrival'] = (isset($row['s_fire_arrival']) && !empty($row['s_fire_arrival'])) ? trim($row['s_fire_arrival']) : '';
@@ -2646,9 +2668,7 @@ class Dones extends My_Controller
         redirect('/dones/edit_form_standart/' . $id_dones_new);
     }
 
-
-
-        public function simple_save()
+    public function simple_save()
     {
 
         $post = $this->input->post();
@@ -2740,7 +2760,7 @@ class Dones extends My_Controller
         $dones['opening_description'] = (isset($post['opening_description']) && !empty($post['opening_description'])) ? trim($post['opening_description']) : '';
 
 
-         /* description of RIG */
+        /* description of RIG */
         $dones['time_msg'] = (isset($post['time_msg']) && !empty($post['time_msg'])) ? (\DateTime::createFromFormat('d.m.Y H:i:s', $post['time_msg'])->format('Y-m-d H:i:s')) : NULL;
         $dones['latitude'] = (isset($post['latitude']) && !empty($post['latitude'])) ? trim($post['latitude']) : '';
         $dones['longitude'] = (isset($post['longitude']) && !empty($post['longitude'])) ? trim($post['longitude']) : '';
@@ -2838,8 +2858,7 @@ class Dones extends My_Controller
         redirect('/creator/catalog');
     }
 
-
-        public function edit_form_simple($id_dones = 0)
+    public function edit_form_simple($id_dones = 0)
     {
 
         $this->data['type_sd'] = Main_model::TYPE_SD_SIMPLE;
@@ -2918,9 +2937,45 @@ class Dones extends My_Controller
 
         //media
         $media = $this->dones_model->get_dones_media($id_dones);
-        $this->data['dones']['media']=$media;
+        $this->data['dones']['media'] = $media;
 
 
         $this->twig->display('create/simple/form_simple', $this->data);
+    }
+
+    public function refresh_str($action = 0)
+    {
+
+        $action = intval($action);
+        if ($action == 0) {
+            echo json_encode(array('is_error' => 1, 'msg' => 'Что-то пошло не так'));
+        }
+
+
+
+        if ($action == 1) {//prev dateduty
+            $dateduty = date("Y-m-d", time() - (60 * 60 * 24));
+        } elseif ($action == 2) {//current date=today
+            $dateduty = date('Y-m-d');
+        }
+        //echo $dateduty;
+
+
+        $ids_pasp = $this->input->post('ids_pasp');
+
+        if (isset($ids_pasp) && !empty($ids_pasp)) {
+
+
+            $result = $this->getStrByIdsPasp(array_unique($ids_pasp), (isset($dateduty) ? $dateduty : null)); //data for table: shtat, vacant...
+
+            if (isset($result) && !empty($result)) {
+
+                echo json_encode(array('pasp' => $result, 'is_error' => 0));
+            } else {
+                echo json_encode(array('is_error' => 1, 'msg' => 'Данные по подразделениям не найдены'));
+            }
+        } else {
+            echo json_encode(array('is_error' => 1, 'msg' => 'Необходимо выбрать подразделение'));
+        }
     }
 }

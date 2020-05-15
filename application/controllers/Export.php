@@ -263,7 +263,8 @@ class Export extends My_Controller
                 foreach ($silymchs as $key => $row) {
                     $arr[] = array(
                         'mark_sis'          => $row['mark'] . '' . ((!empty($row['pasp_name'])) ? (' ' . $row['pasp_name']) : '') . '' . ((!empty($row['locorg_name'])) ? (' ' . $row['locorg_name']) : ''),
-                        'v_ac_sis'          => ((empty($row['v_ac'])) ? '-' : ((strpos($row['v_ac'], '.') === false) ? $row['v_ac'] : str_replace(".", ",", $row['v_ac']))),
+                        //'v_ac_sis'          => ((empty($row['v_ac'])) ? '-' : ((strpos($row['v_ac'], '.') === false) ? $row['v_ac'] : str_replace(".", ",", $row['v_ac']))),
+                        'v_ac_sis'          => (empty($row['v_ac'])) ? '-' : (number_format($row['v_ac'] / 1000, 1, '.', '')),
                         'man_per_car_sis'   => $row['man_per_car'],
                         'time_exit_sis'     => ((isset($row['time_exit']) && !empty($row['time_exit'])) ? (\DateTime::createFromFormat('H:i:s', $row['time_exit'])->format('H-i')) : ''),
                         'time_arrival_sis'  => ((isset($row['time_arrival']) && !empty($row['time_arrival'])) ? (\DateTime::createFromFormat('H:i:s', $row['time_arrival'])->format('H-i')) : ''),
@@ -322,7 +323,8 @@ class Export extends My_Controller
                         $wide_table[] = array(
                             'is_wide'              => 1,
                             'mark_trunk'           => $row['mark'] . '' . ((!empty($row['pasp_name'])) ? (' ' . $row['pasp_name']) : '') . '' . ((!empty($row['locorg_name'])) ? (' ' . $row['locorg_name']) : ''),
-                            'v_ac_trunk'           => ((empty($row['v_ac'])) ? '-' : ((strpos($row['v_ac'], '.') === false) ? $row['v_ac'] : str_replace(".", ",", $row['v_ac']))),
+                            //'v_ac_trunk'           => ((empty($row['v_ac'])) ? '-' : ((strpos($row['v_ac'], '.') === false) ? $row['v_ac'] : str_replace(".", ",", $row['v_ac']))),
+                            'v_ac_trunk'           => (empty($row['v_ac'])) ? '-' : (number_format($row['v_ac'] / 1000, 1, '.', '')),
                             'man_per_car_trunk'    => $row['man_per_car'],
                             's_fire_arrival_trunk' => (isset($row['s_fire_arrival']) && !empty($row['s_fire_arrival'])) ? $row['s_fire_arrival'] : '-',
                             'time_arrival_trunk'   => ((isset($row['time_arrival']) && !empty($row['time_arrival'])) ? (\DateTime::createFromFormat('H:i:s', $row['time_arrival'])->format('H-i')) : ''),
@@ -334,7 +336,8 @@ class Export extends My_Controller
                     } else {
                         $arr[] = array(
                             'mark_trunk'           => $row['mark'] . '' . ((!empty($row['pasp_name'])) ? (' ' . $row['pasp_name']) : '') . '' . ((!empty($row['locorg_name'])) ? (' ' . $row['locorg_name']) : ''),
-                            'v_ac_trunk'           => ((empty($row['v_ac'])) ? '-' : ((strpos($row['v_ac'], '.') === false) ? $row['v_ac'] : str_replace(".", ",", $row['v_ac']))),
+                            //'v_ac_trunk'           => ((empty($row['v_ac'])) ? '-' : ((strpos($row['v_ac'], '.') === false) ? $row['v_ac'] : str_replace(".", ",", $row['v_ac']))),
+                            'v_ac_trunk'           => (empty($row['v_ac'])) ? '-' : (number_format($row['v_ac'] / 1000, 1, '.', '')),
                             'man_per_car_trunk'    => $row['man_per_car'],
                             's_fire_arrival_trunk' => (isset($row['s_fire_arrival']) && !empty($row['s_fire_arrival'])) ? $row['s_fire_arrival'] : '-',
                             'time_arrival_trunk'   => ((isset($row['time_arrival']) && !empty($row['time_arrival'])) ? (\DateTime::createFromFormat('H:i:s', $row['time_arrival'])->format('H-i')) : ''),
