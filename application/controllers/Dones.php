@@ -175,7 +175,7 @@ class Dones extends My_Controller
 
             $man_per_car_id = array();
             if (isset($this->data['rig']['silymchs']) && !empty($this->data['rig']['silymchs'])) {
-
+//print_r($this->data['rig']['silymchs']);
                 foreach ($this->data['rig']['silymchs'] as $key => $value) {
 
                     if (isset($value['pasp_id']) && !empty($value['pasp_id']) && $value['pasp_id'] != null)

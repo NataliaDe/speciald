@@ -62,7 +62,7 @@ class Dones_model extends CI_Model
         if (isset($filter['is_delete']))
             $this->db->where('d.is_delete', $filter['is_delete']);
 
-        $this->db->order_by('d.specd_date');
+        $this->db->order_by('d.date_insert','DESC');
 
 
         $result = $this->db->get('speciald.dones as d')->result_array();
@@ -135,7 +135,7 @@ class Dones_model extends CI_Model
         if (isset($filter['is_delete']))
             $this->db->where('d.is_delete', $filter['is_delete']);
 
-        $this->db->order_by('d.specd_date');
+        $this->db->order_by('d.date_insert','DESC');
 
 
         $result = $this->db->get('speciald.dones as d')->result_array();
@@ -179,7 +179,7 @@ class Dones_model extends CI_Model
         if (isset($filter['is_delete']))
             $this->db->where('d.is_delete', $filter['is_delete']);
 
-        $this->db->order_by('d.specd_date');
+        $this->db->order_by('d.date_insert','DESC');
 
 
         $result = $this->db->get('speciald.dones as d')->result_array();
