@@ -1202,7 +1202,9 @@ class Dones extends My_Controller
     {
 
         $post = $this->input->post();
-        //print_r($post['sd_media']);exit();
+
+        //print_r($post['sd_media']);
+        //exit();
         $dones = array();
 
         $id_dones = (isset($post['id_dones']) && !empty($post['id_dones'])) ? intval($post['id_dones']) : 0; //id of edit dones
@@ -1347,6 +1349,9 @@ class Dones extends My_Controller
 
         // type SD
         $dones['type'] = Main_model::TYPE_SD_STANDART;
+
+        $dones['is_show_address'] = (isset($post['is_show_address']) && !empty($post['is_show_address'])) ? 1 : 0;
+        $dones['is_show_object'] = (isset($post['is_show_object']) && !empty($post['is_show_object'])) ? 1 : 0;
 
         /* insert/edit dones */
         if ($id_dones == 0) {//create a new
@@ -1801,6 +1806,15 @@ class Dones extends My_Controller
             }
         }
 
+        /*  settings accordion */
+        $settings_accordion['value']=(isset($post['settings_accordion']) && !empty($post['settings_accordion'])) ? $post['settings_accordion'] : '';
+        $settings_accordion['id_user']=$this->data['active_user']['id_user'];
+        $settings_accordion['id_dones']=$id_dones_new;
+        $settings_accordion['date_insert'] = date('Y-m-d H:i:s');
+        $this->dones_model->delete_settings_accordion($id_dones_new,$settings_accordion['id_user']);
+        if(!empty($settings_accordion['value']))
+        $this->dones_model->add_settings_accordion($settings_accordion);
+
         redirect('/creator/catalog');
     }
 
@@ -1927,6 +1941,11 @@ class Dones extends My_Controller
         //media
         $media = $this->dones_model->get_dones_media($id_dones);
         $this->data['dones']['media'] = $media;
+
+
+        /* preview */
+        $this->data['dones']['preview_opening_description'] = explode(PHP_EOL, $this->data['dones']['opening_description']);
+
 //        if (!empty($media)) {
 //            $i = 0;
 //            foreach ($media as $row) {
@@ -1935,7 +1954,8 @@ class Dones extends My_Controller
 //            }
 //        }
 
-
+        /*  settings accordion */
+        $this->data['settings_accordion']=$this->dones_model->get_settings_accordion($id_dones,$this->data['active_user']['id_user']);
 
 
         $this->twig->display('create/standart/form_standart', $this->data);
@@ -2419,6 +2439,9 @@ class Dones extends My_Controller
 
             $new_dones['is_test_sd'] = (isset($dones['is_test_sd']) && !empty($dones['is_test_sd'])) ? 1 : 0;
             $new_dones['type'] = $dones['type'];
+
+            $new_dones['is_show_address'] = (isset($dones['is_show_address']) && !empty($dones['is_show_address'])) ? 1 : 0;
+            $new_dones['is_show_object'] = (isset($dones['is_show_object']) && !empty($dones['is_show_object'])) ? 1 : 0;
 
 
 

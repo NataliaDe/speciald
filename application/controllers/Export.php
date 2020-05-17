@@ -118,7 +118,7 @@ class Export extends My_Controller
         $phpWord->getSettings()->setThemeFontLang(new PhpOffice\PhpWord\Style\Language(PhpOffice\PhpWord\Style\Language::RU_RU));
         $phpWord->getSettings()->setHideSpellingErrors(true);
         $phpWord->getSettings()->setHideGrammaticalErrors(true);
-        $phpWord->getSettings()->setAutoHyphenation(true);
+        //$phpWord->getSettings()->setAutoHyphenation(true);
 
 
 
@@ -219,6 +219,10 @@ class Export extends My_Controller
             $coords = ' (нет координат).';
         }
         // }
+
+        if($dones['is_show_address'] == 1 && isset($dones['address']) && !empty($dones['address'])){
+            $coords= ' '.trim($dones['address']).$coords;
+        }
 
 
         if (!empty($opening_description)) {
@@ -736,7 +740,7 @@ class Export extends My_Controller
         if (!empty($rank_sign))
             $rank_sign = $rank_sign . ' ' . 'внутренней службы';
 
-        $section->addText($rank_sign . '                                                    ' . $dones['author_fio'], self::header_style_cell_size, self::header_style_cell_font);
+        $section->addText($rank_sign . '                                          ' . $dones['author_fio'], self::header_style_cell_size, self::header_style_cell_font);
 
 
 

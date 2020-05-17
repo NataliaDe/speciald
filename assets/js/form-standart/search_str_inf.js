@@ -249,6 +249,27 @@ if(ids_pasp !== '' && ids_pasp !== null){
             });
 
 
+
+                /*  delete empty first row*/
+                $('#str-block-div #div-str').find('.id_pasp').each(function (i, v) {
+                    var id_row = ($(this).closest('.str_row')).attr('id');
+                    var $row_check = $('#str-block-div #div-str .table tbody').find('#' + id_row);
+                    if ($row_check.find('td').find('.str_pasp_name').val() === '' &&
+                            $row_check.find('td').find('.str_locorg_name').val() === ''){
+                        $row_check.remove();
+                    }
+                });
+
+                 /*  delete empty first row - text block */
+                $('#str-block-div #div-str').find('.id_pasp_text').each(function (i, v) {
+                    var id_row = ($(this).closest('.str_text_row')).attr('id');
+                    var $row_check = $('#str-block-div #div-str .table tbody').find('#' + id_row);
+                    if ($row_check.find('td').find('.str_text_podr_name').val() === ''){
+                        $row_check.remove();
+                    }
+                });
+
+
             $('#preload-update-data-search-rig').css('display', 'none');
             $('body').css('opacity', 1);
 
