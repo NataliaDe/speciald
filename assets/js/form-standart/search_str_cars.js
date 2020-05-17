@@ -288,6 +288,7 @@ $('#modal-agree-get-str-cars #btn-fill-str-cars-form').on('click', function (eve
                     $(val).each(function (index_1, value) {
 
                         var yes = 0;
+
                         $('#silymchs-block-div').find('.id_teh').each(function (i, v) {
                             if ($(this).val() === value.id_teh)
                                 yes = yes + 1;
@@ -331,6 +332,28 @@ $('#modal-agree-get-str-cars #btn-fill-str-cars-form').on('click', function (eve
 
 
                     });
+                });
+
+                /*  delete empty first row*/
+                $('#silymchs-block-div').find('.id_teh').each(function (i, v) {
+                    var id_row = ($(this).closest('.teacher_row')).attr('id');
+                    var $row_check = $('#silymchs-block-div #div-silymchs .table tbody').find('#' + id_row);
+                    if ($row_check.find('td').find('.mark').val() === '' &&
+                            $row_check.find('td').find('.pasp_name').val() === '' &&
+                            $row_check.find('td').find('.locorg_name').val() === ''){
+                        $row_check.remove();
+                    }
+                });
+
+                 /*  delete empty first row - trunks */
+                $('#trunks_data-block-div #trunks-block').find('.id_teh').each(function (i, v) {
+                    var id_row = ($(this).closest('.trunks_row')).attr('id');
+                    var $row_check = $('#trunks_data-block-div #trunks-block .table tbody').find('#' + id_row);
+                    if ($row_check.find('td').find('.mark_trunks').val() === '' &&
+                            $row_check.find('td').find('.pasp_name_trunks').val() === '' &&
+                            $row_check.find('td').find('.locorg_name_trunks').val() === ''){
+                        $row_check.remove();
+                    }
                 });
 
 

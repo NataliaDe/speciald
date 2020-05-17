@@ -3,12 +3,21 @@
 <div class="card">
     <div class="card-header">
         Описание и адреса выезда (автоматизированный режим из ПС "Журнал ЦОУ")
+
+        <label for="is_show_address" >&nbsp;</label>
+        <div class="checkbox checkbox-success" style='display:inline'>
+            <input  type="checkbox" name="is_show_address" value="1" id="is_show_address" {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_show_address == 1 %}checked{%endif%}>
+            <label for="is_show_address">
+                выводить адрес в СД <i class="fa fa-info-circle info-all" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="адрес будет добавлен в СД перед координатами"></i>
+            </label>
+        </div>
+
     </div>
     <div class="card-body">
         {# Дата и время сообщения: 2019-06-26 12:10:04 | Дата и время локализации: 2019-06-26 12:10:05 | Дата и время ликвидации: 2019-06-26 12:10:06#}
 
         <div class="form-row create-form-row">
-<input type="hidden" class="form-control"  placeholder="" name="id_rig_current" value="{%if id_rig_current is defined and id_rig_current is not empty%}{{id_rig_current}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.id_rig is not empty %}{{dones.id_rig}}{%endif%}">
+            <input type="hidden" class="form-control"  placeholder="" name="id_rig_current" value="{%if id_rig_current is defined and id_rig_current is not empty%}{{id_rig_current}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.id_rig is not empty %}{{dones.id_rig}}{%endif%}">
 
 
             <div class="form-group col-md-2">
@@ -133,9 +142,9 @@
                     <input type="text" class="form-control" id="long_id"  placeholder="" name="longitude" value="{%if rig is defined and rig.longitude is defined and rig.longitude is not empty and rig.longitude != 0%}{{rig.longitude|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.longitude is not empty %}{{dones.longitude|trim}}{%endif%}">
                 </div>
 
-{#                <div class="col-sm-2"><br>
-                    (ссылка по возможности)
-                </div>#}
+                {#                <div class="col-sm-2"><br>
+                                    (ссылка по возможности)
+                                </div>#}
 
 
 
@@ -152,19 +161,19 @@
                         </div>#}
 
 
-{#            <div class="form-row create-form-row">
+            {#            <div class="form-row create-form-row">
 
-                <label for="coord" class="col-sm-1 col-form-label">Координаты:</label>
+                            <label for="coord" class="col-sm-1 col-form-label">Координаты:</label>
 
-                <div class="col-sm-1">широта
-                    <input type="text" class="form-control" id="lat_id"  placeholder="" name="latitude" value="{%if rig is defined and rig.latitude is defined and rig.latitude is not empty and rig.latitude != 0%}{{rig.latitude|trim}}{%endif%}">
-                </div>
+                            <div class="col-sm-1">широта
+                                <input type="text" class="form-control" id="lat_id"  placeholder="" name="latitude" value="{%if rig is defined and rig.latitude is defined and rig.latitude is not empty and rig.latitude != 0%}{{rig.latitude|trim}}{%endif%}">
+                            </div>
 
-                <div class="col-sm-1">долгота
-                    <input type="text" class="form-control" id="long_id"  placeholder="" name="longitude" value="{%if rig is defined and rig.longitude is defined and rig.longitude is not empty and rig.longitude != 0%}{{rig.longitude|trim}}{%endif%}">
-                </div>
+                            <div class="col-sm-1">долгота
+                                <input type="text" class="form-control" id="long_id"  placeholder="" name="longitude" value="{%if rig is defined and rig.longitude is defined and rig.longitude is not empty and rig.longitude != 0%}{{rig.longitude|trim}}{%endif%}">
+                            </div>
 
-            </div>#}
+                        </div>#}
 
             {#            <strong>г. Пинск</strong>
                         <br><strong>ул. Советская 12, 23 (дополнительное поле, напротив)</strong>
@@ -175,131 +184,131 @@
         </address>
 
 
-            {#{%set fio_people=''%}
-            {%set address_people=''%}
-            {%set phone_people=''%}
-            {%set all_people=''%}
+        {#{%set fio_people=''%}
+        {%set address_people=''%}
+        {%set phone_people=''%}
+        {%set all_people=''%}
 
-            {%if rig is defined and rig.people is defined and rig.people is not empty and rig.people.fio  %}
-                {%set fio_people=rig.people.fio%}
+        {%if rig is defined and rig.people is defined and rig.people is not empty and rig.people.fio  %}
+            {%set fio_people=rig.people.fio%}
+        {%endif%}
+
+        {%if rig is defined and rig.people is defined and rig.people is not empty and rig.people.address is not empty %}
+            {%set address_people=rig.people.address%}
+        {%endif%}
+
+        {%if rig is defined and rig.people is defined and rig.people.phone is defined and rig.people.phone is not empty %}
+            {%set phone_people=rig.people.phone%}
+        {%endif%}
+
+        {%if fio_people is not empty %}
+            {%set all_people=fio_people%}
+        {%endif%}
+
+        {%if address_people is not empty %}
+            {%if all_people is not empty %}
+                {%set all_people=all_people~' ('~address_people~')'%}
+            {%else%}
+                {%set all_people=address_people%}
             {%endif%}
+        {%endif%}
 
-            {%if rig is defined and rig.people is defined and rig.people is not empty and rig.people.address is not empty %}
-                {%set address_people=rig.people.address%}
+        {%if phone_people is not empty %}
+            {%if all_people is not empty %}
+                {%set all_people=all_people~', тел. '~phone_people%}
+            {%else%}
+                {%set all_people='тел. '~phone_people%}
             {%endif%}
+        {%endif%}#}
 
-            {%if rig is defined and rig.people is defined and rig.people.phone is defined and rig.people.phone is not empty %}
-                {%set phone_people=rig.people.phone%}
-            {%endif%}
+        {#            <div class="form-group row create-form-row">
+                        <label for="people" class="col-sm-1 col-form-label">ФИО заявителя:</label>
+                        <div class="col-sm-4">
 
-            {%if fio_people is not empty %}
-                {%set all_people=fio_people%}
-            {%endif%}
-
-            {%if address_people is not empty %}
-                {%if all_people is not empty %}
-                    {%set all_people=all_people~' ('~address_people~')'%}
-                {%else%}
-                    {%set all_people=address_people%}
-                {%endif%}
-            {%endif%}
-
-            {%if phone_people is not empty %}
-                {%if all_people is not empty %}
-                    {%set all_people=all_people~', тел. '~phone_people%}
-                {%else%}
-                    {%set all_people='тел. '~phone_people%}
-                {%endif%}
-            {%endif%}#}
-
-            {#            <div class="form-group row create-form-row">
-                            <label for="people" class="col-sm-1 col-form-label">ФИО заявителя:</label>
-                            <div class="col-sm-4">
-
-                                <input type="text" class="form-control"  placeholder="" name="people" value="{{all_people}}">
-                            </div>
-                        </div>#}
+                            <input type="text" class="form-control"  placeholder="" name="people" value="{{all_people}}">
+                        </div>
+                    </div>#}
 
 
-            {#            ФИО заявителя: Иванов И.И. (место жительства)
-                        Телефон: 209-27-51#}
+        {#            ФИО заявителя: Иванов И.И. (место жительства)
+                    Телефон: 209-27-51#}
 
 
-            <div class="form-row create-form-row">
+        <div class="form-row create-form-row">
 
-                <div class="form-group col-md-3">
-                    <label for="hs_vid" >Вид ЧС</label>
-                    <select class="form-control select2-single" name="vid_hs_1" id="vid_hs_1"  >
-                        <option></option>
-                        {% for vid in vid_hs_1 %}
-                            <option value="{{ vid.id }}" {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.vid_hs_1 == vid.id %}selected{%endif%} >{{ vid.name }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-
-
-                <div class="form-group col-md-2">
-                    <label for="hs_vid_sub" >Вид ЧС 1</label>
-                    <select class="form-control  select2-single" name="vid_hs_2" id="vid_hs_2"  >
+            <div class="form-group col-md-3">
+                <label for="hs_vid" >Вид ЧС</label>
+                <select class="form-control select2-single" name="vid_hs_1" id="vid_hs_1"  >
                     <option></option>
-                        {% for vid in vid_hs_2 %}
-                            <option value="{{ vid.id }}" class="{{vid.id_vid_hs_1}}" {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.vid_hs_2 == vid.id %}selected{%endif%}>{{ vid.name }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-
-
-
-{#                <div class="form-group col-md-1">
-                    <label for="hs_vid_sub_sub" >Вид ЧС 2</label>
-                    <select class="form-control select2-select" name="hs_vid_sub_sub" id="hs_vid_sub_sub"  >
-
-                        {% for vid in hs_vid %}
-                            <option value="{{ vid.id }}" >{{ vid.name }}</option>
-                        {% endfor %}
-                    </select>
-                </div>#}
-
-
-
+                    {% for vid in vid_hs_1 %}
+                        <option value="{{ vid.id }}" {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.vid_hs_1 == vid.id %}selected{%endif%} >{{ vid.name }}</option>
+                    {% endfor %}
+                </select>
             </div>
 
 
-            <div class="form-row create-form-row">
-
-
-                <div class="form-group col-md-2">
-                    <label for="reason_rig">Причина выезда:</label>
-                    <input type="text" class="form-control"  placeholder="" name="reason_rig" value="{%if rig is defined and rig.id_reasonrig is defined and rig.id_reasonrig is not empty and rig.id_reasonrig != 0%}{{rig.reasonrig_name|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.reason_rig is not empty %}{{dones.reason_rig|trim}}{%endif%}{%if is_edit_dones is not defined and rig.view_work_id is defined and rig.view_work_id != 0 %} ({{rig.view_work|trim}}){%endif%}">
-                </div>
-
-
-
-                <div class="form-group col-md-2">
-                    <label for="firereason_rig" >Причина пожара:</label>
-                    <input type="text" class="form-control"  placeholder="" name="firereason_rig" value="{%if rig is defined and rig.firereason_id is defined and rig.firereason_id is not empty and rig.firereason_id != 0%}{{rig.firereason_name|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.firereason_rig is not empty %}{{dones.firereason_rig|trim}}{%endif%}">
-                </div>
-
-
-
-                <div class="form-group col-md-2">
-                    <label for="inspector" >Инспектор:</label>
-                    <input type="text" class="form-control"  placeholder="" name="inspector" value="{%if rig is defined and rig.inspector is defined and rig.inspector is not empty %}{{rig.inspector|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.inspector is not empty %}{{dones.inspector|trim}}{%endif%}">
-                </div>
-
-
-
+            <div class="form-group col-md-2">
+                <label for="hs_vid_sub" >Вид ЧС 1</label>
+                <select class="form-control  select2-single" name="vid_hs_2" id="vid_hs_2"  >
+                    <option></option>
+                    {% for vid in vid_hs_2 %}
+                        <option value="{{ vid.id }}" class="{{vid.id_vid_hs_1}}" {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.vid_hs_2 == vid.id %}selected{%endif%}>{{ vid.name }}</option>
+                    {% endfor %}
+                </select>
             </div>
 
 
 
-            {# <strong>Причина выезда: пожар (вид работ) </strong>
-             <br>#}
-            {#            <strong>Причина пожара: неосторожное обращение с огнем </strong>
-                        <br>#}
+            {#                <div class="form-group col-md-1">
+                                <label for="hs_vid_sub_sub" >Вид ЧС 2</label>
+                                <select class="form-control select2-select" name="hs_vid_sub_sub" id="hs_vid_sub_sub"  >
+
+                                    {% for vid in hs_vid %}
+                                        <option value="{{ vid.id }}" >{{ vid.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>#}
 
 
-            {#Инспектор: Иванов И.И.#}
+
+        </div>
+
+
+        <div class="form-row create-form-row">
+
+
+            <div class="form-group col-md-2">
+                <label for="reason_rig">Причина выезда:</label>
+                <input type="text" class="form-control"  placeholder="" name="reason_rig" value="{%if rig is defined and rig.id_reasonrig is defined and rig.id_reasonrig is not empty and rig.id_reasonrig != 0%}{{rig.reasonrig_name|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.reason_rig is not empty %}{{dones.reason_rig|trim}}{%endif%}{%if is_edit_dones is not defined and rig.view_work_id is defined and rig.view_work_id != 0 %} ({{rig.view_work|trim}}){%endif%}">
+            </div>
+
+
+
+            <div class="form-group col-md-2">
+                <label for="firereason_rig" >Причина пожара:</label>
+                <input type="text" class="form-control"  placeholder="" name="firereason_rig" value="{%if rig is defined and rig.firereason_id is defined and rig.firereason_id is not empty and rig.firereason_id != 0%}{{rig.firereason_name|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.firereason_rig is not empty %}{{dones.firereason_rig|trim}}{%endif%}">
+            </div>
+
+
+
+            <div class="form-group col-md-2">
+                <label for="inspector" >Инспектор:</label>
+                <input type="text" class="form-control"  placeholder="" name="inspector" value="{%if rig is defined and rig.inspector is defined and rig.inspector is not empty %}{{rig.inspector|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.inspector is not empty %}{{dones.inspector|trim}}{%endif%}">
+            </div>
+
+
+
+        </div>
+
+
+
+        {# <strong>Причина выезда: пожар (вид работ) </strong>
+         <br>#}
+        {#            <strong>Причина пожара: неосторожное обращение с огнем </strong>
+                    <br>#}
+
+
+        {#Инспектор: Иванов И.И.#}
 
 
 

@@ -37,10 +37,10 @@ class Dones_model extends CI_Model
     {
         parent::__construct();
     }
-
     /* catalog table.
      * level 3
      *      */
+
     public function get_dones_by_grochs($filter, $id_organ = false)
     {
 
@@ -56,13 +56,13 @@ class Dones_model extends CI_Model
             $this->db->where('author.id_organ', $id_organ);
 
         if (isset($filter['without_cp']))
-             $this->db->where_not_in('author.id_organ', $filter['without_cp']);
+            $this->db->where_not_in('author.id_organ', $filter['without_cp']);
 
 
         if (isset($filter['is_delete']))
             $this->db->where('d.is_delete', $filter['is_delete']);
 
-        $this->db->order_by('d.date_insert','DESC');
+        $this->db->order_by('d.date_insert', 'DESC');
 
 
         $result = $this->db->get('speciald.dones as d')->result_array();
@@ -100,21 +100,17 @@ class Dones_model extends CI_Model
         return $result;
     }
 
-
-
     public function set_number_dones($id_dones, $number)
     {
         $this->db->where('id', $id_dones);
         $this->db->set('specd_number', $number);
         $this->db->update('speciald.dones');
-
     }
-
-
     /* catalog table.
      * level 2
      *      */
-        public function get_dones_by_region($filter, $id_organ = false)
+
+    public function get_dones_by_region($filter, $id_organ = false)
     {
 
         $this->db->select('d.*, author.id_local as author_local_id,author.id_region as author_region_id, vid.name as specd_vid_name, author.auth_organ');
@@ -129,23 +125,20 @@ class Dones_model extends CI_Model
             $this->db->where('author.id_organ', $id_organ);
 
         if (isset($filter['without_cp']))
-             $this->db->where_not_in('author.id_organ', $filter['without_cp']);
+            $this->db->where_not_in('author.id_organ', $filter['without_cp']);
 
 
         if (isset($filter['is_delete']))
             $this->db->where('d.is_delete', $filter['is_delete']);
 
-        $this->db->order_by('d.date_insert','DESC');
+        $this->db->order_by('d.date_insert', 'DESC');
 
 
         $result = $this->db->get('speciald.dones as d')->result_array();
         return $result;
     }
 
-
-
-
-        public function is_status_by_id_dones($id_dones, $status)
+    public function is_status_by_id_dones($id_dones, $status)
     {
 
         $this->db->select('dl.*');
@@ -161,13 +154,11 @@ class Dones_model extends CI_Model
         $result = $this->db->get('speciald.dones_logs as dl')->result_array();
         return $result;
     }
-
-
-
     /* catalog table.
      * level 1 RCU
      *      */
-        public function get_dones_for_rcu($filter)
+
+    public function get_dones_for_rcu($filter)
     {
 
         $this->db->select('d.*, author.id_local as author_local_id,author.id_region as author_region_id,author.level as author_level,'
@@ -179,26 +170,21 @@ class Dones_model extends CI_Model
         if (isset($filter['is_delete']))
             $this->db->where('d.is_delete', $filter['is_delete']);
 
-        $this->db->order_by('d.date_insert','DESC');
+        $this->db->order_by('d.date_insert', 'DESC');
 
 
         $result = $this->db->get('speciald.dones as d')->result_array();
         return $result;
     }
 
-
-        public function set_open_update($id_dones, $is_open_update)
+    public function set_open_update($id_dones, $is_open_update)
     {
         $this->db->where('id', $id_dones);
         $this->db->set('is_open_update', $is_open_update);
         $this->db->update('speciald.dones');
-
     }
 
-
-
-
-        public function get_dones_by_id($id_dones)
+    public function get_dones_by_id($id_dones)
     {
         return $this->db->select('d.*')
                 ->from('speciald.dones as d')
@@ -207,23 +193,19 @@ class Dones_model extends CI_Model
                 ->row_array();
     }
 
-
-
-        public function delete_dones_media($id_dones)
+    public function delete_dones_media($id_dones)
     {
         $this->db->where('id_dones', $id_dones)->delete('dones_media');
     }
 
-
-        public function add_dones_media($data)
+    public function add_dones_media($data)
     {
         $data['created_by'] = $this->session->userdata('id_user');
         $data['date_create'] = date('Y-m-d H:i:s');
         $this->db->insert('dones_media', $data);
     }
 
-
-            public function get_dones_media($id_dones)
+    public function get_dones_media($id_dones)
     {
 
         $this->db->select('*');
@@ -231,5 +213,25 @@ class Dones_model extends CI_Model
 
         $result = $this->db->get('dones_media')->result_array();
         return $result;
+    }
+
+    public function delete_settings_accordion($id_dones, $id_user)
+    {
+        $this->db->where('id_dones', $id_dones)->where('id_user', $id_user)->delete('settings_accordion');
+    }
+
+    public function add_settings_accordion($data)
+    {
+
+        $this->db->insert('settings_accordion', $data);
+    }
+
+    public function get_settings_accordion($id_dones, $id_user)
+    {
+
+        $this->db->select('*');
+        $this->db->where('id_dones', $id_dones);
+        $this->db->where('id_user', $id_user);
+        return $this->db->get('settings_accordion')->row_array();
     }
 }

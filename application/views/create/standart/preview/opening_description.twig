@@ -1,0 +1,134 @@
+<div id="div-preview-opening-description">
+<i class="fa fa-info-circle info-all" id="icon-preview-opening-description" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="скрыть"></i>
+<div id="preview-opening-description-standart">
+
+    {#    <span id="date-msg"></span>
+        <span id="time-msg"></span>
+        <span id="descr"></span>#}
+{#{{dump(dones)}}#}
+    {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined  %}
+        <b><u>Предпросмотр:</u></b><br>
+            {%endif%}
+
+
+    {%set time_preview=''%}
+    {%set date_preview=''%}
+    {%set latitude_preview=''%}
+    {%set longitude_preview=''%}
+
+    {%if time_msg != ''%}
+        {{time_msg|date('d.m.Y')}} года
+    {%endif%}
+
+    {%if time_msg != ''%}
+        в {{time_msg|date('H:i')}}
+    {%endif%}
+
+
+    {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.latitude is not empty %}
+        {%set latitude_preview=dones.latitude|trim%}
+    {%endif%}
+
+    {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.longitude is not empty %}
+        {%set longitude_preview=dones.longitude|trim%}
+    {%endif%}
+
+
+    {%if latitude_preview is not empty and longitude_preview is not empty %}
+        {%set coord_preview=' ('~latitude_preview~', '~longitude_preview~').'%}
+    {%else%}
+        {%set coord_preview=' (нет координат).'%}
+    {%endif%}
+
+
+        {%if dones.address is not empty and dones.is_show_address == 1%}
+        {%set coord_preview=' '~dones.address~coord_preview%}
+    {%endif%}
+
+
+
+
+    {%if  rig.description is defined and  rig.description is not empty and rig.description is not null %}
+        {{rig.description|nl2br}}{{coord_preview}}
+    {%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.opening_description is not empty %}
+        {#{{(dones.opening_description|trim)|nl2br}}{{coord_preview}}#}
+        {%for op in dones.preview_opening_description%}
+
+            {%if loop.index == 1%}
+                {{op}}{{coord_preview}}
+            {%else%}
+                <br>{{op}}
+            {%endif%}
+
+        {%endfor%}
+    {%endif%}
+
+</div>
+    </div>
+
+
+
+    <div id="div-preview-object">
+<i class="fa fa-info-circle info-all" id="icon-preview-object" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="скрыть"></i>
+<div id="preview-object-standart">
+
+
+   {# {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined  %}
+        <b><u>Предпросмотр:</u></b><br>
+            {%endif%}
+
+
+    {%set time_preview=''%}
+    {%set date_preview=''%}
+    {%set latitude_preview=''%}
+    {%set longitude_preview=''%}
+
+    {%if time_msg != ''%}
+        {{time_msg|date('d.m.Y')}} года
+    {%endif%}
+
+    {%if time_msg != ''%}
+        в {{time_msg|date('H:i')}}
+    {%endif%}
+
+
+    {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.latitude is not empty %}
+        {%set latitude_preview=dones.latitude|trim%}
+    {%endif%}
+
+    {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.longitude is not empty %}
+        {%set longitude_preview=dones.longitude|trim%}
+    {%endif%}
+
+
+    {%if latitude_preview is not empty and longitude_preview is not empty %}
+        {%set coord_preview=' ('~latitude_preview~', '~longitude_preview~').'%}
+    {%else%}
+        {%set coord_preview=' (нет координат).'%}
+    {%endif%}
+
+
+        {%if dones.address is not empty and dones.is_show_address == 1%}
+        {%set coord_preview=' '~dones.address~coord_preview%}
+    {%endif%}
+
+
+
+
+    {%if  rig.description is defined and  rig.description is not empty and rig.description is not null %}
+        {{rig.description|nl2br}}{{coord_preview}}
+    {%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.opening_description is not empty %}
+        {#{{(dones.opening_description|trim)|nl2br}}{{coord_preview}}#}
+        {#{%for op in dones.preview_opening_description%}
+
+            {%if loop.index == 1%}
+                {{op}}{{coord_preview}}
+            {%else%}
+                <br>{{op}}
+            {%endif%}
+
+        {%endfor%}
+    {%endif%}#}
+
+</div>
+    </div>
