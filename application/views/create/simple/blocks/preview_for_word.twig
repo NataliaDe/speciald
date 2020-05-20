@@ -1,55 +1,61 @@
-<div id="preview-simple-block">
-    {#    <span id="date-msg"></span>
-        <span id="time-msg"></span>
-        <span id="descr"></span>#}
+<div id="preview-simple-block" class="fixed t-left close_panel left-panel">
+    <a id="preview-simple-block_button"  aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Предпросмотр (начальный текст)"> <i class="fa fa-tripadvisor"></i> </a>
 
-    {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined  %}
-        <b><u>Предпросмотр:</u></b><br>
+    <div id="preview-simple-block-inner">
+        {#    <span id="date-msg"></span>
+            <span id="time-msg"></span>
+            <span id="descr"></span>#}
+        <b><u>Предпросмотр (текст специального донесения):</u></b>
+                {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined  %}
+
+
+
+
+            {%set time_preview=''%}
+            {%set date_preview=''%}
+            {%set latitude_preview=''%}
+            {%set longitude_preview=''%}
+
+            {%if dones.time_msg != ''%}
+                {{dones.time_msg|date('d.m.Y')}} года
+            {%endif%}
+
+            {%if dones.time_msg != ''%}
+                в {{dones.time_msg|date('H:i')}}
             {%endif%}
 
 
-    {%set time_preview=''%}
-    {%set date_preview=''%}
-    {%set latitude_preview=''%}
-    {%set longitude_preview=''%}
+            {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.latitude is not empty %}
+                {%set latitude_preview=dones.latitude|trim%}
+            {%endif%}
 
-    {%if time_msg != ''%}
-        {{time_msg|date('d.m.Y')}} года
-    {%endif%}
-
-    {%if time_msg != ''%}
-        в {{time_msg|date('H:i')}}
-    {%endif%}
+            {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.longitude is not empty %}
+                {%set longitude_preview=dones.longitude|trim%}
+            {%endif%}
 
 
-    {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.latitude is not empty %}
-        {%set latitude_preview=dones.latitude|trim%}
-    {%endif%}
-
-    {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.longitude is not empty %}
-        {%set longitude_preview=dones.longitude|trim%}
-    {%endif%}
-
-
-    {%if latitude_preview is not empty and longitude_preview is not empty %}
-        {%set coord_preview=' ('~latitude_preview~', '~longitude_preview~').'%}
-    {%else%}
-        {%set coord_preview=' (нет координат).'%}
-    {%endif%}
-
-    {%if  rig.description is defined and  rig.description is not empty and rig.description is not null %}
-        {{rig.description|nl2br}}{{coord_preview}}
-    {%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.opening_description is not empty %}
-        {#{{(dones.opening_description|trim)|nl2br}}{{coord_preview}}#}
-        {%for op in dones.preview_opening_description%}
-
-            {%if loop.index == 1%}
-                {{op}}{{coord_preview}}
+            {%if latitude_preview is not empty and longitude_preview is not empty %}
+                {%set coord_preview=' ('~latitude_preview~', '~longitude_preview~').'%}
             {%else%}
-                <br>{{op}}
+                {%set coord_preview=' (нет координат).'%}
             {%endif%}
 
-        {%endfor%}
-    {%endif%}
+            {%if  rig.description is defined and  rig.description is not empty and rig.description is not null %}
+                {{rig.description|nl2br}}{{coord_preview}}
+            {%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.opening_description is not empty %}
+                {#{{(dones.opening_description|trim)|nl2br}}{{coord_preview}}#}
+                {%for op in dones.preview_opening_description%}
 
+                    {%if loop.index == 1%}
+                        {{op}}{{coord_preview}}
+                    {%else%}
+                        <br>{{op}}
+                    {%endif%}
+
+                {%endfor%}
+            {%endif%}
+
+        {%endif%}
+
+    </div>
 </div>

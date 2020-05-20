@@ -13,5 +13,5 @@ CREATE TABLE `settings_accordion` (
 COMMENT='настройки пользователя: если пользователь закрыл вкладку на форме создания стандартного СД - сохраняем сюда. при повторном открытии формы стандартного СД эта вкладка будет закрыта по умолчанию.'
 COLLATE='utf8_general_ci'
 ENGINE=InnoDB
-AUTO_INCREMENT=3
+AUTO_INCREMENT=1
 ;

@@ -62,6 +62,8 @@ class Dones extends My_Controller
 
             $this->load->library('form_validation');
 
+            $this->load->helper('floor_by_number_helper');
+
 //            //TWIG
 //            $this->load->library('twig');
 //
@@ -1936,7 +1938,12 @@ class Dones extends My_Controller
 
 
         $this->data['dones']['object'] = $this->create_model->get_dones_object($id_dones);
-
+        $this->data['dones']['object_data'] = $this->create_model->get_dones_object_data($id_dones);
+        if (!empty($this->data['dones']['object_data']) && !empty($this->data['dones']['object_data']['object'])) {
+            $this->data['dones']['object_data']['object_preview'] = explode(PHP_EOL, $this->data['dones']['object_data']['object']);
+            $this->data['dones']['object_data']['object_floor_text'] = get_text_by_floor(intval($this->data['dones']['object_data']['object_floor']));
+        }
+//print_r();exit();
 
         //media
         $media = $this->dones_model->get_dones_media($id_dones);

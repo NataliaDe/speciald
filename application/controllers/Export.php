@@ -74,6 +74,8 @@ class Export extends My_Controller
 
         $this->data['active_item_menu'] = 'catalog';
 
+        $this->load->helper('floor_by_number_helper');
+
 
         //TWIG
         //$this->load->library('twig');
@@ -109,6 +111,13 @@ class Export extends My_Controller
 
         $str = $this->create_model->get_dones_str($id_dones);
         $str_text = $this->create_model->get_dones_str_text($id_dones);
+
+
+        $object_data = $this->create_model->get_dones_object_data($id_dones);
+        if (!empty($object_data) && !empty($object_data)) {
+            $object_data['object_preview'] = explode(PHP_EOL, $object_data['object']);
+            $object_data['object_floor_text'] = get_text_by_floor(intval($object_data['object_floor']));
+        }
 
 
         $phpWord = new \PhpOffice\PhpWord\PhpWord();
@@ -220,8 +229,9 @@ class Export extends My_Controller
         }
         // }
 
-        if($dones['is_show_address'] == 1 && isset($dones['address']) && !empty($dones['address'])){
-            $coords= ' '.trim($dones['address']).$coords;
+        if ($dones['is_show_address'] == 1 && isset($dones['address']) && !empty($dones['address'])) {
+
+            $coords = ' ' . trim($dones['address']) . $coords;
         }
 
 
@@ -702,6 +712,109 @@ class Export extends My_Controller
         // $section->addTextBreak(1, self::header_style_cell_size, self::header_style_cell_font);
 
 
+
+
+        /* object  */
+        $object = '';
+        if (!empty($object_data) && $dones['is_show_object']) {
+
+            $a = $object_data['object_preview'];
+
+            if (!empty($object_data['house_name'])) {
+                $object = '(' . $object_data['house_name'] . ')';
+            }
+
+            if (!empty($object_data['material_name'])) {
+
+                if (empty($object)) {
+                    $object = $object_data['material_name'];
+                } else {
+                    $object = $object . ', ' . $object_data['material_name'];
+                }
+            }
+
+
+            if (!empty($object_data['object_floor_text'])) {
+
+                if (empty($object)) {
+                    $object = $object_data['object_floor_text'];
+                } else {
+                    $object = $object . ', ' . $object_data['object_floor_text'];
+                }
+            }
+
+
+            if (!empty($object_data['roof_name'])) {
+
+                if (empty($object)) {
+                    $object = 'кровля ' . $object_data['roof_name'];
+                } else {
+                    $object = $object . ', ' . 'кровля ' . $object_data['roof_name'];
+                }
+            }
+
+
+            if ($object_data['object_is_electric'] == 1) {
+                $electric = 'электрофицирован';
+            } else {
+                $electric = 'не электрофицирован';
+            }
+
+            if (empty($object)) {
+                $object = $electric;
+            } else {
+                $object = $object . ', ' . $electric;
+            }
+
+
+            if ($object_data['object_is_api'] == 1) {
+                $api = 'АПИ установлен';
+            } else {
+                $api = 'АПИ не установлен';
+            }
+
+            if (empty($object)) {
+                $object = $api;
+            } else {
+                $object = $object . ', ' . $api;
+            }
+
+
+
+
+
+            if (!empty($object) || count($a) > 0) {
+                $object = $object . '.';
+            }
+
+            if (!empty($object_data['officebelong_name'])) {
+
+                if (empty($object)) {
+                    $object = 'Ведомственная принадлежность - ' . $object_data['officebelong_name'] . '.';
+                } else {
+                    $object = $object . ' Ведомственная принадлежность - ' . $object_data['officebelong_name'] . '.';
+                }
+            }
+
+
+
+            $i = 0;
+            foreach ($a as $value) {
+                $i++;
+
+
+                if ($i == count($a)) {
+//$value=$value.'.';
+
+                    if (!empty($object))
+                        $value = $value . ' ' . $object;
+                }
+
+                $section->addText('          ' . trim($value), self::header_style_cell_size, self::start_descr_font);
+            }
+        }
+
+        /* END object  */
 
 
         /*  END DESCRIPTION */

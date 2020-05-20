@@ -337,4 +337,21 @@ class Create_model extends CI_Model
                 ->get()
                 ->result_array();
     }
+
+            public function get_dones_object_data($id_dones)
+    {
+        return $this->db->select('do.*,ob.name as officebelong_name,h.name as house_name,m.name as material_name,'
+                    . ' roof.name as roof_name')
+                ->from('speciald.dones_object as do')
+                ->join('journal.officebelong as ob', 'ob.id=do.object_office_belong', 'left')
+                ->join('speciald.object_house as h', 'h.id=do.object_house', 'left')
+
+                ->join('speciald.object_material as m', 'm.id=do.object_material', 'left')
+                ->join('speciald.object_roof as roof', 'roof.id=do.object_roof', 'left')
+                ->where('do.id_dones', $id_dones)
+                ->get()
+                ->row_array();
+    }
+
+
 }

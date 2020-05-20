@@ -227,3 +227,12 @@ background-color: #e0f5e5 !important;
   background-color: #c7e6cf  !important;
 }
 
+
+@media screen and (max-width: 1000px) {
+
+
+    .left-panel{
+        display: none;
+    }
+
+}

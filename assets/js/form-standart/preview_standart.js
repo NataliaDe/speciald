@@ -85,6 +85,16 @@ function setPreviewData() {
         new_coord = ' (нет координат).';
     }
 
+
+//            if (address !== '') {
+//            address = address.replace(/\r?\n/g, '<br />');
+//
+//            var arr_new_address = address.split('<br />');
+//            var arr_new_address_str = arr_new_address.join('<br />');
+//
+//            address = arr_new_address_str;
+//        }
+
     if (address !== '' && is_show_address === true) {
         new_coord = ' ' + address + new_coord;
     }
@@ -101,7 +111,7 @@ function setPreviewData() {
         var arr_new_descr_str = new_coord;
     }
 
-    $('#preview-opening-description-standart').html('<b><u>Предпросмотр:</u></b><br>' + new_date + '' + new_time + '' + arr_new_descr_str);
+    $('#preview-opening-description-standart').html('<b><u>Предпросмотр (начальный текст):</u></b><br>' + new_date + '' + new_time + '' + arr_new_descr_str);
 
 
 }
@@ -148,26 +158,129 @@ $('body').on('change', '#createStandart #is_show_object', function (e) {
 });
 
 
+$('body').on('input change keyup', '#createStandart textarea[name="object"]', function (e) {
+    setPreviewDataObject();
+
+});
+
+
+$('body').on('change', '#createStandart  #object_house_id', function (e) {
+    setPreviewDataObject();
+
+
+});
+
+$('body').on('change', '#createStandart  #object-office-belong-id', function (e) {
+    setPreviewDataObject();
+
+
+});
+
+
 
 
 
 function setPreviewDataObject() {
 
+    var object = $('#createStandart textarea[name="object"]').val();
+
+    var object_house_val = $('#createStandart #object_house_id option:selected').val();
+    var object_house = $('#createStandart  #object_house_id option:selected').text();
 
     var material_val = $('#createStandart #object_material_id option:selected').val();
     var material = $('#createStandart  #object_material_id option:selected').text();
 
     var object_floor = $('#createStandart input[name="object_floor"]').val();
 
-    var all_floor = '';
+    var $text = '';
     switch (parseInt(object_floor)) {
         case 1:
-            all_floor = 'одно';
+            $text = 'одно';
             break;
-        case 5:
-            all_floor = 'пяти';
+        case 2:
+            $text = 'двух';
+            break;
+        case 3:
+            $text = 'трех';
             break;
 
+        case 4:
+            $text = 'четырех';
+            break;
+        case 5:
+            $text = 'пяти';
+            break;
+
+        case 6:
+            $text = 'шести';
+            break;
+        case 7:
+            $text = 'семи';
+            break;
+        case 8:
+            $text = 'восьми';
+            break;
+        case 9:
+            $text = 'девяти';
+            break;
+        case 10:
+            $text = 'десяти';
+            break;
+        case 11:
+            $text = 'одиннадцати';
+            break;
+        case 12:
+            $text = 'двенадцати';
+            break;
+        case 13:
+            $text = 'тренадцати';
+            break;
+        case 14:
+            $text = 'четырнадцати';
+            break;
+        case 15:
+            $text = 'пятнадцати';
+            break;
+        case 16:
+            $text = 'шестнадцати';
+            break;
+        case 17:
+            $text = 'семнадцати';
+            break;
+        case 18:
+            $text = 'восемнадцати';
+            break;
+        case 19:
+            $text = 'девятнадцати';
+            break;
+        case 20:
+            $text = 'двадцати';
+            break;
+        case 21:
+            $text = 'двадцатиодно';
+            break;
+        case 22:
+            $text = 'двадцатидвух';
+            break;
+        case 23:
+            $text = 'двадцатитрех';
+            break;
+        case 24:
+            $text = 'двадцатичетырех';
+            break;
+        case 25:
+            $text = 'двадцатипяти';
+            break;
+
+
+        default:
+            $text = '';
+            break;
+
+    }
+
+    if ($text !== '') {
+        $text = $text + 'этажный';
     }
 
     var roof_id = $('#createStandart #object_roof_id option:selected').val();
@@ -175,6 +288,9 @@ function setPreviewDataObject() {
 
     var object_is_electric = $('#createStandart #object_is_electric').is(":checked");
     var object_is_api = $('#createStandart #object_is_api').is(":checked");
+
+    var office_belong_val = $('#createStandart #object-office-belong-id option:selected').val();
+    var office_belong = $('#createStandart  #object-office-belong-id option:selected').text();
 
 
     var is_show_object = $('#createStandart #is_show_object').is(":checked");
@@ -184,15 +300,39 @@ function setPreviewDataObject() {
     var preview = '';
 
     if (is_show_object === true) {
-        if (material_val !== '') {
-            preview = 'Дом ' + material;
+
+        if (object !== '') {
+            object = object.replace(/\r?\n/g, '<br />');
+
+            var arr_new_descr = object.split('<br />');
+            var arr_new_descr_str = arr_new_descr.join('<br />');
+
+            preview = arr_new_descr_str;
         }
 
-        if (all_floor !== '') {
+
+
+
+        if (object_house_val !== '') {
             if (preview === '')
-                preview = all_floor + 'этажный';
+                preview = object_house;
             else
-                preview = preview + ', ' + all_floor + 'этажный';
+                preview = preview + ' (' + object_house + ')';
+        }
+
+        if (material_val !== '') {
+
+            if (preview === '')
+                preview = 'Дом ' + material;
+            else
+                preview = preview + ', ' + material;
+        }
+
+        if ($text !== '') {
+            if (preview === '')
+                preview = $text;
+            else
+                preview = preview + ', ' + $text;
         }
 
         if (roof_id !== '') {
@@ -226,11 +366,71 @@ function setPreviewDataObject() {
                 preview = preview + ', ' + 'АПИ не установлен';
         }
 
-        preview = preview + '.';
+        if (preview === '')
+            preview = preview + '.';
+
+        if (office_belong_val !== '') {
+
+
+            if (preview === '')
+                preview = 'Ведомственная принадлежность ' + office_belong;
+            else
+                preview = preview + '. ' + 'Ведомственная принадлежность - ' + office_belong;
+        }
+
+
+
+
+
+    } else {
+        preview = 'информация не будет выведена в СД';
     }
 
+    $('#preview-object-standart').html('<b><u>Предпросмотр (объект):</u></b><br>' + preview);
 
-    $('#preview-object-standart').html('<b><u>Предпросмотр:</u></b><br>' + preview + '.');
 
 
 }
+
+
+
+
+$("#preview_opening_description_button").click(function () {
+
+
+    if ($("#panel_preview_opening_description").hasClass('open_panel')) {
+        $("#panel_preview_opening_description").removeClass('open_panel');
+        $("#panel_preview_opening_description").addClass('close_panel');
+        $("#preview-opening-description-standart").hide();
+        $("#preview_opening_description_button").show();
+    } else {
+        $("#panel_preview_opening_description").removeClass('close_panel');
+        $("#panel_preview_opening_description").addClass('open_panel');
+        $("#preview-opening-description-standart").show();
+        //$( "#theme_panel_button" ).show();
+    }
+
+
+
+});
+
+
+
+$("#preview_object_button").click(function () {
+
+
+    if ($("#panel-preview-object").hasClass('open_panel')) {
+        $("#panel-preview-object").removeClass('open_panel');
+        $("#panel-preview-object").addClass('close_panel');
+        $("#preview-object-standart").hide();
+        $("#preview_object_button").show();
+    } else {
+        $("#panel-preview-object").removeClass('close_panel');
+        $("#panel-preview-object").addClass('open_panel');
+        $("#preview-object-standart").show();
+        //$( "#theme_panel_button" ).show();
+    }
+
+
+
+});
