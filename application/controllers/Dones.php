@@ -106,6 +106,11 @@ class Dones extends My_Controller
             array('Стандартное'));
 
 
+        /* settings */
+        $this->data['settings'] = $this->user_model->get_user_settings_type_sd($this->data['active_user']['id_user'], Main_model::TYPE_SD_STANDART);
+        $this->data['settings'] = $this->user_model->get_user_settings_options_format($this->data['settings']);
+
+
         /* classification */
         $this->data['work_innerservice'] = $this->main_model->get_work_innerservice();
         $this->data['office_belong'] = $this->journal_model->get_officebelong();
@@ -282,6 +287,10 @@ class Dones extends My_Controller
 
         $this->data['bread_crumb'] = array(array('/dones' => 'Создать специальное донесение'),
             array('Простое'));
+
+                /* settings */
+        $this->data['settings'] = $this->user_model->get_user_settings_type_sd($this->data['active_user']['id_user'], Main_model::TYPE_SD_STANDART);
+        $this->data['settings'] = $this->user_model->get_user_settings_options_format($this->data['settings']);
 
 
         $this->data['vid_specd'] = $this->main_model->get_vid_specd();
@@ -1204,9 +1213,6 @@ class Dones extends My_Controller
     {
 
         $post = $this->input->post();
-
-        //print_r($post['sd_media']);
-        //exit();
         $dones = array();
 
         $id_dones = (isset($post['id_dones']) && !empty($post['id_dones'])) ? intval($post['id_dones']) : 0; //id of edit dones
@@ -1255,6 +1261,10 @@ class Dones extends My_Controller
         }
 
 
+        /* settings */
+        $settings = $this->user_model->get_user_settings_type_sd($this->data['active_user']['id_user'], Main_model::TYPE_SD_STANDART);
+        $settings = $this->user_model->get_user_settings_options_format($settings);
+
 
         $dones['is_copy'] = 0;
         $dones['copy_parent_id'] = 0;
@@ -1295,9 +1305,25 @@ class Dones extends My_Controller
 
         /* description of RIG */
         $dones['id_rig'] = (isset($post['id_rig_current']) && !empty($post['id_rig_current'])) ? intval($post['id_rig_current']) : 0;
-        $dones['time_msg'] = (isset($post['time_msg']) && !empty($post['time_msg'])) ? (\DateTime::createFromFormat('d.m.Y H:i:s', $post['time_msg'])->format('Y-m-d H:i:s')) : NULL;
-        $dones['time_loc'] = (isset($post['time_loc']) && !empty($post['time_loc'])) ? (\DateTime::createFromFormat('d.m.Y H:i:s', $post['time_loc'])->format('Y-m-d H:i:s')) : null;
-        $dones['time_likv'] = (isset($post['time_likv']) && !empty($post['time_likv'])) ? (\DateTime::createFromFormat('d.m.Y H:i:s', $post['time_likv'])->format('Y-m-d H:i:s')) : null;
+
+        if (!empty($settings) && isset($settings['is_seconds_show']) && in_array('yes', $settings['is_seconds_show'])) {
+            $dones['time_msg'] = (isset($post['time_msg']) && !empty($post['time_msg'])) ? (\DateTime::createFromFormat('d.m.Y H:i:s', trim($post['time_msg']))->format('Y-m-d H:i:s')) : NULL;
+        } else {
+            $dones['time_msg'] = (isset($post['time_msg']) && !empty($post['time_msg'])) ? (\DateTime::createFromFormat('d.m.Y H:i', trim($post['time_msg']))->format('Y-m-d H:i:s')) : NULL;
+        }
+
+        if (!empty($settings) && isset($settings['is_seconds_show']) && in_array('yes', $settings['is_seconds_show'])) {
+            $dones['time_loc'] = (isset($post['time_loc']) && !empty($post['time_loc'])) ? (\DateTime::createFromFormat('d.m.Y H:i:s', trim($post['time_loc']))->format('Y-m-d H:i:s')) : null;
+        } else {
+            $dones['time_loc'] = (isset($post['time_loc']) && !empty($post['time_loc'])) ? (\DateTime::createFromFormat('d.m.Y H:i', trim($post['time_loc']))->format('Y-m-d H:i:s')) : null;
+        }
+
+        if (!empty($settings) && isset($settings['is_seconds_show']) && in_array('yes', $settings['is_seconds_show'])) {
+            $dones['time_likv'] = (isset($post['time_likv']) && !empty($post['time_likv'])) ? (\DateTime::createFromFormat('d.m.Y H:i:s', trim($post['time_likv']))->format('Y-m-d H:i:s')) : null;
+        } else {
+            $dones['time_likv'] = (isset($post['time_likv']) && !empty($post['time_likv'])) ? (\DateTime::createFromFormat('d.m.Y H:i', trim($post['time_likv']))->format('Y-m-d H:i:s')) : null;
+        }
+
         $dones['podr_take_msg'] = (isset($post['podr_take_msg']) && !empty($post['podr_take_msg'])) ? trim($post['podr_take_msg']) : '';
         $dones['disp_take_msg'] = (isset($post['disp_take_msg']) && !empty($post['disp_take_msg'])) ? trim($post['disp_take_msg']) : '';
         $dones['address'] = (isset($post['address']) && !empty($post['address'])) ? trim($post['address']) : '';
@@ -1836,6 +1862,10 @@ class Dones extends My_Controller
             array('ID = ' . $id_dones)
         );
 
+
+        /* settings */
+        $this->data['settings'] = $this->user_model->get_user_settings_type_sd($this->data['active_user']['id_user'], Main_model::TYPE_SD_STANDART);
+        $this->data['settings'] = $this->user_model->get_user_settings_options_format($this->data['settings']);
 
 
 
@@ -2401,6 +2431,9 @@ class Dones extends My_Controller
             $new_dones['address'] = (isset($dones['address']) && !empty($dones['address'])) ? trim($dones['address']) : '';
             $new_dones['latitude'] = (isset($dones['latitude']) && !empty($dones['latitude'])) ? trim($dones['latitude']) : '';
             $new_dones['longitude'] = (isset($dones['longitude']) && !empty($dones['longitude'])) ? trim($dones['longitude']) : '';
+
+            $new_dones['is_show_coords'] = (isset($dones['is_show_coords']) && !empty($dones['is_show_coords'])) ? 1 : 0;
+
             $new_dones['vid_hs_1'] = (isset($dones['vid_hs_1']) && !empty($dones['vid_hs_1'])) ? intval($dones['vid_hs_1']) : 0;
             $new_dones['vid_hs_2'] = (isset($dones['vid_hs_2']) && !empty($dones['vid_hs_2'])) ? intval($dones['vid_hs_2']) : 0;
             $new_dones['reason_rig'] = (isset($dones['reason_rig']) && !empty($dones['reason_rig'])) ? trim($dones['reason_rig']) : '';
@@ -2751,6 +2784,9 @@ class Dones extends My_Controller
         }
 
 
+        /* settings */
+        $settings = $this->user_model->get_user_settings_type_sd($this->data['active_user']['id_user'], Main_model::TYPE_SD_STANDART);
+        $settings = $this->user_model->get_user_settings_options_format($settings);
 
         $dones['is_copy'] = 0;
         $dones['copy_parent_id'] = 0;
@@ -2791,9 +2827,16 @@ class Dones extends My_Controller
 
 
         /* description of RIG */
-        $dones['time_msg'] = (isset($post['time_msg']) && !empty($post['time_msg'])) ? (\DateTime::createFromFormat('d.m.Y H:i:s', $post['time_msg'])->format('Y-m-d H:i:s')) : NULL;
+        if (!empty($settings) && isset($settings['is_seconds_show']) && in_array('yes', $settings['is_seconds_show'])) {
+            $dones['time_msg'] = (isset($post['time_msg']) && !empty($post['time_msg'])) ? (\DateTime::createFromFormat('d.m.Y H:i:s', trim($post['time_msg']))->format('Y-m-d H:i:s')) : NULL;
+        } else {
+            $dones['time_msg'] = (isset($post['time_msg']) && !empty($post['time_msg'])) ? (\DateTime::createFromFormat('d.m.Y H:i', trim($post['time_msg']))->format('Y-m-d H:i:s')) : NULL;
+        }
+
         $dones['latitude'] = (isset($post['latitude']) && !empty($post['latitude'])) ? trim($post['latitude']) : '';
         $dones['longitude'] = (isset($post['longitude']) && !empty($post['longitude'])) ? trim($post['longitude']) : '';
+
+        $dones['is_show_coords'] = (isset($post['is_show_coords']) && !empty($post['is_show_coords'])) ? 1 : 0;
 
 
 
@@ -2899,6 +2942,9 @@ class Dones extends My_Controller
         $this->data['bread_crumb'] = array(array('/dones' => 'Редактировать специальное донесение'),
             array('Простое'));
 
+        /* settings */
+        $this->data['settings'] = $this->user_model->get_user_settings_type_sd($this->data['active_user']['id_user'], Main_model::TYPE_SD_STANDART);
+        $this->data['settings'] = $this->user_model->get_user_settings_options_format($this->data['settings']);
 
         $this->data['vid_specd'] = $this->main_model->get_vid_specd();
 

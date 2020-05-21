@@ -34,6 +34,11 @@
     {% include '/header_auth_user.twig' %}
 
 
+
+            <li class="nav-item">
+                <a class="nav-link {%if active_item_menu is defined and active_item_menu == 'settings'%} active_item_menu {%endif%}" href="{{ base_url('/settings')}}">Настройки</a>
+            </li>
+
 </div>
 
 {#</header>#}

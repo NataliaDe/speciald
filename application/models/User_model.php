@@ -157,30 +157,26 @@ class User_model extends CI_Model
                 ->result_array();
     }
 
-
-        public function set_user_sd_to_journal($id_user_journal,$id_user)
+    public function set_user_sd_to_journal($id_user_journal, $id_user)
     {
         $this->db->set('id_user_sd', $id_user)
             ->where('id', $id_user_journal)
             ->update('journal.user');
     }
 
-
-        public function get_users_journal_for_edit($id_user_sd)
+    public function get_users_journal_for_edit($id_user_sd)
     {
         return $this->db->select('*')
                 ->from('journal.permissions')
                 ->where([
                     'id_user_sd' => null
                 ])
-            ->or_where('id_user_sd',$id_user_sd)
+                ->or_where('id_user_sd', $id_user_sd)
                 ->get()
                 ->result_array();
     }
 
-
-
-            public function get_ids_user_sd_from_journal()
+    public function get_ids_user_sd_from_journal()
     {
         return $this->db->select('id_user_sd')
                 ->from('journal.permissions')
@@ -189,27 +185,100 @@ class User_model extends CI_Model
                 ->result_array();
     }
 
-
-
-        public function reset_user_sd_in_journal($id_user_sd,$id_user_sd_new)
+    public function reset_user_sd_in_journal($id_user_sd, $id_user_sd_new)
     {
         $this->db->set('id_user_sd', $id_user_sd_new)
             ->where('id_user_sd', $id_user_sd)
             ->update('journal.user');
-
     }
 
-
-
-            public function get_user_journal_by_user_sd($id_user_sd)
+    public function get_user_journal_by_user_sd($id_user_sd)
     {
-        $res= $this->db->select('id')
-                ->from('journal.user')
-                ->where('id_user_sd', $id_user_sd)
-                ->get()
-                ->row_array();
+        $res = $this->db->select('id')
+            ->from('journal.user')
+            ->where('id_user_sd', $id_user_sd)
+            ->get()
+            ->row_array();
 
         return $res['id'];
+    }
 
+    public function get_settings_list_by_role($role)
+    {
+        return $this->db->select('*')
+                ->from('settings')
+                ->group_start()
+                ->where('role', $role)
+                ->or_where('role', 'all')
+                ->group_end()
+                ->get()
+                ->result_array();
+    }
+
+    public function get_settings_options($id_settings)
+    {
+        return $this->db->select('*')
+                ->from('settings_options')
+                ->where('id_settings', $id_settings)
+                ->get()
+                ->result_array();
+    }
+
+    public function get_settings_options_users($id_user)
+    {
+        return $this->db->select('*')
+                ->from('settings_options_users')
+                ->where('id_user', $id_user)
+                ->get()
+                ->result_array();
+    }
+
+    public function delete_settings_options_users($id_user)
+    {
+        $this->db->where('id_user', $id_user)->delete('settings_options_users');
+    }
+
+    public function save_settings_options_users($data)
+    {
+        $this->db->insert('settings_options_users', $data);
+    }
+
+    public function get_user_settings_type_sd($id_user, $type_sd)
+    {
+        $this->db->select('s.name as setting_name, s.type as settings_type,so.option');
+        $this->db->where('su.id_user', $id_user);
+        $this->db->group_start();
+        $this->db->where('s.type_sd', $type_sd);
+        $this->db->or_where('s.type_sd', 'all');
+        $this->db->group_end();
+        $this->db->join('settings_options as so', 'su.id_settings_option=so.id', 'left');
+        $this->db->join('settings as s', 's.id=so.id_settings', 'left');
+
+        $result = $this->db->get('settings_options_users as su')->result_array();
+        return $result;
+    }
+
+        public function get_user_settings_format($settings)
+    {
+        $result = [];
+
+        if (!empty($settings)) {
+            foreach ($settings as $key => $value) {
+                $result[$value['settings_type']][] = $value;
+            }
+        }
+        return $result;
+    }
+
+            public function get_user_settings_options_format($settings)
+    {
+        $result = [];
+
+        if (!empty($settings)) {
+            foreach ($settings as $key => $value) {
+                $result[$value['settings_type']][] = $value['option'];
+            }
+        }
+        return $result;
     }
 }

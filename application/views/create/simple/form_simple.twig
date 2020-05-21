@@ -79,7 +79,7 @@
 
     </form>
 
- {%include '/create/simple/blocks/preview_for_word.twig'%}
+    {%include '/create/simple/blocks/preview_for_word.twig'%}
     <!-- .content -->
 
     {%include '/create/standart/modals/modal-media.twig'%}
@@ -95,7 +95,7 @@
     <link rel="stylesheet" href="{{ base_url('assets/datatables/jquery.dataTables.css') }}">
     <link rel="stylesheet" href="{{ base_url('/assets/css/media.css') }}">
 
-     <link rel="stylesheet" href="{{ base_url('/assets/css/form-simple/preview.css') }}">
+    <link rel="stylesheet" href="{{ base_url('/assets/css/form-simple/preview.css') }}">
 
 {% endblock %}
 
@@ -141,6 +141,29 @@
 
         });
 
+
+
+
+        $(document).ready(function () {
+            $('body').on('change', '#is_show_coords', function (e) {
+
+                e.preventDefault();
+
+                var is_check = $(this).is(":checked");
+                var lat = $('#lat_id');
+                var lon = $('#long_id');
+
+                if (is_check === true) {
+                    lat.prop('readonly', true);
+                    lon.prop('readonly', true);
+
+                } else {
+                    lat.prop('readonly', false);
+                    lon.prop('readonly', false);
+                }
+
+            });
+        });
 
     </script>
 

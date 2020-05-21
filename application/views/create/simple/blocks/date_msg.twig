@@ -7,20 +7,32 @@
         {%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.time_msg is not empty and dones.time_msg != '0000-00-00 00:00:00'%}
             {%set time_msg=dones.time_msg|date('d.m.Y H:i:s')%}
         {%endif%}
-        <input type="text" autocomplete="off" class="form-control date-time-sec-cal"  placeholder="" name="time_msg" value="{%if time_msg is not empty%}{{time_msg|date('d.m.Y H:i:s')}}{%endif%}">
+        <input type="text" autocomplete="off" class="form-control date-time-sec-cal"  placeholder="" name="time_msg" value="{%if settings is defined and settings.is_seconds_show is defined and 'yes' in settings.is_seconds_show and time_msg is not empty%}{{time_msg|date('d.m.Y H:i:s')}}{%elseif time_msg is not empty%} {{time_msg|date('d.m.Y H:i')}} {%endif%}">
     </div>
 
     <div class="form-group col-md-1">
         <label for="latitude" >Широта:</label>
-        <input type="text" class="form-control" id="lat_id"  placeholder="" name="latitude" value="{%if rig is defined and rig.latitude is defined and rig.latitude is not empty and rig.latitude != 0%}{{rig.latitude|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.latitude is not empty %}{{dones.latitude|trim}}{%endif%}">
+        <input type="text" class="form-control" id="lat_id"  placeholder="" name="latitude" value="{%if rig is defined and rig.latitude is defined and rig.latitude is not empty and rig.latitude != 0%}{{rig.latitude|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.latitude is not empty %}{{dones.latitude|trim}}{%endif%}"
+               {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_show_coords == 1 %}readonly{%endif%}>
     </div>
 
 
     <div class="form-group col-md-1">
         <label for="longitude" >Долгота:</label>
-        <input type="text" class="form-control" id="long_id"  placeholder="" name="longitude" value="{%if rig is defined and rig.longitude is defined and rig.longitude is not empty and rig.longitude != 0%}{{rig.longitude|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.longitude is not empty %}{{dones.longitude|trim}}{%endif%}">
+        <input type="text" class="form-control" id="long_id"  placeholder="" name="longitude" value="{%if rig is defined and rig.longitude is defined and rig.longitude is not empty and rig.longitude != 0%}{{rig.longitude|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.longitude is not empty %}{{dones.longitude|trim}}{%endif%}"
+               {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_show_coords == 1 %}readonly{%endif%}>
     </div>
 
+
+                <div class="form-group col-md-2">
+                <div class="checkbox checkbox-success" style="margin-top: 40px;">
+                    <input  type="checkbox" name="is_show_coords" value="1" id="is_show_coords"
+                            {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_show_coords == 1 %}checked{%endif%}>
+                    <label for="is_show_coords" >
+                        не выводить координаты в СД
+                    </label>
+                </div>
+            </div>
 
 {#     <div class="form-group col-md-7">
        {%include '/create/simple/blocks/preview_for_word.twig'%}

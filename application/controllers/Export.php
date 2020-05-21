@@ -219,6 +219,7 @@ class Export extends My_Controller
 
         $coords = '';
 
+        if($dones['is_show_coords'] == 0){
         // if ($type_sd == Main_model::TYPE_SD_STANDART) {
         $longitude = (isset($dones['longitude']) && !empty($dones['longitude'])) ? trim($dones['longitude']) : '';
         $latitude = (isset($dones['latitude']) && !empty($dones['latitude'])) ? trim($dones['latitude']) : '';
@@ -228,6 +229,10 @@ class Export extends My_Controller
             $coords = ' (нет координат).';
         }
         // }
+        }
+        else{
+            $coords = '.';
+        }
 
         if ($dones['is_show_address'] == 1 && isset($dones['address']) && !empty($dones['address'])) {
 

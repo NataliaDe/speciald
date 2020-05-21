@@ -29,6 +29,13 @@ $('body').on('input change keyup', '#opening_description_id', function (e) {
 });
 
 
+$('body').on('change', '#is_show_coords', function (e) {
+    setPreviewData();
+
+
+});
+
+
 function setPreviewData() {
 
 
@@ -37,6 +44,8 @@ function setPreviewData() {
     var lat = $('#lat_id').val();
     var long = $('#long_id').val();
     var descr = $("#opening_description_id").val();
+
+    var is_show_coords = $('#is_show_coords').is(":checked");
 
 
     var new_date = '';
@@ -61,11 +70,18 @@ function setPreviewData() {
 
 
 
-    new_coord = ' (' + lat + ', ' + long + ').';
+if(is_show_coords === false){
+        new_coord = ' (' + lat + ', ' + long + ').';
 
     if (lat === '' && long === '') {
         new_coord = ' (нет координат).';
     }
+}
+else{
+    new_coord = '.';
+}
+
+
 
 
 

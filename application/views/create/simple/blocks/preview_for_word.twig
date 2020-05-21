@@ -33,8 +33,9 @@
                 {%set longitude_preview=dones.longitude|trim%}
             {%endif%}
 
-
-            {%if latitude_preview is not empty and longitude_preview is not empty %}
+            {%if dones.is_show_coords == 1 %}
+                {%set coord_preview='.'%}
+            {%elseif latitude_preview is not empty and longitude_preview is not empty %}
                 {%set coord_preview=' ('~latitude_preview~', '~longitude_preview~').'%}
             {%else%}
                 {%set coord_preview=' (нет координат).'%}
