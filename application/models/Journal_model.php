@@ -91,8 +91,28 @@ class Journal_model extends CI_Model
 
     public function get_informing_by_rig_id($id)
     {
-        return $this->db->select('*')
-                ->from('journal.informingrep')
+        return $this->db->select(" `inf`.`id`               AS `id`,
+  `inf`.`id_rig`           AS `id_rig`,
+  `inf`.`id_destination`   AS `id_destination`,
+  `inf`.`time_msg`         AS `time_msg`,
+  `inf`.`time_exit`        AS `time_exit`,
+  `inf`.`time_arrival`     AS `time_arrival`,
+  `p`.`name`      AS `position_name`,
+  `r`.`name`          AS `rank_name`,
+  `inf`.`destination_text` AS `destination_text`,
+
+    (CASE WHEN (`inf`.`id_destination` = 0) THEN `inf`.`destination_text`
+
+WHEN (`inf`.`id_destination` <> 0 AND `d`.`pos_place` IS NOT NULL AND `d`.`pos_place` <> '') THEN CONCAT(`p`.`name`,' ',d.pos_place,' ',r.full_name,' ', d.`fio`)
+WHEN (`inf`.`id_destination` <> 0 AND (`d`.`pos_place` IS NULL OR `d`.`pos_place` = '')) THEN CONCAT(`p`.`name`,' ',r.full_name,' ', d.`fio`)
+  ELSE `d`.`fio` END) AS `fio`,
+
+  `d`.`id_level`           AS `id_level`,
+  `inf`.`id_level_created` AS `id_level_created`")
+                ->from('journal.informing as inf')
+                ->join('journal.`destination` as `d`', '`inf`.`id_destination` = `d`.`id`', 'left')
+                ->join('journal.rank AS r ', 'r.id=d.id_rank', 'left')
+                ->join('journal.`position` `p`', '`p`.`id` = `d`.`id_position`', 'left')
                 ->where([
                     'id_rig' => $id
                 ])
@@ -159,38 +179,36 @@ class Journal_model extends CI_Model
                 ->result_array();
     }
 
-
-        public function is_work_innerservice($name)
+    public function is_work_innerservice($name)
     {
-         $query = $this->db->where([
-                'name'   => $name,
-                'is_delete'=>0
+        $query = $this->db->where([
+                'name'      => $name,
+                'is_delete' => 0
             ])
             ->get('speciald.work_innerservice');
 
         return $query->num_rows();
     }
 
-
-            public function add_work_innerservice($data)
+    public function add_work_innerservice($data)
     {
         $this->db->insert('speciald.work_innerservice', $data);
         return $this->db->insert_id();
     }
 
-
-                public function edit_work_innerservice_by_id($data, $id)
-    {
-        $this->db->where('id', $id);
-        $this->db->update('speciald.work_innerservice', $data);
-    }
-                    public function delete_work_innerservice_by_id($data, $id)
+    public function edit_work_innerservice_by_id($data, $id)
     {
         $this->db->where('id', $id);
         $this->db->update('speciald.work_innerservice', $data);
     }
 
-        public function get_officebelong()
+    public function delete_work_innerservice_by_id($data, $id)
+    {
+        $this->db->where('id', $id);
+        $this->db->update('speciald.work_innerservice', $data);
+    }
+
+    public function get_officebelong()
     {
         return $this->db->select('*')
                 ->from('journal.officebelong')
@@ -198,9 +216,8 @@ class Journal_model extends CI_Model
                     'is_delete' => 0
                 ])
                 ->where('id != ', 0)
-            ->order_by('name', 'asc')
+                ->order_by('name', 'asc')
                 ->get()
                 ->result_array();
     }
-
 }
