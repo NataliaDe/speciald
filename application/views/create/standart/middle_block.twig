@@ -18,7 +18,6 @@
 
         <div class="form-row create-form-row">
             <input type="hidden" class="form-control"  placeholder="" name="id_rig_current" value="{%if id_rig_current is defined and id_rig_current is not empty%}{{id_rig_current}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.id_rig is not empty %}{{dones.id_rig}}{%endif%}">
-            {{dump(settings)}}
 
             <div class="form-group col-md-2">
                 <label for="time_msg" >Дата и время сообщения:</label>
