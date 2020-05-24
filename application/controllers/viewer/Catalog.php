@@ -78,6 +78,10 @@ class Catalog extends My_Controller
                         $this->data['outs'][$key]['statuses_id'] = array_column($this->data['outs'][$key]['statuses'], 'id_action');
 
                         foreach ($this->data['outs'][$key]['statuses'] as $row) {//detail actions
+                            if (!isset($this->data['outs'][$key]['dates_actions'][$row['id_action']]) || (isset($this->data['outs'][$key]['dates_actions'][$row['id_action']]) && $row['date_action'] > $this->data['outs'][$key]['dates_actions'][$row['id_action']]))
+                                $this->data['outs'][$key]['dates_actions'][$row['id_action']] = $row['date_action'];
+
+
                             if ($row['id_action'] == 5) {
 
                                 $this->data['outs'][$key]['statuses_detail'][$row['id_action']][$row['id_user_action']] = $row;
@@ -88,84 +92,89 @@ class Catalog extends My_Controller
                     }
                 }
             }
-        }
-         elseif ($this->data['active_user']['level'] ==  Main_model::LEVEL_ID_UMCHS) {//UMCHS
-                $filter['author_region_id'] = $this->data['active_user']['id_region'];
+        } elseif ($this->data['active_user']['level'] == Main_model::LEVEL_ID_UMCHS) {//UMCHS
+            $filter['author_region_id'] = $this->data['active_user']['id_region'];
             $filter['is_delete'] = 0;
 
 //            if (in_array($this->data['active_user']['id_organ'], [Main_model::ORGAN_ID_ROSN, Main_model::ORGAN_ID_UGZ, Main_model::ORGAN_ID_AVIA])) {
 //                $this->data['outs'] = $this->dones_model->get_dones_by_region($filter, $this->data['active_user']['id_organ']);
 //            } else {
 
-                $filter['without_cp'] = [Main_model::ORGAN_ID_ROSN, Main_model::ORGAN_ID_UGZ, Main_model::ORGAN_ID_AVIA, Main_model::ORGAN_ID_RCU];
-                $this->data['outs'] = $this->dones_model->get_dones_by_region($filter, FALSE);
+            $filter['without_cp'] = [Main_model::ORGAN_ID_ROSN, Main_model::ORGAN_ID_UGZ, Main_model::ORGAN_ID_AVIA, Main_model::ORGAN_ID_RCU];
+            $this->data['outs'] = $this->dones_model->get_dones_by_region($filter, FALSE);
             //}
 
 
 
 
-        if (isset($this->data['outs']) && !empty($this->data['outs'])) {
-            foreach ($this->data['outs'] as $key => $value) {
-                $this->data['outs'][$key]['statuses'] = $this->dones_model->get_statuses_by_id_dones($value['id'], 0, false); //only active statuses
+            if (isset($this->data['outs']) && !empty($this->data['outs'])) {
+                foreach ($this->data['outs'] as $key => $value) {
+                    $this->data['outs'][$key]['statuses'] = $this->dones_model->get_statuses_by_id_dones($value['id'], 0, false); //only active statuses
 
-                if (isset($this->data['outs'][$key]['statuses']) && !empty($this->data['outs'][$key]['statuses'])) {
-                    $this->data['outs'][$key]['statuses_id'] = array_column($this->data['outs'][$key]['statuses'], 'id_action');
+                    if (isset($this->data['outs'][$key]['statuses']) && !empty($this->data['outs'][$key]['statuses'])) {
+                        $this->data['outs'][$key]['statuses_id'] = array_column($this->data['outs'][$key]['statuses'], 'id_action');
 
-                    $is_other_refuse = 0;
-                    foreach ($this->data['outs'][$key]['statuses'] as $row) {//detail actions
-                        if ($row['id_action'] == Logs_model::ACTION_REFUSE_SD_UMCHS) {
+                        $is_other_refuse = 0;
+                        foreach ($this->data['outs'][$key]['statuses'] as $row) {//detail actions
+                            if (!isset($this->data['outs'][$key]['dates_actions'][$row['id_action']]) || (isset($this->data['outs'][$key]['dates_actions'][$row['id_action']]) && $row['date_action'] > $this->data['outs'][$key]['dates_actions'][$row['id_action']]))
+                                $this->data['outs'][$key]['dates_actions'][$row['id_action']] = $row['date_action'];
 
-                            $this->data['outs'][$key]['statuses_detail'][$row['id_action']][$row['id_user_action']] = $row;
 
-                            if ($row['id_user_action'] != $this->data['active_user']['id_user']) {
-                                $is_other_refuse ++;
+                            if ($row['id_action'] == Logs_model::ACTION_REFUSE_SD_UMCHS) {
+
+                                $this->data['outs'][$key]['statuses_detail'][$row['id_action']][$row['id_user_action']] = $row;
+
+                                if ($row['id_user_action'] != $this->data['active_user']['id_user']) {
+                                    $is_other_refuse ++;
+                                }
+                            } else {
+                                $this->data['outs'][$key]['statuses_detail'][$row['id_action']] = $row;
                             }
-                        } else {
-                            $this->data['outs'][$key]['statuses_detail'][$row['id_action']] = $row;
                         }
-                    }
 
-                    if($is_other_refuse > 0){
-                        $this->data['outs'][$key]['is_other_refuse']= $is_other_refuse.' '.declination_word_by_number($is_other_refuse, array('замечание', 'замечания', 'замечаний'));
-                        $this->data['outs'][$key]['is_other_refuse_cnt']=$is_other_refuse;
+                        if ($is_other_refuse > 0) {
+                            $this->data['outs'][$key]['is_other_refuse'] = $is_other_refuse . ' ' . declination_word_by_number($is_other_refuse, array('замечание', 'замечания', 'замечаний'));
+                            $this->data['outs'][$key]['is_other_refuse_cnt'] = $is_other_refuse;
+                        }
                     }
                 }
             }
-        }
-        }
-
-        elseif ($this->data['active_user']['level'] == Main_model::LEVEL_ID_RCU) {//rcu
+        } elseif ($this->data['active_user']['level'] == Main_model::LEVEL_ID_RCU) {//rcu
             $filter['is_delete'] = 0;
             $this->data['outs'] = $this->dones_model->get_dones_for_rcu($filter, FALSE);
 
             if (isset($this->data['outs']) && !empty($this->data['outs'])) {
-            foreach ($this->data['outs'] as $key => $value) {
-                $this->data['outs'][$key]['statuses'] = $this->dones_model->get_statuses_by_id_dones($value['id'], 0, false); //only active statuses
+                foreach ($this->data['outs'] as $key => $value) {
+                    $this->data['outs'][$key]['statuses'] = $this->dones_model->get_statuses_by_id_dones($value['id'], 0, false); //only active statuses
 
-                if (isset($this->data['outs'][$key]['statuses']) && !empty($this->data['outs'][$key]['statuses'])) {
-                    $this->data['outs'][$key]['statuses_id'] = array_column($this->data['outs'][$key]['statuses'], 'id_action');
+                    if (isset($this->data['outs'][$key]['statuses']) && !empty($this->data['outs'][$key]['statuses'])) {
+                        $this->data['outs'][$key]['statuses_id'] = array_column($this->data['outs'][$key]['statuses'], 'id_action');
 
-                    $is_other_refuse = 0;
-                    foreach ($this->data['outs'][$key]['statuses'] as $row) {//detail actions
-                        if ($row['id_action'] == Logs_model::ACTION_REFUSE_SD_RCU) {
+                        $is_other_refuse = 0;
+                        foreach ($this->data['outs'][$key]['statuses'] as $row) {//detail actions
+                            if (!isset($this->data['outs'][$key]['dates_actions'][$row['id_action']]) || (isset($this->data['outs'][$key]['dates_actions'][$row['id_action']]) && $row['date_action'] > $this->data['outs'][$key]['dates_actions'][$row['id_action']]))
+                                $this->data['outs'][$key]['dates_actions'][$row['id_action']] = $row['date_action'];
 
-                            $this->data['outs'][$key]['statuses_detail'][$row['id_action']][$row['id_user_action']] = $row;
 
-                            if ($row['id_user_action'] != $this->data['active_user']['id_user']) {
-                                $is_other_refuse ++;
+                            if ($row['id_action'] == Logs_model::ACTION_REFUSE_SD_RCU) {
+
+                                $this->data['outs'][$key]['statuses_detail'][$row['id_action']][$row['id_user_action']] = $row;
+
+                                if ($row['id_user_action'] != $this->data['active_user']['id_user']) {
+                                    $is_other_refuse ++;
+                                }
+                            } else {
+                                $this->data['outs'][$key]['statuses_detail'][$row['id_action']] = $row;
                             }
-                        } else {
-                            $this->data['outs'][$key]['statuses_detail'][$row['id_action']] = $row;
                         }
-                    }
 
-                    if($is_other_refuse > 0){
-                        $this->data['outs'][$key]['is_other_refuse']= $is_other_refuse.' '.declination_word_by_number($is_other_refuse, array('замечание', 'замечания', 'замечаний'));
-                        $this->data['outs'][$key]['is_other_refuse_cnt']=$is_other_refuse;
+                        if ($is_other_refuse > 0) {
+                            $this->data['outs'][$key]['is_other_refuse'] = $is_other_refuse . ' ' . declination_word_by_number($is_other_refuse, array('замечание', 'замечания', 'замечаний'));
+                            $this->data['outs'][$key]['is_other_refuse_cnt'] = $is_other_refuse;
+                        }
                     }
                 }
             }
-        }
         }
 
         //media
