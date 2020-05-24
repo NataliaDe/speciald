@@ -6,6 +6,7 @@
     <!-- content -->
     <br>
     <center>
+        {%if settings is defined and settings is not empty%}
         <form role="form" id="settingsForm" method="POST" action="{{base_url('/settings/save')}}" >
             <caption>Настройки</caption>
             <table class="table table-condensed table-hover  table-bordered table-custom" id="userTable" >
@@ -68,6 +69,9 @@
 
                      </center>
         </form>
+                    {%else%}
+                        <i class="fa fa-folder-open-o" aria-hidden="true"></i> Настроек нет
+                    {%endif%}
     </center>
 
     <!-- .content -->

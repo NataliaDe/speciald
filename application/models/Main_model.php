@@ -339,4 +339,15 @@ class Main_model extends CI_Model
                 ->get()
                 ->result_array();
     }
+
+        public function get_firereason()
+    {
+        return $this->db->select('*')
+                ->from('journal.firereason')
+                ->where('is_delete', 0)
+                ->where('id !=', 0)
+                ->order_by('name', 'asc')
+                ->get()
+                ->result_array();
+    }
 }

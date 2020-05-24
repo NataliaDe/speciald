@@ -1,6 +1,6 @@
 
 
-$('body').on('input change keyup', '.date-time-sec-cal', function (e) {
+$('body').on('input change keyup', '.calendar-simple-time-msg', function (e) {
     setPreviewData();
 });
 
@@ -39,8 +39,8 @@ $('body').on('change', '#is_show_coords', function (e) {
 function setPreviewData() {
 
 
-    var date = $('.date-time-sec-cal').val();
-    var time = $('.date-time-sec-cal').val();
+    var date = $('.calendar-simple-time-msg').val();
+    var time = $('.calendar-simple-time-msg').val();
     var lat = $('#lat_id').val();
     var long = $('#long_id').val();
     var descr = $("#opening_description_id").val();
@@ -64,7 +64,8 @@ function setPreviewData() {
 
     if (time !== '') {
 
-        var arr_time = arr_date[1].split(':');
+var arr_t = time.split(' ');
+        var arr_time = arr_t[1].split(':');
         new_time = 'в ' + arr_time[0] + ':' + arr_time[1] + ' ';
     }
 
@@ -78,7 +79,7 @@ if(is_show_coords === false){
     }
 }
 else{
-    new_coord = '.';
+    new_coord = '';
 }
 
 

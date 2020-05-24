@@ -54,7 +54,7 @@ class Dones extends My_Controller
             $this->data['positions'] = $this->main_model->get_positions();
 
             $this->data['reasonrig'] = $this->main_model->get_reasonrig();
-
+            $this->data['firereason'] = $this->main_model->get_firereason();
 
 
 
@@ -1333,6 +1333,7 @@ class Dones extends My_Controller
         $dones['vid_hs_2'] = (isset($post['vid_hs_2']) && !empty($post['vid_hs_2'])) ? intval($post['vid_hs_2']) : 0;
         $dones['reason_rig'] = (isset($post['reason_rig']) && !empty($post['reason_rig'])) ? trim($post['reason_rig']) : '';
         $dones['firereason_rig'] = (isset($post['firereason_rig']) && !empty($post['firereason_rig'])) ? trim($post['firereason_rig']) : '';
+        $dones['id_firereason'] = (isset($post['id_firereason']) && !empty($post['id_firereason'])) ? intval($post['id_firereason']) : 0;
         $dones['inspector'] = (isset($post['inspector']) && !empty($post['inspector'])) ? trim($post['inspector']) : '';
 
 
@@ -1380,6 +1381,7 @@ class Dones extends My_Controller
 
         $dones['is_show_address'] = (isset($post['is_show_address']) && !empty($post['is_show_address'])) ? 1 : 0;
         $dones['is_show_object'] = (isset($post['is_show_object']) && !empty($post['is_show_object'])) ? 1 : 0;
+        $dones['is_show_prevention'] = (isset($post['is_show_prevention']) && !empty($post['is_show_prevention'])) ? 1 : 0;
 
         /* insert/edit dones */
         if ($id_dones == 0) {//create a new
@@ -1982,7 +1984,8 @@ class Dones extends My_Controller
 
         /* preview */
         $this->data['dones']['preview_opening_description'] = explode(PHP_EOL, $this->data['dones']['opening_description']);
-
+        $this->data['dones']['preview_prevention_results'] = explode(PHP_EOL, $this->data['dones']['prevention_result']);
+        $this->data['dones']['preview_prevention_events'] = explode(PHP_EOL, $this->data['dones']['prevention_events']);
 //        if (!empty($media)) {
 //            $i = 0;
 //            foreach ($media as $row) {
@@ -2438,6 +2441,8 @@ class Dones extends My_Controller
             $new_dones['vid_hs_2'] = (isset($dones['vid_hs_2']) && !empty($dones['vid_hs_2'])) ? intval($dones['vid_hs_2']) : 0;
             $new_dones['reason_rig'] = (isset($dones['reason_rig']) && !empty($dones['reason_rig'])) ? trim($dones['reason_rig']) : '';
             $new_dones['firereason_rig'] = (isset($dones['firereason_rig']) && !empty($dones['firereason_rig'])) ? trim($dones['firereason_rig']) : '';
+            $new_dones['id_firereason'] = (isset($dones['id_firereason']) && !empty($dones['id_firereason'])) ? trim($dones['id_firereason']) : 0;
+
             $new_dones['inspector'] = (isset($dones['inspector']) && !empty($dones['inspector'])) ? trim($dones['inspector']) : '';
 
 
@@ -2482,6 +2487,7 @@ class Dones extends My_Controller
 
             $new_dones['is_show_address'] = (isset($dones['is_show_address']) && !empty($dones['is_show_address'])) ? 1 : 0;
             $new_dones['is_show_object'] = (isset($dones['is_show_object']) && !empty($dones['is_show_object'])) ? 1 : 0;
+            $new_dones['is_show_prevention'] = (isset($dones['is_show_prevention']) && !empty($dones['is_show_prevention'])) ? 1 : 0;
 
 
 

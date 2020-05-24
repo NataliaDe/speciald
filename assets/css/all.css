@@ -176,6 +176,11 @@ table.dataTable tbody td {
     color: red;
     font-weight: 600;
 }
+.refuse-info-edit{
+    text-decoration: underline;
+    color: #ff5200;
+    font-weight: 600;
+}
 
 
 #detail-refuse-sd-modal .modal-header{

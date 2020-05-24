@@ -34,7 +34,7 @@
             {%endif%}
 
             {%if dones.is_show_coords == 1 %}
-                {%set coord_preview='.'%}
+                {%set coord_preview=''%}
             {%elseif latitude_preview is not empty and longitude_preview is not empty %}
                 {%set coord_preview=' ('~latitude_preview~', '~longitude_preview~').'%}
             {%else%}

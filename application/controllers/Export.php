@@ -219,18 +219,17 @@ class Export extends My_Controller
 
         $coords = '';
 
-        if($dones['is_show_coords'] == 0){
-        // if ($type_sd == Main_model::TYPE_SD_STANDART) {
-        $longitude = (isset($dones['longitude']) && !empty($dones['longitude'])) ? trim($dones['longitude']) : '';
-        $latitude = (isset($dones['latitude']) && !empty($dones['latitude'])) ? trim($dones['latitude']) : '';
-        if (!empty($longitude) && !empty($latitude)) {
-            $coords = ' (' . $latitude . ', ' . $longitude . ').';
+        if ($dones['is_show_coords'] == 0) {
+            // if ($type_sd == Main_model::TYPE_SD_STANDART) {
+            $longitude = (isset($dones['longitude']) && !empty($dones['longitude'])) ? trim($dones['longitude']) : '';
+            $latitude = (isset($dones['latitude']) && !empty($dones['latitude'])) ? trim($dones['latitude']) : '';
+            if (!empty($longitude) && !empty($latitude)) {
+                $coords = ' (' . $latitude . ', ' . $longitude . ').';
+            } else {
+                $coords = ' (нет координат).';
+            }
+            // }
         } else {
-            $coords = ' (нет координат).';
-        }
-        // }
-        }
-        else{
             $coords = '.';
         }
 
@@ -831,10 +830,79 @@ class Export extends My_Controller
                 $section->addText('          ' . $value, array('size' => 15), array('spaceAfter' => 0, 'spacing'    => 0,
                     'alignment'  => PhpOffice\PhpWord\SimpleType\Jc::BOTH));
             }
-            $section->addTextBreak(2, self::header_style_cell_size, self::header_style_cell_font);
+            if ($dones['is_show_prevention'] == 0)
+                $section->addTextBreak(2, self::header_style_cell_size, self::header_style_cell_font);
         } else {
-            $section->addTextBreak(1, self::header_style_cell_size, self::header_style_cell_font);
+            if ($dones['is_show_prevention'] == 0)
+                $section->addTextBreak(1, self::header_style_cell_size, self::header_style_cell_font);
         }
+
+
+        /* prevention  */
+        $prevention = '';
+        if ($dones['is_show_prevention']) {
+
+            $a = array();
+            $b = [];
+            if (!empty($dones['prevention_result'])) {
+                $a = explode(PHP_EOL, $dones['prevention_result']);
+            }
+            if (!empty($dones['prevention_events'])) {
+                $b = explode(PHP_EOL, $dones['prevention_events']);
+            }
+
+            if (!empty($dones['prevention_time']) && $dones['prevention_time'] != '0000-00-00' && $dones['prevention_time'] != null) {
+                $prevention = \DateTime::createFromFormat('Y-m-d', $dones['prevention_time'])->format('d.m.Y');
+            }
+
+            if (!empty($dones['prevention_who'])) {
+
+                if (empty($prevention)) {
+                    $prevention = $dones['prevention_who'];
+                } else {
+                    $prevention = $prevention . ' ' . $dones['prevention_who'];
+                }
+            }
+
+
+            $i = 0;
+            if (!empty($a)) {
+                foreach ($a as $value) {
+                    $i++;
+
+
+                    if ($i == 1) {
+                        if ($i == count($a) && !empty($b)) {
+                            $dop = ' Проводимые мероприятия для формирования в обществе культуры, безопасной жизнедеятельности: ' . $dones['prevention_events'];
+                        } else {
+                            $dop = '';
+                        }
+                        if (!empty($prevention))
+                            $value = $prevention . ' проводились следующие профилактические работы: ' . $value . $dop;
+                        else
+                            $value = 'Проводились следующие профилактические работы: ' . $value . $dop;
+                    }
+                    elseif ($i == count($a) && !empty($b)) {
+                        $value = $value . ' Проводимые мероприятия для формирования в обществе культуры, безопасной жизнедеятельности: ' . $dones['prevention_events'];
+                    }
+
+                    $section->addText('          ' . trim($value), self::header_style_cell_size, self::start_descr_font);
+                }
+            } elseif (!empty($b)) {
+                if (!empty($prevention))
+                    $value = $prevention . '. Проводимые мероприятия для формирования в обществе культуры, безопасной жизнедеятельности: ' . $dones['prevention_events'];
+                else
+                    $value = 'Проводимые мероприятия для формирования в обществе культуры, безопасной жизнедеятельности: ' . $dones['prevention_events'];
+                $section->addText('          ' . trim($value), self::header_style_cell_size, self::start_descr_font);
+            }
+            $section->addTextBreak(2, self::header_style_cell_size, self::header_style_cell_font);
+        }
+
+        /* END prevention  */
+
+
+
+
 
         $section->addText($dones['author_position_name'], self::header_style_cell_size, self::header_style_cell_font);
 

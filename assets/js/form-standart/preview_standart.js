@@ -301,6 +301,8 @@ function setPreviewDataObject() {
 
     if (is_show_object === true) {
 
+        $("#panel-preview-object").show();
+
         if (object !== '') {
             object = object.replace(/\r?\n/g, '<br />');
 
@@ -377,17 +379,94 @@ function setPreviewDataObject() {
             else
                 preview = preview + '. ' + 'Ведомственная принадлежность - ' + office_belong;
         }
-
-
-
-
-
     } else {
         preview = 'информация не будет выведена в СД';
+        $("#panel-preview-object").hide();
     }
 
     $('#preview-object-standart').html('<b><u>Предпросмотр (объект):</u></b><br>' + preview);
 
+}
+
+
+
+
+/* prevention */
+$('body').on('input change keyup blur', '#createStandart #accordion7 input[name="prevention_time"]', function (e) {
+    setPreviewDataPrevent();
+});
+$('body').on('input change keyup', '#createStandart #accordion7 input[name="prevention_who"]', function (e) {
+    setPreviewDataPrevent();
+});
+$('body').on('input change keyup', '#createStandart #accordion7 textarea[name="prevention_result"]', function (e) {
+    setPreviewDataPrevent();
+});
+$('body').on('input change keyup', '#createStandart #accordion7 textarea[name="prevention_events"]', function (e) {
+    setPreviewDataPrevent();
+});
+$('body').on('change', '#createStandart #accordion7 #is_show_prevention', function (e) {
+    setPreviewDataPrevent();
+});
+
+
+function setPreviewDataPrevent() {
+
+    var date = $('#createStandart #accordion7 input[name="prevention_time"]').val();
+    var who = $('#createStandart #accordion7 input[name="prevention_who"]').val();
+    var result = $('#createStandart #accordion7 textarea[name="prevention_result"]').val();
+    var events = $('#createStandart #accordion7 textarea[name="prevention_events"]').val();
+    var is_show_prevention = $('#createStandart #accordion7 #is_show_prevention').is(":checked");
+
+
+    var preview = '';
+
+    if (is_show_prevention === true) {
+        $("#panel_preview_prevention").show();
+
+        if (date !== '') {
+            preview = date;
+        }
+
+
+        if (who !== '') {
+
+            if (preview === '')
+                preview = who;
+            else
+                preview = preview + ' ' + who;
+        }
+
+        if (result !== '') {
+            result = result.replace(/\r?\n/g, '<br />');
+
+            var arr_new_descr = result.split('<br />');
+            var arr_new_descr_str = arr_new_descr.join('<br />');
+
+            if (preview === '')
+                preview = arr_new_descr_str;
+            else
+                preview = preview + ' проводились следующие профилактические работы: ' + arr_new_descr_str;
+
+        }
+
+        if (events !== '') {
+            events = events.replace(/\r?\n/g, '<br />');
+
+            var arr_new_descr = events.split('<br />');
+            var arr_new_descr_str = arr_new_descr.join('<br />');
+
+            if (preview === '')
+                preview = arr_new_descr_str;
+            else
+                preview = preview + ' Проводимые мероприятия для формирования в обществе культуры, безопасной жизнедеятельности: ' + arr_new_descr_str;
+
+        }
+    } else {
+        preview = 'информация не будет выведена в СД';
+        $("#panel_preview_prevention").hide();
+
+    }
+    $('#preview_prevention').html('<b><u>Предпросмотр (меры профилактики):</u></b><br>' + preview);
 
 
 }
@@ -430,7 +509,19 @@ $("#preview_object_button").click(function () {
         $("#preview-object-standart").show();
         //$( "#theme_panel_button" ).show();
     }
+});
+
+$("#preview_prevention_button").click(function () {
 
 
-
+    if ($("#panel_preview_prevention").hasClass('open_panel')) {
+        $("#panel_preview_prevention").removeClass('open_panel');
+        $("#panel_preview_prevention").addClass('close_panel');
+        $("#preview_prevention").hide();
+        $("#preview_prevention_button").show();
+    } else {
+        $("#panel_preview_prevention").removeClass('close_panel');
+        $("#panel_preview_prevention").addClass('open_panel');
+        $("#preview_prevention").show();
+    }
 });
