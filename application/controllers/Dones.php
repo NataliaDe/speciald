@@ -127,6 +127,35 @@ class Dones extends My_Controller
 
         $this->data['regions_cp_list'] = $this->ss_model->set_regions_cp_list();
 
+        /* default number sd */
+        $request_region = $this->data['active_user']['id_region'];
+        if ($this->data['active_user']['id_organ'] == Main_model::ORGAN_ID_ROSN || $this->data['active_user']['id_organ'] == Main_model::ORGAN_ID_UGZ ||
+            $this->data['active_user']['id_organ'] == Main_model::ORGAN_ID_AVIA) {
+            $request_region = $this->data['active_user']['id_organ'];
+
+            $cnt_dones_per_region = $this->dones_model->get_cnt_dones_per_organ($request_region);
+        } elseif ($this->data['active_user']['id_organ'] == Main_model::ORGAN_ID_RCU) {
+            $request_region = Main_model::REGION_ID_RCU;
+            $cnt_dones_per_region = $this->dones_model->get_cnt_dones_per_organ(Main_model::ORGAN_ID_RCU);
+        } else {
+            $cnt_dones_per_region = $this->dones_model->get_cnt_dones_per_region($request_region);
+        }
+
+        if (!isset($cnt_dones_per_region) || empty($cnt_dones_per_region)) {
+            $cnt_dones_per_region = 1;
+        }
+
+        $this->data['first_part_number_sd'] = $this->main_model->get_first_part_number_sd($request_region);
+        $all_cnt_dones = $this->dones_model->get_cnt_dones();
+        if (!isset($all_cnt_dones) || empty($all_cnt_dones)) {
+            $all_cnt_dones = 1;
+        }
+
+        $this->data['default_number_sd'] = $this->data['first_part_number_sd'] . '/' . $all_cnt_dones . '/' . $cnt_dones_per_region;
+        /* END default number sd */
+
+
+
 
 
         if ($is_default == 1) {//show empty form
@@ -295,6 +324,34 @@ class Dones extends My_Controller
 
         $this->data['vid_specd'] = $this->main_model->get_vid_specd();
         $this->data['minirovanie_id']= Main_model::VID_SD_MINIROVANIE;
+
+
+                /* default number sd */
+        $request_region = $this->data['active_user']['id_region'];
+        if ($this->data['active_user']['id_organ'] == Main_model::ORGAN_ID_ROSN || $this->data['active_user']['id_organ'] == Main_model::ORGAN_ID_UGZ ||
+            $this->data['active_user']['id_organ'] == Main_model::ORGAN_ID_AVIA) {
+            $request_region = $this->data['active_user']['id_organ'];
+
+            $cnt_dones_per_region = $this->dones_model->get_cnt_dones_per_organ($request_region);
+        } elseif ($this->data['active_user']['id_organ'] == Main_model::ORGAN_ID_RCU) {
+            $request_region = Main_model::REGION_ID_RCU;
+            $cnt_dones_per_region = $this->dones_model->get_cnt_dones_per_organ(Main_model::ORGAN_ID_RCU);
+        } else {
+            $cnt_dones_per_region = $this->dones_model->get_cnt_dones_per_region($request_region);
+        }
+
+        if (!isset($cnt_dones_per_region) || empty($cnt_dones_per_region)) {
+            $cnt_dones_per_region = 1;
+        }
+
+        $this->data['first_part_number_sd'] = $this->main_model->get_first_part_number_sd($request_region);
+        $all_cnt_dones = $this->dones_model->get_cnt_dones();
+        if (!isset($all_cnt_dones) || empty($all_cnt_dones)) {
+            $all_cnt_dones = 1;
+        }
+
+        $this->data['default_number_sd'] = $this->data['first_part_number_sd'] . '/' . $all_cnt_dones . '/' . $cnt_dones_per_region;
+        /* END default number sd */
 
         $this->twig->display('create/simple/form_simple', $this->data);
     }

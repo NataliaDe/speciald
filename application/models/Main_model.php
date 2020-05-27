@@ -53,6 +53,8 @@ class Main_model extends CI_Model
 
         const REGION_ID_RCU=50;//RCU
 
+
+
     public function __construct()
     {
         parent::__construct();
@@ -353,5 +355,16 @@ class Main_model extends CI_Model
                 ->order_by('name', 'asc')
                 ->get()
                 ->result_array();
+    }
+
+
+        public function get_first_part_number_sd($id_region)
+    {
+        $res = $this->db->select('first_part')
+            ->from('number_sd')
+            ->where('id_region', $id_region)
+            ->get()
+            ->row_array();
+        return $res['first_part'];
     }
 }

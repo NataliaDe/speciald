@@ -234,4 +234,32 @@ class Dones_model extends CI_Model
         $this->db->where('id_user', $id_user);
         return $this->db->get('settings_accordion')->row_array();
     }
+
+
+        public function get_cnt_dones()
+    {
+        $this->db->select('count(id) as cnt');
+        $res= $this->db->get('dones')->row_array();
+        return $res['cnt'];
+    }
+
+
+        public function get_cnt_dones_per_region($id_region)
+    {
+        $this->db->select('count(d.id) as cnt');
+        $this->db->join('users as u', 'u.id=d.created_by', 'left');
+        $this->db->where('u.id_region', $id_region);
+        $res= $this->db->get('dones as d')->row_array();
+        return $res['cnt'];
+    }
+
+
+        public function get_cnt_dones_per_organ($id_organ)
+    {
+        $this->db->select('count(d.id) as cnt');
+        $this->db->join('users as u', 'u.id=d.created_by', 'left');
+        $this->db->where('u.id_organ', $id_organ);
+        $res= $this->db->get('dones as d')->row_array();
+        return $res['cnt'];
+    }
 }
