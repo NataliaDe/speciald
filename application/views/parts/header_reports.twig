@@ -1,0 +1,9 @@
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle {%if active_item_menu is defined and active_item_menu == 'reports'%} active_item_menu {%endif%}" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Отчеты</a>
+    <div class="dropdown-menu" aria-labelledby="dropdown01">
+        <a class="dropdown-item" href="{{ base_url('/reports/time_sd_form')}}">Время подготовки СД</a>
+        {#                <a class="dropdown-item" href="{{ base_url('/classif/vid_hs')}}">Вид ЧС</a>
+                        <a class="dropdown-item" href="{{ base_url('/classif/type_hs')}}">Тип ЧС</a>#}
+
+    </div>
+</li>

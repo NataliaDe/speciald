@@ -49,6 +49,10 @@ class Main_model extends CI_Model
         const TYPE_SD_STANDART=1;
         const TYPE_SD_SIMPLE=2;
 
+        const VID_SD_MINIROVANIE = 130;
+
+        const REGION_ID_RCU=50;//RCU
+
     public function __construct()
     {
         parent::__construct();

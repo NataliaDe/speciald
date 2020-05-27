@@ -294,6 +294,7 @@ class Dones extends My_Controller
 
 
         $this->data['vid_specd'] = $this->main_model->get_vid_specd();
+        $this->data['minirovanie_id']= Main_model::VID_SD_MINIROVANIE;
 
         $this->twig->display('create/simple/form_simple', $this->data);
     }
@@ -2741,7 +2742,7 @@ class Dones extends My_Controller
     {
 
         $post = $this->input->post();
-        //print_r($post['sd_media']);exit();
+        //print_r($post);exit();
         $dones = array();
 
         $id_dones = (isset($post['id_dones']) && !empty($post['id_dones'])) ? intval($post['id_dones']) : 0; //id of edit dones
@@ -2953,6 +2954,7 @@ class Dones extends My_Controller
         $this->data['settings'] = $this->user_model->get_user_settings_options_format($this->data['settings']);
 
         $this->data['vid_specd'] = $this->main_model->get_vid_specd();
+        $this->data['minirovanie_id']= Main_model::VID_SD_MINIROVANIE;
 
         $this->data['dones'] = $this->create_model->get_dones_by_id($id_dones);
 

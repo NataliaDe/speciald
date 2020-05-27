@@ -43,7 +43,7 @@ function dateAdd(date, interval, units) {
     return ret;
 }
 
-var deadline = dateAdd(new Date(), 'minute', 25);
+var deadline = dateAdd(new Date(), 'minute', 60);
 //alert(deadline);
 $('.countdown').downCount({
     date: deadline,

@@ -178,7 +178,7 @@ table.dataTable tbody td {
 }
 .refuse-info-edit{
     text-decoration: underline;
-    color: #ff5200;
+    color: #88a728;
     font-weight: 600;
 }
 
@@ -240,4 +240,9 @@ background-color: #e0f5e5 !important;
         display: none;
     }
 
+}
+
+
+input[type="checkbox"][readonly] {
+  pointer-events: none;
 }

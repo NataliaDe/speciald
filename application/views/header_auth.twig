@@ -4,7 +4,7 @@
 управление#}
 
 <img src="{{ base_url('/assets/images/writing-pad.png')}}" width="50" height="50" style="float: left;">
-<a class="navbar-brand" href="#">Специальные донесения</a>
+<a class="navbar-brand" href="{{ base_url('/auth')}}">Специальные донесения</a>
 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
 </button>
@@ -15,6 +15,8 @@
 
 
     <ul class="navbar-nav mr-auto">
+
+        {% include 'header_news.twig' %}
 
 
         {#      <li class="nav-item">
@@ -29,10 +31,17 @@
                 </div>
               </li>#}
 
-
-
-
     </ul>
+    {#        <li class="nav-item active">
+                <a class="nav-link custom-a"  href="{{ base_url('/dones')}}">Справка<span class="sr-only"></span></a>
+            </li>#}
+
+    <li class="nav-item ">
+        <a href="#" class=" custom-a" data-toggle="modal" data-target="#modal-spravka">
+            Справка
+        </a>
+    </li>
+
 
 
 

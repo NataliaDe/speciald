@@ -85,3 +85,13 @@ $(function () {
 $(function () {
   $('[data-toggle="popover"]').popover();
 });
+
+
+(function ($) {
+    "use strict";
+    $(document.body).delegate('[type="checkbox"][readonly="readonly"]', 'click', function (e) {
+        e.preventDefault();
+    });
+
+
+}(window.jQuery));

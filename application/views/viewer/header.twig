@@ -11,9 +11,9 @@
 
 
     <ul class="navbar-nav mr-auto">
-{#        <li class="nav-item active">
-            <a class="nav-link {%if active_item_menu is defined and active_item_menu == 'catalog'%} active_item_menu {%endif%}" href="{{ base_url('viewer/catalog')}}">Каталог <span class="sr-only"></span></a>
-        </li>#}
+        {#        <li class="nav-item active">
+                    <a class="nav-link {%if active_item_menu is defined and active_item_menu == 'catalog'%} active_item_menu {%endif%}" href="{{ base_url('viewer/catalog')}}">Каталог <span class="sr-only"></span></a>
+                </li>#}
 
         {#      <li class="nav-item">
                 <a class="nav-link disabled" href="#">Сервис</a>
@@ -28,9 +28,13 @@
               </li>#}
 
 
-            <li class="nav-item">
-                <a class="nav-link {%if active_item_menu is defined and active_item_menu == 'settings'%} active_item_menu {%endif%}" href="{{ base_url('/settings')}}">Настройки</a>
-            </li>
+        {% include 'parts/header_reports.twig' %}
+
+        <li class="nav-item">
+            <a class="nav-link {%if active_item_menu is defined and active_item_menu == 'settings'%} active_item_menu {%endif%}" href="{{ base_url('/settings')}}">Настройки</a>
+        </li>
+
+        {% include 'header_news.twig' %}
 
 
     </ul>

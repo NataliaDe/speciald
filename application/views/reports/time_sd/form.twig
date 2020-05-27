@@ -1,0 +1,156 @@
+{% extends 'layout.twig' %}
+
+{% block title %}{{title}}{% endblock %}
+
+{% block content %}
+
+    {%include '/parts/bread_crumb.twig'%}
+    <br> <br>
+
+    <form role="form" id="time_sd_report_form" method="POST" action="{{base_url('/reports/time_sd')}}" >
+
+        <div class="form-row create-form-row">
+
+
+            <div class="form-group col-md-2">
+                <label for="daterange" >Период</label>
+                <input type="text" class="form-control" name="daterange" value="">
+            </div>
+
+            <div class="form-group col-md-2">
+                <label for="id_region">Область (создатель)</label>
+                <div class="form-group select-cars-region-cls">
+                    <select  class="form-control select2-single " name="id_region" >
+                        <option value=""></option>
+                        {% for region in regions_cp_list %}
+                            <option  value="{{ region.id }}" >{{ region.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-lg-3">
+                <label for="btn-search-rig"></label>
+                <div class="form-group" style="margin-top:8px">
+                    <button  type="submit" class="btn btn-success" id="show-on-screen">Применить</button>
+                </div>
+            </div>
+
+        </div>
+    </form>
+
+
+
+
+
+
+
+
+
+{% endblock %}
+
+
+{% block head %}
+
+    <link href="{{ base_url('/assets/daterangepicker/daterangepicker.css') }}" rel="stylesheet">
+
+    <style>
+        .select2-container {
+            width: 300px !important;
+        }
+    </style>
+
+{% endblock %}
+
+{% block footer %}
+
+    <script type="text/javascript"
+    src="{{ base_url('assets/daterangepicker/moment.min.js') }}"></script>
+    <script type="text/javascript"
+    src="{{ base_url('assets/daterangepicker/daterangepicker.js') }}"></script>
+
+    <script>
+
+
+
+        $(function () {
+            $('input[name="daterange"]').daterangepicker({
+                opens: 'left',
+                locale: {
+                    format: 'DD.MM.YYYY',
+                    applyLabel: 'Применить',
+                    cancelLabel: 'Отменить',
+                    "daysOfWeek": [
+                        "Вс",
+                        "Пн",
+                        "Вт",
+                        "Ср",
+                        "Чт",
+                        "Пт",
+                        "Сб"
+                    ],
+                    "monthNames": [
+                        "Январь",
+                        "Февраль",
+                        "Март",
+                        "Апрель",
+                        "Май",
+                        "Июнь",
+                        "Июль",
+                        "Август",
+                        "Сентябрь",
+                        "Октябрь",
+                        "Ноябрь",
+                        "Декабрь"
+                    ],
+                    "firstDay": 1
+                }
+            }, function (start, end, label) {
+                console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+            });
+        });
+
+        $('.option-select').select2({
+            "language": {
+                "noResults": function () {
+                    return "Ничего не найдено";
+                }
+            }
+        });
+
+
+        {#
+                $('body').on('click', '#show-on-screen', function (e) {
+
+            e.preventDefault();
+
+            var daterange = $('form#time_sd_report_form').find('input[name="daterange"]').val();
+            var id_region = $('form#time_sd_report_form').find('input[name="id_region"]').val();
+
+
+        if(daterange === '' ){
+            toastr.error('Укажите диапазон', 'Ошибка!', {progressBar: true, timeOut: 2500});
+        }
+        else{
+
+        }
+
+            var data = {'id': id};
+
+            $.post(url, data, function (res) {
+                if (parseInt(JSON.parse(res)['success']) === 1) {
+
+                    $("#modal-catalog-media .modal-body").html('');
+                    $('#modal-catalog-media .modal-body').html(JSON.parse(res)['innerHtml']);
+
+                } else {
+
+                    toastr.error(parseInt(JSON.parse(res)['error']), 'Ошибка!', {progressBar: true, timeOut: 2500});
+
+                }
+            });
+
+        });#}
+    </script>
+{% endblock %}
+

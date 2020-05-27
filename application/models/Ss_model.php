@@ -46,8 +46,7 @@ class Ss_model extends CI_Model
                 ->result_array();
     }
 
-
-        public function set_regions_cp_list()
+    public function set_regions_cp_list()
     {
         $regions = $this->get_regions();
         $cp_region[] = array('id' => 8, 'name' => 'РОСН');
@@ -56,4 +55,33 @@ class Ss_model extends CI_Model
         return array_merge($regions, $cp_region);
     }
 
+    public function set_regions_cp_list_reports()
+    {
+        $regions = $this->get_regions();
+        $cp_region[] = array('id' => 8, 'name' => 'РОСН');
+        $cp_region[] = array('id' => 9, 'name' => 'УГЗ');
+        $cp_region[] = array('id' => 12, 'name' => 'Авиация');
+        $cp_region[] = array('id' => 50, 'name' => 'РЦУРЧС');
+        return array_merge($regions, $cp_region);
+    }
+
+    public function get_organ_name_by_id($id)
+    {
+        $res = $this->db->select('*')
+            ->from('ss.organs')
+            ->where('id', $id)
+            ->get()
+            ->row_array();
+        return $res['name'];
+    }
+
+    public function get_region_name_by_id($id)
+    {
+        $res = $this->db->select('*')
+            ->from('ss.regions')
+            ->where('id', $id)
+            ->get()
+            ->row_array();
+        return $res['name'];
+    }
 }

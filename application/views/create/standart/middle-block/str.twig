@@ -104,13 +104,13 @@
                                         {%set podr_name=podr_name~' '~st.locorg_name_spec%}
                                     {%endif%}
 
-                                    <input style="width: 120px" type="text" class="form-control  str_pasp_name "   placeholder="ПАСЧ-1" name="str[{{x}}][pasp_name]" value="{%if str.table is defined and st.pasp_name_spec is defined and st.pasp_name_spec is not empty %}{{st.pasp_name_spec|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and st.pasp_name is defined%}{{st.pasp_name|trim}}{%endif%}">
+                                    <input style="width: 120px" type="text" class="form-control  str_pasp_name "   placeholder="часть" name="str[{{x}}][pasp_name]" value="{%if str.table is defined and st.pasp_name_spec is defined and st.pasp_name_spec is not empty %}{{st.pasp_name_spec|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and st.pasp_name is defined%}{{st.pasp_name|trim}}{%endif%}">
 
                                 </td>
 
 
                                 <td>
-                                    <input style="width: 190px" type="text" class="form-control  str_locorg_name "   placeholder="Ленинского РОЧС" name="str[{{x}}][locorg_name]" value="{%if str.table is defined and st.locorg_name_spec is defined and st.locorg_name_spec is not empty %}{{st.locorg_name_spec|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and st.locorg_name is defined%}{{st.locorg_name|trim}}{%endif%}">
+                                    <input style="width: 190px" type="text" class="form-control  str_locorg_name "   placeholder="наименование ГРОЧС" name="str[{{x}}][locorg_name]" value="{%if str.table is defined and st.locorg_name_spec is defined and st.locorg_name_spec is not empty %}{{st.locorg_name_spec|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and st.locorg_name is defined%}{{st.locorg_name|trim}}{%endif%}">
 
                                 </td>
 
@@ -206,14 +206,14 @@
 
                             <td>
 
-                                <input style="width: 120px" type="text" class="form-control  str_pasp_name str-list"   placeholder="ПАСЧ-1" name="str[{{i}}][pasp_name]" >
+                                <input style="width: 120px" type="text" class="form-control  str_pasp_name str-list"   placeholder="часть" name="str[{{i}}][pasp_name]" >
 
                             </td>
 
 
                             <td>
 
-                                <input style="width: 190px" type="text" class="form-control  str_locorg_name str-list"   placeholder="Ленинского РОЧС" name="str[{{i}}][locorg_name]" >
+                                <input style="width: 190px" type="text" class="form-control  str_locorg_name str-list"   placeholder="наименование ГРОЧС" name="str[{{i}}][locorg_name]" >
 
                             </td>
 
@@ -347,7 +347,7 @@
                                         {%set podr_name=st.str_text_podr_name%}
                                     {%endif%}
 
-                                    <input  type="text" class="form-control str_text_podr_name "   placeholder="ПАСЧ-1 Ленинского РОЧС" name="str_text[{{x}}][str_text_podr_name]" value="{%if podr_name is defined and podr_name is not empty %}{{podr_name|trim}}{%endif%}">
+                                    <input  type="text" class="form-control str_text_podr_name "   placeholder="часть наименование ГРОЧС" name="str_text[{{x}}][str_text_podr_name]" value="{%if podr_name is defined and podr_name is not empty %}{{podr_name|trim}}{%endif%}">
 
 
 
@@ -426,7 +426,7 @@
 
                             <td>
 
-                                <input  type="text" class="form-control str_text_podr_name "   placeholder="ПАСЧ-1 Ленинского РОЧС" name="str_text[{{i}}][str_text_podr_name]" value="">
+                                <input  type="text" class="form-control str_text_podr_name "   placeholder="часть наименование ГРОЧС" name="str_text[{{i}}][str_text_podr_name]" value="">
 
                                 <textarea style="white-space: pre-line" class="form-control str_text_descr" name="str_text[{{i}}][str_text_description]"  rows="8" cols="3"></textarea>
 
