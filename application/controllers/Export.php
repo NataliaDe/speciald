@@ -155,7 +155,7 @@ class Export extends My_Controller
                 if ($c == 1)
                     $table->addCell(PhpOffice\PhpWord\Shared\Converter::cmToTwip(9.72))->addText(((isset($dones['official_creator_name']) && !empty($dones['official_creator_name'])) ? $dones['official_creator_name'] : 'ПОДРАЗДЕЛЕНИЕ-СОЗДАТЕЛЬ'), self::header_style_cell_size, self::header_style_cell_font);
                 else
-                    $table->addCell(PhpOffice\PhpWord\Shared\Converter::cmToTwip(6.98))->addText("Оперативному дежурному РЦУРЧС МЧС", self::header_style_cell_size, self::header_style_cell_font);
+                    $table->addCell(PhpOffice\PhpWord\Shared\Converter::cmToTwip(6.98))->addText("Главному оперативному дежурному РЦУРЧС МЧС", self::header_style_cell_size, self::header_style_cell_font);
             }
         }
 

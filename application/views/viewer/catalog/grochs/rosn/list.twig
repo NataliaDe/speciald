@@ -28,7 +28,7 @@
 
             {% for out in outs %}
 
-                <tr>
+                <tr class=" {%if out.type == 1 %} standart-sd-color {%endif%}">
                     <td><a href="#" class="a-custom" data-toggle="modal"  data-target="#history-sd-modal" data-url="{{base_url('history')}}" data-id="{{out.id}}" data-number-sd="{{out.specd_date ? out.specd_date|date('d.m.Y') : ''}} {{out.specd_number ? '№ '~out.specd_number : ''}}" >{{out.id}}</a></td>
 
                     <td> {{out.specd_date ? out.specd_date|date('d.m.Y') : ''}}<br>{{out.specd_number ? '№ '~out.specd_number : ''}}
@@ -109,7 +109,7 @@
 
                         {%elseif 7 in out.statuses_id%}
 
-                            <a href="#" class="{%if out.dates_actions is defined and out.dates_actions[7] is defined and out.dates_actions[2] is defined and out.dates_actions[2]>out.dates_actions[7]%}refuse-info-edit{%else%}refuse-info{%endif%}" data-toggle="modal"  data-target="#detail-refuse-sd-modal"
+                            <a href="#" class="{%if out.dates_actions is defined and ((out.dates_actions[7] is defined and out.dates_actions[2] is defined and out.dates_actions[2]>out.dates_actions[7]) or (out.dates_actions[7] is defined and out.dates_actions[10] is defined and out.dates_actions[10]>out.dates_actions[7]))%}refuse-info-edit{%else%}refuse-info{%endif%}" data-toggle="modal"  data-target="#detail-refuse-sd-modal"
                                data-level="1"
                                data-id="{{out.id}}"
                                data-number-sd="{{out.specd_date ? out.specd_date|date('d.m.Y') : ''}} {{out.specd_number ? '№ '~out.specd_number : ''}}"

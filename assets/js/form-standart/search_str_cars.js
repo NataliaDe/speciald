@@ -173,11 +173,11 @@ $('#searchStrCarsForm #id_pasp_str_cars').on('change', function (event) {
                                 t.push(value.id_car);
                                 if (cur_cars !== null && cur_cars !== '' && cur_cars !== undefined && cur_cars !== "undefined" && cur_cars.includes(value.id_car)) {
 
-                                    $('#searchStrCarsForm ').find("#id_cars_str_cars").append($("<option selected></option>").attr({"value": value.id_teh + '~' + value.mark + '~' + value.pasp_name_spec + '~' + value.locorg_name_spec + '~' + value.v_ac + '~' + value.man_per_car, 'data-idcar': value.id_car}).text(value.mark + ' ' + value.status + value.pasp_name_spec_real + ' ' + value.of_locorg_name_spec_real));
+                                    $('#searchStrCarsForm ').find("#id_cars_str_cars").append($("<option selected></option>").attr({"value": value.id_teh + '~' + value.mark + '~' + value.pasp_name_spec + '~' + value.locorg_name_spec + '~' + value.v_ac + '~' + value.man_per_car, 'data-idcar': value.id_car}).text(value.mark + ' ' + value.status + ' '+ value.pasp_name_spec_real + ' ' + value.of_locorg_name_spec_real));
 
                                 } else {
 
-                                    $('#searchStrCarsForm ').find("#id_cars_str_cars").append($("<option></option>").attr({"value": value.id_teh + '~' + value.mark + '~' + value.pasp_name_spec + '~' + value.locorg_name_spec + '~' + value.v_ac + '~' + value.man_per_car, 'data-idcar': value.id_car}).text(value.mark + ' ' + value.status + value.pasp_name_spec_real + ' ' + value.of_locorg_name_spec_real));
+                                    $('#searchStrCarsForm ').find("#id_cars_str_cars").append($("<option></option>").attr({"value": value.id_teh + '~' + value.mark + '~' + value.pasp_name_spec + '~' + value.locorg_name_spec + '~' + value.v_ac + '~' + value.man_per_car, 'data-idcar': value.id_car}).text(value.mark + ' ' + value.status + ' '+ value.pasp_name_spec_real + ' ' + value.of_locorg_name_spec_real));
                                 }
 
 
