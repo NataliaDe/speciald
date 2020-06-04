@@ -131,11 +131,17 @@ class Reports extends My_Controller
                     if ($sec != 0)
                         $result[$key]['create_sec'] = $sec . ' ' . declination_word_by_number($sec, array('секунда', 'секунды', 'секунд'));
                     //echo $sec.' '.declination_word_by_number($sec, array('секунда','секунды','секунд'));
-                    //echo $row['official_date_start']; echo ' - '.$row['official_date_end']; echo $diff['h'];echo $diff['i'];echo $diff['s'];    echo '<br>';
+                    //echo $row['official_date_start']; echo ' - '.$row['official_date_end']; echo $diff['h'];echo $diff['i'];echo $diff['s'];
+                    //  echo '<br>';
+                    if($hours == 0 && $min == 0 && $sec == 0 && $row['is_copy'] == 1){
+                        $result[$key]['create_text']='шаблон';
+                    }
                 }
+                elseif($row['is_copy'] == 1){
+                        $result[$key]['create_text']='шаблон';
+                    }
             }
         }
-
 
 
 
@@ -165,8 +171,8 @@ class Reports extends My_Controller
                 $sheet->setCellValue('E' . $r, $row['short_description']);
                 $sheet->setCellValue('F' . $r, $row['opening_description']);
                 $sheet->setCellValue('G' . $r, ($row['full_creator_name'] . (!empty($row['creator_fio']) ? ', ' . $row['creator_fio'] : '')));
-                $sheet->setCellValue('H' . $r, ((isset($row['create_hours']) ? $row['create_hours'] : '') .
-                    (isset($row['create_min']) ? ' ' . $row['create_min'] : '') . (isset($row['create_sec']) ? ' ' . $row['create_sec'] : '')));
+                $sheet->setCellValue('H' . $r, ( (isset($row['create_text']) && !empty($row['create_text']) ) ? $row['create_text'] : ((isset($row['create_hours']) ? $row['create_hours'] : '') .
+                    (isset($row['create_min']) ? ' ' . $row['create_min'] : '') . (isset($row['create_sec']) ? ' ' . $row['create_sec'] : ''))));
                 $r++;
             }
         }

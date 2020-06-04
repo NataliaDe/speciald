@@ -143,8 +143,14 @@
 
                                     {%set time_follow=''%}
                                     {% if sily.time_follow is not empty and sily.time_follow is not null and sily.time_follow != '0000-00-00 00:00:00' %}
-                                        {#{%set time_follow=sily.time_follow|date('i')|trim('0','left')%}#}
-                                        {%set time_follow=sily.time_follow%}
+
+                                        {%if is_edit_dones is defined and is_edit_dones == 1%}
+
+                                            {%set time_follow=sily.time_follow%}
+
+                                        {% elseif rig is defined %}
+                                            {%set time_follow=sily.time_follow|date('i')|trim('0','left')%}
+                                        {%endif%}
                                     {%endif%}
 
                                     <input type="number" class="form-control time_follow" min="0"  placeholder="" name="silymchs[{{x}}][time_follow]" value="{%if time_follow is not empty%}{{time_follow}}{%endif%}">

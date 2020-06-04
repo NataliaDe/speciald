@@ -17,7 +17,7 @@ class Reports_model extends CI_Model
 
     public function get_time_sd($filter)
     {
-        $this->db->select("u.id_region as creator_region,u.id_organ as creator_organ,u.fio as creator_fio,d.id as id_dones,d.official_date_start, d.official_date_end,d.specd_date,d.specd_number,d.short_description,d.opening_description, (CASE WHEN (`u`.`id_organ` = 5) THEN CONVERT(CONCAT('РЦУРЧС') USING utf8)
+        $this->db->select("d.is_copy, u.id_region as creator_region,u.id_organ as creator_organ,u.fio as creator_fio,d.id as id_dones,d.official_date_start, d.official_date_end,d.specd_date,d.specd_number,d.short_description,d.opening_description, (CASE WHEN (`u`.`id_organ` = 5) THEN CONVERT(CONCAT('РЦУРЧС') USING utf8)
 WHEN ((`u`.`id_organ` = 8) AND (`r`.`id` = 3)) THEN CONCAT('РОСН',', ',`r`.`name`)
 WHEN ((`u`.`id_organ` = 8) AND (`r`.`id` <> 3)) THEN CONCAT('РОСН',', ',`loc`.`name`,' район')
 WHEN ((`u`.`id_organ` = 9) AND (`r`.`id` = 3)) THEN CONCAT('УГЗ',', ',`r`.`name`) WHEN ((`u`.`id_organ` = 9) AND (`r`.`id` <> 3)) THEN CONCAT('УГЗ',', ',`loc`.`name`)

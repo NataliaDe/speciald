@@ -55,7 +55,7 @@ class Export extends My_Controller
     //'spaceAfter' => 0,
     const header_style_cell_font = array('spaceAfter'      => 0, 'spacing'         => 280,
         'spacingLineRule' => 'exact');
-    const start_descr_font = array('spaceAfter' => 0, 'spacing' => 0);
+    const start_descr_font = array('spaceAfter' => 0, 'spacing' => 0,'align'=>'both');
 
 //'spaceAfter' => PhpOffice\PhpWord\Shared\Converter::pointToTwip(6)
 
@@ -696,11 +696,11 @@ class Export extends My_Controller
                 $i++;
                 if (!empty($row['str_text_podr_name']) && !empty($row['str_text_description'])) {
 
-                    $section->addText($row['str_text_podr_name'], array('size' => 12, 'italic' => true, 'bold' => true, 'underline' => 'single'), array('spaceAfter' => 0, 'spacing' => 0));
+                    $section->addText($row['str_text_podr_name'], array('size' => 12, 'italic' => true, 'bold' => true, 'underline' => 'single'), array('spaceAfter' => 0, 'spacing' => 0,'align'=>'both'));
 
                     $a = explode(PHP_EOL, $row['str_text_description']);
                     foreach ($a as $value) {
-                        $section->addText($value, array('size' => 10), array('spaceAfter' => 0, 'spacing' => 0));
+                        $section->addText($value, array('size' => 10), array('spaceAfter' => 0, 'spacing' => 0,'align'=>'both'));
                     }
                     if (count($str_text) == $i) {
                         $section->addTextBreak(1, array('size' => 12), array('spaceAfter' => 0, 'spacing' => 0));
