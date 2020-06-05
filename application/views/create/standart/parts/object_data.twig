@@ -3,7 +3,7 @@
     <label for="object" >Объект:</label>
     <textarea class="form-control" cols="3" rows="3"  name="object">{%if rig.object is defined and rig.object is not empty%}{{rig.object|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.object is defined and dones.object is not empty %}{{dones.object.object|trim}}{%endif%}</textarea>
 </div>
-<div class="form-group col-md-2">
+{#<div class="form-group col-md-2">
     <label for="object_office_belong" >Ведомственная принадлежность</label>
     <select class="form-control select2-single" name="object_office_belong" id="object-office-belong-id"  >
         <option></option>
@@ -11,4 +11,4 @@
             <option {%if (rig.office_belong_id is defined and rig.office_belong_id == of.id) or (is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.object is defined and dones.object is not empty and dones.object.object_office_belong == of.id) %}selected{%endif%} value="{{ of.id }}" >{{ of.name|trim }}</option>
         {% endfor %}
     </select>
-</div>
+</div>#}

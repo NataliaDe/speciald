@@ -128,6 +128,9 @@ $('#btn-fill-form').on('click', function (event) {
             $("#people-rig-data").html('');
             $("#people-rig-data").html(JSON.parse(res)['people_rig_data']);
 
+            $("#law_face_office_belong").html('');
+            $("#law_face_office_belong").html(JSON.parse(res)['law_face_office_belong']);
+
 
             $('.select2-select').select2({
                 placeholder: "Выберите из списка",

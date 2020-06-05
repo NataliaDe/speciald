@@ -1,0 +1,4 @@
+<div class="form-group col-md-3">
+    <label for="object" >Наименование собственника:</label>
+    <textarea class="form-control" cols="2" rows="2"  name="law_face_name_owner">{%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.law_face_name_owner is defined and dones.law_face_name_owner is not empty %}{{dones.law_face_name_owner|trim}}{%endif%}</textarea>
+</div>

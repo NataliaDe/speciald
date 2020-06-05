@@ -33,6 +33,16 @@ $(document).ready(function () {
                 }
             });
 
+            $('.select2-single-face-belong').select2({
+                placeholder: "Не установлена",
+                allowClear: true,
+                "language": {
+                    "noResults": function () {
+                        return "Ничего не найдено";
+                    }
+                }
+            });
+
 
 
 

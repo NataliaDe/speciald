@@ -1,0 +1,181 @@
+<script>
+    $('body').on('change', '#createStandart #id_face_belong', function (e) {
+
+        e.preventDefault();
+        var face = $(this).val();
+//alert(face);
+
+        if (parseInt(face) === 1) {
+            $('#law-face-div').removeClass('show');
+            $('#law-face-div').removeClass('hide');
+            $('#law-face-div').addClass('hide');
+
+            $('#individual-face-div').removeClass('show');
+            $('#individual-face-div').removeClass('hide');
+            $('#individual-face-div').addClass('show');
+        } else if (parseInt(face) === 2) {
+            $('#law-face-div').removeClass('show');
+            $('#law-face-div').removeClass('hide');
+            $('#law-face-div').addClass('show');
+
+            $('#individual-face-div').removeClass('show');
+            $('#individual-face-div').removeClass('hide');
+            $('#individual-face-div').addClass('hide');
+        } else {
+            $('#law-face-div').removeClass('show');
+            $('#law-face-div').removeClass('hide');
+            $('#law-face-div').addClass('hide');
+
+            $('#individual-face-div').removeClass('show');
+            $('#individual-face-div').removeClass('hide');
+            $('#individual-face-div').addClass('hide');
+        }
+
+    });
+
+
+    $('body').on('click', '#fill-live-together', function (e) {
+
+        e.preventDefault();
+        var cnt = parseInt($('input[name="owner_live_together"]').val());
+//alert(cnt);
+
+
+        if (cnt > 0 && cnt <= 10) {
+
+
+            if ($('#div-live-together').hasClass('hide')) {
+                $('#div-live-together').removeClass('hide');
+                $('#div-live-together').addClass('show');
+
+
+                if ((cnt - 1) >= 1) {
+                    for (var i = 1; i <= (cnt - 1); i++) {
+                        $('#individual-face-div').find('#add-row-live-together').trigger('click');
+                    }
+                }
+
+
+            }
+
+        } else {
+
+            if ($('#div-live-together').hasClass('show')) {
+
+
+                $('.del-row-live-together').each(function () {
+                    $(this).trigger('click');
+                });
+
+
+
+                $('#div-live-together').removeClass('show');
+                $('#div-live-together').addClass('hide');
+            } else {
+                toastr.error('Необходимо указать от 1 до 10 человек', 'Ошибка!', {progressBar: true, timeOut: 2500});
+            }
+
+
+        }
+
+    });
+
+
+
+
+
+    $(document).ready(function () {
+
+        /* ----------------- add live together --------------- */
+        $('body').on('click', '#add-row-live-together', function (e) {
+            e.preventDefault();
+
+            var $div = $('div[id^="live_together_id_row"]:last');
+            var $div_for_clon = $('.live_together_row:last');
+
+            var id_car_block = $div_for_clon.data('loop');
+            var new_loop = parseInt($div_for_clon.find('.loop-index').text()) + 1;
+
+            var num = parseInt(id_car_block) + 1;
+
+            var is = $('div #live_together_id_row' + num);
+            while ((is.length > 0)) {
+                var num = num + 1;
+                var is = $('div #live_together_id_row' + num);
+            }
+
+            // Clone it and assign the new ID (i.e: from num 4 to ID "klon4")
+            var $klon = $div_for_clon.clone().prop('id', 'live_together_id_row' + num);
+
+            $klon.insertAfter($('.live_together_row').last());
+
+            /* new name */
+            var $div_new = $('#live_together_id_row' + num);
+            $div_new.find('td').find('.live_together_fio').attr('name', 'live_together[' + num + '][fio]');
+            $div_new.find('td').find('.live_together_year_birth').attr('name', 'live_together[' + num + '][year_birth]');
+            $div_new.find('td').find('.live_together_note').attr('name', 'live_together[' + num + '][note]');
+
+            $div_new.find('td').find('input').val('');
+            $div_new.find('td').find('textarea').val('');
+
+            $div_new.find('.loop-index').text(new_loop);
+            $div_new.attr('data-loop', new_loop);
+
+            $div_new.find('td').find('.sort').val(new_loop);
+
+
+            return false;
+        });
+
+
+        $('body').on('click', '.del-row-live-together', function (e) {
+
+            e.preventDefault();
+
+            if ($(".live_together_fio").length > 1) {
+
+                $(this).parent().parent().remove();
+
+                var k = 1;
+                var k_sort = 1;
+
+                $('#div-live-together').find('.loop-index').each(function () {
+                    $(this).text(k);
+                    k++;
+                });
+
+                $('#div-live-together').find('.sort').each(function () {
+                    $(this).val(k_sort);
+                    k_sort++;
+                });
+
+            }
+            return false;
+        });
+
+    });
+
+    $("#div-live-together table").on("click", ".up, .down", function () {
+        var $row = $(this).closest("tr");
+
+        var up = $(this).hasClass("up");
+
+        var $t = up ? $row.prev() : $row.next();
+        if ($t.length) {
+            up ? $t.insertAfter($row) : $t.insertBefore($row);
+        }
+
+        var k = 1;
+        var k_sort = 1;
+        $('#div-live-together').find('.loop-index').each(function () {
+            $(this).text(k);
+            k++;
+        });
+        $('#div-live-together').find('.sort').each(function () {
+            $(this).val(k_sort);
+            k_sort++;
+        });
+    });
+
+
+</script>

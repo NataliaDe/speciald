@@ -220,4 +220,14 @@ WHEN (`inf`.`id_destination` <> 0 AND (`d`.`pos_place` IS NULL OR `d`.`pos_place
                 ->get()
                 ->result_array();
     }
+
+
+
+    public function get_owner_categories()
+    {
+        return $this->db->select('*')
+                ->from('journal.owner_categories')
+                ->get()
+                ->result_array();
+    }
 }

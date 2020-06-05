@@ -367,4 +367,13 @@ class Main_model extends CI_Model
             ->row_array();
         return $res['first_part'];
     }
+
+
+        public function get_face_belong()
+    {
+        return $this->db->select('*')
+                ->from('face_belong')
+                ->get()
+                ->result_array();
+    }
 }
