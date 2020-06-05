@@ -1,53 +1,201 @@
-<div class="card">
-    <div class="card-header" >
 
-    </div>
-    <!-- /.panel-heading -->
-    <div class="card-body" >
+<br>
+<div class="hide" id="individual-face-div">
+    <div class="form-row create-form-row">
 
         {#from journal#}
-        <div class="form-row create-form-row" id="people-rig-data">
-            {%include '/create/standart/parts/people_rig_data.twig'%}
+        {%include '/create/standart/owner/parts/owner_from_jour.twig'%}
+
+    </div>
+
+
+
+
+    <div class="form-row create-form-row">
+
+
+        {#        <div class="form-group col-md-2">
+                    <label for="people_status">Статус
+                        <a href="#" class="add-new-vid-people-status" data-placement="right" title="Добавить новый вид" data-toggle="modal" data-target="#modal-add-new-vid-people-status">
+                            <i class="fa fa-pencil-square-o " aria-hidden="true" style="color:green;padding-left: 10px; cursor: pointer"></i>
+                        </a>
+                    </label>
+                    <select  class="form-control select2-single people_status" name="people_status" id="people_status_id" >
+                        <option></option>
+                        {% for vid in people_status %}
+                            <option value="{{ vid.id }}" {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.people_status == vid.id %}selected{%endif%}  >{{ vid.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>#}
+
+
+        <div class="form-group col-md-5">
+            <label for="owner_character" >Характеристика</label>
+            <textarea class="form-control" cols="2" rows="2"  name="owner_character">со слов соседей, характеризуется положительно/посредственно</textarea>
         </div>
 
 
 
-
-        <div class="form-row create-form-row">
-
-
-            <div class="form-group col-md-2">
-                <label for="people_status">Статус
-                    <a href="#" class="add-new-vid-people-status" data-placement="right" title="Добавить новый вид" data-toggle="modal" data-target="#modal-add-new-vid-people-status">
-                        <i class="fa fa-pencil-square-o " aria-hidden="true" style="color:green;padding-left: 10px; cursor: pointer"></i>
-                    </a>
+        <div class="form-group col-md-2">
+            <label for="people_is_uhet" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+            <div class="checkbox checkbox-success">
+                <input  type="checkbox" name="people_is_uhet" value="1" id="people_is_uhet" {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.people_is_uhet == 1 %}checked{%endif%}>
+                <label for="people_is_uhet">
+                    Состоит на учете профилактики
                 </label>
-                <select  class="form-control select2-single people_status" name="people_status" id="people_status_id" >
-                    <option></option>
-                    {% for vid in people_status %}
-                        <option value="{{ vid.id }}" {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.people_status == vid.id %}selected{%endif%}  >{{ vid.name }}</option>
-                    {% endfor %}
-                </select>
-
-
             </div>
+        </div>
 
-
-
-            <div class="form-group col-md-3">
-                <label for="people_is_uhet" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                <div class="checkbox checkbox-success">
-                    <input  type="checkbox" name="people_is_uhet" value="1" id="people_is_uhet" {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.people_is_uhet == 1 %}checked{%endif%}>
-                    <label for="people_is_uhet">
-                        Состоит на учете профилактики
-                    </label>
-                </div>
-            </div>
-
+        <div class="form-group col-md-1">
+            <label for="owner_live_together">Совместно проживает, чел.
+            <i class="fa fa-address-card" id="fill-live-together" style="cursor:pointer" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Заполнить информацию"></i>
+            </label>
+            <input type="number" min="0" max="10" class="form-control"  placeholder="" name="owner_live_together"  value="">
 
         </div>
 
 
     </div>
-    <!-- /.panel-body -->
+
+
+
+    <div class="form-row create-form-row hide" id="div-live-together">
+
+
+
+        <div class="table-responsive table-bordered">
+            <caption>Совместно проживающие</caption>
+            <table class="table table-borderless" id="live-together-table">
+                <thead>
+                    <tr>
+                        <th style="width: 30px">#</th>
+                        <th style="width: 30px"></th>
+                        <th style="width: 370px">Ф.И.О.</th>
+                        <th style="width: 50px">Год рождения</th>
+                        <th style="width: 480px">Прим.</th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                {%set x=1%}
+
+                {#{% if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.water_source  is defined and dones.water_source is not empty%}
+
+
+                    <tbody>
+
+                        {%for water in dones.water_source %}
+
+                            {%set x=water.sort%}
+
+
+                            <tr class="water_source_row" id="water_source_id_row{{x}}" data-loop="{{x}}" >
+                                <td class="loop-index">{{x}}</td>
+                                <td>
+                                    <div class="btn-group btn-group-xs">
+                                        <img src="{{ base_url('assets/images/updown/24-em-up.png') }}" class="up" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Переместить строку вверх" >
+                                        <img src="{{ base_url('assets/images/updown/24-em-down.png') }}" class="down" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Переместить строку вниз" >
+                                    </div>
+                                    <input type="hidden" class="sort" name="water_source[{{x}}][sort]" value="{{x}}">
+                                </td>
+
+                                <td class="td_water-source-type">
+                                    <select class="form-control select2-single  water_source_type" name="water_source[{{x}}][water_source_type]" >
+                                        <option></option>
+                                        {% for vid in type_water_source %}
+                                            <option value="{{ vid.id }}" {%if water.water_source_type is defined and water.water_source_type == vid.id%}selected{%endif%} >{{ vid.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <a href="#" class="add-new-vid-type-water-source" data-placement="right" title="Добавить новый вид" data-toggle="modal" data-target="#modal-add-new-vid-type-water-source">
+                                        <i class="fa fa-pencil-square-o " aria-hidden="true" style="color:green;padding-left: 10px; cursor: pointer"></i>
+                                    </a>
+
+                                </td>
+
+
+                                <td>
+
+                                    <input type="text" class="form-control water_source_distance" onkeypress="allowFloat();"  placeholder=""  name="water_source[{{x}}][water_source_distance]" value="{%if water.water_source_distance is defined %}{{water.water_source_distance|trim}}{%endif%}">
+
+                                </td>
+
+                                <td>
+
+                                    <input type="text" class="form-control water_source_use"   placeholder="" name="water_source[{{x}}][water_source_use]"  value="{%if water.water_source_use is defined %}{{water.water_source_use|trim}}{%endif%}">
+
+                                </td>
+
+                                <td>
+                                     <input type="hidden" class="id_water_source" name="water_source[{{x}}][id_water_source]" value="{{water.id}}">
+                                    <a href="#" class="del-row-water-source delete-cross"  data-toggle="tooltip" data-placement="right" title="Удалить строку" ><i class="fa fa-times" aria-hidden="true"></i></a>
+                                </td>
+                            </tr>
+
+
+
+                        {%endfor%}
+
+                    </tbody>
+
+
+                {%else%}#}
+
+                {%set i=1%}
+                {%set x=i%}
+                <tbody>
+
+                    <tr class="live_together_row" id="live_together_id_row{{i}}" data-loop="{{i}}" >
+                        <td class="loop-index">{{i}}</td>
+                        <td>
+                            <div class="btn-group btn-group-xs">
+                                <img src="{{ base_url('assets/images/updown/24-em-up.png') }}" class="up" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Переместить строку вверх" >
+                                <img src="{{ base_url('assets/images/updown/24-em-down.png') }}" class="down" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Переместить строку вниз" >
+                            </div>
+                            <input type="hidden" class="sort" name="live_together[{{i}}][sort]" value="{{i}}">
+                        </td>
+
+                        <td>
+                            <input type="text" class="form-control live_together_fio"   placeholder=""  name="live_together[{{i}}][fio]" value="">
+                        </td>
+
+
+                        <td>
+
+                            <input type="number" min="1920" max="{{now|date("Y")}}" class="form-control live_together_year_birth"  placeholder=""  name="live_together[{{i}}][year_birthday]" value="">
+
+                        </td>
+
+                        <td>
+                            <textarea class="form-control live_together_note" cols="2" rows="2"  name="live_together[{{i}}][note]"></textarea>
+
+
+                        </td>
+
+                        <td>
+                            <a href="#" class="del-row-live-together delete-cross"  data-toggle="tooltip" data-placement="right" title="Удалить строку" ><i class="fa fa-times" aria-hidden="true"></i></a>
+                        </td>
+                    </tr>
+
+
+                </tbody>
+                {#{%endif%}#}
+            </table>
+        </div>
+        <a href="#" id="add-row-live-together" >+  добавить еще</a>
+
+
+    </div>
+
+
+
+</div>
+
+
+
+
+<div class="form-row create-form-row hide" id="law-face-div">
+    <div class="form-group col-md-2" id="law_face_office_belong">
+        {%include '/create/standart/owner/parts/law_face_office_belong.twig'%}
+    </div>
+    {%include '/create/standart/owner/law_face_div.twig'%}
 </div>

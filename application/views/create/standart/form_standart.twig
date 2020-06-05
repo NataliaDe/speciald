@@ -103,7 +103,7 @@
 
                     <dt class="dt-class">
                         <a style="background-color:#428bca; color: white;border-color: #428bca; " href="#accordion6" aria-expanded="{%if settings_accordion is not defined or settings_accordion.value is empty or ('accordion6' not in settings_accordion.value|split(","))%}true{%else%} false{%endif%}" aria-controls="accordion6" class="accordion-title accordionTitle js-accordionTrigger custom-a {%if settings_accordion is not defined or settings_accordion.value is empty or ('accordion6' not in settings_accordion.value|split(","))%}is-collapsed is-expanded{%endif%}">
-                            Данные по заявителю
+                            Данные по собственнику (принадлежность)
                         </a>
                     </dt>
                     <dd class="accordion-content accordionItem {%if settings_accordion is not defined or settings_accordion.value is empty or ('accordion6' not in settings_accordion.value|split(","))%}is-expanded animateIn{%else%}is-collapsed{%endif%}" id="accordion6" aria-hidden="{%if settings_accordion is not defined or settings_accordion.value is empty or ('accordion6' not in settings_accordion.value|split(","))%}false{%else%} true{%endif%}">
@@ -233,6 +233,7 @@
 
     {%include '/create/standart/preview/opening_description.twig'%}
 
+
 {% endblock %}
 
 
@@ -320,6 +321,9 @@
         }
 
 
+        #law_face_office_belong .select2-container, #individual-face-div .select2-container  {
+            width: 240px !important;
+        }
 
 
 
@@ -401,6 +405,7 @@
     <script src="{{ base_url('/assets/js/form-standart/media.js')}}"></script>
     <script src="{{ base_url('/assets/js/form-standart/preview_standart.js')}}"></script>
 
+    {%include '/create/standart/owner/actions_js.twig'%}
 
     {%if is_edit_dones is not defined  %}
         <script src="{{ base_url('/assets/js/timer.js')}}"></script>

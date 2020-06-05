@@ -139,7 +139,7 @@
                                 </td>
 
                                 <td>
-                                    <input type="time" class="form-control time_pod_trunks"   placeholder="" name="trunks[{{x}}][time_pod]" value="{%if trunk.time_pod is defined and  trunk.time_pod is not empty%}{{trunk.time_pod|date('H:i')}}{%endif%}">
+                                    <input type="time" class="form-control time_pod_trunks"   placeholder="" name="trunks[{{x}}][time_pod]" value="{%if trunk.time_pod is defined and  trunk.time_pod is not empty and trunk.time_pod is not null%}{{trunk.time_pod|date('H:i')}}{%endif%}">
 
                                 </td>
 

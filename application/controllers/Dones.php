@@ -127,6 +127,9 @@ class Dones extends My_Controller
 
         $this->data['regions_cp_list'] = $this->ss_model->set_regions_cp_list();
 
+        $this->data['face_belong'] = $this->main_model->get_face_belong();
+        $this->data['owner_categories'] = $this->journal_model->get_owner_categories();
+
         /* default number sd */
         $request_region = $this->data['active_user']['id_region'];
         if ($this->data['active_user']['id_organ'] == Main_model::ORGAN_ID_ROSN || $this->data['active_user']['id_organ'] == Main_model::ORGAN_ID_UGZ ||
@@ -291,6 +294,7 @@ class Dones extends My_Controller
                 'object_data'     => $this->twig->render('create/standart/parts/object_data', $this->data, true),
                 'object_floor'    => $this->twig->render('create/standart/parts/object_floor', $this->data, true),
                 'people_rig_data' => $this->twig->render('create/standart/parts/people_rig_data', $this->data, true),
+                'law_face_office_belong'     => $this->twig->render('create/standart/owner/parts/law_face_office_belong', $this->data, true),
                 'is_data'         => $is_data
             ]);
             die;
