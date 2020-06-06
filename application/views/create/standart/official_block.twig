@@ -126,7 +126,7 @@
             <select class="form-control select2-single-face-belong" name="id_face_belong" id="id_face_belong"  >
                 <option></option>
                 {% for face in face_belong %}
-                    <option value="{{ face.id }}" {%if (is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.id_face_belong == face.id) %}selected{%endif%} >{{ face.name }}</option>
+                    <option value="{{ face.id }}" {%if (((rig.id_owner_category is defined and rig.id_owner_category is not empty) or (rig.owner_fio is not empty)) and face.id == 1) or (is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.id_face_belong == face.id)%}selected{%endif%} >{{ face.name }}</option>
                 {% endfor %}
             </select>
         </div>

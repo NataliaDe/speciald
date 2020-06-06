@@ -30,6 +30,20 @@
                     <dd class="accordion-content accordionItem {%if settings_accordion is not defined or settings_accordion.value is empty or ('accordion1' not in settings_accordion.value|split(","))%}is-expanded animateIn{%else%}is-collapsed{%endif%}  accordion-content-official" id="accordion1" aria-hidden="{%if settings_accordion is not defined or settings_accordion.value is empty or ('accordion1' not in settings_accordion.value|split(","))%}false{%else%} true{%endif%}">
                         {%include '/create/standart/official_block.twig'%}
                     </dd>
+
+
+
+                    <dt class="dt-class">
+                        <a style="background-color:#428bca; color: white;border-color: #428bca; " href="#accordion6" aria-expanded="{%if settings_accordion is not defined or settings_accordion.value is empty or ('accordion6' not in settings_accordion.value|split(","))%}true{%else%} false{%endif%}" aria-controls="accordion6" class="accordion-title accordionTitle js-accordionTrigger custom-a {%if settings_accordion is not defined or settings_accordion.value is empty or ('accordion6' not in settings_accordion.value|split(","))%}is-collapsed is-expanded{%endif%}">
+                            Данные по собственнику (принадлежность)
+                        </a>
+                    </dt>
+                    <dd class="accordion-content accordionItem {%if settings_accordion is not defined or settings_accordion.value is empty or ('accordion6' not in settings_accordion.value|split(","))%}is-expanded animateIn{%else%}is-collapsed{%endif%}" id="accordion6" aria-hidden="{%if settings_accordion is not defined or settings_accordion.value is empty or ('accordion6' not in settings_accordion.value|split(","))%}false{%else%} true{%endif%}">
+                        {%include '/create/standart/people_block.twig'%}
+                    </dd>
+
+
+
                     <dt class="dt-class">
                         <a style="background-color:#428bca; color: white;border-color: #428bca; " href="#accordion2" aria-expanded="{%if settings_accordion is not defined or settings_accordion.value is empty or ('accordion2' not in settings_accordion.value|split(","))%}true{%else%} false{%endif%}" aria-controls="accordion2" class="accordion-title accordionTitle js-accordionTrigger custom-a {%if settings_accordion is not defined or settings_accordion.value is empty or ('accordion2' not in settings_accordion.value|split(","))%}is-collapsed is-expanded{%endif%} ">
                             Начальный текст (ручной набор данных)</a>
@@ -98,16 +112,6 @@
                     </dt>
                     <dd class="accordion-content accordionItem {%if settings_accordion is not defined or settings_accordion.value is empty or ('accordion5' not in settings_accordion.value|split(","))%}is-expanded animateIn{%else%}is-collapsed{%endif%}" id="accordion5" aria-hidden="{%if settings_accordion is not defined or settings_accordion.value is empty or ('accordion5' not in settings_accordion.value|split(","))%}false{%else%} true{%endif%}">
                         {%include '/create/standart/object_block.twig'%}
-                    </dd>
-
-
-                    <dt class="dt-class">
-                        <a style="background-color:#428bca; color: white;border-color: #428bca; " href="#accordion6" aria-expanded="{%if settings_accordion is not defined or settings_accordion.value is empty or ('accordion6' not in settings_accordion.value|split(","))%}true{%else%} false{%endif%}" aria-controls="accordion6" class="accordion-title accordionTitle js-accordionTrigger custom-a {%if settings_accordion is not defined or settings_accordion.value is empty or ('accordion6' not in settings_accordion.value|split(","))%}is-collapsed is-expanded{%endif%}">
-                            Данные по собственнику (принадлежность)
-                        </a>
-                    </dt>
-                    <dd class="accordion-content accordionItem {%if settings_accordion is not defined or settings_accordion.value is empty or ('accordion6' not in settings_accordion.value|split(","))%}is-expanded animateIn{%else%}is-collapsed{%endif%}" id="accordion6" aria-hidden="{%if settings_accordion is not defined or settings_accordion.value is empty or ('accordion6' not in settings_accordion.value|split(","))%}false{%else%} true{%endif%}">
-                        {%include '/create/standart/people_block.twig'%}
                     </dd>
 
 

@@ -131,6 +131,14 @@ $('#btn-fill-form').on('click', function (event) {
             $("#law_face_office_belong").html('');
             $("#law_face_office_belong").html(JSON.parse(res)['law_face_office_belong']);
 
+            $("#owner_from_jour").html('');
+            $("#owner_from_jour").html(JSON.parse(res)['owner_from_jour']);
+
+            if(parseInt(JSON.parse(res)['id_face_belong']) === 1 ){
+
+                $('#id_face_belong').val(1);
+                $('#id_face_belong').trigger("change");
+            }
 
             $('.select2-select').select2({
                 placeholder: "Выберите из списка",

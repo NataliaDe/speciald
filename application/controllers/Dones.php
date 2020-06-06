@@ -295,7 +295,9 @@ class Dones extends My_Controller
                 'object_floor'    => $this->twig->render('create/standart/parts/object_floor', $this->data, true),
                 'people_rig_data' => $this->twig->render('create/standart/parts/people_rig_data', $this->data, true),
                 'law_face_office_belong'     => $this->twig->render('create/standart/owner/parts/law_face_office_belong', $this->data, true),
-                'is_data'         => $is_data
+                'owner_from_jour'     => $this->twig->render('create/standart/owner/parts/owner_from_jour', $this->data, true),
+                'is_data'         => $is_data,
+                'id_face_belong'=> (($this->data['rig']['id_owner_category'] != 0 || !empty($this->data['rig']['owner_fio'])) ? 1 : 0)
             ]);
             die;
         }
@@ -1363,6 +1365,57 @@ class Dones extends My_Controller
         $dones['official_creator_position'] = (isset($post['official_creator_position']) && !empty($post['official_creator_position'])) ? trim($post['official_creator_position']) : '';
         $dones['official_destination'] = (isset($post['official_destination']) && !empty($post['official_destination'])) ? trim($post['official_destination']) : '';
 
+
+        /* owner */
+        $dones['id_face_belong'] = (isset($post['id_face_belong']) && !empty($post['id_face_belong'])) ? intval($post['id_face_belong']) : 0;
+
+        if($dones['id_face_belong'] == 1){// individual face
+            $dones['id_owner_category'] = (isset($post['id_owner_category']) && !empty($post['id_owner_category'])) ? intval($post['id_owner_category']) : 0;
+            $dones['owner_fio'] = (isset($post['owner_fio']) && !empty($post['owner_fio'])) ? trim($post['owner_fio']) : '';
+            $dones['owner_year_birthday'] = (isset($post['owner_year_birthday']) && !empty($post['owner_year_birthday'])) ? intval($post['owner_year_birthday']) : '';
+            $dones['owner_address'] = (isset($post['owner_address']) && !empty($post['owner_address'])) ? trim($post['owner_address']) : '';
+            $dones['owner_position'] = (isset($post['owner_position']) && !empty($post['owner_position'])) ? trim($post['owner_position']) : '';
+            $dones['owner_job'] = (isset($post['owner_job']) && !empty($post['owner_job'])) ? trim($post['owner_job']) : '';
+            $dones['owner_character'] = (isset($post['owner_character']) && !empty($post['owner_character'])) ? trim($post['owner_character']) : '';
+            $dones['owner_is_uhet'] = (isset($post['owner_is_uhet']) && !empty($post['owner_is_uhet'])) ? intval($post['owner_is_uhet']) : 0;
+            $dones['owner_live_together'] = (isset($post['owner_live_together']) && !empty($post['owner_live_together'])) ? intval($post['owner_live_together']) : 0;
+
+            $dones['law_face_office_belong'] = 0;
+            $dones['law_face_name_owner'] = '';
+
+        }
+        elseif($dones['id_face_belong'] == 2){// law face
+            $dones['id_owner_category'] = 0;
+            $dones['owner_fio'] = '';
+            $dones['owner_year_birthday'] = '';
+            $dones['owner_address'] = '';
+            $dones['owner_position'] = '';
+            $dones['owner_job'] = '';
+            $dones['owner_character'] = '';
+            $dones['owner_is_uhet'] =  0;
+            $dones['owner_live_together'] =  0;
+
+            $dones['law_face_office_belong'] = (isset($post['law_face_office_belong']) && !empty($post['law_face_office_belong'])) ? intval($post['law_face_office_belong']) : 0;
+            $dones['law_face_name_owner'] = (isset($post['law_face_name_owner']) && !empty($post['law_face_name_owner'])) ? trim($post['law_face_name_owner']) : '';
+        }
+        else{
+              $dones['id_owner_category'] = 0;
+            $dones['owner_fio'] = '';
+            $dones['owner_year_birthday'] = '';
+            $dones['owner_address'] = '';
+            $dones['owner_position'] = '';
+            $dones['owner_job'] = '';
+            $dones['owner_character'] = '';
+            $dones['owner_is_uhet'] =  0;
+            $dones['owner_live_together'] =  0;
+
+            $dones['law_face_office_belong'] = 0;
+            $dones['law_face_name_owner'] = '';
+        }
+
+
+
+
         $dones['opening_description'] = (isset($post['opening_description']) && !empty($post['opening_description'])) ? trim($post['opening_description']) : '';
 
         /* description of RIG */
@@ -1412,7 +1465,7 @@ class Dones extends My_Controller
         $dones['people_address'] = (isset($post['people_address']) && !empty($post['people_address'])) ? trim($post['people_address']) : '';
         $dones['people_position'] = (isset($post['people_position']) && !empty($post['people_position'])) ? trim($post['people_position']) : '';
         $dones['people_status'] = (isset($post['people_status']) && !empty($post['people_status'])) ? intval($post['people_status']) : 0;
-        $dones['people_is_uhet'] = (isset($post['people_is_uhet']) && !empty($post['people_is_uhet'])) ? intval($post['people_is_uhet']) : 0;
+
 
 
         /* detail inf block */
@@ -1501,6 +1554,32 @@ class Dones extends My_Controller
             $logs['id_action'] = Logs_model::ACTION_EDIT_SD;
             $logs['date_action'] = date("Y-m-d H:i:s");
             $this->logs_model->add_logs($logs);
+        }
+
+
+        /*---------------- live together --------------*/
+
+        //delete live_together
+        $this->dones_model->delete_dones_live_together($id_dones_new);
+        if ($dones['owner_live_together'] > 0) {
+            $live_together = (isset($post['live_together']) && !empty($post['live_together'])) ? $post['live_together'] : array();
+
+            if (!empty($live_together)) {
+                foreach ($live_together as $k => $row) {
+                    $dones_live_together = array();
+                    if (isset($row['fio']) && !empty(trim($row['fio']))) {
+
+                        $dones_live_together['id_dones'] = $id_dones_new;
+                        $dones_live_together['fio'] = trim($row['fio']);
+                        $dones_live_together['year_birthday'] = (isset($row['year_birthday']) && !empty($row['year_birthday'])) ? trim($row['year_birthday']) : '';
+                        $dones_live_together['note'] = (isset($row['note']) && !empty($row['note'])) ? trim($row['note']) : '';
+
+                        $dones_live_together['sort'] = (isset($row['sort']) && !empty($row['sort'])) ? intval($row['sort']) : 0;
+
+                        $this->dones_model->add_dones_live_together($dones_live_together);
+                    }
+                }
+            }
         }
 
 
@@ -1936,6 +2015,8 @@ class Dones extends My_Controller
         $statuses = $this->dones_model->get_statuses_by_id_dones($id_dones, 0, false);
         $statuses_id = array_column($statuses, 'id_action');
 
+        $this->data['face_belong'] = $this->main_model->get_face_belong();
+        $this->data['owner_categories'] = $this->journal_model->get_owner_categories();
 
 
         if ($this->session->userdata('can_edit') == 0) {// viewer can see SD
@@ -2006,6 +2087,9 @@ class Dones extends My_Controller
 
         $this->data['is_edit_dones'] = 1; //sign of edit dones
         $this->data['id_dones'] = $id_dones; //ID of dones
+
+        /* live together */
+        $this->data['dones']['live_together_arr'] = $this->dones_model->get_dones_live_together($id_dones);
 
         /* data of edit dones */
         $this->data['dones']['silymchs'] = $this->create_model->get_dones_silymchs($id_dones);
@@ -2522,7 +2606,7 @@ class Dones extends My_Controller
             $new_dones['people_address'] = (isset($dones['people_address']) && !empty($dones['people_address'])) ? trim($dones['people_address']) : '';
             $new_dones['people_position'] = (isset($dones['people_position']) && !empty($dones['people_position'])) ? trim($dones['people_position']) : '';
             $new_dones['people_status'] = (isset($dones['people_status']) && !empty($dones['people_status'])) ? intval($dones['people_status']) : 0;
-            $new_dones['people_is_uhet'] = (isset($dones['people_is_uhet']) && !empty($dones['people_is_uhet'])) ? intval($dones['people_is_uhet']) : 0;
+            $new_dones['owner_is_uhet'] = (isset($dones['owner_is_uhet']) && !empty($dones['owner_is_uhet'])) ? intval($dones['owner_is_uhet']) : 0;
 
 
             /* detail inf block */

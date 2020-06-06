@@ -262,4 +262,25 @@ class Dones_model extends CI_Model
         $res= $this->db->get('dones as d')->row_array();
         return $res['cnt'];
     }
+
+        public function delete_dones_live_together($id_dones)
+    {
+        $this->db->where('id_dones', $id_dones)->delete('dones_live_together');
+    }
+
+        public function add_dones_live_together($data)
+    {
+        $this->db->insert('speciald.dones_live_together', $data);
+        return $this->db->insert_id();
+    }
+
+        public function get_dones_live_together($id_dones)
+    {
+        return $this->db->select('*')
+                ->from('speciald.dones_live_together')
+                ->where('id_dones', $id_dones)
+                ->order_by('sort', 'asc')
+                ->get()
+                ->result_array();
+    }
 }

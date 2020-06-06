@@ -112,8 +112,9 @@
             /* new name */
             var $div_new = $('#live_together_id_row' + num);
             $div_new.find('td').find('.live_together_fio').attr('name', 'live_together[' + num + '][fio]');
-            $div_new.find('td').find('.live_together_year_birth').attr('name', 'live_together[' + num + '][year_birth]');
+            $div_new.find('td').find('.live_together_year_birth').attr('name', 'live_together[' + num + '][year_birthday]');
             $div_new.find('td').find('.live_together_note').attr('name', 'live_together[' + num + '][note]');
+            $div_new.find('td').find('.sort').attr('name','live_together['+num+'][sort]');
 
             $div_new.find('td').find('input').val('');
             $div_new.find('td').find('textarea').val('');
