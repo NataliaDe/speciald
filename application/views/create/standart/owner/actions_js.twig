@@ -125,6 +125,9 @@
             $div_new.find('td').find('.sort').val(new_loop);
 
 
+                var cnt_men=$('.live_together_row').length;
+                $('input[name="owner_live_together"]').val(cnt_men);
+
             return false;
         });
 
@@ -149,6 +152,9 @@
                     $(this).val(k_sort);
                     k_sort++;
                 });
+
+                var cnt_men=$('.live_together_row').length;
+                $('input[name="owner_live_together"]').val(cnt_men);
 
             }
             return false;

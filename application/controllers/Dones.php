@@ -2544,6 +2544,8 @@ class Dones extends My_Controller
 
                 $water_source = $this->create_model->get_dones_water_source($id_dones);
                 $object = $this->create_model->get_dones_object($id_dones);
+
+                $live_together = $this->dones_model->get_dones_live_together($id_dones);
             }
 
 
@@ -2566,6 +2568,25 @@ class Dones extends My_Controller
             $new_dones['official_creator_name'] = (isset($dones['official_creator_name']) && !empty($dones['official_creator_name'])) ? trim($dones['official_creator_name']) : '';
             $new_dones['official_creator_position'] = (isset($dones['official_creator_position']) && !empty($dones['official_creator_position'])) ? trim($dones['official_creator_position']) : '';
             $new_dones['official_destination'] = (isset($dones['official_destination']) && !empty($dones['official_destination'])) ? trim($dones['official_destination']) : '';
+
+
+
+            /* owner */
+            $new_dones['id_face_belong'] = $dones['id_face_belong'];
+            $new_dones['id_owner_category'] = $dones['id_owner_category'];
+            $new_dones['owner_fio'] = $dones['owner_fio'];
+            $new_dones['owner_year_birthday'] = $dones['owner_year_birthday'];
+            $new_dones['owner_address'] = $dones['owner_address'];
+            $new_dones['owner_position'] = $dones['owner_position'];
+            $new_dones['owner_job'] = $dones['owner_job'];
+            $new_dones['owner_character'] = $dones['owner_character'];
+            $new_dones['owner_is_uhet'] =  $dones['owner_is_uhet'];
+            $new_dones['owner_live_together'] =  $dones['owner_live_together'];
+            $new_dones['law_face_office_belong'] = $dones['law_face_office_belong'];
+            $new_dones['law_face_name_owner'] = $dones['law_face_name_owner'];
+
+
+
 
             $new_dones['opening_description'] = (isset($dones['opening_description']) && !empty($dones['opening_description'])) ? trim($dones['opening_description']) : '';
 
@@ -2606,7 +2627,7 @@ class Dones extends My_Controller
             $new_dones['people_address'] = (isset($dones['people_address']) && !empty($dones['people_address'])) ? trim($dones['people_address']) : '';
             $new_dones['people_position'] = (isset($dones['people_position']) && !empty($dones['people_position'])) ? trim($dones['people_position']) : '';
             $new_dones['people_status'] = (isset($dones['people_status']) && !empty($dones['people_status'])) ? intval($dones['people_status']) : 0;
-            $new_dones['owner_is_uhet'] = (isset($dones['owner_is_uhet']) && !empty($dones['owner_is_uhet'])) ? intval($dones['owner_is_uhet']) : 0;
+
 
 
             /* detail inf block */
@@ -2669,7 +2690,19 @@ class Dones extends My_Controller
             }
 
 
-
+            /* live together */
+            $this->dones_model->delete_dones_live_together($id_dones_new);
+            if(isset($live_together) && !empty($live_together)){
+                 foreach ($live_together as $k => $row) {
+                    $dones_live_together = array();
+                    $dones_live_together['id_dones'] = $id_dones_new;
+                    $dones_live_together['fio'] = $row['fio'];
+                    $dones_live_together['year_birthday'] = $row['year_birthday'];
+                    $dones_live_together['note'] = $row['note'];
+                    $dones_live_together['sort'] = $row['sort'];
+                    $this->dones_model->add_dones_live_together($dones_live_together);
+                 }
+            }
 
 
 
