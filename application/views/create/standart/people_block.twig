@@ -56,8 +56,8 @@
 
         </div>
             <div class="form-group col-md-1">
-            <button style="margin-top: 58px;" type="button" class="btn btn-outline-success btn-sm"  id="fill-live-together"><i class="fa fa-address-card" style="cursor:pointer" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Заполнить информацию"></i></button>
-            {#<button style="margin-top: 58px;" type="button" class="btn btn-outline-danger btn-sm {% if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.live_together_arr  is defined and dones.live_together_arr is not empty%}show{%else%}hide{%endif%}"  id="unset-live-together"><i class="fa fa-address-card" style="cursor:pointer" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Не заполнять информацию"></i></button>#}
+            <button style="margin-top: 58px;" type="button" class="btn btn-outline-success btn-sm {% if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.live_together_arr is defined and dones.live_together_arr is not empty%}hide{%else%}show{%endif%}"  id="fill-live-together"><i class="fa fa-address-card" style="cursor:pointer" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Заполнить информацию"></i></button>
+            <button style="margin-top: 58px;" type="button" class="btn btn-outline-danger btn-sm {% if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.live_together_arr  is defined and dones.live_together_arr is not empty%}show{%else%}hide{%endif%}"  id="unset-live-together"><i class="fa fa-address-card" style="cursor:pointer" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Не заполнять информацию"></i></button>
             </div>
             </div>
 

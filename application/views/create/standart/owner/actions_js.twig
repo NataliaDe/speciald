@@ -45,8 +45,7 @@
 
 
             if ($('#div-live-together').hasClass('hide')) {
-                $('#div-live-together').removeClass('hide');
-                $('#div-live-together').addClass('show');
+
 
 
                 if ((cnt - 1) >= 1) {
@@ -54,6 +53,18 @@
                         $('#individual-face-div').find('#add-row-live-together').trigger('click');
                     }
                 }
+
+                $('#div-live-together').removeClass('hide');
+                $('#div-live-together').addClass('show');
+
+
+                $('#unset-live-together').removeClass('hide');
+                $('#unset-live-together').removeClass('show');
+                $('#unset-live-together').addClass('show');
+
+                $('#fill-live-together').removeClass('hide');
+                $('#fill-live-together').removeClass('show');
+                $('#fill-live-together').addClass('hide');
 
 
             }
@@ -71,6 +82,16 @@
 
                 $('#div-live-together').removeClass('show');
                 $('#div-live-together').addClass('hide');
+
+
+                $('#unset-live-together').removeClass('hide');
+                $('#unset-live-together').removeClass('show');
+                $('#unset-live-together').addClass('hide');
+
+                $('#fill-live-together').removeClass('hide');
+                $('#fill-live-together').removeClass('show');
+                $('#fill-live-together').addClass('show');
+
             } else {
                 toastr.error('Необходимо указать от 1 до 10 человек', 'Ошибка!', {progressBar: true, timeOut: 2500});
             }
@@ -80,6 +101,44 @@
 
     });
 
+
+    $('body').on('click', '#unset-live-together', function (e) {
+
+
+        if ($('#div-live-together').hasClass('show')) {
+
+
+            $('#unset-live-together').removeClass('hide');
+            $('#unset-live-together').removeClass('show');
+            $('#unset-live-together').addClass('hide');
+
+            $('#fill-live-together').removeClass('hide');
+            $('#fill-live-together').removeClass('show');
+            $('#fill-live-together').addClass('show');
+
+
+
+            $('#div-live-together').removeClass('show');
+            $('#div-live-together').addClass('hide');
+
+            $('.del-row-live-together').each(function () {
+                $(this).trigger('click');
+            });
+
+
+
+
+        }
+    });
+
+
+    $('input[name="owner_live_together"]').bind('click keyup', function () {
+        var cnt_men = $('.live_together_row').length;
+        var numb = $('input[name="owner_live_together"]').val();
+        if ($('#div-live-together').hasClass('show') && $('#fill-live-together').hasClass('hide') && parseInt(cnt_men) !== parseInt(numb)) {
+            toastr.warning('Количество совместно проживающих человек не совпадает', 'Внимание!', {progressBar: true, timeOut: 2500});
+        }
+    });
 
 
 
@@ -114,7 +173,7 @@
             $div_new.find('td').find('.live_together_fio').attr('name', 'live_together[' + num + '][fio]');
             $div_new.find('td').find('.live_together_year_birth').attr('name', 'live_together[' + num + '][year_birthday]');
             $div_new.find('td').find('.live_together_note').attr('name', 'live_together[' + num + '][note]');
-            $div_new.find('td').find('.sort').attr('name','live_together['+num+'][sort]');
+            $div_new.find('td').find('.sort').attr('name', 'live_together[' + num + '][sort]');
 
             $div_new.find('td').find('input').val('');
             $div_new.find('td').find('textarea').val('');
@@ -125,8 +184,11 @@
             $div_new.find('td').find('.sort').val(new_loop);
 
 
-                var cnt_men=$('.live_together_row').length;
-                $('input[name="owner_live_together"]').val(cnt_men);
+            var cnt_men = $('.live_together_row').length;
+            var numb = $('input[name="owner_live_together"]').val();
+            if ($('#div-live-together').hasClass('show') && $('#fill-live-together').hasClass('hide') && parseInt(cnt_men) !== parseInt(numb)) {
+                toastr.warning('Количество совместно проживающих человек не совпадает', 'Внимание!', {progressBar: true, timeOut: 2500});
+            }
 
             return false;
         });
@@ -153,8 +215,11 @@
                     k_sort++;
                 });
 
-                var cnt_men=$('.live_together_row').length;
-                $('input[name="owner_live_together"]').val(cnt_men);
+                var cnt_men = $('.live_together_row').length;
+                var numb = $('input[name="owner_live_together"]').val();
+                if ($('#div-live-together').hasClass('show') && $('#fill-live-together').hasClass('hide') && parseInt(cnt_men) !== parseInt(numb)) {
+                    toastr.warning('Количество совместно проживающих человек не совпадает', 'Внимание!', {progressBar: true, timeOut: 2500});
+                }
 
             }
             return false;
@@ -183,6 +248,9 @@
             k_sort++;
         });
     });
+
+
+
 
 
 </script>
