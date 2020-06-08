@@ -1,0 +1,28 @@
+<div class="form-row create-form-row">
+
+    <div class="form-group col-md-3">
+        <label for="aps_name" >Название АПС</label>
+        <textarea class="form-control" cols="2" rows="2"  name="aps_name">{%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.object.aps_name is defined and dones.object.aps_name is not empty %}{{dones.object.aps_name|trim}}{%endif%}</textarea>
+    </div>
+
+
+    <div class="form-group col-md-1">
+        <label for="is_aps_worked" style="display: block;" ></label>
+        <div class="checkbox checkbox-success">
+            <input  type="checkbox" name="is_aps_worked" value="1" id="is_aps_worked" {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.object is defined and dones.object is not empty and dones.object.is_aps_worked == 1 %}checked{%endif%}>
+            <label for="is_aps_worked" >
+                АПС сработал
+            </label>
+        </div>
+    </div>
+
+    <div class="form-group col-md-3">
+        <label for="is_aps_influence" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+        <div class="checkbox checkbox-success">
+            <input  type="checkbox" name="is_aps_influence" value="1" id="is_aps_influence" {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.object is defined and dones.object is not empty and dones.object.is_aps_influence == 1 %}checked{%endif%}>
+            <label for="is_aps_influence" >
+                сработка повлияла на обнаружение загорания
+            </label>
+        </div>
+    </div>
+</div>

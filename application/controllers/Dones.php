@@ -130,6 +130,8 @@ class Dones extends My_Controller
         $this->data['face_belong'] = $this->main_model->get_face_belong();
         $this->data['owner_categories'] = $this->journal_model->get_owner_categories();
 
+        $this->data['api_source'] = $this->main_model->get_api_source();
+
         /* default number sd */
         $request_region = $this->data['active_user']['id_region'];
         if ($this->data['active_user']['id_organ'] == Main_model::ORGAN_ID_ROSN || $this->data['active_user']['id_organ'] == Main_model::ORGAN_ID_UGZ ||
@@ -1944,6 +1946,33 @@ class Dones extends My_Controller
         $object['object_is_api'] = (isset($post['object_is_api']) && !empty($post['object_is_api'])) ? intval($post['object_is_api']) : 0;
         $object['object_material'] = (isset($post['object_material']) && !empty($post['object_material'])) ? intval($post['object_material']) : 0;
         $object['object_roof'] = (isset($post['object_roof']) && !empty($post['object_roof'])) ? intval($post['object_roof']) : 0;
+
+        $object['is_aps'] = (isset($post['is_aps']) && !empty($post['is_aps'])) ? intval($post['is_aps']) : 0;
+
+        if ($dones['id_face_belong'] == 1 && $object['object_is_api'] == 1) {// individual face
+            $object['api_date'] = (isset($post['api_date']) && !empty($post['api_date'])) ? (\DateTime::createFromFormat('d.m.Y', trim($post['api_date']))->format('Y-m-d')) : NULL;
+            $object['id_api_source'] = (isset($post['id_api_source']) && !empty($post['id_api_source'])) ? intval($post['id_api_source']) : 0;
+            $object['is_api_worked'] = (isset($post['is_api_worked']) && !empty($post['is_api_worked'])) ? intval($post['is_api_worked']) : 0;
+            $object['is_api_influence'] = (isset($post['is_api_influence']) && !empty($post['is_api_influence'])) ? intval($post['is_api_influence']) : 0;
+
+        } else {// individual face
+            $object['api_date'] = NULL;
+            $object['id_api_source'] = 0;
+            $object['is_api_worked'] = 0;
+            $object['is_api_influence'] = 0;
+        }
+
+        if ($dones['id_face_belong'] == 2 && $object['is_aps'] == 1) {// law face
+            $object['aps_name'] = (isset($post['api_date']) && !empty($post['aps_name'])) ? trim($post['aps_name']) : '';
+            $object['is_aps_worked'] = (isset($post['is_aps_worked']) && !empty($post['is_aps_worked'])) ? intval($post['is_aps_worked']) : 0;
+            $object['is_aps_influence'] = (isset($post['is_aps_influence']) && !empty($post['is_aps_influence'])) ? intval($post['is_aps_influence']) : 0;
+
+        } else {// law face
+            $object['aps_name'] = '';
+            $object['is_aps_worked'] = 0;
+            $object['is_aps_influence'] = 0;
+        }
+
         $id_object = (isset($post['id_object']) && !empty($post['id_object'])) ? intval($post['id_object']) : 0; //edit id of table object
 
         if ($id_object == 0) {//add new object
@@ -2017,6 +2046,7 @@ class Dones extends My_Controller
 
         $this->data['face_belong'] = $this->main_model->get_face_belong();
         $this->data['owner_categories'] = $this->journal_model->get_owner_categories();
+        $this->data['api_source'] = $this->main_model->get_api_source();
 
 
         if ($this->session->userdata('can_edit') == 0) {// viewer can see SD
@@ -2909,6 +2939,17 @@ class Dones extends My_Controller
             $dones_object['object_is_api'] = (isset($object['object_is_api']) && !empty($object['object_is_api'])) ? intval($object['object_is_api']) : 0;
             $dones_object['object_material'] = (isset($object['object_material']) && !empty($object['object_material'])) ? intval($object['object_material']) : 0;
             $dones_object['object_roof'] = (isset($object['object_roof']) && !empty($object['object_roof'])) ? intval($object['object_roof']) : 0;
+
+            $dones_object['api_date'] = $object['api_date'];
+            $dones_object['id_api_source'] = $object['id_api_source'];
+            $dones_object['is_api_worked'] = $object['is_api_worked'];
+            $dones_object['is_api_influence'] = $object['is_api_influence'];
+
+            $dones_object['is_aps'] = $object['is_aps'];
+            $dones_object['aps_name'] = $object['aps_name'];
+            $dones_object['is_aps_worked'] = $object['is_aps_worked'];
+            $dones_object['is_aps_influence'] = $object['is_aps_influence'];
+
 
             $this->create_model->add_new_dones_object($dones_object);
         }

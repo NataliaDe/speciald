@@ -376,4 +376,13 @@ class Main_model extends CI_Model
                 ->get()
                 ->result_array();
     }
+
+            public function get_api_source()
+    {
+        return $this->db->select('*')
+                ->from('api_source')
+                ->order_by('name', 'asc')
+                ->get()
+                ->result_array();
+    }
 }

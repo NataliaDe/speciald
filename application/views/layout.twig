@@ -31,7 +31,7 @@
         <link rel="stylesheet" href="{{ base_url('assets/css/checkbox.css') }}">
         <link rel="stylesheet" href="{{ base_url('assets/css/radiobuttons.css') }}">
 
-        <link rel="stylesheet" href="{{ base_url('assets/css/all.css') }}">
+        <link rel="stylesheet" href="{{ base_url('assets/css/all.css')}}?{{now|date('H:i:s')}}">
 
         <link rel="stylesheet" href="{{ base_url('assets/preloader/preloader.css') }}">
 
@@ -87,7 +87,7 @@
 <script src="{{ base_url('/assets/js/jquery.chained.min.js')}}"></script>
 
 
-<script src="{{ base_url('/assets/js/all.js')}}"></script>
+<script src="{{ base_url('/assets/js/all.js')}}?{{now|date('H:i:s')}}"></script>
 
 <script src="{{ base_url('/assets/preloader/preloader.js')}}"></script>
 

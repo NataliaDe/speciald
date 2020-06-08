@@ -139,6 +139,11 @@ $('#btn-fill-form').on('click', function (event) {
                 $('#id_face_belong').val(1);
                 $('#id_face_belong').trigger("change");
             }
+            else{
+
+                $('#id_face_belong').val('');
+                $('#id_face_belong').trigger("change");
+            }
 
             $('.select2-select').select2({
                 placeholder: "Выберите из списка",

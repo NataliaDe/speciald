@@ -329,6 +329,10 @@
             width: 240px !important;
         }
 
+        #object-api-card .select2-container{
+            width: 312px !important;
+        }
+
 
 
 
@@ -391,23 +395,23 @@
 
     {#<script src="{{ base_url('/assets/js/dd/locale/ru.js')}}"></script>#}
     {#    <script src="{{ base_url('/assets/js/dd/js/bootstrap-datetimepicker.min.js')}}"></script>#}
-    <script src="{{ base_url('/assets/js/manual_datetimepicker.js')}}"></script>
+    <script src="{{ base_url('/assets/js/manual_datetimepicker.js')}}?{{now|date('H:i:s')}}"></script>
 
 
-    <script src="{{ base_url('/assets/js/form-standart/journal_table.js')}}"></script>
-    <script src="{{ base_url('/assets/js/form-standart/str_table.js')}}"></script>
-    <script src="{{ base_url('/assets/js/form-standart/final_block.js')}}"></script>
+    <script src="{{ base_url('/assets/js/form-standart/journal_table.js')}}?{{now|date('H:i:s')}}"></script>
+    <script src="{{ base_url('/assets/js/form-standart/str_table.js')}}?{{now|date('H:i:s')}}"></script>
+    <script src="{{ base_url('/assets/js/form-standart/final_block.js')}}?{{now|date('H:i:s')}}"></script>
 
-    <script src="{{ base_url('/assets/js/form-standart/search_rig.js')}}"></script>
-    <script src="{{ base_url('/assets/js/form-standart/search_str_cars.js')}}"></script>
-    <script src="{{ base_url('/assets/js/form-standart/search_str_inf.js')}}"></script>
+    <script src="{{ base_url('/assets/js/form-standart/search_rig.js')}}?{{now|date('H:i:s')}}"></script>
+    <script src="{{ base_url('/assets/js/form-standart/search_str_cars.js')}}?{{now|date('H:i:s')}}"></script>
+    <script src="{{ base_url('/assets/js/form-standart/search_str_inf.js')}}?{{now|date('H:i:s')}}"></script>
 
     <script src="{{ base_url('/assets/datatables/jquery.dataTables.js')}}"></script>
 
 
 
     <script src="{{ base_url('/assets/js/form-standart/media.js')}}"></script>
-    <script src="{{ base_url('/assets/js/form-standart/preview_standart.js')}}"></script>
+    <script src="{{ base_url('/assets/js/form-standart/preview_standart.js')}}?{{now|date('H:i:s')}}"></script>
 
     {%include '/create/standart/owner/actions_js.twig'%}
 

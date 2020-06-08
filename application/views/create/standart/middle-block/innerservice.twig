@@ -22,7 +22,7 @@
                         <th style="width: 120px">Время прибытия</th>
                         <th style="width: 120px">Расстояние (км)</th>
                         <th style="width: 300px">Примечание</th>
-                        <th style="width: 350px">Выполняемый вид работ</th>
+                        {#<th style="width: 350px">Выполняемый вид работ</th>#}
                         <th></th>
                     </tr>
                 </thead>
@@ -108,7 +108,7 @@
 
                                 </td>
 
-                                <td>
+{#                                <td>
                                     <select multiple class="form-control select2-multi work_innerservice" name="innerservice[{{x}}][work_innerservice][]" >
 
                                         {% for vid in work_innerservice %}
@@ -121,7 +121,7 @@
                                     </a>
 
 
-                                </td>
+                                </td>#}
 
 
                                 <td>
@@ -187,7 +187,7 @@
 
                             </td>
 
-                            <td>
+{#                            <td>
                                 <select multiple class="form-control select2-multi work_innerservice" name="innerservice[{{i}}][work_innerservice][]" >
 
                                     {% for vid in work_innerservice %}
@@ -200,7 +200,7 @@
                                 </a>
 
 
-                            </td>
+                            </td>#}
 
                             <td>
 

@@ -13,6 +13,18 @@
             $('#individual-face-div').removeClass('show');
             $('#individual-face-div').removeClass('hide');
             $('#individual-face-div').addClass('show');
+
+
+//hide aps
+            $('#div-is-aps').removeClass('hide');
+            $('#div-is-aps').removeClass('show');
+            $('#div-is-aps').addClass('hide');
+
+//show api
+            $('#div-is-api').removeClass('hide');
+            $('#div-is-api').removeClass('show');
+            $('#div-is-api').addClass('show');
+
         } else if (parseInt(face) === 2) {
             $('#law-face-div').removeClass('show');
             $('#law-face-div').removeClass('hide');
@@ -21,6 +33,16 @@
             $('#individual-face-div').removeClass('show');
             $('#individual-face-div').removeClass('hide');
             $('#individual-face-div').addClass('hide');
+
+//show aps
+            $('#div-is-aps').removeClass('hide');
+            $('#div-is-aps').removeClass('show');
+            $('#div-is-aps').addClass('show');
+
+//hide api
+            $('#div-is-api').removeClass('hide');
+            $('#div-is-api').removeClass('show');
+            $('#div-is-api').addClass('hide');
         } else {
             $('#law-face-div').removeClass('show');
             $('#law-face-div').removeClass('hide');
@@ -29,7 +51,50 @@
             $('#individual-face-div').removeClass('show');
             $('#individual-face-div').removeClass('hide');
             $('#individual-face-div').addClass('hide');
+
+
+            $('#div-is-aps').removeClass('hide');
+            $('#div-is-aps').removeClass('show');
+            $('#div-is-aps').addClass('hide');
+            $('#div-is-api').removeClass('hide');
+            $('#div-is-api').removeClass('show');
+            $('#div-is-api').addClass('hide');
+
         }
+
+
+
+
+
+        var is_api = $('#object_is_api').is(":checked");
+        var is_aps = $('#is_aps').is(":checked");
+        var face = $('#id_face_belong').val();
+
+
+        if (is_api === true && parseInt(face) === 1) {
+            $('#object-api-card').removeClass('show');
+            $('#object-api-card').removeClass('hide');
+            $('#object-api-card').addClass('show');
+
+        } else {
+            $('#object-api-card').removeClass('show');
+            $('#object-api-card').removeClass('hide');
+            $('#object-api-card').addClass('hide');
+        }
+
+
+
+        if (is_aps === true && parseInt(face) === 2) {
+            $('#object-aps-card').removeClass('show');
+            $('#object-aps-card').removeClass('hide');
+            $('#object-aps-card').addClass('show');
+
+        } else {
+            $('#object-aps-card').removeClass('show');
+            $('#object-aps-card').removeClass('hide');
+            $('#object-aps-card').addClass('hide');
+        }
+
 
     });
 
@@ -125,7 +190,10 @@
                 $(this).trigger('click');
             });
 
-
+            var tbl = $('#live-together-table');
+            tbl.find('.live_together_fio').val('');
+            tbl.find('.live_together_year_birth').val('');
+            tbl.find('.live_together_note').val('');
 
 
         }
@@ -247,6 +315,47 @@
             $(this).val(k_sort);
             k_sort++;
         });
+    });
+
+
+
+
+    $('body').on('change', '#createStandart #object_is_api', function (e) {
+
+        var is_api = $(this).is(":checked");
+        var face = $('#id_face_belong').val();
+
+
+        if (is_api === true && parseInt(face) === 1) {
+            $('#object-api-card').removeClass('show');
+            $('#object-api-card').removeClass('hide');
+            $('#object-api-card').addClass('show');
+
+        } else {
+            $('#object-api-card').removeClass('show');
+            $('#object-api-card').removeClass('hide');
+            $('#object-api-card').addClass('hide');
+        }
+    });
+
+
+    $('body').on('change', '#createStandart #is_aps', function (e) {
+
+        var is_aps = $(this).is(":checked");
+        var face = $('#id_face_belong').val();
+
+
+
+        if (is_aps === true && parseInt(face) === 2) {
+            $('#object-aps-card').removeClass('show');
+            $('#object-aps-card').removeClass('hide');
+            $('#object-aps-card').addClass('show');
+
+        } else {
+            $('#object-aps-card').removeClass('show');
+            $('#object-aps-card').removeClass('hide');
+            $('#object-aps-card').addClass('hide');
+        }
     });
 
 
