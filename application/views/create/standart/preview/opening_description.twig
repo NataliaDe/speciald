@@ -4,7 +4,11 @@
     <div id="preview-opening-description-standart">
 
         <b><u>Предпросмотр (начальный текст):</u></b>
-                {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined  %}
+
+
+        <textarea readonly  class="form-control" cols="2" rows="8"  name="opening_word">{%if dones.opening_word is defined and dones.opening_word is not empty%}{{dones.opening_word|trim}}{%endif%}</textarea>
+
+               {# {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined  %}
 
 
 
@@ -47,7 +51,7 @@
 
 
             {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.opening_description is not empty %}
-                {#{{(dones.opening_description|trim)|nl2br}}{{coord_preview}}#}
+
                 {%for op in dones.preview_opening_description%}
 
                     {%if loop.index == 1%}
@@ -60,20 +64,24 @@
             {%else%}
                 {{coord_preview}}
             {%endif%}
-        {%endif%}
+        {%endif%}#}
     </div>
 </div>
 
 
 
 <div id="panel-preview-object" class="fixed t-left close_panel left-panel" style="display:{%if is_edit_dones is defined and is_edit_dones == 1 and dones.is_show_object == 1  %}block{%else%}none{%endif%}" >
-    <a id="preview_object_button"  aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Предпросмотр (объект)"> <i class="fa fa-tripadvisor"></i> </a>
+    <a id="preview_object_button"  aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Предпросмотр (объект)"> <i class="fa fa-tripadvisor" style="color:red"></i> </a>
     <div id="preview-object-standart">
 
         <b><u>Предпросмотр (объект):</u></b><br>
-                {%if is_edit_dones is defined and is_edit_dones == 1 and dones.object_data is defined and dones.object_data is not empty and dones.is_show_object == 1  %}
-                    {#{{dump(dones.object_data)}}#}
-                    {%set i=0%}
+
+
+        <textarea  class="form-control" cols="2" rows="8"  name="object_word">{%if dones.object_word is defined and dones.object_word is not empty and dones.is_show_object == 1%}{{dones.object_word|trim}}{%endif%}</textarea>
+
+        {#{%if is_edit_dones is defined and is_edit_dones == 1 and dones.object_data is defined and dones.object_data is not empty and dones.is_show_object == 1  %}
+
+            {%set i=0%}
 
             {%if dones.object_data.object_preview is not empty %}
 
@@ -189,7 +197,7 @@
         {%elseif dones.is_show_object == 0  %}
             информация не будет выведена в СД
 
-        {%endif%}
+        {%endif%}#}
 
 
 
@@ -262,6 +270,25 @@
         {%endif%}
 
 
+
+
+
+
+
+    </div>
+</div>
+
+
+
+
+<div id="panel_preview_owner" class="fixed t-left close_panel left-panel" style="display:{%if is_edit_dones is defined and is_edit_dones == 1 and dones.is_show_owner == 1  %}block{%else%}none{%endif%}">
+    <a id="preview_owner_button"  aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Предпросмотр (данные по собственнику)"> <i class="fa fa-tripadvisor" style="color:red"></i> </a>
+
+    <div id="preview-owner-standart">
+
+        <b><u>Предпросмотр (данные по собственнику):</u></b>
+
+        <textarea class="form-control" cols="2" rows="8"  name="owner_word">{%if dones.owner_word is defined and dones.owner_word is not empty and dones.is_show_owner == 1%}{{dones.owner_word|trim}}{%endif%}</textarea>
 
     </div>
 </div>

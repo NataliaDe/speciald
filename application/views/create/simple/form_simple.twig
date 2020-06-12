@@ -146,62 +146,61 @@
 
         $(document).ready(function () {
 
-                            $('body').on('change', '#is_show_coords', function (e) {
+            $('body').on('change', '#is_show_coords', function (e) {
 
-                                e.preventDefault();
+                e.preventDefault();
 
-                                var is_check = $(this).is(":checked");
-                                var lat = $('#lat_id');
-                                var lon = $('#long_id');
+                var is_check = $(this).is(":checked");
+                var lat = $('#lat_id');
+                var lon = $('#long_id');
 
-                                if (is_check === true) {
-                                    lat.prop('readonly', true);
-                                    lon.prop('readonly', true);
+                if (is_check === true) {
+                    lat.prop('readonly', true);
+                    lon.prop('readonly', true);
 
-                                } else {
-                                    lat.prop('readonly', false);
-                                    lon.prop('readonly', false);
-                                }
+                } else {
+                    lat.prop('readonly', false);
+                    lon.prop('readonly', false);
+                }
 
-                            });
-                        });
-
-
-                        $(document).ready(function () {
-                            $('form#createSimple').keydown(function (event) {
-                                if (event.keyCode == 13) {
-                                    event.preventDefault();
-                                    return false;
-                                }
-                            });
+            });
+        });
 
 
-                            $('body').on('change', '#createSimple #specd_vid', function (e) {
-
-                                e.preventDefault();
-                                var vid = $(this).val();
-                                var lat = $('#lat_id');
-                                var lon = $('#long_id');
-
-                                var is_coord = $('#is_show_coords');
-
-                                if (parseInt(vid) === {{minirovanie_id}}) {
-
-                                    $('#is_show_coords').prop('checked', true);
-                                    lat.prop('readonly', true);
-                                    lon.prop('readonly', true);
-                                    {#is_coord.prop("readonly", true);#}
-                                } else {
-                                    $('#is_show_coords').prop('checked', false);
-                                    lat.prop('readonly', false);
-                                    lon.prop('readonly', false);
-                                    {#is_coord.prop("readonly", false);#}
-                                }
-                                setPreviewData();
+        $(document).ready(function () {
 
 
-                            });
-                        });
+            $(document).on("keypress", ":input:not(textarea)", function (event) {
+                return event.keyCode != 13;
+            });
+
+
+            $('body').on('change', '#createSimple #specd_vid', function (e) {
+
+                e.preventDefault();
+                var vid = $(this).val();
+                var lat = $('#lat_id');
+                var lon = $('#long_id');
+
+                var is_coord = $('#is_show_coords');
+
+                if (parseInt(vid) === {{minirovanie_id}}) {
+
+                    $('#is_show_coords').prop('checked', true);
+                    lat.prop('readonly', true);
+                    lon.prop('readonly', true);
+        {#is_coord.prop("readonly", true);#}
+                    } else {
+                        $('#is_show_coords').prop('checked', false);
+                        lat.prop('readonly', false);
+                        lon.prop('readonly', false);
+        {#is_coord.prop("readonly", false);#}
+                    }
+                    setPreviewData();
+
+
+                });
+            });
 
 
     </script>

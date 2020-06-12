@@ -192,81 +192,87 @@ class Export extends My_Controller
 
 
         /* START DESCRIPTION */
-        $open_descr = '';
-        $date_msg = ((isset($dones['time_msg']) && !empty($dones['time_msg'])) ? (\DateTime::createFromFormat('Y-m-d H:i:s', $dones['time_msg'])->format('d.m.Y')) : '');
-        $time_msg = ((isset($dones['time_msg']) && !empty($dones['time_msg'])) ? (\DateTime::createFromFormat('Y-m-d H:i:s', $dones['time_msg'])->format('H-i')) : '');
 
-        $opening_description = trim($dones['opening_description']);
-        //$open_descr = $opening_description;
-        //if ($type_sd == Main_model::TYPE_SD_STANDART) {
-        if ($date_msg != '') {
-            if ($type_sd == Main_model::TYPE_SD_STANDART) {
-                $open_descr = $date_msg;
-            } else {
-                $open_descr = $date_msg . ' года';
-            }
-        }
-        if ($time_msg != '') {
-            if (!empty($open_descr))
-                $open_descr = $open_descr . ' в ' . $time_msg;
-            else
-                $open_descr = 'в ' . $time_msg;
-        }
-
-        // }
-
-
-
-        $coords = '';
-
-        if ($dones['is_show_coords'] == 0) {
-            // if ($type_sd == Main_model::TYPE_SD_STANDART) {
-            $longitude = (isset($dones['longitude']) && !empty($dones['longitude'])) ? trim($dones['longitude']) : '';
-            $latitude = (isset($dones['latitude']) && !empty($dones['latitude'])) ? trim($dones['latitude']) : '';
-            if (!empty($longitude) && !empty($latitude)) {
-                $coords = ' (' . $latitude . ', ' . $longitude . ').';
-            } else {
-                $coords = ' (нет координат).';
-            }
-            // }
+        if (isset($dones['opening_word']) && !empty(trim($dones['opening_word'])) && $type_sd == Main_model::TYPE_SD_STANDART) {
+            $section->addText('          ' . trim($dones['opening_word']), self::header_style_cell_size, self::start_descr_font);
         } else {
-            $coords = '.';
-        }
+            $open_descr = '';
+            $date_msg = ((isset($dones['time_msg']) && !empty($dones['time_msg'])) ? (\DateTime::createFromFormat('Y-m-d H:i:s', $dones['time_msg'])->format('d.m.Y')) : '');
+            $time_msg = ((isset($dones['time_msg']) && !empty($dones['time_msg'])) ? (\DateTime::createFromFormat('Y-m-d H:i:s', $dones['time_msg'])->format('H-i')) : '');
 
-        if ($dones['is_show_address'] == 1 && isset($dones['address']) && !empty($dones['address'])) {
+            $opening_description = trim($dones['opening_description']);
+            //$open_descr = $opening_description;
+            //if ($type_sd == Main_model::TYPE_SD_STANDART) {
+            if ($date_msg != '') {
+                if ($type_sd == Main_model::TYPE_SD_STANDART) {
+                    $open_descr = $date_msg;
+                } else {
+                    $open_descr = $date_msg . ' года';
+                }
+            }
+            if ($time_msg != '') {
+                if (!empty($open_descr))
+                    $open_descr = $open_descr . ' в ' . $time_msg;
+                else
+                    $open_descr = 'в ' . $time_msg;
+            }
 
-            $coords = ' ' . trim($dones['address']) . $coords;
-        }
+            // }
 
 
-        if (!empty($opening_description)) {
-            $a = explode(PHP_EOL, $opening_description);
-            $descr = '';
-            $i = 0;
-            foreach ($a as $value) {
-                $i++;
+
+            $coords = '';
+
+            if ($dones['is_show_coords'] == 0) {
+                // if ($type_sd == Main_model::TYPE_SD_STANDART) {
+                $longitude = (isset($dones['longitude']) && !empty($dones['longitude'])) ? trim($dones['longitude']) : '';
+                $latitude = (isset($dones['latitude']) && !empty($dones['latitude'])) ? trim($dones['latitude']) : '';
+                if (!empty($longitude) && !empty($latitude)) {
+                    $coords = ' (' . $latitude . ', ' . $longitude . ').';
+                } else {
+                    $coords = ' (нет координат).';
+                }
+                // }
+            } else {
+                $coords = '.';
+            }
+
+            if ($dones['is_show_address'] == 1 && isset($dones['address']) && !empty($dones['address'])) {
+
+                $coords = ' ' . trim($dones['address']) . $coords;
+            }
 
 
-                if ($i == 1) {
+            if (!empty($opening_description)) {
+                $a = explode(PHP_EOL, $opening_description);
+                $descr = '';
+                $i = 0;
+                foreach ($a as $value) {
+                    $i++;
 
-                    $pos = strripos($value, '.');
-                    if ($pos === false) {
 
-                    } else {
-                        $value = mb_substr($value, 0, mb_strrpos($value, '.'));
+                    if ($i == 1) {
+
+                        $pos = strripos($value, '.');
+                        if ($pos === false) {
+
+                        } else {
+                            $value = mb_substr($value, 0, mb_strrpos($value, '.'));
+                        }
+
+                        $value = (!empty($open_descr) ? ($open_descr . ' ') : '') . trim($value) . $coords;
                     }
 
-                    $value = (!empty($open_descr) ? ($open_descr . ' ') : '') . trim($value) . $coords;
+                    $section->addText('          ' . trim($value), self::header_style_cell_size, self::start_descr_font);
                 }
+            } else {
 
-                $section->addText('          ' . trim($value), self::header_style_cell_size, self::start_descr_font);
+                $open_descr = 'ОПИСАНИЕ' . $coords;
+
+                $section->addText('          ' . $open_descr, self::header_style_cell_size, self::start_descr_font);
             }
-        } else {
-
-            $open_descr = 'ОПИСАНИЕ' . $coords;
-
-            $section->addText('          ' . $open_descr, self::header_style_cell_size, self::start_descr_font);
         }
+
 
 
 
@@ -716,107 +722,119 @@ class Export extends My_Controller
         // $section->addTextBreak(1, self::header_style_cell_size, self::header_style_cell_font);
 
 
+         /* object  */
+        if ($dones['is_show_object'] == 1 && !empty($dones['object_word'])) {
+            $section->addText('          ' . trim($dones['object_word']), self::header_style_cell_size, self::start_descr_font);
+           // $section->addTextBreak(1, self::header_style_cell_size, self::header_style_cell_font);
+        }
+
+
+        /* owner */
+        if ($dones['is_show_owner'] == 1 && !empty($dones['owner_word'])) {
+            $section->addText('          ' . trim($dones['owner_word']), self::header_style_cell_size, self::start_descr_font);
+           // $section->addTextBreak(1, self::header_style_cell_size, self::header_style_cell_font);
+        }
 
 
         /* object  */
-        $object = '';
-        if (!empty($object_data) && $dones['is_show_object']) {
-
-            $a = $object_data['object_preview'];
-
-            if (!empty($object_data['house_name'])) {
-                $object = '(' . $object_data['house_name'] . ')';
-            }
-
-            if (!empty($object_data['material_name'])) {
-
-                if (empty($object)) {
-                    $object = $object_data['material_name'];
-                } else {
-                    $object = $object . ', ' . $object_data['material_name'];
-                }
-            }
-
-
-            if (!empty($object_data['object_floor_text'])) {
-
-                if (empty($object)) {
-                    $object = $object_data['object_floor_text'];
-                } else {
-                    $object = $object . ', ' . $object_data['object_floor_text'];
-                }
-            }
-
-
-            if (!empty($object_data['roof_name'])) {
-
-                if (empty($object)) {
-                    $object = 'кровля ' . $object_data['roof_name'];
-                } else {
-                    $object = $object . ', ' . 'кровля ' . $object_data['roof_name'];
-                }
-            }
-
-
-            if ($object_data['object_is_electric'] == 1) {
-                $electric = 'электрофицирован';
-            } else {
-                $electric = 'не электрофицирован';
-            }
-
-            if (empty($object)) {
-                $object = $electric;
-            } else {
-                $object = $object . ', ' . $electric;
-            }
-
-
-            if ($object_data['object_is_api'] == 1) {
-                $api = 'АПИ установлен';
-            } else {
-                $api = 'АПИ не установлен';
-            }
-
-            if (empty($object)) {
-                $object = $api;
-            } else {
-                $object = $object . ', ' . $api;
-            }
-
-
-
-
-
-            if (!empty($object) || count($a) > 0) {
-                $object = $object . '.';
-            }
-
-            if (!empty($object_data['officebelong_name'])) {
-
-                if (empty($object)) {
-                    $object = 'Ведомственная принадлежность - ' . $object_data['officebelong_name'] . '.';
-                } else {
-                    $object = $object . ' Ведомственная принадлежность - ' . $object_data['officebelong_name'] . '.';
-                }
-            }
-
-
-
-            $i = 0;
-            foreach ($a as $value) {
-                $i++;
-
-
-                if ($i == count($a)) {
-//$value=$value.'.';
-
-                    if (!empty($object))
-                        $value = $value . ' ' . $object;
-                }
-
-                $section->addText('          ' . trim($value), self::header_style_cell_size, self::start_descr_font);
-            }
-        }
+//        $object = '';
+//        if (!empty($object_data) && $dones['is_show_object']) {
+//
+//            $a = $object_data['object_preview'];
+//
+//            if (!empty($object_data['house_name'])) {
+//                $object = '(' . $object_data['house_name'] . ')';
+//            }
+//
+//            if (!empty($object_data['material_name'])) {
+//
+//                if (empty($object)) {
+//                    $object = $object_data['material_name'];
+//                } else {
+//                    $object = $object . ', ' . $object_data['material_name'];
+//                }
+//            }
+//
+//
+//            if (!empty($object_data['object_floor_text'])) {
+//
+//                if (empty($object)) {
+//                    $object = $object_data['object_floor_text'];
+//                } else {
+//                    $object = $object . ', ' . $object_data['object_floor_text'];
+//                }
+//            }
+//
+//
+//            if (!empty($object_data['roof_name'])) {
+//
+//                if (empty($object)) {
+//                    $object = 'кровля ' . $object_data['roof_name'];
+//                } else {
+//                    $object = $object . ', ' . 'кровля ' . $object_data['roof_name'];
+//                }
+//            }
+//
+//
+//            if ($object_data['object_is_electric'] == 1) {
+//                $electric = 'электрофицирован';
+//            } else {
+//                $electric = 'не электрофицирован';
+//            }
+//
+//            if (empty($object)) {
+//                $object = $electric;
+//            } else {
+//                $object = $object . ', ' . $electric;
+//            }
+//
+//
+//            if ($object_data['object_is_api'] == 1) {
+//                $api = 'АПИ установлен';
+//            } else {
+//                $api = 'АПИ не установлен';
+//            }
+//
+//            if (empty($object)) {
+//                $object = $api;
+//            } else {
+//                $object = $object . ', ' . $api;
+//            }
+//
+//
+//
+//
+//
+//            if (!empty($object) || count($a) > 0) {
+//                $object = $object . '.';
+//            }
+//
+//            if (!empty($object_data['officebelong_name'])) {
+//
+//                if (empty($object)) {
+//                    $object = 'Ведомственная принадлежность - ' . $object_data['officebelong_name'] . '.';
+//                } else {
+//                    $object = $object . ' Ведомственная принадлежность - ' . $object_data['officebelong_name'] . '.';
+//                }
+//            }
+//
+//
+//
+//            $i = 0;
+//            foreach ($a as $value) {
+//                $i++;
+//
+//
+//                if ($i == count($a)) {
+////$value=$value.'.';
+//
+//                    if (!empty($object))
+//                        $value = $value . ' ' . $object;
+//                }
+//
+//                $section->addText('          ' . trim($value), self::header_style_cell_size, self::start_descr_font);
+//            }
+//        }
 
         /* END object  */
 

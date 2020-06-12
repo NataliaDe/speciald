@@ -1280,7 +1280,7 @@ class Dones extends My_Controller
 
         $post = $this->input->post();
         $dones = array();
-
+//print_r($post);exit();
         $id_dones = (isset($post['id_dones']) && !empty($post['id_dones'])) ? intval($post['id_dones']) : 0; //id of edit dones
 
 
@@ -1367,6 +1367,11 @@ class Dones extends My_Controller
         $dones['official_creator_position'] = (isset($post['official_creator_position']) && !empty($post['official_creator_position'])) ? trim($post['official_creator_position']) : '';
         $dones['official_destination'] = (isset($post['official_destination']) && !empty($post['official_destination'])) ? trim($post['official_destination']) : '';
 
+/* show or no blocks */
+        $dones['is_show_address'] = (isset($post['is_show_address']) && !empty($post['is_show_address'])) ? 1 : 0;
+        $dones['is_show_object'] = (isset($post['is_show_object']) && !empty($post['is_show_object'])) ? 1 : 0;
+        $dones['is_show_prevention'] = (isset($post['is_show_prevention']) && !empty($post['is_show_prevention'])) ? 1 : 0;
+
 
         /* owner */
         $dones['id_face_belong'] = (isset($post['id_face_belong']) && !empty($post['id_face_belong'])) ? intval($post['id_face_belong']) : 0;
@@ -1384,6 +1389,7 @@ class Dones extends My_Controller
 
             $dones['law_face_office_belong'] = 0;
             $dones['law_face_name_owner'] = '';
+            $dones['is_show_owner']=(isset($post['is_show_owner']) && !empty($post['is_show_owner'])) ? intval($post['is_show_owner']) : 0;
 
         }
         elseif($dones['id_face_belong'] == 2){// law face
@@ -1399,6 +1405,8 @@ class Dones extends My_Controller
 
             $dones['law_face_office_belong'] = (isset($post['law_face_office_belong']) && !empty($post['law_face_office_belong'])) ? intval($post['law_face_office_belong']) : 0;
             $dones['law_face_name_owner'] = (isset($post['law_face_name_owner']) && !empty($post['law_face_name_owner'])) ? trim($post['law_face_name_owner']) : '';
+
+            $dones['is_show_owner']=(isset($post['is_show_owner_law']) && !empty($post['is_show_owner_law'])) ? intval($post['is_show_owner_law']) : 0;
         }
         else{
               $dones['id_owner_category'] = 0;
@@ -1413,9 +1421,30 @@ class Dones extends My_Controller
 
             $dones['law_face_office_belong'] = 0;
             $dones['law_face_name_owner'] = '';
+            $dones['is_show_owner']=0;
         }
 
 
+        if(isset($dones['is_show_owner']) && $dones['is_show_owner'] == 1){
+            $dones['owner_word']=(isset($post['owner_word']) && !empty($post['owner_word'])) ? trim($post['owner_word']) : '';
+        }
+        else{
+           $dones['owner_word']='' ;
+        }
+
+
+        /* object text */
+        if(isset($dones['is_show_object']) && $dones['is_show_object'] == 1){
+            $dones['object_word']=(isset($post['object_word']) && !empty($post['object_word'])) ? trim($post['object_word']) : '';
+        }
+        else{
+           $dones['object_word']='' ;
+        }
+
+
+        /* start text SD*/
+        $dones['is_show_opening_descr'] = (isset($post['is_show_opening_descr']) && !empty($post['is_show_opening_descr'])) ? 1 : 0;
+        $dones['opening_word'] = (isset($post['opening_word']) && !empty($post['opening_word'])) ? trim($post['opening_word']) : '';
 
 
         $dones['opening_description'] = (isset($post['opening_description']) && !empty($post['opening_description'])) ? trim($post['opening_description']) : '';
@@ -1495,10 +1524,6 @@ class Dones extends My_Controller
 
         // type SD
         $dones['type'] = Main_model::TYPE_SD_STANDART;
-
-        $dones['is_show_address'] = (isset($post['is_show_address']) && !empty($post['is_show_address'])) ? 1 : 0;
-        $dones['is_show_object'] = (isset($post['is_show_object']) && !empty($post['is_show_object'])) ? 1 : 0;
-        $dones['is_show_prevention'] = (isset($post['is_show_prevention']) && !empty($post['is_show_prevention'])) ? 1 : 0;
 
         /* insert/edit dones */
         if ($id_dones == 0) {//create a new
@@ -2614,8 +2639,14 @@ class Dones extends My_Controller
             $new_dones['owner_live_together'] =  $dones['owner_live_together'];
             $new_dones['law_face_office_belong'] = $dones['law_face_office_belong'];
             $new_dones['law_face_name_owner'] = $dones['law_face_name_owner'];
+            $new_dones['is_show_owner']=$dones['is_show_owner'];
+            $new_dones['owner_word']=$dones['owner_word'];
+            $new_dones['object_word']=$dones['object_word'];
 
 
+                    /* start text SD */
+            $new_dones['is_show_opening_descr'] = $dones['is_show_opening_descr'];
+            $new_dones['opening_word'] = $dones['opening_word'];
 
 
             $new_dones['opening_description'] = (isset($dones['opening_description']) && !empty($dones['opening_description'])) ? trim($dones['opening_description']) : '';

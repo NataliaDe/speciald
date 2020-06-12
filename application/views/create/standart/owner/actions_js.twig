@@ -25,6 +25,9 @@
             $('#div-is-api').removeClass('show');
             $('#div-is-api').addClass('show');
 
+            setPreviewOwner();
+            setPreviewDataObject();
+
         } else if (parseInt(face) === 2) {
             $('#law-face-div').removeClass('show');
             $('#law-face-div').removeClass('hide');
@@ -43,6 +46,9 @@
             $('#div-is-api').removeClass('hide');
             $('#div-is-api').removeClass('show');
             $('#div-is-api').addClass('hide');
+
+            setPreviewLawFace();
+            setPreviewDataObject();
         } else {
             $('#law-face-div').removeClass('show');
             $('#law-face-div').removeClass('hide');
@@ -60,6 +66,9 @@
             $('#div-is-api').removeClass('show');
             $('#div-is-api').addClass('hide');
 
+
+            hidePreviewOwner();
+            hidePreviewDataObject();
         }
 
 

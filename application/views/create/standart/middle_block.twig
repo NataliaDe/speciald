@@ -4,13 +4,13 @@
     <div class="card-header">
         Описание и адреса выезда (автоматизированный режим из ПС "Журнал ЦОУ")
 
-        <label for="is_show_address" >&nbsp;</label>
+{#        <label for="is_show_address" >&nbsp;</label>
         <div class="checkbox checkbox-success" style='display:inline'>
             <input  type="checkbox" name="is_show_address" value="1" id="is_show_address" {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_show_address == 1 %}checked{%endif%}>
             <label for="is_show_address">
                 выводить адрес в СД <i class="fa fa-info-circle info-all" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="адрес будет добавлен в СД перед координатами"></i>
             </label>
-        </div>
+        </div>#}
 
     </div>
     <div class="card-body">
@@ -243,7 +243,7 @@
         {#            ФИО заявителя: Иванов И.И. (место жительства)
                     Телефон: 209-27-51#}
 
-
+{#
         <div class="form-row create-form-row">
 
             <div class="form-group col-md-3">
@@ -267,9 +267,7 @@
                 </select>
             </div>
 
-
-
-            {#                <div class="form-group col-md-1">
+                            <div class="form-group col-md-1">
                                 <label for="hs_vid_sub_sub" >Вид ЧС 2</label>
                                 <select class="form-control select2-select" name="hs_vid_sub_sub" id="hs_vid_sub_sub"  >
 
@@ -277,20 +275,18 @@
                                         <option value="{{ vid.id }}" >{{ vid.name }}</option>
                                     {% endfor %}
                                 </select>
-                            </div>#}
+                            </div>
 
-
-
-        </div>
+        </div>#}
 
 
         <div class="form-row create-form-row">
 
 
-            <div class="form-group col-md-2">
+{#            <div class="form-group col-md-2">
                 <label for="reason_rig">Причина выезда:</label>
                 <input type="text" class="form-control"  placeholder="" name="reason_rig" value="{%if rig is defined and rig.id_reasonrig is defined and rig.id_reasonrig is not empty and rig.id_reasonrig != 0%}{{rig.reasonrig_name|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.reason_rig is not empty %}{{dones.reason_rig|trim}}{%endif%}{%if is_edit_dones is not defined and rig.view_work_id is defined and rig.view_work_id != 0 %} ({{rig.view_work|trim}}){%endif%}">
-            </div>
+            </div>#}
 
 
 

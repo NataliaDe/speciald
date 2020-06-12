@@ -169,6 +169,8 @@
 
             {%include '/create/standart/modals/modal-media.twig'%}
 
+            {%include '/create/standart/preview/opening_description.twig'%}
+
             <center>
 
 
@@ -235,7 +237,7 @@
     {%include '/create/standart/modals/modal-str-refresh.twig'%}
 
 
-    {%include '/create/standart/preview/opening_description.twig'%}
+
 
 
 {% endblock %}
@@ -396,6 +398,8 @@
     {#<script src="{{ base_url('/assets/js/dd/locale/ru.js')}}"></script>#}
     {#    <script src="{{ base_url('/assets/js/dd/js/bootstrap-datetimepicker.min.js')}}"></script>#}
     <script src="{{ base_url('/assets/js/manual_datetimepicker.js')}}?{{now|date('H:i:s')}}"></script>
+    <script src="{{ base_url('/assets/js/name.js')}}"></script>
+    
 
 
     <script src="{{ base_url('/assets/js/form-standart/journal_table.js')}}?{{now|date('H:i:s')}}"></script>
@@ -1377,14 +1381,25 @@
 
 
 
-                $(document).ready(function () {
-                    $('form#createStandart').keydown(function (event) {
-                        if (event.keyCode == 13) {
-                            event.preventDefault();
-                            return false;
-                        }
-                    });
-                });
+        {#                $(document).ready(function () {
+                            $('form#createStandart textarea').keydown(function (event) {
+                                if (event.keyCode == 13) {
+                                    event.preventDefault();
+                                    return true;
+                                }
+                            });#}
+
+        {#                $('form#createStandart textarea').keydown(function (event) {
+                                if (event.keyCode == 13) {
+                                    event.preventDefault();
+                                    return false;
+                                }
+                            });#}
+
+                                $(document).on("keypress", ":input:not(textarea)", function (event) {
+                                    return event.keyCode != 13;
+                                });
+
 
 
     </script>

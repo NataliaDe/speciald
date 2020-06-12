@@ -19,7 +19,7 @@ INSERT INTO `number_sd` (`id`, `id_region`, `first_part`) VALUES
 	(8, 8, 8),
 	(9, 9, 8),
 	(10, 12, 8),
-	(11, 5, 8);
+	(11, 50, 8);
 
 
 ALTER TABLE `number_sd`

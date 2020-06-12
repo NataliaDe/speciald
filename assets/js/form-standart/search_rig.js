@@ -134,6 +134,8 @@ $('#btn-fill-form').on('click', function (event) {
             $("#owner_from_jour").html('');
             $("#owner_from_jour").html(JSON.parse(res)['owner_from_jour']);
 
+            setPreviewData();// set preview start text
+
             if(parseInt(JSON.parse(res)['id_face_belong']) === 1 ){
 
                 $('#id_face_belong').val(1);
