@@ -399,7 +399,7 @@
     {#    <script src="{{ base_url('/assets/js/dd/js/bootstrap-datetimepicker.min.js')}}"></script>#}
     <script src="{{ base_url('/assets/js/manual_datetimepicker.js')}}?{{now|date('H:i:s')}}"></script>
     <script src="{{ base_url('/assets/js/name.js')}}"></script>
-    
+
 
 
     <script src="{{ base_url('/assets/js/form-standart/journal_table.js')}}?{{now|date('H:i:s')}}"></script>
@@ -426,6 +426,11 @@
 
 
     <script>
+
+    {% if rig is defined%}
+        setPreviewData();
+    {%endif%}
+
 
         jQuery(function () {
             $("#Go_Top").hide();

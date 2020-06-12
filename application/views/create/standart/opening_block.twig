@@ -8,7 +8,7 @@
 
             <label for="is_show_opening_descr" >&nbsp;</label>
             <div class="checkbox checkbox-success" style='display:inline'>
-                <input  type="checkbox" name="is_show_opening_descr" value="1" id="is_show_opening_descr" {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_show_opening_descr is  defined and dones.is_show_opening_descr == 0 %}{%else%}checked{%endif%}>
+                <input  type="checkbox" name="is_show_opening_descr" value="1" id="is_show_opening_descr" {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_show_opening_descr is  defined and dones.is_show_opening_descr == 1 %}checked{%endif%}>
                 <label for="is_show_opening_descr">
                     выводить содержание поступившей информации в СД <i class="fa fa-info-circle info-all" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="будет добавлена в СД перед координатами"></i>
                 </label>
