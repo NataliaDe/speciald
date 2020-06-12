@@ -77,6 +77,19 @@ class Journal_model extends CI_Model
                 ->result_array();
     }
 
+
+        public function get_silymchs_by_rig_id_sort_distance($id)
+    {
+
+            $result = $this->db->query("CALL journal.`spec_basic_sort_teh`({$id})");
+        //$this->db->reconnect();
+        mysqli_next_result($this->db->conn_id);
+        $res = $result->result_array();
+
+        return $res;
+
+    }
+
     public function get_innerservice_by_rig_id($id)
     {
         return $this->db->select('i.id_rig, i.time_msg, i.time_arrival, i.distance, i.note, s.name as service_name, s.id as service_id')
@@ -177,6 +190,22 @@ WHEN (`inf`.`id_destination` <> 0 AND (`d`.`pos_place` IS NULL OR `d`.`pos_place
                 ->order_by('divizion_num', 'asc')
                 ->get()
                 ->result_array();
+    }
+
+
+
+    public function get_trunks_by_id_rig_sort_distance($id)
+    {
+
+
+
+            $result = $this->db->query("CALL journal.`spec_basic_sort_trunks`({$id})");
+        //$this->db->reconnect();
+        mysqli_next_result($this->db->conn_id);
+        $res = $result->result_array();
+
+        return $res;
+
     }
 
     public function is_work_innerservice($name)

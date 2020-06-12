@@ -180,7 +180,8 @@ class Dones extends My_Controller
             $this->data['rig'] = $this->journal_model->get_rig_by_id($id_rig);
             $this->data['rig']['reasonrig_name'] = trim(stristr($this->data['rig']['reasonrig_name'], ' '));
             $this->data['rig']['people'] = $this->journal_model->get_people_by_rig_id($id_rig);
-            $this->data['rig']['silymchs'] = $this->journal_model->get_silymchs_by_rig_id($id_rig);
+            //$this->data['rig']['silymchs'] = $this->journal_model->get_silymchs_by_rig_id($id_rig);
+            $this->data['rig']['silymchs'] = $this->journal_model->get_silymchs_by_rig_id_sort_distance($id_rig);
 
 
 //            if (isset($this->data['rig']['silymchs']) && !empty($this->data['rig']['silymchs'])) {
@@ -597,7 +598,10 @@ class Dones extends My_Controller
     public function getTrunksByIdRig($id_rig, $man_per_car_id)
     {
 
-        $trunks = $this->journal_model->get_trunks_by_id_rig($id_rig); //table trunks
+        //$trunks = $this->journal_model->get_trunks_by_id_rig($id_rig); //table trunks
+        $trunks = $this->journal_model->get_trunks_by_id_rig_sort_distance($id_rig); //table trunks
+
+
 
         if (!empty($man_per_car_id) && !empty($trunks)) {//man per car
             foreach ($trunks as $key => $value) {
