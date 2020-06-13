@@ -606,12 +606,16 @@ class Dones extends My_Controller
         if (!empty($man_per_car_id) && !empty($trunks)) {//man per car
             foreach ($trunks as $key => $value) {
 
-                if (!empty($value['id_teh']) && $value['id_teh'] != NULL && isset($man_per_car_id[$value['id_teh']])) {//man per car from str
-                    $trunks[$key]['man_per_car'] = $man_per_car_id[$value['id_teh']];
-                } else {// man per car = min br from kusis
-                    $trunks[$key]['man_per_car'] = $value['min_br'];
-                    $trunks[$key]['man_per_car_note'] = 'указан мин.б.р.';
-                }
+               // if ($value['is_return'] == 1 && (empty($value['cnt']) || $value['cnt'] == 0)) {
+                    unset($trunks[$key]);
+               // } else {
+                    if (!empty($value['id_teh']) && $value['id_teh'] != NULL && isset($man_per_car_id[$value['id_teh']])) {//man per car from str
+                        $trunks[$key]['man_per_car'] = $man_per_car_id[$value['id_teh']];
+                    } else {// man per car = min br from kusis
+                        $trunks[$key]['man_per_car'] = $value['min_br'];
+                        $trunks[$key]['man_per_car_note'] = 'указан мин.б.р.';
+                    }
+                //}
             }
         }
 
@@ -1634,7 +1638,8 @@ class Dones extends My_Controller
                     $dones_silymchs['v_ac'] = (isset($row['v_ac']) && !empty($row['v_ac'])) ? (trim($row['v_ac']) * 1000) : 0;
                     $dones_silymchs['man_per_car'] = (isset($row['man_per_car']) && !empty($row['man_per_car'])) ? intval($row['man_per_car']) : 0;
                     $dones_silymchs['time_exit'] = (isset($row['time_exit']) && !empty($row['time_exit'])) ? (\DateTime::createFromFormat('H:i', $row['time_exit'])->format('H:i')) : null;
-                    $dones_silymchs['time_arrival'] = (isset($row['time_arrival']) && !empty($row['time_arrival'])) ? (\DateTime::createFromFormat('H:i', $row['time_arrival'])->format('H:i')) : null;
+                    $dones_silymchs['is_return'] = (isset($row['is_return']) && !empty($row['is_return'])) ? 1 : 0;
+
                     $dones_silymchs['time_follow'] = (isset($row['time_follow']) && !empty($row['time_follow'])) ? intval($row['time_follow']) : 0;
                     $dones_silymchs['distance'] = (isset($row['distance']) && !empty($row['distance'])) ? trim($row['distance']) : '';
                     $dones_silymchs['time_end'] = (isset($row['time_end']) && !empty($row['time_end'])) ? (\DateTime::createFromFormat('H:i', $row['time_end'])->format('H:i')) : NULL;
@@ -2786,6 +2791,7 @@ class Dones extends My_Controller
                         $dones_silymchs['man_per_car'] = (isset($row['man_per_car']) && !empty($row['man_per_car'])) ? intval($row['man_per_car']) : 0;
                         $dones_silymchs['time_exit'] = (isset($row['time_exit']) && !empty($row['time_exit'])) ? $row['time_exit'] : '';
                         $dones_silymchs['time_arrival'] = (isset($row['time_arrival']) && !empty($row['time_arrival'])) ? $row['time_arrival'] : '';
+                        $dones_silymchs['is_return'] = (isset($row['is_return']) && !empty($row['is_return'])) ? 1 : 0;
                         $dones_silymchs['time_follow'] = (isset($row['time_follow']) && !empty($row['time_follow'])) ? intval($row['time_follow']) : 0;
                         $dones_silymchs['distance'] = (isset($row['distance']) && !empty($row['distance'])) ? trim($row['distance']) : '';
                         $dones_silymchs['time_end'] = (isset($row['time_end']) && !empty($row['time_end'])) ? $row['time_end'] : '';

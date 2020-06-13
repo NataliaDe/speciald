@@ -134,7 +134,13 @@
                                         {%set time_arrival=sily.time_arrival%}
                                     {%endif%}
 
-                                    <input type="time" class="form-control time_arrival" onchange="setTimeFollow(this);"  placeholder="" name="silymchs[{{x}}][time_arrival]" value="{%if time_arrival is not empty%}{{time_arrival|date('H:i')}}{%endif%}">
+                                    <input type="time" class="form-control time_arrival" onchange="setTimeFollow(this);"  placeholder="" name="silymchs[{{x}}][time_arrival]" value="{%if time_arrival is not empty%}{{time_arrival|date('H:i')}}{%endif%}" {%if sily.is_return == 1%}disabled{%endif%}>
+
+
+                                    <input  type="checkbox" class="is_return" name="silymchs[{{x}}][is_return]"  value="1" data-numb="{{x}}" onChange='returnTeh(this);' {%if sily.is_return == 1%}checked{%endif%}>
+                                    <label for="is_return">
+                                        возврат
+                                    </label>
 
                                 </td>
 
@@ -262,6 +268,13 @@
                             </td>
                             <td>
                                 <input type="time" class="form-control time_arrival" onchange="setTimeFollow(this);"   placeholder="" name="silymchs[{{i}}][time_arrival]" value="">
+
+
+            <input  type="checkbox" class="is_return" name="silymchs[{{i}}][is_return]"  value="1" data-numb="{{i}}"   onChange='returnTeh(this);' >
+            <label for="is_return">
+                возврат
+            </label>
+
 
                             </td>
 

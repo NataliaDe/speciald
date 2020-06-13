@@ -40,6 +40,7 @@ $(document).ready(function () {
         $div_new.find('td').find('.man_per_car').attr('name','silymchs['+num+'][man_per_car]');
         $div_new.find('td').find('.time_exit').attr('name','silymchs['+num+'][time_exit]');
         $div_new.find('td').find('.time_arrival').attr('name','silymchs['+num+'][time_arrival]');
+        $div_new.find('td').find('.is_return').attr('name','silymchs['+num+'][is_return]');
         $div_new.find('td').find('.time_follow').attr('name','silymchs['+num+'][time_follow]');
         $div_new.find('td').find('.time_end').attr('name','silymchs['+num+'][time_end]');
         $div_new.find('td').find('.time_return').attr('name','silymchs['+num+'][time_return]');
@@ -49,6 +50,9 @@ $(document).ready(function () {
         $div_new.find('td').find('.id_silymchs').attr('name','silymchs['+num+'][id_silymchs]');
 
         $div_new.find('td').find('input').val('');
+        $div_new.find('td').find('.is_return').prop('checked',false);
+        $div_new.find('td').find('.is_return').data('numb',num);
+        $div_new.find('td').find('.time_arrival').prop('disabled', false);
         $div_new.find('.loop-index').text(new_loop);
         $div_new.attr('data-loop',new_loop);
 
@@ -495,7 +499,18 @@ $("#div-silymchs table").on("click", ".up, .down", function(){
     });
   });
 
+function returnTeh(t) {
 
+var i=$(t).data('numb');
+    var time_arrival = $('input[name="silymchs[' + i + '][time_arrival]"]');
+
+    if ($(t).is(':checked') === true) {
+        time_arrival.val('');
+        time_arrival.prop('disabled', true);
+    } else {
+        time_arrival.prop('disabled', false);
+    }
+}
 
 
 
