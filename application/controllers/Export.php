@@ -291,7 +291,7 @@ class Export extends My_Controller
                         'v_ac_sis'          => (empty($row['v_ac'])) ? '-' : (number_format($row['v_ac'] / 1000, 1, '.', '')),
                         'man_per_car_sis'   => $row['man_per_car'],
                         'time_exit_sis'     => ((isset($row['time_exit']) && !empty($row['time_exit'])) ? (\DateTime::createFromFormat('H:i:s', $row['time_exit'])->format('H-i')) : ''),
-                        'time_arrival_sis'  => ((isset($row['time_arrival']) && !empty($row['time_arrival'])) ? (\DateTime::createFromFormat('H:i:s', $row['time_arrival'])->format('H-i')) : ''),
+                        'time_arrival_sis'  => ($row['is_return'] == 1)? 'возврат' : (((isset($row['time_arrival']) && !empty($row['time_arrival'])) ? (\DateTime::createFromFormat('H:i:s', $row['time_arrival'])->format('H-i')) : '')),
                         'time_follow_sis'   => (isset($row['time_follow']) && !empty($row['time_follow'])) ? $row['time_follow'] : '-',
                         'distance_sis'      => (isset($row['distance']) && !empty($row['distance'])) ? $row['distance'] : '-',
                         'time_end_work_sis' => ((isset($row['time_end']) && !empty($row['time_end'])) ? (\DateTime::createFromFormat('H:i:s', $row['time_end'])->format('H-i')) : ''),
