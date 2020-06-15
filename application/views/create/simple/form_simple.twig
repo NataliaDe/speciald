@@ -111,7 +111,7 @@
     <script src="{{ base_url('/assets/js/manual_datetimepicker.js')}}"></script>
 
 
-    <script src="{{ base_url('/assets/js/form-standart/media.js')}}"></script>
+    <script src="{{ base_url('/assets/js/form-standart/media.js')}}?{{now|date('H:i:s')}}"></script>
 
     {%if is_edit_dones is not defined  %}
         <script src="{{ base_url('/assets/js/timer.js')}}"></script>
