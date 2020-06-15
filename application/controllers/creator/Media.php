@@ -75,7 +75,7 @@ class Media extends MY_Controller
                         'overwrite'     => FALSE,
                         'allowed_types' => "mp3",
                         //'max_size' => 1000000,
-                        'max_size'      => 10240000000,
+                        'max_size'      => 5120000000,
                         'encrypt_name'  => true
                     );
                     break;
