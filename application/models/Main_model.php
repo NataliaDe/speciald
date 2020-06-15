@@ -45,6 +45,7 @@ class Main_model extends CI_Model
 
         const PHOTO_CNT_PER_SD=4;
         const VIDEO_CNT_PER_SD=1;
+        const AUDIO_CNT_PER_SD=1;
 
         const TYPE_SD_STANDART=1;
         const TYPE_SD_SIMPLE=2;

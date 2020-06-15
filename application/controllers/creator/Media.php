@@ -69,6 +69,17 @@ class Media extends MY_Controller
                     );
                     break;
 
+                                case 'sd_audio':
+                    $config = array(
+                        'upload_path'   => $upload_path . '/sd_audio',
+                        'overwrite'     => FALSE,
+                        'allowed_types' => "mp3",
+                        //'max_size' => 1000000,
+                        'max_size'      => 10240000000,
+                        'encrypt_name'  => true
+                    );
+                    break;
+
 
                                 case 'sd_doc':
 

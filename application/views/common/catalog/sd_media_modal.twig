@@ -1,6 +1,7 @@
 <ul class="nav nav-tabs">
     {%set start_photo=1%}
     {%set start_video=1%}
+    {%set start_audio=1%}
     {%set is_elem=0%}
 
 
@@ -31,6 +32,18 @@
 
         {%endfor%}
 
+                {%for elem in media%}
+
+            {%if elem.type == 'audio'%}
+
+                <li class="nav-item {%if is_elem == 0%}active{%endif%}" id="li-tab-audio-{{start_audio}}">
+                    <a class="nav-link {%if is_elem == 0%}active{%endif%}" data-toggle="tab" href="#audio_sd_{{start_audio}}" style='color:green'>Аудио {{start_audio}}</a>
+                </li>
+                {%set start_audio=start_audio+1%}
+            {%endif%}
+
+        {%endfor%}
+
     {%endif%}
 
 
@@ -49,6 +62,7 @@
 
     {%set start_photo=1%}
     {%set start_video=1%}
+    {%set start_audio=1%}
 
 
 
@@ -75,6 +89,20 @@
                     </video>
                 </div>
                 {%set start_video=start_video+1%}
+            {%endif%}
+
+        {%endfor%}
+
+
+                {%for elem in media%}
+
+            {%if elem.type == 'audio'%}
+                <div class="tab-pane fade {%if is_elem == 0%}active{%endif%} {%if is_elem == 0%}show{%endif%}" id="audio_sd_{{start_audio}}">
+                    <audio controls class="issue-audio-catalog">
+                        <source src='{{ base_url("/data/sd_audio/"~elem.file) }}' >
+                    </audio>
+                </div>
+                {%set start_audio=start_audio+1%}
             {%endif%}
 
         {%endfor%}

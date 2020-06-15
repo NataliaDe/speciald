@@ -80,6 +80,11 @@ $('body').on('change', '.adapt-img, .adapt-img-cloud', function (e) {
                                     $el.parent().prepend('<video controls class="issue-video"><source src="' + data.success + '"></video>');
                                 }
                                 break;
+                            case 'audio':
+                                if (!$el.hasClass('student-test-adapt-img')) {
+                                    $el.parent().prepend('<audio controls class="issue-video"><source src="' + data.success + '"></audio>');
+                                }
+                                break;
                         }
                     }
                 }

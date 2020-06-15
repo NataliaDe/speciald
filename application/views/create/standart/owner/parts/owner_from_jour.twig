@@ -18,7 +18,7 @@
 <div class="form-group col-md-1">
 
     <label for="owner_year_birthday">Год рождения</label>
-    <input type="number"  max="{{now|date("Y")}}" class="form-control"  placeholder="" name="owner_year_birthday"  value="{%if rig.owner_year_birthday is defined and rig.owner_year_birthday is not empty%}{{rig.owner_year_birthday|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.owner_year_birthday is defined and dones.owner_year_birthday is not empty %}{{dones.owner_year_birthday|trim}}{%endif%}">
+    <input type="number"  max="{{now|date("Y")}}" class="form-control"  placeholder="" name="owner_year_birthday"  value="{%if rig.owner_year_birthday is defined and rig.owner_year_birthday is not empty and rig.owner_year_birthday != 0%}{{rig.owner_year_birthday|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.owner_year_birthday is defined and dones.owner_year_birthday is not empty %}{{dones.owner_year_birthday|trim}}{%endif%}">
 
 </div>
 

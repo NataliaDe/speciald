@@ -30,6 +30,7 @@ class MY_Controller extends CI_Controller
         $this->twig->addGlobal('ORGAN_ID_RCU', Main_model::ORGAN_ID_RCU);
         $this->twig->addGlobal('PHOTO_CNT_PER_SD', Main_model::PHOTO_CNT_PER_SD);
         $this->twig->addGlobal('VIDEO_CNT_PER_SD', Main_model::VIDEO_CNT_PER_SD);
+        $this->twig->addGlobal('AUDIO_CNT_PER_SD', Main_model::AUDIO_CNT_PER_SD);
     }
 
     public function re_login()

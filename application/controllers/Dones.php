@@ -607,7 +607,7 @@ class Dones extends My_Controller
             foreach ($trunks as $key => $value) {
 
                // if ($value['is_return'] == 1 && (empty($value['cnt']) || $value['cnt'] == 0)) {
-                    unset($trunks[$key]);
+                   // unset($trunks[$key]);
                // } else {
                     if (!empty($value['id_teh']) && $value['id_teh'] != NULL && isset($man_per_car_id[$value['id_teh']])) {//man per car from str
                         $trunks[$key]['man_per_car'] = $man_per_car_id[$value['id_teh']];

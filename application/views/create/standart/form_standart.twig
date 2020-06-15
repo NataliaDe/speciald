@@ -414,7 +414,7 @@
 
 
 
-    <script src="{{ base_url('/assets/js/form-standart/media.js')}}"></script>
+    <script src="{{ base_url('/assets/js/form-standart/media.js')}}?{{now|date('H:i:s')}}"></script>
     <script src="{{ base_url('/assets/js/form-standart/preview_standart.js')}}?{{now|date('H:i:s')}}"></script>
 
     {%include '/create/standart/owner/actions_js.twig'%}
