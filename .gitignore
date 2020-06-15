@@ -33,6 +33,7 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 
 /data/
 /vendor/
+/assets/news/
 /application/config/config.php
 /application/config/database.php
 
