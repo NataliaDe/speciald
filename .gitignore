@@ -31,7 +31,7 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 /tests/results/
 
 
-
+/data/
 /vendor/
 /application/config/config.php
 /application/config/database.php
