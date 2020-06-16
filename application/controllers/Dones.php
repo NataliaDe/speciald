@@ -1489,6 +1489,7 @@ class Dones extends My_Controller
         $dones['firereason_rig'] = (isset($post['firereason_rig']) && !empty($post['firereason_rig'])) ? trim($post['firereason_rig']) : '';
         $dones['id_firereason'] = (isset($post['id_firereason']) && !empty($post['id_firereason'])) ? intval($post['id_firereason']) : 0;
         $dones['inspector'] = (isset($post['inspector']) && !empty($post['inspector'])) ? trim($post['inspector']) : '';
+        $dones['garnison_main'] = (isset($post['garnison_main']) && !empty($post['garnison_main'])) ? trim($post['garnison_main']) : '';
 
 
         /* gdzs block */
@@ -1525,6 +1526,16 @@ class Dones extends My_Controller
         $dones['is_not_involved_trunks'] = (isset($post['is_not_involved_trunks']) && !empty($post['is_not_involved_trunks'])) ? 1 : 0;
         $dones['is_wide_table_trunks'] = (isset($post['is_wide_table_trunks']) && !empty($post['is_wide_table_trunks'])) ? 1 : 0;
         $dones['is_not_involved_str'] = (isset($post['is_not_involved_str']) && !empty($post['is_not_involved_str'])) ? 1 : 0;
+
+        /* opg */
+        if ($dones['is_not_involved_informing'] == 0) {
+            $dones['is_opg'] = (isset($post['is_opg']) && !empty($post['is_opg'])) ? 1 : 0;
+            $dones['opg_text'] = (isset($post['opg_text']) && !empty($post['opg_text'])) ? trim($post['opg_text']) : '';
+        } else {
+            $dones['is_opg'] = 0;
+            $dones['opg_text'] = '';
+        }
+
 
         $dones['is_test_sd'] = (isset($post['is_test_sd']) && !empty($post['is_test_sd'])) ? 1 : 0;
 
@@ -2681,7 +2692,7 @@ class Dones extends My_Controller
             $new_dones['id_firereason'] = (isset($dones['id_firereason']) && !empty($dones['id_firereason'])) ? trim($dones['id_firereason']) : 0;
 
             $new_dones['inspector'] = (isset($dones['inspector']) && !empty($dones['inspector'])) ? trim($dones['inspector']) : '';
-
+            $new_dones['garnison_main'] = $dones['garnison_main'];
 
 
             /* gdzs block */
@@ -2718,6 +2729,9 @@ class Dones extends My_Controller
             $new_dones['is_not_involved_trunks'] = (isset($dones['is_not_involved_trunks']) && !empty($dones['is_not_involved_trunks'])) ? 1 : 0;
             $new_dones['is_wide_table_trunks'] = (isset($dones['is_wide_table_trunks']) && !empty($dones['is_wide_table_trunks'])) ? 1 : 0;
             $new_dones['is_not_involved_str'] = (isset($dones['is_not_involved_str']) && !empty($dones['is_not_involved_str'])) ? 1 : 0;
+
+            $new_dones['is_opg'] = $dones['is_opg'];
+            $new_dones['opg_text'] = $dones['opg_text'];
 
             $new_dones['is_test_sd'] = (isset($dones['is_test_sd']) && !empty($dones['is_test_sd'])) ? 1 : 0;
             $new_dones['type'] = $dones['type'];

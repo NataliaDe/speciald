@@ -19,8 +19,7 @@
 <div class="form-group row create-form-row">
 
     <div class="col-sm-12">
-        <textarea class="form-control" name="opening_description" id="opening_description_id"  rows="10" cols="50">{%if rig.description is defined and rig.description is not empty and rig.description is not null %}{{rig.description|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.opening_description is not empty %}{{dones.opening_description|trim}}{%else%}{%endif%}
-        </textarea>
+        <textarea class="form-control" name="opening_description" id="opening_description_id"  rows="10" cols="50">{%if rig.description is defined and rig.description is not empty and rig.description is not null %}{{rig.description|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.opening_description is not empty %}{{dones.opening_description|trim}}{%endif%}</textarea>
     </div>
 </div>
 

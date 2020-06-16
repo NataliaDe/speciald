@@ -246,3 +246,7 @@ background-color: #e0f5e5 !important;
 input[type="checkbox"][readonly] {
   pointer-events: none;
 }
+
+.new-field{
+        background-color: #e5ef5833;
+}

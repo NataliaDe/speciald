@@ -187,10 +187,13 @@
                             <i class="fa fa-file-word-o" aria-hidden="true"></i>
                         </a>
 &nbsp;|&nbsp;
-                        <a href="{{base_url('dones/copy_standart_sd/'~out.id)}}" >
+{#                        <a href="{{base_url('dones/copy_standart_sd/'~out.id)}}" >
+                            <i class="fa fa-clone" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Создать по шаблону."></i>
+                        </a>#}
+
+                        <a href="#" data-toggle="modal"  data-target="#modal-copy-sd" data-url="{{base_url('dones/copy_standart_sd/'~out.id)}}" data-sd-id="{{out.id}}" data-number-sd="{{out.specd_date ? out.specd_date|date('d.m.Y') : ''}} {{out.specd_number ? '№ '~out.specd_number : ''}}" >
                             <i class="fa fa-clone" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Создать по шаблону."></i>
                         </a>
-
 
                         {% if (out.media is defined and out.media is not empty) or out.file_doc is not empty %}
                             &nbsp;|&nbsp;

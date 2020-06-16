@@ -5,7 +5,7 @@
         <tr>
             <th>ID</th>
             <th>Дата, номер</th>
-    <th>Создатель</th>
+            <th>Создатель</th>
 
             <th>Кр. описание</th>
             <th>Вид</th>
@@ -29,7 +29,7 @@
         <tr>
             <th>ID</th>
             <th>Дата, номер</th>
-           <th>Создатель</th>
+            <th>Создатель</th>
             <th>Кр. описание</th>
             <th>Вид</th>
             <th></th>
@@ -278,7 +278,7 @@ or (out.dates_actions_by_user[7][active_user.id_user] is not defined and out.dat
 and (out.dates_actions[2] is defined or out.dates_actions[10] is defined)
 and (out.dates_actions[2]>out.dates_actions[7] or out.dates_actions[10]>out.dates_actions[7]))%}refuse-info-edit{%else%}refuse-info{%endif%}" data-toggle="modal"  data-target="#detail-refuse-sd-modal"
 
-data-id="{{out.id}}"
+                               data-id="{{out.id}}"
                                data-number-sd="{{out.specd_date ? out.specd_date|date('d.m.Y') : ''}} {{out.specd_number ? '№ '~out.specd_number : ''}}"
                                data-url="{{base_url('history/detail_refuse_sd')}}" data-level="1">
                                 <i class="fa fa-times" aria-hidden="true"></i>
@@ -372,10 +372,15 @@ data-id="{{out.id}}"
                         <a href="{{base_url('export/sd_to_word/'~out.id)}}" class="a-non-dec" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Экспорт в Word.">
                             <i class="fa fa-file-word-o" aria-hidden="true"></i>
                         </a>
-                            &nbsp;|&nbsp;
-                        <a href="{{base_url('dones/copy_standart_sd/'~out.id)}}" >
+                        &nbsp;|&nbsp;
+                        {#                        <a href="{{base_url('dones/copy_standart_sd/'~out.id)}}" >
+                                                    <i class="fa fa-clone" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Создать по шаблону."></i>
+                                                </a>#}
+
+                        <a href="#" data-toggle="modal"  data-target="#modal-copy-sd" data-url="{{base_url('dones/copy_standart_sd/'~out.id)}}" data-sd-id="{{out.id}}" data-number-sd="{{out.specd_date ? out.specd_date|date('d.m.Y') : ''}} {{out.specd_number ? '№ '~out.specd_number : ''}}" >
                             <i class="fa fa-clone" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Создать по шаблону."></i>
                         </a>
+
 
                         {% if (out.media is defined and out.media is not empty) or out.file_doc is not empty %}
                             &nbsp;|&nbsp;
@@ -407,79 +412,79 @@ data-id="{{out.id}}"
 
         var table = $('#catalogUmchsTable').DataTable({
             "pageLength": 50,
-            {#"order": [[0, "desc"]],#}
-            "order": [],
-            language: {
-                "processing": "Подождите...",
-                "search": "Поиск:",
-                "lengthMenu": "Показать _MENU_ записей",
-                "info": "Записи с _START_ до _END_ из _TOTAL_ записей",
-                "infoEmpty": "Записи с 0 до 0 из 0 записей",
-                "infoFiltered": "(отфильтровано из _MAX_ записей)",
-                "infoPostFix": "",
-                "loadingRecords": "Загрузка записей...",
-                "zeroRecords": "Записи отсутствуют.",
-                "emptyTable": "В таблице отсутствуют данные",
-                "paginate": {
-                    "first": "Первая",
-                    "previous": "Предыдущая",
-                    "next": "Следующая",
-                    "last": "Последняя"
-                },
-                "aria": {
-                    "sortAscending": ": активировать для сортировки столбца по возрастанию",
-                    "sortDescending": ": активировать для сортировки столбца по убыванию"
-                }
+    {#"order": [[0, "desc"]],#}
+                        "order": [],
+                        language: {
+                            "processing": "Подождите...",
+                            "search": "Поиск:",
+                            "lengthMenu": "Показать _MENU_ записей",
+                            "info": "Записи с _START_ до _END_ из _TOTAL_ записей",
+                            "infoEmpty": "Записи с 0 до 0 из 0 записей",
+                            "infoFiltered": "(отфильтровано из _MAX_ записей)",
+                            "infoPostFix": "",
+                            "loadingRecords": "Загрузка записей...",
+                            "zeroRecords": "Записи отсутствуют.",
+                            "emptyTable": "В таблице отсутствуют данные",
+                            "paginate": {
+                                "first": "Первая",
+                                "previous": "Предыдущая",
+                                "next": "Следующая",
+                                "last": "Последняя"
+                            },
+                            "aria": {
+                                "sortAscending": ": активировать для сортировки столбца по возрастанию",
+                                "sortDescending": ": активировать для сортировки столбца по убыванию"
+                            }
 
-            }
-        });
-
-
-        $('#catalogUmchsTable tfoot th').each(function (i) {
-
-            if (i !== 5 && i !==  6 && i !== 7 && i !== 8 && i !== 9 && i !== 10) {
-
-
-                if (i === 4) {
-
-                    var y = 'catalogUmchsTable';
-                    var select = $('<select class="' + i + '  noprint" id="sel' + y + i + '"><option value=""></option></select>')
-                            .appendTo($(this).empty())
-                            .on('change', function () {
-
-                                var val = $(this).val();
-
-                                table.column(i) //Only the first column
-                                        .search(val ? '^' + $(this).val() + '$' : val, true, false)
-                                        .draw();
-                            });
-
-                    var x = $('#catalogUmchsTable tfoot th').index($(this));
-                    table.column(i).data().unique().sort().each(function (d, j) {
-                        select.append('<option   value="' + d + '" >' + d + '</option>');
+                        }
                     });
 
-                } else {
 
-                    var title = $('#catalogUmchsTable tfoot th').eq($(this).index()).text();
-                    var x = $('#catalogUmchsTable tfoot th').index($(this));
-                    var y = 'catalogUmchsTable';
-                    //$(this).html( '<input type="text" placeholder="Поиск '+title+'" />' );
-                    $(this).html('<input type="text" class="noprint" id="inpt' + y + x + '" placeholder="Поиск"  />');
-                    // document.getElementById("inpt11").html('placeholder="<i class="fa fa-search" aria-hidden="true"></i>"');
-                }
+                    $('#catalogUmchsTable tfoot th').each(function (i) {
 
-            }
-        });
+                        if (i !== 5 && i !== 6 && i !== 7 && i !== 8 && i !== 9 && i !== 10) {
 
-        $("#catalogUmchsTable tfoot input").on('keyup change', function () {
-            table
-                    .column($(this).parent().index() + ':visible')
-                    .search(this.value)
-                    .draw();
-        });
 
-    });
+                            if (i === 4) {
+
+                                var y = 'catalogUmchsTable';
+                                var select = $('<select class="' + i + '  noprint" id="sel' + y + i + '"><option value=""></option></select>')
+                                        .appendTo($(this).empty())
+                                        .on('change', function () {
+
+                                            var val = $(this).val();
+
+                                            table.column(i) //Only the first column
+                                                    .search(val ? '^' + $(this).val() + '$' : val, true, false)
+                                                    .draw();
+                                        });
+
+                                var x = $('#catalogUmchsTable tfoot th').index($(this));
+                                table.column(i).data().unique().sort().each(function (d, j) {
+                                    select.append('<option   value="' + d + '" >' + d + '</option>');
+                                });
+
+                            } else {
+
+                                var title = $('#catalogUmchsTable tfoot th').eq($(this).index()).text();
+                                var x = $('#catalogUmchsTable tfoot th').index($(this));
+                                var y = 'catalogUmchsTable';
+                                //$(this).html( '<input type="text" placeholder="Поиск '+title+'" />' );
+                                $(this).html('<input type="text" class="noprint" id="inpt' + y + x + '" placeholder="Поиск"  />');
+                                // document.getElementById("inpt11").html('placeholder="<i class="fa fa-search" aria-hidden="true"></i>"');
+                            }
+
+                        }
+                    });
+
+                    $("#catalogUmchsTable tfoot input").on('keyup change', function () {
+                        table
+                                .column($(this).parent().index() + ':visible')
+                                .search(this.value)
+                                .draw();
+                    });
+
+                });
 
 
 

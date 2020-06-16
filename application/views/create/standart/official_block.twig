@@ -42,9 +42,8 @@
 
 
     <div class="col-sm-4">
-        <label for="short_description" >О чем СД:</label>
-        <textarea class="form-control" name="short_description"  rows="2" cols="50">{%if  rig.short_description is defined and  rig.short_description is not empty and rig.short_description is not null %}{{rig.short_description|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.short_description is not empty %}{{dones.short_description|trim}}{%endif%}
-        </textarea>
+        <label for="short_description" >О чем СД (кратко):</label>
+        <textarea class="form-control" name="short_description"  rows="2" cols="50">{%if rig.short_description is defined and rig.short_description is not empty and rig.short_description is not null%}{{rig.short_description|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.short_description is not empty %}{{dones.short_description|trim}}{%endif%}</textarea>
     </div>
 
 

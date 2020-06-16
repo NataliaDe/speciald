@@ -447,3 +447,15 @@ $('#close-update-sd-modal #close-update-sd-btn').on('click', function (e) {
         }
     });
 });
+
+
+
+/* copy SD */
+$('#modal-copy-sd').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget);
+
+    $(this).find('#btn-create-copy').attr('href', '#');
+    $(this).find('.modal-body p b span').text('');
+    $(this).find('#btn-create-copy').attr('href', button.data('url'));
+    $(this).find('.modal-body p b span').text(button.data('number-sd'));
+});

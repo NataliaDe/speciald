@@ -336,6 +336,7 @@ class Export extends My_Controller
         /* TRUNKS */
         if (isset($dones['is_not_involved_trunks']) && $dones['is_not_involved_trunks'] == 0 && $type_sd == Main_model::TYPE_SD_STANDART) {//insert table
             $section->addTextBreak(1, self::header_style_cell_size, self::header_style_cell_font);
+            $section->addText('          ' . 'Оперативные данные по боевым действиям:', array('size' => 15, 'italic' => true), array('spaceAfter' => 0, 'spacing' => 0));
 
             $arr = [];
             $wide_table = [];
