@@ -235,6 +235,7 @@
     {%include '/create/standart/modals/modal-media.twig'%}
 
     {%include '/create/standart/modals/modal-str-refresh.twig'%}
+    {%include '/create/standart/modals/modal-dolj-add.twig'%}
 
 
 
@@ -427,52 +428,52 @@
 
     <script>
 
-    {% if rig is defined%}
-        setPreviewData();
-    {%endif%}
+        {% if rig is defined%}
+            setPreviewData();
+        {%endif%}
 
 
-        jQuery(function () {
-            $("#Go_Top").hide();
-            if ($(window).scrollTop() >= 250)
-                $("#Go_Top").fadeIn("slow")
-            $(window).scroll(function () {
-                if ($(window).scrollTop() <= 250)
-                    $("#Go_Top").fadeOut("slow")
-                else
+            jQuery(function () {
+                $("#Go_Top").hide();
+                if ($(window).scrollTop() >= 250)
                     $("#Go_Top").fadeIn("slow")
-            });
+                $(window).scroll(function () {
+                    if ($(window).scrollTop() <= 250)
+                        $("#Go_Top").fadeOut("slow")
+                    else
+                        $("#Go_Top").fadeIn("slow")
+                });
 
-            $("#Go_Bottom").hide();
-            if ($(window).scrollTop() <= $(document).height() - 999)
-                $("#Go_Bottom").fadeIn("slow")
-            $(window).scroll(function () {
-                if ($(window).scrollTop() >= $(document).height() - 999)
-                    $("#Go_Bottom").fadeOut("slow")
-                else
+                $("#Go_Bottom").hide();
+                if ($(window).scrollTop() <= $(document).height() - 999)
                     $("#Go_Bottom").fadeIn("slow")
+                $(window).scroll(function () {
+                    if ($(window).scrollTop() >= $(document).height() - 999)
+                        $("#Go_Bottom").fadeOut("slow")
+                    else
+                        $("#Go_Bottom").fadeIn("slow")
+                });
+
+                $("#Go_Top").click(function () {
+                    $("html, body").animate({scrollTop: 0}, "slow")
+                })
+                $("#Go_Bottom").click(function () {
+                    $("html, body").animate({scrollTop: $(document).height()}, "slow")
+                })
             });
 
-            $("#Go_Top").click(function () {
-                $("html, body").animate({scrollTop: 0}, "slow")
-            })
-            $("#Go_Bottom").click(function () {
-                $("html, body").animate({scrollTop: $(document).height()}, "slow")
-            })
-        });
 
 
 
 
 
+            jQuery("#lat_id").mask("99.999999");//долгота
+            jQuery("#long_id").mask("99.999999");//широта
 
-        jQuery("#lat_id").mask("99.999999");//долгота
-        jQuery("#long_id").mask("99.999999");//широта
+            $(document).ready(function () {
 
-        $(document).ready(function () {
-
-            jQuery("#vid_hs_2").chained("#vid_hs_1");
-        });
+                jQuery("#vid_hs_2").chained("#vid_hs_1");
+            });
 
     </script>
 
@@ -1264,6 +1265,11 @@
 
                 }
 
+                if (what === 'div-informing') {// informing - don't show get dolj
+                    $('#' + what).find('.dolj-add').hide();
+
+                }
+
 
 
                 if (what === 'div-trunks') {// wide table for trunks block
@@ -1294,6 +1300,11 @@
 
                 if (what === 'div-trunks') {// wide table for trunks block
                     $('#' + what).find('#trunks_is_wide_table').prop('disabled', false);
+
+                }
+
+                if (what === 'div-informing') {// informing - don't show get dolj
+                    $('#' + what).find('.dolj-add').show();
 
                 }
             }
@@ -1403,6 +1414,62 @@
 
                                 $(document).on("keypress", ":input:not(textarea)", function (event) {
                                     return event.keyCode != 13;
+                                });
+
+
+
+
+                                /*  add default doljnosty */
+                                $('body').on('click', '#btn-add-dolj', function (event) {
+
+                                    var url = '{{base_url('/dones/get_dolj')}}';
+
+
+                                    $('#preload-update-data-search-rig').css('display', 'block');
+                                    $('body').css('opacity', 0.5);
+
+                                    $.post(url, {}, function (res) {
+
+
+                                        if (parseInt(JSON.parse(res)['is_error']) === 0) {
+
+
+                                            $(JSON.parse(res)['result']).each(function (index, val) {
+
+                                                $(val).each(function (index_1, value) {
+
+                                                    $('#informing-block-div #div-informing').find('#add-row-informing').trigger('click');
+                                                    var $row = $('#informing-block-div #div-informing .table tbody').find('.informing_row:last');
+                                                    $row.find('td').find('.informing_fio').val(value.fio);
+                                                });
+                                            });
+
+                                            /*  delete empty first row*/
+                                            $('#informing-block-div #div-informing').find('.informing_fio').each(function (i, v) {
+                                                var id_row = ($(this).closest('.informing_row')).attr('id');
+                                                var $row_check = $('#informing-block-div #div-informing .table tbody').find('#' + id_row);
+                                                if ($row_check.find('td').find('.informing_fio').val() === '') {
+                                                    $row_check.remove();
+                                                }
+                                            });
+
+
+                                            $('#preload-update-data-search-rig').css('display', 'none');
+                                            $('body').css('opacity', 1);
+
+
+                                            toastr.success('Данные по должностям успешно получены', 'Успех!', {progressBar: true, timeOut: 2500});
+                                            $('#modal-dolj-add').css('opacity', '');
+                                            $('#modal-dolj-add').click();
+                                        } else {
+
+                                            $('body').css('opacity', 1);
+                                            toastr.error('Информация не найдена', 'Ошибка!', {progressBar: true, timeOut: 2500});
+
+                                        }
+                                    });
+
+
                                 });
 
 

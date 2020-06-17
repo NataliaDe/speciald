@@ -511,6 +511,3 @@ var i=$(t).data('numb');
         time_arrival.prop('disabled', false);
     }
 }
-
-
-

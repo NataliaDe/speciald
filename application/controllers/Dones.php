@@ -3336,4 +3336,16 @@ class Dones extends My_Controller
             echo json_encode(array('is_error' => 1, 'msg' => 'Необходимо выбрать подразделение'));
         }
     }
+
+
+
+    public function get_dolj()
+    {
+
+        $id_user = $this->data['active_user']['id_user'];
+
+        $result = array(0 => array('fio' => 'Начальник гарнизона'), 1 => array('fio' => 'Ответственный по гарнизону'), 2 => array('fio' => 'Ответственный ИНиП'));
+
+        echo json_encode(array('result' => $result, 'is_error' => 0));
+    }
 }

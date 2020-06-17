@@ -13,7 +13,8 @@
 
 
 
-                <label for="str_is_not_involved" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                {#<label for="str_is_not_involved" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>#}
+                &nbsp;&nbsp;&nbsp;
         <div class="checkbox checkbox-danger" style='display:inline'>
             <input  type="checkbox" name="is_not_involved_str" value="1"  id='str_is_not_involved' onChange='notEnvolve("div-str", this);' {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_not_involved_str == 1 %}checked{%endif%}>
             <label for="str_is_not_involved">
