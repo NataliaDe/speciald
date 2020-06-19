@@ -1,0 +1,22 @@
+<script>
+
+
+    /*  filter SD by period */
+    $('body').on('change', '#range_sd', function (event) {
+        var range = $(this).val();
+
+        var data = {'id_range': range};
+
+        $.post('{{ base_url('/common/set_range_filter_sd') }}', data, function (res) {
+
+            if (parseInt(JSON.parse(res)['success']) === 1) {
+                setTimeout(function () {
+                    location.reload();
+                }, 150);
+
+            }
+        });
+
+    });
+
+</script>

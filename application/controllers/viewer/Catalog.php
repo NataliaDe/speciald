@@ -48,9 +48,12 @@ class Catalog extends My_Controller
 
         $this->data['title'] = 'Спец.донесения. Список';
 
-
-
         $filter = [];
+        
+        // period for select SD
+        $id_range=$this->dones_model->get_range_filter_sd($this->data['active_user']['id_user']);
+        $this->data['id_range']=(isset($id_range['id_range'])) ? $id_range['id_range'] : 0;
+        $filter['id_range']=(isset($id_range['id_range'])) ? $id_range['id_range'] : 0;
 
         if ($this->data['active_user']['level'] == Main_model::LEVEL_ID_ROCHS) {
 

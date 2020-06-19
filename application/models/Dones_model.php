@@ -62,6 +62,34 @@ class Dones_model extends CI_Model
         if (isset($filter['is_delete']))
             $this->db->where('d.is_delete', $filter['is_delete']);
 
+
+                // by last month
+        if (isset($filter['id_range']) && $filter['id_range'] == 1) {
+            $date = new DateTime();
+            $date->modify('-1 month');
+            $from= $date->format('Y-m-d');
+            $to=new DateTime();
+            $to=$to->format('Y-m-d');
+
+            $this->db->group_start();
+            $this->db->where('d.specd_date >=', $from);
+            $this->db->where('d.specd_date <=', $to);
+            $this->db->group_end();
+        }
+        //by current year
+        elseif (isset($filter['id_range']) && $filter['id_range'] == 2){
+                        $date = new DateTime();
+            $date->modify('-1 year');
+            $from= $date->format('Y-m-d');
+            $to=new DateTime();
+            $to=$to->format('Y-m-d');
+
+            $this->db->group_start();
+            $this->db->where('d.specd_date >=', $from);
+            $this->db->where('d.specd_date <=', $to);
+            $this->db->group_end();
+        }
+
         $this->db->order_by('d.date_insert', 'DESC');
 
 
@@ -131,6 +159,34 @@ class Dones_model extends CI_Model
         if (isset($filter['is_delete']))
             $this->db->where('d.is_delete', $filter['is_delete']);
 
+
+                // by last month
+        if (isset($filter['id_range']) && $filter['id_range'] == 1) {
+            $date = new DateTime();
+            $date->modify('-1 month');
+            $from= $date->format('Y-m-d');
+            $to=new DateTime();
+            $to=$to->format('Y-m-d');
+
+            $this->db->group_start();
+            $this->db->where('d.specd_date >=', $from);
+            $this->db->where('d.specd_date <=', $to);
+            $this->db->group_end();
+        }
+        //by current year
+        elseif (isset($filter['id_range']) && $filter['id_range'] == 2){
+                        $date = new DateTime();
+            $date->modify('-1 year');
+            $from= $date->format('Y-m-d');
+            $to=new DateTime();
+            $to=$to->format('Y-m-d');
+
+            $this->db->group_start();
+            $this->db->where('d.specd_date >=', $from);
+            $this->db->where('d.specd_date <=', $to);
+            $this->db->group_end();
+        }
+
         $this->db->order_by('d.date_insert', 'DESC');
 
 
@@ -169,6 +225,33 @@ class Dones_model extends CI_Model
 
         if (isset($filter['is_delete']))
             $this->db->where('d.is_delete', $filter['is_delete']);
+
+        // by last month
+        if (isset($filter['id_range']) && $filter['id_range'] == 1) {
+            $date = new DateTime();
+            $date->modify('-1 month');
+            $from= $date->format('Y-m-d');
+            $to=new DateTime();
+            $to=$to->format('Y-m-d');
+
+            $this->db->group_start();
+            $this->db->where('d.specd_date >=', $from);
+            $this->db->where('d.specd_date <=', $to);
+            $this->db->group_end();
+        }
+        //by current year
+        elseif (isset($filter['id_range']) && $filter['id_range'] == 2){
+                        $date = new DateTime();
+            $date->modify('-1 year');
+            $from= $date->format('Y-m-d');
+            $to=new DateTime();
+            $to=$to->format('Y-m-d');
+
+            $this->db->group_start();
+            $this->db->where('d.specd_date >=', $from);
+            $this->db->where('d.specd_date <=', $to);
+            $this->db->group_end();
+        }
 
         $this->db->order_by('d.date_insert', 'DESC');
 
@@ -283,4 +366,35 @@ class Dones_model extends CI_Model
                 ->get()
                 ->result_array();
     }
+
+
+        public function get_range_filter_sd($id_user)
+    {
+        return $this->db->select('*')
+                ->from('filter_range_sd')
+                ->where('id_user', $id_user)
+                ->get()
+                ->row_array();
+    }
+
+    public function set_range_filter_sd($id_range,$id_user)
+    {
+        $data['date_create'] = date('Y-m-d H:i:s');
+        $data['last_update'] = date('Y-m-d H:i:s');
+        $data['id_range']=$id_range;
+        $data['id_user']=$id_user;
+        $this->db->insert('filter_range_sd', $data);
+
+    }
+
+
+        public function update_range_filter_sd($id_range,$id_user)
+    {
+        $this->db->where('id_user', $id_user);
+        $this->db->set('id_range', $id_range);
+        $this->db->set('last_update', date('Y-m-d H:i:s'));
+        $this->db->update('filter_range_sd');
+
+    }
+
 }

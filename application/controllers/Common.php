@@ -63,4 +63,32 @@ class Common extends My_Controller
             }
         }
     }
+
+
+        public function set_range_filter_sd()
+    {
+        if ($this->input->is_ajax_request()) {
+
+            $id_range = $this->input->post('id_range');
+            $id_user = $this->data['active_user']['id_user'];
+
+            if (isset($id_range) && isset($id_user) && !empty($id_user)) {
+
+                if (!empty($this->dones_model->get_range_filter_sd($id_user))) {
+                    $this->dones_model->update_range_filter_sd($id_range, $id_user);
+                } else {
+                    $this->dones_model->set_range_filter_sd($id_range, $id_user);
+                }
+
+                echo json_encode([
+                    'success'   => 1
+                ]);
+               // redirect
+            } else {
+                echo json_encode([
+                    'success' =>0
+                ]);
+            }
+        }
+    }
 }
