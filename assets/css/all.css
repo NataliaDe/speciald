@@ -207,7 +207,9 @@ table.dataTable tbody td {
 
 
 .catalog-head{
-    padding-top:10px
+    padding-top:10px;
+
+
 }
 
 .header_auth_user{
@@ -217,19 +219,39 @@ table.dataTable tbody td {
 
 .standart-sd-color>td{
 /*background-color: #e8f7ec !important*/
-background-color: #e0f5e5 !important;
+/*//background-color: #e0f5e5 !important;
+//border-color: #aed2b6 !important*/
+    border-color: #ece993 !important;
+background-color: #f7f5bc !important;
 }
-.standart-sd-color td{
-   border-color: #aed2b6 !important
 
-}
 
 .table-hover > tbody > tr > td.standart-sd-color:hover,
 .table-hover > tbody > tr > th.standart-sd-color:hover,
 .table-hover > tbody > tr.standart-sd-color:hover > td,
 .table-hover > tbody > tr:hover > .standart-sd-color,
 .table-hover > tbody > tr.standart-sd-color:hover > th {
-  background-color: #c7e6cf  !important;
+/*  background-color: #c7e6cf  !important;*/
+ background-color: #f1ee9c !important;
+}
+
+
+.table-hover > tbody > tr > td.standart-sd-confirm-umchs:hover,
+.table-hover > tbody > tr > th.standart-sd-confirm-umchs:hover,
+.table-hover > tbody > tr.standart-sd-confirm-umchs:hover > td,
+.table-hover > tbody > tr:hover > .standart-sd-confirm-umchs,
+.table-hover > tbody > tr.standart-sd-confirm-umchs:hover > th {
+/*  background-color: #c7e6cf  !important;*/
+ background-color: #f9dd87 !important;
+}
+
+.table-hover > tbody > tr > td.standart-sd-confirm:hover,
+.table-hover > tbody > tr > th.standart-sd-confirm:hover,
+.table-hover > tbody > tr.standart-sd-confirm:hover > td,
+.table-hover > tbody > tr:hover > .standart-sd-confirm,
+.table-hover > tbody > tr.standart-sd-confirm:hover > th {
+/*  background-color: #c7e6cf  !important;*/
+ background-color: #c1efc1 !important;
 }
 
 
@@ -249,4 +271,37 @@ input[type="checkbox"][readonly] {
 
 .new-field{
         background-color: #e5ef5833;
+}
+
+
+.standart-sd-confirm td{
+   background-color: #00800061 !important;
+   border: 1px #86b386 solid;
+
+}
+
+.standart-sd-confirm-umchs td{
+   background-color: #b9e0b9 !important;
+       border: 1px #96c596 solid;
+
+}
+
+.range_sd_li .select2-container{
+    width: 100px !important;
+    font-size:15px  !important;
+
+}
+
+
+.standart-sd-confirm td {
+/*    background-color: #d2f3d2 !important;*/
+background-color: #d2fdd2 !important;
+
+    border: 1px #a4e2a4 solid;
+}
+
+
+.standart-sd-confirm-umchs td {
+    background-color: #f7e3a5 !important;
+    border: 1px #fbd355 solid;
 }

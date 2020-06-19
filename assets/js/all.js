@@ -3,45 +3,56 @@ $(document).ready(function () {
 
 
 
-            $('.select2-single').select2({
-                placeholder: "Выберите из списка",
-                allowClear: true,
-                "language": {
-                    "noResults": function () {
-                        return "Ничего не найдено";
-                    }
-                }
-            });
+    $('.select2-single').select2({
+        placeholder: "Выберите из списка",
+        allowClear: true,
+        "language": {
+            "noResults": function () {
+                return "Ничего не найдено";
+            }
+        }
+    });
 
-            $('.select2-multi').select2({
-                placeholder: "Выберите из списка",
-                allowClear: true,
-                "language": {
-                    "noResults": function () {
-                        return "Ничего не найдено";
-                    }
-                }
-            });
+    $('.select2-multi').select2({
+        placeholder: "Выберите из списка",
+        allowClear: true,
+        "language": {
+            "noResults": function () {
+                return "Ничего не найдено";
+            }
+        }
+    });
 
-            $('.select2-multi-not-clear').select2({
-                placeholder: "Выберите из списка",
-                allowClear: false,
-                "language": {
-                    "noResults": function () {
-                        return "Ничего не найдено";
-                    }
-                }
-            });
+    $('.select2-multi-not-clear').select2({
+        placeholder: "Выберите из списка",
+        allowClear: false,
+        "language": {
+            "noResults": function () {
+                return "Ничего не найдено";
+            }
+        }
+    });
 
-            $('.select2-single-face-belong').select2({
-                placeholder: "Не установлена",
-                allowClear: true,
-                "language": {
-                    "noResults": function () {
-                        return "Ничего не найдено";
-                    }
-                }
-            });
+    $('.select2-single-face-belong').select2({
+        placeholder: "Не установлена",
+        allowClear: true,
+        "language": {
+            "noResults": function () {
+                return "Ничего не найдено";
+            }
+        }
+    });
+
+
+    $('.select2-filter-header').select2({
+        placeholder: "все",
+        allowClear: false,
+        "language": {
+            "noResults": function () {
+                return "Ничего не найдено";
+            }
+        }
+    });
 
 
 
@@ -66,34 +77,34 @@ function ckeditor_init(id) {
 //});
 
 
-function allowFloat(){
+function allowFloat() {
 
- if (((event.which < 48)&& (event.which != 46) ) || (event.which > 57) ){
-      //alert(event.which);
-      event.preventDefault();
-       // return false;
+    if (((event.which < 48) && (event.which != 46)) || (event.which > 57)) {
+        //alert(event.which);
+        event.preventDefault();
+        // return false;
     }
 }
 
 
 
-function allowFloatTrunks(){
+function allowFloatTrunks() {
 
- if (((event.which < 48)&& (event.which != 46) && (event.which != 47) ) || (event.which > 57) ){
-      //alert(event.which);
-      event.preventDefault();
-       // return false;
+    if (((event.which < 48) && (event.which != 46) && (event.which != 47)) || (event.which > 57)) {
+        //alert(event.which);
+        event.preventDefault();
+        // return false;
     }
 }
 
 $(function () {
-  $('[data-toggle="tooltip"]').tooltip();
+    $('[data-toggle="tooltip"]').tooltip();
 });
 
 
 
 $(function () {
-  $('[data-toggle="popover"]').popover();
+    $('[data-toggle="popover"]').popover();
 });
 
 
