@@ -41,16 +41,16 @@
 
 
             <div class="form-group col-md-6">
-                <label for="prevention_result" >Результаты профилактической работы:</label>
+                <label for="prevention_result" >Результаты профилактической работы: <i class="fa fa-info-circle info-all" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="+ проводимые мероприятия для формирования в обществе культуры, безопасной жизнедеятельности"></i></label>
                 <textarea class="form-control" cols="3" rows="3"  name="prevention_result">{%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.prevention_result is not empty %}{{dones.prevention_result|trim}}{%endif%}</textarea>
             </div>
 
 
 
-            <div class="form-group col-md-6">
+{#            <div class="form-group col-md-6">
                 <label for="prevention_events" >Проводимые мероприятия для формирования в обществе культуры, безопасной жизнедеятельности:</label>
                 <textarea class="form-control" cols="3" rows="3"  name="prevention_events">{%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.prevention_events is not empty %}{{dones.prevention_events|trim}}{%endif%}</textarea>
-            </div>
+            </div>#}
 
         </div>
     </div>

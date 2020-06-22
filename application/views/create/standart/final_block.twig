@@ -11,7 +11,14 @@
 </div>
 
 
-<div class="form-row create-form-row" id="div-water-source">
+        <div class="checkbox checkbox-info" style='display:inline'>
+            <input  type="checkbox" name="is_water_source" value="1" id="is_water_source" {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_water_source == 1 %}checked{%endif%}>
+            <label for="is_water_source">
+                использовался водоисточник
+            </label>
+        </div>
+
+{#<div class="form-row create-form-row" id="div-water-source">
 
 
 
@@ -144,6 +151,7 @@
     <a href="#" id="add-row-water-source" >+  добавить еще</a>
 
 
-</div>
+</div>#}
+<br>
 <br>
 

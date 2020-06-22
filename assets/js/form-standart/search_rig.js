@@ -124,6 +124,9 @@ $('#btn-fill-form').on('click', function (event) {
             $("#object-floor-div").html('');
             $("#object-floor-div").html(JSON.parse(res)['object_floor']);
 
+            $("#object-floor-flat-div").html('');
+            $("#object-floor-flat-div").html(JSON.parse(res)['object_floor_flat']);
+
 
             $("#people-rig-data").html('');
             $("#people-rig-data").html(JSON.parse(res)['people_rig_data']);

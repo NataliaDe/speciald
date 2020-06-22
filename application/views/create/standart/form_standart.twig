@@ -1474,6 +1474,37 @@
 
 
 
+                                $('body').on('change', '#object_house_id', function (e) {
+
+                                    e.preventDefault();
+
+                                    var floor = $('#object-floor-flat-div');
+                                    var rooms = $('#object_cnt_rooms_div');
+
+                                    if (parseInt($(this).val()) === {{id_object_many_floor}}) {
+
+                                        floor.removeClass('hide');
+                                        floor.removeClass('show');
+                                        floor.addClass('show');
+
+                                        rooms.removeClass('hide');
+                                        rooms.removeClass('show');
+                                        rooms.addClass('show');
+
+
+                                    } else {
+
+                                        floor.removeClass('hide');
+                                        floor.removeClass('show');
+                                        floor.addClass('hide');
+
+                                        rooms.removeClass('hide');
+                                        rooms.removeClass('show');
+                                        rooms.addClass('hide');
+                                    }
+
+                                });
+
     </script>
 
 

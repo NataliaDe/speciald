@@ -102,6 +102,8 @@ class Dones extends My_Controller
         $this->data['active_item_menu_type_create'] = 'standart';
         $this->data['is_show_btn_search_rig'] = 1; //show btn "search rig"
 
+        $this->data['id_object_many_floor'] = Main_model::OBJECT_MANY_FLOOR;
+
         $this->data['bread_crumb'] = array(array('/dones' => 'Создать специальное донесение'),
             array('Стандартное'));
 
@@ -296,6 +298,7 @@ class Dones extends My_Controller
                 'trunks_block'    => $this->twig->render('create/standart/middle-block/trunks', $this->data, true),
                 'object_data'     => $this->twig->render('create/standart/parts/object_data', $this->data, true),
                 'object_floor'    => $this->twig->render('create/standart/parts/object_floor', $this->data, true),
+                'object_floor_flat'    => $this->twig->render('create/standart/parts/object_floor_flat', $this->data, true),
                 'people_rig_data' => $this->twig->render('create/standart/parts/people_rig_data', $this->data, true),
                 'law_face_office_belong'     => $this->twig->render('create/standart/owner/parts/law_face_office_belong', $this->data, true),
                 'owner_from_jour'     => $this->twig->render('create/standart/owner/parts/owner_from_jour', $this->data, true),
@@ -1511,6 +1514,7 @@ class Dones extends My_Controller
         /* detail inf block */
         $dones['detail_inf'] = (isset($post['detail_inf']) && !empty($post['detail_inf'])) ? trim($post['detail_inf']) : '';
 
+        $dones['is_water_source'] = (isset($post['is_water_source']) && !empty($post['is_water_source'])) ? 1 : 0;
 
         /* prevention block */
         $dones['prevention_time'] = (isset($post['prevention_time']) && !empty($post['prevention_time'])) ? (\DateTime::createFromFormat('d.m.Y', $post['prevention_time'])->format('Y-m-d')) : NULL;
@@ -1992,6 +1996,14 @@ class Dones extends My_Controller
         $object['object_material'] = (isset($post['object_material']) && !empty($post['object_material'])) ? intval($post['object_material']) : 0;
         $object['object_roof'] = (isset($post['object_roof']) && !empty($post['object_roof'])) ? intval($post['object_roof']) : 0;
 
+        if ($object['object_house'] == Main_model::OBJECT_MANY_FLOOR) {
+            $object['object_floor_flat'] = (isset($post['object_floor_flat']) && !empty($post['object_floor_flat'])) ? intval($post['object_floor_flat']) : 0;
+            $object['object_cnt_rooms'] = (isset($post['object_cnt_rooms']) && !empty($post['object_cnt_rooms'])) ? intval($post['object_cnt_rooms']) : 0;
+        } else {
+            $object['object_floor_flat'] = 0;
+            $object['object_cnt_rooms'] = 0;
+        }
+
         $object['is_aps'] = (isset($post['is_aps']) && !empty($post['is_aps'])) ? intval($post['is_aps']) : 0;
 
         if ($dones['id_face_belong'] == 1 && $object['object_is_api'] == 1) {// individual face
@@ -2074,6 +2086,8 @@ class Dones extends My_Controller
         $this->data['type_sd'] = Main_model::TYPE_SD_STANDART;
         $this->data['title'] = 'Ред. спец.донесение';
         $this->data['is_show_btn_search_rig'] = 1; //show btn "search rig"
+
+        $this->data['id_object_many_floor'] = Main_model::OBJECT_MANY_FLOOR;
 
         $this->data['bread_crumb'] = array(array('/' => 'Редактировать специальное донесение'),
             array('ID = ' . $id_dones)
@@ -2714,6 +2728,7 @@ class Dones extends My_Controller
             /* detail inf block */
             $new_dones['detail_inf'] = (isset($dones['detail_inf']) && !empty($dones['detail_inf'])) ? trim($dones['detail_inf']) : '';
 
+            $new_dones['is_water_source'] =$dones['is_water_source'];
 
             /* prevention block */
             $new_dones['prevention_time'] = (isset($dones['prevention_time']) && !empty($dones['prevention_time'])) ? $dones['prevention_time'] : '';
@@ -2994,6 +3009,9 @@ class Dones extends My_Controller
             $dones_object['object_is_api'] = (isset($object['object_is_api']) && !empty($object['object_is_api'])) ? intval($object['object_is_api']) : 0;
             $dones_object['object_material'] = (isset($object['object_material']) && !empty($object['object_material'])) ? intval($object['object_material']) : 0;
             $dones_object['object_roof'] = (isset($object['object_roof']) && !empty($object['object_roof'])) ? intval($object['object_roof']) : 0;
+
+            $dones_object['object_floor_flat'] = $object['object_floor_flat'];
+            $dones_object['object_cnt_rooms'] = $object['object_cnt_rooms'];
 
             $dones_object['api_date'] = $object['api_date'];
             $dones_object['id_api_source'] = $object['id_api_source'];

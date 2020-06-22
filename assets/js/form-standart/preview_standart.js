@@ -447,26 +447,18 @@ $('body').on('input change keyup blur', '#createStandart  input[name="api_date"]
     setPreviewDataObject();
 });
 
+$('body').on('input change keyup', '#createStandart input[name="object_floor_flat"]', function (e) {
+    setPreviewDataObject();
+
+});
+
+$('body').on('input change keyup', '#createStandart input[name="object_cnt_rooms"]', function (e) {
+    setPreviewDataObject();
+
+});
 
 
-
-
-function setPreviewDataObject() {
-
-    var id_face_belong = $('#createStandart #id_face_belong').val();
-
-
-
-
-    var object = $('#createStandart textarea[name="object"]').val();
-
-    var object_house_val = $('#createStandart #object_house_id option:selected').val();
-    var object_house = $('#createStandart  #object_house_id option:selected').text();
-
-    var material_val = $('#createStandart #object_material_id option:selected').val();
-    var material = $('#createStandart  #object_material_id option:selected').text();
-
-    var object_floor = $('#createStandart input[name="object_floor"]').val();
+function getFloorNumber(object_floor) {
 
     var $text = '';
     switch (parseInt(object_floor)) {
@@ -554,6 +546,39 @@ function setPreviewDataObject() {
             break;
 
     }
+    return $text;
+}
+
+
+var arr_floor = ['нулевом', 'первом', 'втором', 'третьем', 'четвертом', 'пятом', 'шестом', 'седьмом', 'восьмом', 'девятом', 'десятом',
+    'одинадцатом', 'двенадцатом', 'тринадцатом', 'четырнадцатом', 'пятнадцатом', 'шестнадцатом', 'семнадцатом', 'восемнадцатом', 'девятнадцатом', 'двадцатом',
+    'двадцать первом', 'двадцать втором', 'двадцать третьем', 'двадцать четвертом', 'двадцать пятом'];
+
+
+
+function setPreviewDataObject() {
+
+    var id_face_belong = $('#createStandart #id_face_belong').val();
+
+
+
+
+    var object = $('#createStandart textarea[name="object"]').val();
+
+    var object_house_val = $('#createStandart #object_house_id option:selected').val();
+    var object_house = $('#createStandart  #object_house_id option:selected').text();
+
+    var material_val = $('#createStandart #object_material_id option:selected').val();
+    var material = $('#createStandart  #object_material_id option:selected').text();
+
+    var object_floor = $('#createStandart input[name="object_floor"]').val();
+
+    var object_floor_flat = $('#createStandart input[name="object_floor_flat"]').val();
+    var object_cnt_rooms = $('#createStandart input[name="object_cnt_rooms"]').val();
+
+    var $text = '';
+
+    $text = getFloorNumber(parseInt(object_floor));
 
     if ($text !== '') {
         $text = $text + 'этажный';
@@ -564,6 +589,18 @@ function setPreviewDataObject() {
 
     var object_is_electric = $('#createStandart #object_is_electric').is(":checked");
     var object_is_api = $('#createStandart #object_is_api').is(":checked");
+
+
+    var room = '';
+
+    room = getFloorNumber(parseInt(object_cnt_rooms));
+
+    if (room !== '') {
+        room = 'квартира ' + room + 'комнатная';
+    }
+
+
+    //var floor_flat=declOfNum(live_tog, ['человек', 'человека', 'человек'])
 
 //    var office_belong_val = $('#createStandart #object-office-belong-id option:selected').val();
 //    var office_belong = $('#createStandart  #object-office-belong-id option:selected').text();
@@ -642,6 +679,20 @@ function setPreviewDataObject() {
                 preview = 'не электрофицирован';
             else
                 preview = preview + ', ' + 'не электрофицирован';
+        }
+
+        if (room !== '') {
+            if (preview === '')
+                preview = room;
+            else
+                preview = preview + ', ' + room;
+        }
+
+        if (object_floor_flat !== '' && object_floor_flat > 0 && arr_floor[object_floor_flat] !== 'undefined' && arr_floor[object_floor_flat] !== undefined) {
+            if (preview === '')
+                preview = 'расположена на ' + arr_floor[object_floor_flat] + ' этаже';
+            else
+                preview = preview + ', расположена на ' + arr_floor[object_floor_flat] + ' этаже';
         }
 
 
@@ -760,7 +811,7 @@ function setPreviewDataPrevent() {
     var date = $('#createStandart #accordion7 input[name="prevention_time"]').val();
     var who = $('#createStandart #accordion7 input[name="prevention_who"]').val();
     var result = $('#createStandart #accordion7 textarea[name="prevention_result"]').val();
-    var events = $('#createStandart #accordion7 textarea[name="prevention_events"]').val();
+    //var events = $('#createStandart #accordion7 textarea[name="prevention_events"]').val();
     var is_show_prevention = $('#createStandart #accordion7 #is_show_prevention').is(":checked");
 
 
@@ -795,18 +846,18 @@ function setPreviewDataPrevent() {
 
         }
 
-        if (events !== '') {
-            events = events.replace(/\r?\n/g, '<br />');
-
-            var arr_new_descr = events.split('<br />');
-            var arr_new_descr_str = arr_new_descr.join('<br />');
-
-            if (preview === '')
-                preview = arr_new_descr_str;
-            else
-                preview = preview + ' Проводимые мероприятия для формирования в обществе культуры, безопасной жизнедеятельности: ' + arr_new_descr_str;
-
-        }
+//        if (events !== '') {
+//            events = events.replace(/\r?\n/g, '<br />');
+//
+//            var arr_new_descr = events.split('<br />');
+//            var arr_new_descr_str = arr_new_descr.join('<br />');
+//
+//            if (preview === '')
+//                preview = arr_new_descr_str;
+//            else
+//                preview = preview + ' Проводимые мероприятия для формирования в обществе культуры, безопасной жизнедеятельности: ' + arr_new_descr_str;
+//
+//        }
     } else {
         preview = 'информация не будет выведена в СД';
         $("#panel_preview_prevention").hide();

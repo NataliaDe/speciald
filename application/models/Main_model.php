@@ -54,6 +54,8 @@ class Main_model extends CI_Model
 
         const REGION_ID_RCU=50;//RCU
 
+        const OBJECT_MANY_FLOOR = 12;
+
 
 
     public function __construct()

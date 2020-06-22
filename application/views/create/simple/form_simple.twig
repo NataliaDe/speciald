@@ -35,7 +35,10 @@
                             Текст специального донесения (ручной набор данных)</a>
                     </dt>
                     <dd class="accordion-content accordionItem is-expanded animateIn" id="accordion2" aria-hidden="false">
-                        <br>
+
+                        {%include '/create/simple/blocks/btn_add_template.twig'%}
+
+
                         {%include '/create/simple/blocks/date_msg.twig'%}
 
                         {%include '/create/standart/opening_block.twig'%}
@@ -83,6 +86,7 @@
     <!-- .content -->
 
     {%include '/create/standart/modals/modal-media.twig'%}
+    {%include '/create/simple/modals/modal-template-add.twig'%}
 
 {% endblock %}
 
@@ -201,6 +205,31 @@
 
                 });
             });
+
+
+
+
+
+            /*  add template text */
+            $('body').on('click', '#btn-add-template', function (event) {
+
+
+                var old_text = $('#createSimple #opening_description_id').val();
+                var add = "1. По прибытии к месту вызова установлено,\n2. Характеристика объекта –\n3. Хозяин Ф.И.О., г.р., место работы и должность –\n4. В результате пожара огнем повреждено.";
+
+
+                if (old_text === '') {
+                    var new_text = add;
+                } else {
+                    var new_text = old_text + '\n' + add;
+                }
+
+                $('#createSimple #opening_description_id').val(new_text);
+
+                $('#modal-template-add').click();
+            });
+
+
 
 
     </script>
