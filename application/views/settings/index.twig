@@ -7,71 +7,71 @@
     <br>
     <center>
         {%if settings is defined and settings is not empty%}
-        <form role="form" id="settingsForm" method="POST" action="{{base_url('/settings/save')}}" >
-            <caption>Настройки</caption>
-            <table class="table table-condensed table-hover  table-bordered table-custom" id="userTable" >
-                <!-- строка 1 -->
-                <thead>
-                    <tr>
-                        <th>Настройка</th>
-                        <th>Значение</th>
-                        <th>Тип СД, для которго активна настройка</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    {% for setting in settings %}
-{%set i=0%}
-                        <tr class="{%if setting.type_sd == 1 %} standart-sd-color {%elseif setting.type_sd == 0 %} table-warning {%endif%}">
-                            <td>{{setting.name}}</td>
-                            <td>
-                                {%if setting.options is defined and setting.options is not empty %}
-
-
-
-                                    <div class="form-group">
-                                        <select class="form-control option-select" name="id_settings_option[{{setting.type}}][]"  {%if setting.is_multi == 1 %} multiple {%endif%}>
-
-                                            {% for option in setting.options %}
-                                                {%if user_options is defined and option.id in user_options %}
-                                                {%set i=i+1%}
-                                                {%endif%}
-                                                <option value="{{ option.id }}" {%if user_options is defined and option.id in user_options %} selected {%elseif option.is_default == 1 and i==0 %} selected {%endif%} >{{ option.name }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-
-
-                                {%endif%}
-                            </td>
-                            <td>{% if setting.type_sd == 1%} стандартное {%elseif setting.type_sd == 2%}простое{%else%}все{%endif%}</td>
-
+            <form role="form" id="settingsForm" method="POST" action="{{base_url('/settings/save')}}" >
+                <caption>Настройки</caption>
+                <table class="table table-condensed table-hover  table-bordered table-custom" id="userTable" >
+                    <!-- строка 1 -->
+                    <thead>
+                        <tr>
+                            <th>Настройка</th>
+                            <th>Значение</th>
+                            <th>Тип СД, для которго активна настройка</th>
                         </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for setting in settings %}
+                            {%set i=0%}
+                            <tr class="{%if setting.type_sd == 1 %} table-warning {%elseif setting.type_sd == 0 %} table-success {%endif%}">
+                                <td>{{setting.name}}</td>
+                                <td>
+                                    {%if setting.options is defined and setting.options is not empty %}
 
 
-                    {%endfor%}
-                </tbody>
 
-            </table>
+                                        <div class="form-group">
+                                            <select class="form-control option-select" name="id_settings_option[{{setting.type}}][]"  {%if setting.is_multi == 1 %} multiple {%endif%}>
+
+                                                {% for option in setting.options %}
+                                                    {%if user_options is defined and option.id in user_options %}
+                                                        {%set i=i+1%}
+                                                    {%endif%}
+                                                    <option value="{{ option.id }}" {%if user_options is defined and option.id in user_options %} selected {%elseif option.is_default == 1 and i==0 %} selected {%endif%} >{{ option.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
 
 
-                 <center>
+                                    {%endif%}
+                                </td>
+                                <td>{% if setting.type_sd == 1%} стандартное {%elseif setting.type_sd == 2%}простое{%else%}все{%endif%}</td>
 
-                <div class="form-group">
-                    <button type="submit" class="btn btn-success" >Сохранить изменения</button>
-                    <br>
-                </div>
+                            </tr>
 
-                <div class="form-group">
-                    <a href="{{base_url('/')}}">  <button type="button" class="btn btn-secondary">Отмена</button></a>
 
-                </div>
+                        {%endfor%}
+                    </tbody>
 
-                     </center>
-        </form>
-                    {%else%}
-                        <i class="fa fa-folder-open-o" aria-hidden="true"></i> Настроек нет
-                    {%endif%}
+                </table>
+
+
+                <center>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-success" >Сохранить изменения</button>
+                        <br>
+                    </div>
+
+                    <div class="form-group">
+                        <a href="{{base_url('/')}}">  <button type="button" class="btn btn-secondary">Отмена</button></a>
+
+                    </div>
+
+                </center>
+            </form>
+        {%else%}
+            <i class="fa fa-folder-open-o" aria-hidden="true"></i> Настроек нет
+        {%endif%}
     </center>
 
     <!-- .content -->
