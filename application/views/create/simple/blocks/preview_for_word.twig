@@ -6,7 +6,9 @@
             <span id="time-msg"></span>
             <span id="descr"></span>#}
         <b><u>Предпросмотр (текст специального донесения):</u></b>
-                {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined  %}
+
+        <textarea  class="form-control" cols="2" rows="8"  name="opening_word">{%if dones.opening_word is defined and dones.opening_word is not empty%}{{dones.opening_word|trim}}{%endif%}</textarea>
+               {# {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined  %}
 
 
 
@@ -44,7 +46,7 @@
             {%if  rig.description is defined and  rig.description is not empty and rig.description is not null %}
                 {{rig.description|nl2br}}{{coord_preview}}
             {%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.opening_description is not empty %}
-                {#{{(dones.opening_description|trim)|nl2br}}{{coord_preview}}#}
+
                 {%for op in dones.preview_opening_description%}
 
                     {%if loop.index == 1%}
@@ -56,7 +58,7 @@
                 {%endfor%}
             {%endif%}
 
-        {%endif%}
+        {%endif%}#}
 
     </div>
 </div>

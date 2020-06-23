@@ -88,6 +88,11 @@
     {%include '/create/standart/modals/modal-media.twig'%}
     {%include '/create/simple/modals/modal-template-add.twig'%}
 
+
+                {%if settings is defined and settings.is_map is defined and 'yes' %}
+                {%include '/create/standart/parts/map.twig'%}
+            {%endif%}
+
 {% endblock %}
 
 
@@ -100,6 +105,14 @@
     <link rel="stylesheet" href="{{ base_url('/assets/css/media.css') }}">
 
     <link rel="stylesheet" href="{{ base_url('/assets/css/form-simple/preview.css') }}">
+
+
+    {%if settings is defined and settings.is_map is defined and 'yes' %}
+        <link rel="stylesheet" href="{{ base_url('/assets/libs/leaflet-control-geocoder-master/dist/leaflet.css') }}" />
+        <link rel="stylesheet" href="{{ base_url('/assets/libs/leaflet-control-geocoder-master/dist/Control.Geocoder.css') }}" />
+        <link rel="stylesheet" href="{{ base_url('/assets/css/form-standart/map.css') }}">
+
+    {%endif%}
 
 {% endblock %}
 
@@ -122,8 +135,20 @@
 
     {%endif%}
 
-    <script src="{{ base_url('/assets/js/form-simple/preview.js')}}"></script>
+    <script src="{{ base_url('/assets/js/form-simple/preview.js')}}?{{now|date('H:i:s')}}"></script>
 
+
+        {%if settings is defined and settings.is_map is defined and 'yes' %}
+        <script src="{{ base_url('/assets/libs/leaflet-control-geocoder-master/dist/leaflet-src.js')}}"></script>
+        <script src="{{ base_url('/assets/libs/leaflet-control-geocoder-master/dist/Control.Geocoder.js')}}"></script>
+
+        <script src="{{ base_url('/assets/libs/leaflet-control-geocoder-master/esri-leaflet.js')}}"
+                integrity="sha512-6LVib9wGnqVKIClCduEwsCub7iauLXpwrd5njR2J507m3A2a4HXJDLMiSZzjcksag3UluIfuW1KzuWVI5n/cuQ=="
+        crossorigin=""></script>
+
+        {%include '/create/standart/parts/map_js.twig'%}
+
+    {%endif%}
 
 
     <script>
@@ -225,8 +250,10 @@
                 }
 
                 $('#createSimple #opening_description_id').val(new_text);
-
+                $('#createSimple #opening_description_id').change();
                 $('#modal-template-add').click();
+
+
             });
 
 

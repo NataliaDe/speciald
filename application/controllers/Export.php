@@ -193,7 +193,7 @@ class Export extends My_Controller
 
         /* START DESCRIPTION */
 
-        if (isset($dones['opening_word']) && !empty(trim($dones['opening_word'])) && $type_sd == Main_model::TYPE_SD_STANDART) {
+        if (isset($dones['opening_word']) && !empty(trim($dones['opening_word']))) {
             $section->addText('          ' . trim($dones['opening_word']), self::header_style_cell_size, self::start_descr_font);
         } else {
             $open_descr = '';

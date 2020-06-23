@@ -113,6 +113,11 @@ class Dones extends My_Controller
         $this->data['settings'] = $this->user_model->get_user_settings_options_format($this->data['settings']);
 
 
+        /* map centers */
+            $this->data['map_center'] = $this->main_model->get_map_center_by_region($this->data['active_user']['id_region']);
+
+
+
         /* classification */
         $this->data['work_innerservice'] = $this->main_model->get_work_innerservice();
         $this->data['office_belong'] = $this->journal_model->get_officebelong();
@@ -332,6 +337,10 @@ class Dones extends My_Controller
                 /* settings */
         $this->data['settings'] = $this->user_model->get_user_settings_type_sd($this->data['active_user']['id_user'], Main_model::TYPE_SD_STANDART);
         $this->data['settings'] = $this->user_model->get_user_settings_options_format($this->data['settings']);
+
+                        /* map centers */
+            $this->data['map_center'] = $this->main_model->get_map_center_by_region($this->data['active_user']['id_region']);
+
 
 
         $this->data['vid_specd'] = $this->main_model->get_vid_specd();
@@ -2098,6 +2107,9 @@ class Dones extends My_Controller
         $this->data['settings'] = $this->user_model->get_user_settings_type_sd($this->data['active_user']['id_user'], Main_model::TYPE_SD_STANDART);
         $this->data['settings'] = $this->user_model->get_user_settings_options_format($this->data['settings']);
 
+                /* map centers */
+            $this->data['map_center'] = $this->main_model->get_map_center_by_region($this->data['active_user']['id_region']);
+
 
 
         $statuses = $this->dones_model->get_statuses_by_id_dones($id_dones, 0, false);
@@ -3123,7 +3135,7 @@ class Dones extends My_Controller
         $dones['official_destination'] = (isset($post['official_destination']) && !empty($post['official_destination'])) ? trim($post['official_destination']) : '';
 
         $dones['opening_description'] = (isset($post['opening_description']) && !empty($post['opening_description'])) ? trim($post['opening_description']) : '';
-
+        $dones['opening_word'] = (isset($post['opening_word']) && !empty($post['opening_word'])) ? trim($post['opening_word']) : '';
 
         /* description of RIG */
         if (!empty($settings) && isset($settings['is_seconds_show']) && in_array('yes', $settings['is_seconds_show'])) {
@@ -3244,6 +3256,11 @@ class Dones extends My_Controller
         /* settings */
         $this->data['settings'] = $this->user_model->get_user_settings_type_sd($this->data['active_user']['id_user'], Main_model::TYPE_SD_STANDART);
         $this->data['settings'] = $this->user_model->get_user_settings_options_format($this->data['settings']);
+
+                        /* map centers */
+            $this->data['map_center'] = $this->main_model->get_map_center_by_region($this->data['active_user']['id_region']);
+
+
 
         $this->data['vid_specd'] = $this->main_model->get_vid_specd();
         $this->data['minirovanie_id']= Main_model::VID_SD_MINIROVANIE;

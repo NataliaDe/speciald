@@ -388,4 +388,22 @@ class Main_model extends CI_Model
                 ->get()
                 ->result_array();
     }
+
+        public function get_map_center_by_local($id_local)
+    {
+        return $this->db->select('*')
+                ->from('speciald.map_center_locals')
+                ->where('id_local', $id_local)
+                ->get()
+                ->row_array();
+    }
+
+            public function get_map_center_by_region($id_region)
+    {
+        return $this->db->select('*')
+                ->from('speciald.map_center_regions')
+                ->where('id_region', $id_region)
+                ->get()
+                ->row_array();
+    }
 }

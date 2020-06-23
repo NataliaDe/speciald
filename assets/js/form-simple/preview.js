@@ -87,16 +87,22 @@ else{
 
 
     if (descr !== '') {
-        new_descr = descr.replace(/\r?\n/g, '<br />');
+//        new_descr = descr.replace(/\r?\n/g, '<br />');
+//
+//        var arr_new_descr = new_descr.split('<br />');
+//        arr_new_descr[0] = arr_new_descr[0] + '' + new_coord;
+//        var arr_new_descr_str = arr_new_descr.join('<br />');
 
-        var arr_new_descr = new_descr.split('<br />');
-        arr_new_descr[0] = arr_new_descr[0] + '' + new_coord;
-        var arr_new_descr_str = arr_new_descr.join('<br />');
+            var r = $.trim(descr);
+            var arr_new_descr = r.split(/\r?\n/g);
+            arr_new_descr[0] = arr_new_descr[0] + ' ' + new_coord;
+            var arr_new_descr_str = arr_new_descr.join('\n');
     } else {
         var arr_new_descr_str = new_coord;
     }
 
-    $('#preview-simple-block-inner').html('<b><u>Предпросмотр (текст специального донесения):</u></b><br>' + new_date + '' + new_time + '' + arr_new_descr_str);
+    //$('#preview-simple-block-inner').html('<b><u>Предпросмотр (текст специального донесения):</u></b><br>' + new_date + '' + new_time + '' + arr_new_descr_str);
+    $('#preview-simple-block-inner').find('textarea[name="opening_word"]').val(new_date + '' + new_time + '' + arr_new_descr_str);
 
 
 }

@@ -171,6 +171,16 @@
 
             {%include '/create/standart/preview/opening_description.twig'%}
 
+
+            {%if settings is defined and settings.is_map is defined and 'yes' %}
+                {%include '/create/standart/parts/map.twig'%}
+            {%endif%}
+
+
+
+
+
+
             <center>
 
 
@@ -266,6 +276,13 @@
 
     <link rel="stylesheet" href="{{ base_url('/assets/css/preview_standart.css') }}">
 
+
+    {%if settings is defined and settings.is_map is defined and 'yes' %}
+        <link rel="stylesheet" href="{{ base_url('/assets/libs/leaflet-control-geocoder-master/dist/leaflet.css') }}" />
+        <link rel="stylesheet" href="{{ base_url('/assets/libs/leaflet-control-geocoder-master/dist/Control.Geocoder.css') }}" />
+        <link rel="stylesheet" href="{{ base_url('/assets/css/form-standart/map.css') }}">
+
+    {%endif%}
 
 
     <style>
@@ -424,6 +441,24 @@
         <script src="{{ base_url('/assets/js/timer.js')}}"></script>
 
     {%endif%}
+
+
+
+
+    {%if settings is defined and settings.is_map is defined and 'yes' %}
+        <script src="{{ base_url('/assets/libs/leaflet-control-geocoder-master/dist/leaflet-src.js')}}"></script>
+        <script src="{{ base_url('/assets/libs/leaflet-control-geocoder-master/dist/Control.Geocoder.js')}}"></script>
+
+        <script src="{{ base_url('/assets/libs/leaflet-control-geocoder-master/esri-leaflet.js')}}"
+                integrity="sha512-6LVib9wGnqVKIClCduEwsCub7iauLXpwrd5njR2J507m3A2a4HXJDLMiSZzjcksag3UluIfuW1KzuWVI5n/cuQ=="
+        crossorigin=""></script>
+
+        {%include '/create/standart/parts/map_js.twig'%}
+
+    {%endif%}
+
+
+
 
 
     <script>
@@ -1504,6 +1539,10 @@
                                     }
 
                                 });
+
+
+
+
 
     </script>
 
