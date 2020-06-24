@@ -179,9 +179,10 @@
 
 
     </div>
-
-
-
+    <br>
+    <div class="form-row create-form-row">
+        {%include '/create/standart/owner/parts/owner_multi_block.twig' with{name_field:'is_owner_multi', name_descr:'owner_multi_descr'}%}
+    </div>
 </div>
 
 
@@ -203,4 +204,7 @@
         {%include '/create/standart/owner/parts/law_face_office_belong.twig'%}
     </div>
     {%include '/create/standart/owner/law_face_div.twig'%}
+
+
+    {%include '/create/standart/owner/parts/owner_multi_block.twig' with{name_field:'is_owner_multi_law', name_descr:'owner_multi_descr_law'}%}
 </div>

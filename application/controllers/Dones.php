@@ -1411,6 +1411,9 @@ class Dones extends My_Controller
             $dones['law_face_name_owner'] = '';
             $dones['is_show_owner']=(isset($post['is_show_owner']) && !empty($post['is_show_owner'])) ? intval($post['is_show_owner']) : 0;
 
+            $dones['is_owner_multi']=(isset($post['is_owner_multi']) && !empty($post['is_owner_multi'])) ? 1 : 0;
+            $dones['owner_multi_descr']=(isset($post['owner_multi_descr']) && !empty($post['owner_multi_descr']) && $dones['is_owner_multi'] == 1) ? trim($post['owner_multi_descr']) : '';
+
         }
         elseif($dones['id_face_belong'] == 2){// law face
             $dones['id_owner_category'] = 0;
@@ -1427,6 +1430,9 @@ class Dones extends My_Controller
             $dones['law_face_name_owner'] = (isset($post['law_face_name_owner']) && !empty($post['law_face_name_owner'])) ? trim($post['law_face_name_owner']) : '';
 
             $dones['is_show_owner']=(isset($post['is_show_owner_law']) && !empty($post['is_show_owner_law'])) ? intval($post['is_show_owner_law']) : 0;
+
+            $dones['is_owner_multi']=(isset($post['is_owner_multi_law']) && !empty($post['is_owner_multi_law'])) ? 1 : 0;
+            $dones['owner_multi_descr']=(isset($post['owner_multi_descr_law']) && !empty($post['owner_multi_descr_law']) && $dones['is_owner_multi'] == 1) ? trim($post['owner_multi_descr_law']) : '';
         }
         else{
               $dones['id_owner_category'] = 0;
@@ -1442,6 +1448,9 @@ class Dones extends My_Controller
             $dones['law_face_office_belong'] = 0;
             $dones['law_face_name_owner'] = '';
             $dones['is_show_owner']=0;
+
+            $dones['is_owner_multi']=0;
+            $dones['owner_multi_descr']= '';
         }
 
 
@@ -1662,7 +1671,15 @@ class Dones extends My_Controller
                     $dones_silymchs['v_ac'] = (isset($row['v_ac']) && !empty($row['v_ac'])) ? (trim($row['v_ac']) * 1000) : 0;
                     $dones_silymchs['man_per_car'] = (isset($row['man_per_car']) && !empty($row['man_per_car'])) ? intval($row['man_per_car']) : 0;
                     $dones_silymchs['time_exit'] = (isset($row['time_exit']) && !empty($row['time_exit'])) ? (\DateTime::createFromFormat('H:i', $row['time_exit'])->format('H:i')) : null;
+
                     $dones_silymchs['is_return'] = (isset($row['is_return']) && !empty($row['is_return'])) ? 1 : 0;
+
+                    if($dones_silymchs['is_return'] == 0){
+                        $dones_silymchs['time_arrival'] = (isset($row['time_arrival']) && !empty($row['time_arrival'])) ? $row['time_arrival'] : '';
+                    }
+                    else{
+                        $dones_silymchs['time_arrival'] = '';
+                    }
 
                     $dones_silymchs['time_follow'] = (isset($row['time_follow']) && !empty($row['time_follow'])) ? intval($row['time_follow']) : 0;
                     $dones_silymchs['distance'] = (isset($row['distance']) && !empty($row['distance'])) ? trim($row['distance']) : '';
@@ -2688,6 +2705,8 @@ class Dones extends My_Controller
             $new_dones['is_show_owner']=$dones['is_show_owner'];
             $new_dones['owner_word']=$dones['owner_word'];
             $new_dones['object_word']=$dones['object_word'];
+            $new_dones['is_owner_multi']=$dones['is_owner_multi'];
+            $new_dones['owner_multi_descr']= $dones['owner_multi_descr'];
 
 
                     /* start text SD */

@@ -920,6 +920,10 @@ $('body').on('click', '#createStandart #accordion6 .del-row-live-together', func
 
 });
 
+$('body').on('input change keyup', '#createStandart textarea[name="owner_multi_descr"]', function (e) {
+    setPreviewOwner();
+});
+
 
 
 
@@ -944,6 +948,8 @@ function setPreviewOwner() {
     var owner_is_uhet = $('#createStandart #accordion6 #owner_is_uhet').is(":checked");
 
 
+    var is_show_multi = $('#createStandart input[name="is_owner_multi"]').is(":checked");
+    var owner_multi_descr = $('#createStandart textarea[name="owner_multi_descr"]').val();
 
     var preview = '';
 
@@ -1090,6 +1096,15 @@ function setPreviewOwner() {
 
 
 
+        if(is_show_multi === true && owner_multi_descr !== ''){
+                        if (preview === '')
+                preview = owner_multi_descr;
+            else
+                preview = preview + '\n'+owner_multi_descr;
+        }
+
+
+
     } else {
         //preview = 'информация не будет выведена в СД';
         preview = '';
@@ -1115,6 +1130,10 @@ $('body').on('input change keyup', '#createStandart #accordion6 textarea[name="l
     setPreviewLawFace();
 });
 
+$('body').on('input change keyup', '#createStandart textarea[name="owner_multi_descr_law"]', function (e) {
+    setPreviewLawFace();
+});
+
 
 function setPreviewLawFace() {
 
@@ -1123,6 +1142,9 @@ function setPreviewLawFace() {
     var belong_val = $('#createStandart #law-face-office-belong-id option:selected').val();
     var belong = $('#createStandart  #law-face-office-belong-id option:selected').text();
     var name = $('#createStandart textarea[name="law_face_name_owner"]').val();
+
+    var is_show_multi = $('#createStandart input[name="is_owner_multi_law"]').is(":checked");
+    var owner_multi_descr = $('#createStandart textarea[name="owner_multi_descr_law"]').val();
 
 
     var preview = '';
@@ -1142,6 +1164,14 @@ function setPreviewLawFace() {
                 preview = 'Наименование собственника: ' + name;
             else
                 preview = preview + ' Наименование собственника: ' + name;
+        }
+
+
+                if(is_show_multi === true && owner_multi_descr !== ''){
+                        if (preview === '')
+                preview = owner_multi_descr;
+            else
+                preview = preview + '\n'+owner_multi_descr;
         }
     } else {
 

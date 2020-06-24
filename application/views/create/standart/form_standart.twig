@@ -1542,6 +1542,51 @@
 
 
 
+                                $('body').on('change', '#is_owner_multi', function (e) {
+
+                                    e.preventDefault();
+
+                                    var is_multi = $(this).is(':checked');
+                                    var descr = $('.div_owner_multi_descr');
+
+                                    if (is_multi) {
+                                        descr.removeClass('hide');
+                                        descr.removeClass('show');
+                                        descr.addClass('show');
+
+                                    } else {
+                                        descr.removeClass('hide');
+                                        descr.removeClass('show');
+                                        descr.addClass('hide');
+
+                                    }
+                                    setPreviewOwner();
+                                });
+
+
+                                $('body').on('change', '#is_owner_multi_law', function (e) {
+
+                                    e.preventDefault();
+
+                                    var is_multi = $(this).is(':checked');
+                                    var descr = $('.div_owner_multi_descr_law');
+
+                                    if (is_multi) {
+                                        descr.removeClass('hide');
+                                        descr.removeClass('show');
+                                        descr.addClass('show');
+
+                                    } else {
+                                        descr.removeClass('hide');
+                                        descr.removeClass('show');
+                                        descr.addClass('hide');
+
+                                    }
+                                    setPreviewLawFace();
+
+                                });
+
+
 
 
     </script>
