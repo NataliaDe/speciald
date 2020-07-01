@@ -1562,6 +1562,7 @@ class Dones extends My_Controller
         $dones['is_test_sd'] = (isset($post['is_test_sd']) && !empty($post['is_test_sd'])) ? 1 : 0;
 
         $dones['file_doc'] = (isset($post['file_doc']) && !empty($post['file_doc'])) ? $post['file_doc'] : null;
+        $dones['file_pdf'] = (isset($post['file_pdf']) && !empty($post['file_pdf'])) ? $post['file_pdf'] : null;
 
         // type SD
         $dones['type'] = Main_model::TYPE_SD_STANDART;
@@ -3173,6 +3174,7 @@ class Dones extends My_Controller
         $dones['is_test_sd'] = (isset($post['is_test_sd']) && !empty($post['is_test_sd'])) ? 1 : 0;
 
         $dones['file_doc'] = (isset($post['file_doc']) && !empty($post['file_doc'])) ? $post['file_doc'] : null;
+        $dones['file_pdf'] = (isset($post['file_pdf']) && !empty($post['file_pdf'])) ? $post['file_pdf'] : null;
 
         // type SD
         $dones['type'] = Main_model::TYPE_SD_SIMPLE;

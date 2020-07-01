@@ -2,6 +2,7 @@
 {%set thumb_video="Параметры файла для загрузки: MP4, MPEG4 | не более 10Mб"%}
 {%set thumb_doc="Параметры файла для загрузки: doc, docx | не более 1Mб"%}
 {%set thumb_audio="Параметры файла для загрузки: MP3 | не более 10Mб"%}
+{%set thumb_pdf="Параметры файла для загрузки: pdf | не более 1Mб"%}
 <div class="modal fade" id="modal-media" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -116,6 +117,11 @@
 
                         <li class="nav-item" id="li-tab-doc" >
                             <a class="nav-link" data-toggle="tab" href="#sd_doc" {% if is_edit_dones is defined and is_edit_dones == 1 and dones.file_doc is not empty %} style="color:green"{% endif %}>Word</a>
+                        </li>
+
+
+                        <li class="nav-item" id="li-tab-pdf" >
+                            <a class="nav-link" data-toggle="tab" href="#sd_pdf" {% if is_edit_dones is defined and is_edit_dones == 1 and dones.file_pdf is not empty %} style="color:green"{% endif %}>PDF</a>
                         </li>
 
                     </ul>
@@ -473,6 +479,51 @@
                                                 </div>
 
 
+
+
+
+
+
+                                            <div class="tab-pane fade " id="sd_pdf">
+
+                                                <br>
+                                                <div class="row form-group" id="upload-img">
+
+                                                    <div class="col-md-12 col-sm-12">
+
+                                                        <div class="form-control" id="upload-input">
+
+
+                                                            <input type="hidden" name="file_pdf" id="image-file-pdf" value="{% if is_edit_dones is defined and is_edit_dones == 1 and dones.file_pdf is not empty %}{{ dones.file_pdf }}{%endif%}">
+
+                                                            <input {% if is_edit_dones is defined and is_edit_dones == 1 and dones.file_pdf is not empty %} style="display:none"{% endif %} type="file" class="adapt-img"  data-api-url="{{ base_url('creator/media/loadApi/sd_pdf') }}" data-inp-name="image-file-pdf" title="Файл не выбран">
+                                                            <div class="upload-info">
+                                                                <span class="upload-info-text video-file-span" data-text="{{thumb_pdf}}">
+                                                                    {% if is_edit_dones is defined and is_edit_dones == 1 and dones.file_pdf is not empty %}{{ dones.file_pdf }}
+                                                                        <p><a class="upload-info-clear"
+                                                                              href="#">
+                                                                                {%if dones.is_see == 0  %}
+                                                                                    удалить файл
+                                                                                {%endif%}
+                                                                            </a>
+                                                                        </p>{% else %}{{thumb_pdf}}{% endif %}
+                                                                    </span>
+                                                                </div>
+
+
+                                                            </div>
+                                                            <div class="progress" style="display: none">
+                                                                <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+                                                                </div>
+                                                            </div>
+
+
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+
                                             </div>
 
 
@@ -484,7 +535,7 @@
                                         <div class="btn-modal">
                                             <center>
                                                 <button type="button" class="btn btn-success"  id="save-sd-media" data-dismiss="modal">
-                                                    Прикрепить
+                                                    ОК
                                                 </button>
                                             </center>
                                         </div>

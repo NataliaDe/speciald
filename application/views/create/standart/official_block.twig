@@ -51,7 +51,7 @@
         <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
         <a href="#" class="a-non-dec" data-toggle="modal" data-target="#modal-media" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Прикрепить медиаматериалы">
             <img src="{{base_url('assets/images/media_img.png')}}" style=" width:60px; padding-left: 10px; cursor: pointer">
-            {% if is_edit_dones is defined and dones is defined and dones and (dones.media is not empty or dones.file_doc is not empty) %}
+            {% if is_edit_dones is defined and dones is defined and dones and (dones.media is not empty or dones.file_doc is not empty or dones.file_pdf is not empty ) %}
                 <i class="fa fa-check" style="color:green"></i>
             {% endif %}
 

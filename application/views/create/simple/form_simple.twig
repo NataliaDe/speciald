@@ -58,7 +58,8 @@
                     </label>
                 </div>
             </div>
-
+            {%include '/create/simple/blocks/preview_for_word.twig'%}
+            {%include '/create/standart/modals/modal-media.twig'%}
 
             <center>
                 {%if  dones.is_see == 1  %}
@@ -82,16 +83,16 @@
 
     </form>
 
-    {%include '/create/simple/blocks/preview_for_word.twig'%}
+
     <!-- .content -->
 
-    {%include '/create/standart/modals/modal-media.twig'%}
+
     {%include '/create/simple/modals/modal-template-add.twig'%}
 
 
-                {%if settings is defined and settings.is_map is defined and 'yes' %}
-                {%include '/create/standart/parts/map.twig'%}
-            {%endif%}
+    {%if settings is defined and settings.is_map is defined and 'yes' %}
+        {%include '/create/standart/parts/map.twig'%}
+    {%endif%}
 
 {% endblock %}
 
@@ -138,7 +139,7 @@
     <script src="{{ base_url('/assets/js/form-simple/preview.js')}}?{{now|date('H:i:s')}}"></script>
 
 
-        {%if settings is defined and settings.is_map is defined and 'yes' %}
+    {%if settings is defined and settings.is_map is defined and 'yes' %}
         <script src="{{ base_url('/assets/libs/leaflet-control-geocoder-master/dist/leaflet-src.js')}}"></script>
         <script src="{{ base_url('/assets/libs/leaflet-control-geocoder-master/dist/Control.Geocoder.js')}}"></script>
 

@@ -89,6 +89,18 @@ class Dones_model extends CI_Model
             $this->db->where('d.specd_date <=', $to);
             $this->db->group_end();
         }
+        elseif(isset($filter['id_range']) && $filter['id_range'] == 3){
+                        $date = new DateTime();
+            $date->modify('-24 hours');
+            $from= $date->format('Y-m-d');
+            $to=new DateTime();
+            $to=$to->format('Y-m-d');
+
+            $this->db->group_start();
+            $this->db->where('d.specd_date >=', $from);
+            $this->db->where('d.specd_date <=', $to);
+            $this->db->group_end();
+        }
 
         $this->db->order_by('d.date_insert', 'DESC');
 
@@ -186,6 +198,18 @@ class Dones_model extends CI_Model
             $this->db->where('d.specd_date <=', $to);
             $this->db->group_end();
         }
+                elseif(isset($filter['id_range']) && $filter['id_range'] == 3){
+                        $date = new DateTime();
+            $date->modify('-24 hours');
+            $from= $date->format('Y-m-d');
+            $to=new DateTime();
+            $to=$to->format('Y-m-d');
+
+            $this->db->group_start();
+            $this->db->where('d.specd_date >=', $from);
+            $this->db->where('d.specd_date <=', $to);
+            $this->db->group_end();
+        }
 
         $this->db->order_by('d.date_insert', 'DESC');
 
@@ -243,6 +267,18 @@ class Dones_model extends CI_Model
         elseif (isset($filter['id_range']) && $filter['id_range'] == 2){
                         $date = new DateTime();
             $date->modify('-1 year');
+            $from= $date->format('Y-m-d');
+            $to=new DateTime();
+            $to=$to->format('Y-m-d');
+
+            $this->db->group_start();
+            $this->db->where('d.specd_date >=', $from);
+            $this->db->where('d.specd_date <=', $to);
+            $this->db->group_end();
+        }
+                elseif(isset($filter['id_range']) && $filter['id_range'] == 3){
+                        $date = new DateTime();
+            $date->modify('-24 hours');
             $from= $date->format('Y-m-d');
             $to=new DateTime();
             $to=$to->format('Y-m-d');
