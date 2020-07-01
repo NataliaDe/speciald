@@ -73,7 +73,7 @@ class Media extends MY_Controller
                     $config = array(
                         'upload_path'   => $upload_path . '/sd_audio',
                         'overwrite'     => FALSE,
-                        'allowed_types' => "mp3",
+                        'allowed_types' => "mp3|wav",
                         //'max_size' => 1000000,
                         'max_size'      => 10240000000,
                         'encrypt_name'  => true
@@ -87,6 +87,20 @@ class Media extends MY_Controller
                         'upload_path'   => $upload_path . '/sd_doc',
                         'overwrite'     => FALSE,
                         'allowed_types' => "doc|docx",
+                        'encrypt_name'  => TRUE,
+                        'max_size'      => 1024000
+//                        'max_width'     => 1024,
+//                        'max_height'    => 768
+                    );
+                    break;
+
+
+                                                case 'sd_pdf':
+
+                    $config = array(
+                        'upload_path'   => $upload_path . '/sd_pdf',
+                        'overwrite'     => FALSE,
+                        'allowed_types' => "pdf",
                         'encrypt_name'  => TRUE,
                         'max_size'      => 1024000
 //                        'max_width'     => 1024,

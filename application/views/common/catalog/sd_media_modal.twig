@@ -55,6 +55,13 @@
     {%endif%}
 
 
+        {% if dones.file_pdf is not empty %}
+
+        <li class="nav-item {%if is_elem == 0%}active{%endif%}" id="li-tab-pdf" >
+            <a class="nav-link {%if is_elem == 0%}active{%endif%}" data-toggle="tab" href="#sd_pdf" style="color:green">PDF</a>
+        </li>
+    {%endif%}
+
 
 </ul>
 <div class="tab-content">
@@ -116,6 +123,16 @@
             <br>
             К СД прикреплен документ.
             <a href="{{ base_url("/data/sd_doc/"~dones.file_doc) }}"> <i class="fa fa-file-word-o " aria-hidden="true"></i> Скачать документ</a>
+        </div>
+    {%endif%}
+
+
+        {% if dones.file_pdf is not empty %}
+
+        <div class="tab-pane fade {%if is_elem == 0%}active{%endif%} {%if is_elem == 0%}show{%endif%}" id="sd_pdf">
+            <br>
+            К СД прикреплен документ.
+            <a href="{{ base_url("/data/sd_pdf/"~dones.file_pdf) }}" download> <i class="fa fa-file-pdf-o " aria-hidden="true"></i> Скачать документ</a>
         </div>
     {%endif%}
 
