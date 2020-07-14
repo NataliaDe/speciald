@@ -178,7 +178,8 @@ table.dataTable tbody td {
 }
 .refuse-info-edit{
     text-decoration: underline;
-    color: #88a728;
+/*    color: #88a728;*/
+color: #dc3545;
     font-weight: 600;
 }
 
@@ -304,4 +305,8 @@ background-color: #d2fdd2 !important;
 .standart-sd-confirm-umchs td {
     background-color: #f7e3a5 !important;
     border: 1px #fbd355 solid;
+}
+
+.check-refuse-info-edit{
+    color: green;
 }

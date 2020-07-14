@@ -44,7 +44,7 @@ class Main_model extends CI_Model
 
 
         const PHOTO_CNT_PER_SD=4;
-        const VIDEO_CNT_PER_SD=1;
+        const VIDEO_CNT_PER_SD=2;
         const AUDIO_CNT_PER_SD=1;
 
         const TYPE_SD_STANDART=1;
@@ -55,6 +55,9 @@ class Main_model extends CI_Model
         const REGION_ID_RCU=50;//RCU
 
         const OBJECT_MANY_FLOOR = 12;
+
+
+
 
 
 

@@ -33,6 +33,11 @@
 
 {% block head %}
     <link rel="stylesheet" href="{{ base_url('assets/datatables/jquery.dataTables.css') }}">
+
+
+    {#<link rel="stylesheet" href="{{ base_url('assets/plyr.css') }}">#}
+    {#<link rel="stylesheet" href="{{ base_url('assets/libs/jplayer.pink.flag.min.css') }}">#}
+
     <link rel="stylesheet" href="{{ base_url('assets/css/history/history.css') }}">
 
     <link rel="stylesheet" href="{{ base_url('/assets/css/catalog/media.css') }}">
@@ -47,9 +52,13 @@
 
     <script src="{{ base_url('/assets/datatables/jquery.dataTables.js')}}"></script>
 
+    {#<script src="{{ base_url('assets/plyr.js') }}"></script>#}
+
+    {#<script src="{{ base_url('assets/libs/jquery.jplayer.min.js') }}"></script>#}
 
     <script src="{{ base_url('/assets/js/creator/catalog.js')}}?{{now|date('H:i:s')}}"></script>
     <script src="{{ base_url('/assets/js/catalog/slider_media_manual.js')}}"></script>
+
 
 
 {% endblock %}

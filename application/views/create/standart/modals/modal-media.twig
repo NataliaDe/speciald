@@ -1,7 +1,7 @@
 {%set thumb_img="Параметры файла для загрузки: JPG, PNG, JPEG | 1024x768px | не более 1Мб"%}
-{%set thumb_video="Параметры файла для загрузки: MP4, MPEG4 | не более 10Mб"%}
+{%set thumb_video="Параметры файла для загрузки: MP4, MPEG4 | не более 40Mб"%}
 {%set thumb_doc="Параметры файла для загрузки: doc, docx | не более 1Mб"%}
-{%set thumb_audio="Параметры файла для загрузки: MP3 | не более 10Mб"%}
+{%set thumb_audio="Параметры файла для загрузки: MP3, WAV | не более 20Mб"%}
 {%set thumb_pdf="Параметры файла для загрузки: pdf | не более 1Mб"%}
 <div class="modal fade" id="modal-media" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -155,7 +155,7 @@
                                                     {% if media.file is not empty %}
                                                         <img src="{{ base_url("/data/sd_photo/"~media.file) }}" class="issue-img">
                                                     {% endif %}
-                                                    <input {% if media.file is not empty  %} style="display:none"{% endif %} type="file" class="adapt-img"  data-api-url="{{ base_url('creator/media/loadApi/sd_photo') }}" data-inp-name="image-file-event-{{start_photo}}" title="Файл не выбран">
+                                                    <input {% if media.file is not empty  %} style="display:none"{% endif %} type="file"  class="adapt-img"  data-api-url="{{ base_url('creator/media/loadApi/sd_photo') }}" data-inp-name="image-file-event-{{start_photo}}" title="Файл не выбран">
                                                     <div class="upload-info">
                                                         <span class="upload-info-text video-file-span" data-text="{{thumb_img}}">
                                                             {% if media.file is not empty %}{{ media.file }}

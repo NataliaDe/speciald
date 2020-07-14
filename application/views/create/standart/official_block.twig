@@ -47,16 +47,38 @@
     </div>
 
 
-    <div class="form-group col-sm-2">
-        <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-        <a href="#" class="a-non-dec" data-toggle="modal" data-target="#modal-media" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Прикрепить медиаматериалы">
-            <img src="{{base_url('assets/images/media_img.png')}}" style=" width:60px; padding-left: 10px; cursor: pointer">
-            {% if is_edit_dones is defined and dones is defined and dones and (dones.media is not empty or dones.file_doc is not empty or dones.file_pdf is not empty ) %}
-                <i class="fa fa-check" style="color:green"></i>
-            {% endif %}
+        <div class="form-group col-sm-2">
+            <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
 
-        </a>
-    </div>
+
+
+            {%if settings is defined and settings.mode_load_media is defined and 'wide' in settings.mode_load_media%}
+
+                <a href="#" class="a-non-dec" data-toggle="modal" data-target="#modal-media-multi" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Прикрепить медиаматериалы">
+                    <img src="{{base_url('assets/images/media_img.png')}}" style=" width:60px; padding-left: 10px; cursor: pointer">
+                    {% if is_edit_dones is defined and dones is defined and dones and (dones.media is not empty or dones.file_doc is not empty or dones.file_pdf is not empty ) %}
+                        <i class="fa fa-check" style="color:green"></i>
+                    {% endif %}
+
+                </a>
+
+
+            {%else%}
+                <a href="#" class="a-non-dec" data-toggle="modal" data-target="#modal-media" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Прикрепить медиаматериалы">
+                    <img src="{{base_url('assets/images/media_img.png')}}" style=" width:60px; padding-left: 10px; cursor: pointer">
+                    {% if is_edit_dones is defined and dones is defined and dones and (dones.media is not empty or dones.file_doc is not empty or dones.file_pdf is not empty ) %}
+                        <i class="fa fa-check" style="color:green"></i>
+                    {% endif %}
+
+                </a>
+                {%endif%}
+
+
+
+
+
+
+                </div>
 
     {#id of edit dones#}
     <input type="hidden" class="form-control"  placeholder="" name="id_dones" value="{%if is_edit_dones is defined and is_edit_dones == 1 and id_dones is defined and id_dones is not empty%}{{id_dones}}{%endif%}">

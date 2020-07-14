@@ -167,1429 +167,1439 @@
             </div>
 
 
-            {%include '/create/standart/modals/modal-media.twig'%}
+                    {%if settings is defined and settings.mode_load_media is defined and 'wide' in settings.mode_load_media%}
+                    {%include '/create/standart/modals/modal-media-multi.twig'%}
 
-            {%include '/create/standart/preview/opening_description.twig'%}
-
-
-            {%if settings is defined and settings.is_map is defined and 'yes' %}
-                {%include '/create/standart/parts/map.twig'%}
-            {%endif%}
+                    {%else%}
+                        {%include '/create/standart/modals/modal-media.twig'%}
+                        {%endif%}
 
 
 
+                    {%include '/create/standart/preview/opening_description.twig'%}
+
+
+                    {%if settings is defined and settings.is_map is defined and 'yes' %}
+                        {%include '/create/standart/parts/map.twig'%}
+                    {%endif%}
 
 
 
-            <center>
 
 
-                {%if  dones.is_see == 1  %}
 
-                {%else%}
-                    <button type="submit" class="btn btn-danger">Сохранить</button>
-                    <a href="{{base_url('/creator/catalog')}}"><button type="button" class="btn btn-secondary" >Отмена</button></a>
+                    <center>
+
+
+                        {%if  dones.is_see == 1  %}
+
+                        {%else%}
+                            <button type="submit" class="btn btn-danger">Сохранить</button>
+                            <a href="{{base_url('/creator/catalog')}}"><button type="button" class="btn btn-secondary" >Отмена</button></a>
+                        {%endif%}
+
+                    </center>
+
+                    {#                    <div class="form-row create-form-row ">
+
+
+                                            <div class="form-group col-md-4" >
+
+                                            </div>
+
+                                            <div class="form-group col-md-1" >
+                                                <button type="submit" class="btn btn-danger">Сохранить</button>
+                                            </div>
+
+
+                                           <div class="form-group col-md-2">
+                                                <button type="submit" class="btn btn-primary">Сформировать для Microsoft Word &raquo;</button>
+                                            </div>
+
+                                        </div>#}
+
+
+                    {# </div>#}
+                    {%if is_edit_dones is defined and dones is defined and dones.is_see == 1  %}
+
+                    </fieldset>
                 {%endif%}
 
-            </center>
+                {%if is_edit_dones is defined and dones is defined and dones.is_see == 1  %}
+                    <center>
+                        <a href="{{base_url('/creator/catalog')}}"><button type="button" class="btn btn-secondary" >Отмена</button></a>
+                    </center>
+                {%endif%}
 
-            {#                    <div class="form-row create-form-row ">
+            </form>
 
+            <!-- .content -->
 
-                                    <div class="form-group col-md-4" >
 
-                                    </div>
 
-                                    <div class="form-group col-md-1" >
-                                        <button type="submit" class="btn btn-danger">Сохранить</button>
-                                    </div>
 
+            {%include 'create/standart/modals/modal-search-rig.twig'%}
+            {%include 'create/standart/modals/modal-search-str-cars.twig'%}
+            {%include 'create/standart/modals/modal-search-str-inf.twig'%}
 
-                                   <div class="form-group col-md-2">
-                                        <button type="submit" class="btn btn-primary">Сформировать для Microsoft Word &raquo;</button>
-                                    </div>
+            {%include 'create/standart/modals/modal-add-new-work-innerservice.twig'%}
+            {%include 'create/standart/modals/modal-add-new-vid-object-house.twig'%}
+            {%include 'create/standart/modals/modal-add-new-vid-object-material.twig'%}
+            {%include 'create/standart/modals/modal-add-new-vid-object-roof.twig'%}
+            {%include 'create/standart/modals/modal-add-new-vid-people-status.twig'%}
+            {%include 'create/standart/modals/modal-add-new-vid-type-water-source.twig'%}
 
-                                </div>#}
+            {%include '/create/standart/modals/modal-str-refresh.twig'%}
+            {%include '/create/standart/modals/modal-dolj-add.twig'%}
 
 
-            {# </div>#}
-            {%if is_edit_dones is defined and dones is defined and dones.is_see == 1  %}
 
-            </fieldset>
-        {%endif%}
 
-        {%if is_edit_dones is defined and dones is defined and dones.is_see == 1  %}
-            <center>
-                <a href="{{base_url('/creator/catalog')}}"><button type="button" class="btn btn-secondary" >Отмена</button></a>
-            </center>
-        {%endif%}
 
-    </form>
+            {% endblock %}
 
-    <!-- .content -->
 
 
 
+                {% block head %}
+                    <link rel="stylesheet" href="{{ base_url('/assets/accordion/style.css') }}">
+                    <link rel="stylesheet" href="{{ base_url('/assets/css/sb-admin-2.css') }}">
 
-    {%include 'create/standart/modals/modal-search-rig.twig'%}
-    {%include 'create/standart/modals/modal-search-str-cars.twig'%}
-    {%include 'create/standart/modals/modal-search-str-inf.twig'%}
+                    <link rel="stylesheet" href="{{ base_url('/assets/css/timer.css') }}">
 
-    {%include 'create/standart/modals/modal-add-new-work-innerservice.twig'%}
-    {%include 'create/standart/modals/modal-add-new-vid-object-house.twig'%}
-    {%include 'create/standart/modals/modal-add-new-vid-object-material.twig'%}
-    {%include 'create/standart/modals/modal-add-new-vid-object-roof.twig'%}
-    {%include 'create/standart/modals/modal-add-new-vid-people-status.twig'%}
-    {%include 'create/standart/modals/modal-add-new-vid-type-water-source.twig'%}
+                    <link rel="stylesheet" href="{{ base_url('/assets/css/media.css') }}?{{now|date('H:i:s')}}">
 
-    {%include '/create/standart/modals/modal-media.twig'%}
 
-    {%include '/create/standart/modals/modal-str-refresh.twig'%}
-    {%include '/create/standart/modals/modal-dolj-add.twig'%}
 
+                    {#<link rel="stylesheet" href="{{ base_url('assets/js/dd/css/bootstrap-datetimepicker.min.css') }}">#}
 
+                    <link href="{{ base_url('/assets/daterangepicker/daterangepicker.css') }}" rel="stylesheet">
 
 
 
-{% endblock %}
+                    <link rel="stylesheet" href="{{ base_url('assets/datatables/jquery.dataTables.css') }}">
 
+                    <link rel="stylesheet" href="{{ base_url('/assets/css/preview_standart.css') }}">
 
 
+                    {%if settings is defined and settings.is_map is defined and 'yes' %}
+                        <link rel="stylesheet" href="{{ base_url('/assets/libs/leaflet-control-geocoder-master/dist/leaflet.css') }}" />
+                        <link rel="stylesheet" href="{{ base_url('/assets/libs/leaflet-control-geocoder-master/dist/Control.Geocoder.css') }}" />
+                        <link rel="stylesheet" href="{{ base_url('/assets/css/form-standart/map.css') }}">
 
-{% block head %}
-    <link rel="stylesheet" href="{{ base_url('/assets/accordion/style.css') }}">
-    <link rel="stylesheet" href="{{ base_url('/assets/css/sb-admin-2.css') }}">
+                    {%endif%}
 
-    <link rel="stylesheet" href="{{ base_url('/assets/css/timer.css') }}">
 
-    <link rel="stylesheet" href="{{ base_url('/assets/css/media.css') }}">
-
-
-
-    {#<link rel="stylesheet" href="{{ base_url('assets/js/dd/css/bootstrap-datetimepicker.min.css') }}">#}
-
-    <link href="{{ base_url('/assets/daterangepicker/daterangepicker.css') }}" rel="stylesheet">
-
-
-
-    <link rel="stylesheet" href="{{ base_url('assets/datatables/jquery.dataTables.css') }}">
-
-    <link rel="stylesheet" href="{{ base_url('/assets/css/preview_standart.css') }}">
-
-
-    {%if settings is defined and settings.is_map is defined and 'yes' %}
-        <link rel="stylesheet" href="{{ base_url('/assets/libs/leaflet-control-geocoder-master/dist/leaflet.css') }}" />
-        <link rel="stylesheet" href="{{ base_url('/assets/libs/leaflet-control-geocoder-master/dist/Control.Geocoder.css') }}" />
-        <link rel="stylesheet" href="{{ base_url('/assets/css/form-standart/map.css') }}">
-
-    {%endif%}
-
-
-    <style>
-        #lat_id:before {
-            content: "широта";
-        }
-
-        #search-rig{
-            cursor: pointer;
-        }
-
-
-        #modal-search-rig .select2-container {
-            width: 168px !important;
-        }
-
-        {#        #modal-search-str-cars .select2-container {
-                    width: 290px !important;
-                }#}
-        #modal-search-str-cars .select-cars-region-cls .select2-container {
-            width: 227px !important;
-        }
-        #modal-search-str-cars .select-cars-locals-cls .select2-container {
-            width: 282px !important;
-        }
-
-        #modal-search-str-cars .select-cars-pasp-cls .select2-container {
-            width: 500px !important;
-        }
-
-        #modal-search-str-cars .select-cars-cls .select2-container {
-            width: 500px !important;
-        }
-
-
-        {#        #modal-search-str-inf  .select2-container {
-                    width: 350px !important;
-                }#}
-        #modal-search-str-inf .select-pasp-cls .select2-container {
-            width: 500px !important;
-        }
-        #modal-search-str-inf .select-regions-cls .select2-container {
-            width: 227px !important;
-        }
-        #modal-search-str-inf .select-locals-cls .select2-container {
-            width: 282px !important;
-        }
-
-
-
-        #innerservice-table .select2-container {
-            width: 300px !important;
-        }
-
-        #innerservice-table .td_innerservice_name .select2-container {
-            width: 300px !important;
-        }
-        #water-source-table .td_water-source-type .select2-container {
-            width: 290px !important;
-        }
-
-
-        #law_face_office_belong .select2-container, #individual-face-div .select2-container  {
-            width: 240px !important;
-        }
-
-        #object-api-card .select2-container{
-            width: 312px !important;
-        }
-
-
-
-
-        {#       #div-silymchs table {
-                    counter-reset: row-num;
-                }
-               #div-silymchs table tr {
-                    counter-increment: row-num;
-                }
-               #div-silymchs table tr td:first-child::before {
-                    content: counter(row-num);
-                }#}
-
-
-        {#        .select2-results .select2-results__option[aria-disabled=true] {
-                    display: none;
-                }#}
-
-
-
-
-
-    </style>
-
-{% endblock %}
-
-{% block footer %}
-
-
-    <img src="{{ base_url('/assets/images/updown/32.ico')}}" alt="Наверх" title="Наверх" id="Go_Top"
-         style="position: fixed; bottom: 60px; right: 2px; cursor: pointer; width: 36px;z-index: 1000;    border: solid 1px #254aa2;
-         margin-top: 0px;
-         padding-top: 3px;
-         padding-bottom: 0px;">
-
-    <img src="{{ base_url('/assets/images/updown/35.ico')}}" alt="Вниз" title="Вниз" id="Go_Bottom"
-         style="position: fixed; bottom: 20px; right: 2px; cursor: pointer; width: 36px; z-index: 1000;    border: solid 1px #254aa2;
-         margin-top: 0px;
-         padding-top: 3px;
-         padding-bottom: 0px;">
-
-
-
-
-    <script src="{{ base_url('/assets/accordion/index.js')}}"></script>
-    <script type="text/javascript" src="{{ base_url('assets/js/jquery.downCount.js') }}"></script>
-
-    <script src="{{ base_url('/assets/js/mask/jquery.maskedinput.min.js')}}"></script>
-
-
-
-
-
-    <script type="text/javascript"
-    src="{{ base_url('assets/daterangepicker/moment.min.js') }}"></script>
-    <script type="text/javascript"
-    src="{{ base_url('assets/daterangepicker/daterangepicker.js') }}"></script>
-
-    {#<script src="{{ base_url('/assets/js/dd/moment.min.js')}}"></script>#}
-
-    {#<script src="{{ base_url('/assets/js/dd/locale/ru.js')}}"></script>#}
-    {#    <script src="{{ base_url('/assets/js/dd/js/bootstrap-datetimepicker.min.js')}}"></script>#}
-    <script src="{{ base_url('/assets/js/manual_datetimepicker.js')}}?{{now|date('H:i:s')}}"></script>
-    <script src="{{ base_url('/assets/js/name.js')}}"></script>
-
-
-
-    <script src="{{ base_url('/assets/js/form-standart/journal_table.js')}}?{{now|date('H:i:s')}}"></script>
-    <script src="{{ base_url('/assets/js/form-standart/str_table.js')}}?{{now|date('H:i:s')}}"></script>
-    <script src="{{ base_url('/assets/js/form-standart/final_block.js')}}?{{now|date('H:i:s')}}"></script>
-
-    <script src="{{ base_url('/assets/js/form-standart/search_rig.js')}}?{{now|date('H:i:s')}}"></script>
-    <script src="{{ base_url('/assets/js/form-standart/search_str_cars.js')}}?{{now|date('H:i:s')}}"></script>
-    <script src="{{ base_url('/assets/js/form-standart/search_str_inf.js')}}?{{now|date('H:i:s')}}"></script>
-
-    <script src="{{ base_url('/assets/datatables/jquery.dataTables.js')}}"></script>
-
-
-
-    <script src="{{ base_url('/assets/js/form-standart/media.js')}}?{{now|date('H:i:s')}}"></script>
-    <script src="{{ base_url('/assets/js/form-standart/preview_standart.js')}}?{{now|date('H:i:s')}}"></script>
-
-    {%include '/create/standart/owner/actions_js.twig'%}
-
-    {%if is_edit_dones is not defined  %}
-        <script src="{{ base_url('/assets/js/timer.js')}}"></script>
-
-    {%endif%}
-
-
-
-
-    {%if settings is defined and settings.is_map is defined and 'yes' %}
-        <script src="{{ base_url('/assets/libs/leaflet-control-geocoder-master/dist/leaflet-src.js')}}"></script>
-        <script src="{{ base_url('/assets/libs/leaflet-control-geocoder-master/dist/Control.Geocoder.js')}}"></script>
-
-        <script src="{{ base_url('/assets/libs/leaflet-control-geocoder-master/esri-leaflet.js')}}"
-                integrity="sha512-6LVib9wGnqVKIClCduEwsCub7iauLXpwrd5njR2J507m3A2a4HXJDLMiSZzjcksag3UluIfuW1KzuWVI5n/cuQ=="
-        crossorigin=""></script>
-
-        {%include '/create/standart/parts/map_js.twig'%}
-
-    {%endif%}
-
-
-
-
-
-    <script>
-
-        {% if rig is defined%}
-            setPreviewData();
-        {%endif%}
-
-
-            jQuery(function () {
-                $("#Go_Top").hide();
-                if ($(window).scrollTop() >= 250)
-                    $("#Go_Top").fadeIn("slow")
-                $(window).scroll(function () {
-                    if ($(window).scrollTop() <= 250)
-                        $("#Go_Top").fadeOut("slow")
-                    else
-                        $("#Go_Top").fadeIn("slow")
-                });
-
-                $("#Go_Bottom").hide();
-                if ($(window).scrollTop() <= $(document).height() - 999)
-                    $("#Go_Bottom").fadeIn("slow")
-                $(window).scroll(function () {
-                    if ($(window).scrollTop() >= $(document).height() - 999)
-                        $("#Go_Bottom").fadeOut("slow")
-                    else
-                        $("#Go_Bottom").fadeIn("slow")
-                });
-
-                $("#Go_Top").click(function () {
-                    $("html, body").animate({scrollTop: 0}, "slow")
-                })
-                $("#Go_Bottom").click(function () {
-                    $("html, body").animate({scrollTop: $(document).height()}, "slow")
-                })
-            });
-
-
-
-
-
-
-            jQuery("#lat_id").mask("99.999999");//долгота
-            jQuery("#long_id").mask("99.999999");//широта
-
-            $(document).ready(function () {
-
-                jQuery("#vid_hs_2").chained("#vid_hs_1");
-            });
-
-    </script>
-
-
-    <script>
-
-
-
-
-        /* add Add Work Innerservice to bd */
-        function AddWorkInnerservice() {//add in modal
-            $.ajax({
-                dataType: "json",
-                url: '{{ base_url('/dones/add_work_innerservice_ajax')}}',
-                method: 'POST',
-                data: {
-                    name: $('#modal-add-new-work-innerservice').find('#new_name_work_innerservice').val()
-                }
-            }).done(function (data) {
-
-                if (data.is_success === 1) {
-                    $('.work_innerservice').append('<option value="' + data.id + '">' + data.work_name + '</option>');
-                    $('.work_innerservice ').trigger("change");
-
-                    $('#name_work_innerservice_for_edit').append('<option value="' + data.id + '">' + data.work_name + '</option>');
-                    $('#name_work_innerservice_for_edit').trigger("change");
-
-
-                    $('#name_work_innerservice_for_delete').append('<option value="' + data.id + '">' + data.work_name + '</option>');
-                    $('#name_work_innerservice_for_delete').trigger("change");
-
-                    $('#new_name_work_innerservice').val('');
-
-                    $('.md-close').click();
-                    toastr.success(data.message, 'Успех:', {timeOut: 5000});
-                } else {
-                    toastr.warning(data.message, 'Внимание:', {timeOut: 5000});
-                }
-            });
-
-        }
-
-        /* edit Work Innerservice to bd */
-        function EditWorkInnerservice() {//edit in modal
-
-            var id_edit = $('#modal-add-new-work-innerservice').find('#name_work_innerservice_for_edit').val();
-
-            $.ajax({
-                dataType: "json",
-                url: '{{ base_url('/dones/edit_work_innerservice_ajax')}}',
-                method: 'POST',
-                data: {
-                    name: $('#modal-add-new-work-innerservice').find('#edit_name_work_innerservice').val(),
-                    id_edit: id_edit
-                }
-            }).done(function (data) {
-
-                if (data.is_success === 1) {
-
-                    /*  set data*/
-                    $('#name_work_innerservice_for_edit option[value=' + id_edit + ']').text(data.work_name);//select edit
-                    $('#name_work_innerservice_for_delete option[value=' + id_edit + ']').text(data.work_name);//select delete
-                    $('.work_innerservice option[value=' + id_edit + ']').text(data.work_name);//select on form
-
-
-                    /* refresh update select */
-                    $('#name_work_innerservice_for_edit').select2('destroy');
-                    $('#name_work_innerservice_for_edit').select2();
-                    $('#name_work_innerservice_for_edit').trigger("change");//select edit
-
-
-                    /* refresh delete select */
-                    $('#name_work_innerservice_for_delete').select2('destroy');
-                    $('#name_work_innerservice_for_delete').select2();
-                    $('#name_work_innerservice_for_delete').trigger("change");
-
-                    /* refresh select on form */
-                    $('.work_innerservice').select2('destroy');
-                    $('.work_innerservice').select2({
-                        placeholder: "Выберите из списка",
-                        allowClear: true,
-                        "language": {
-                            "noResults": function () {
-                                return "Ничего не найдено";
-                            }
+                    <style>
+                        #lat_id:before {
+                            content: "широта";
                         }
-                    });
-                    $('.work_innerservice').trigger("change");// on form
 
-
-                    $('#edit_name_work_innerservice').val('');
-
-                    $('.md-close').click();
-                    toastr.success(data.message, 'Успех:', {timeOut: 5000});
-                } else {
-                    toastr.warning(data.message, 'Внимание:', {timeOut: 5000});
-                }
-            });
-
-        }
-
-
-
-
-        /* delete work innerservice from bd */
-        function deleteWorkInnerservice() {//delete in modal
-
-            var id = $('#name_work_innerservice_for_delete option:selected').val();
-
-            $.ajax({
-                dataType: "json",
-                url: '{{ base_url('/dones/delete_work_innerservice_ajax')}}',
-                method: 'POST',
-                data: {
-                    id: id
-                }
-            });
-            $('.work_innerservice option[value=' + id + ']').remove();
-            $('#name_work_innerservice_for_edit option[value=' + id + ']').remove();//edit select
-            $('#name_work_innerservice_for_delete option[value=' + id + ']').remove();
-            toastr.success('Тип был удален из БД', 'Info:', {timeOut: 5000});
-
-
-
-            /* refresh update select */
-            //$('#name_work_innerservice_for_edit').select2('destroy');
-            //$('#name_work_innerservice_for_edit').select2();
-            $('#name_work_innerservice_for_edit').trigger("change");//select edit
-
-
-            /* refresh delete select */
-            //$('#name_work_innerservice_for_delete').select2('destroy');
-            //$('#name_work_innerservice_for_delete').select2();
-            $('#name_work_innerservice_for_delete').trigger("change");
-
-            /* refresh select on form */
-            //$('.work_innerservice').select2('destroy');
-            //$('.work_innerservice').select2();
-            $('.work_innerservice').trigger("change");// on form
-        }
-
-
-
-
-
-        /* add Add new vid of house object to bd */
-        function AddObjectHouse() {//add in modal
-            $.ajax({
-                dataType: "json",
-                url: '{{ base_url('/dones/add_object_house_ajax')}}',
-                method: 'POST',
-                data: {
-                    name: $('#modal-add-new-vid-object-house').find('#new_object_house').val()
-                }
-            }).done(function (data) {
-
-                if (data.is_success === 1) {
-                    $('#object_house_id').append('<option value="' + data.id + '">' + data.name + '</option>');
-                    $('#object_house_id').trigger("change");
-
-                    $('#object_house_for_edit').append('<option value="' + data.id + '">' + data.name + '</option>');
-                    $('#object_house_for_edit').trigger("change");
-
-
-                    $('#object_house_for_delete').append('<option value="' + data.id + '">' + data.name + '</option>');
-                    $('#object_house_for_delete').trigger("change");
-
-                    $('#modal-add-new-vid-object-house').find('#new_object_house').val('');
-
-                    $('.md-close').click();
-                    toastr.success(data.message, 'Успех:', {timeOut: 5000});
-                } else {
-                    toastr.warning(data.message, 'Внимание:', {timeOut: 5000});
-                }
-            });
-
-        }
-
-
-
-        /* edit object house vid to bd */
-        function EditObjectHouse() {//edit in modal
-
-            var id_edit = $('#modal-add-new-vid-object-house').find('#object_house_for_edit').val();
-
-            $.ajax({
-                dataType: "json",
-                url: '{{ base_url('/dones/edit_object_house_ajax')}}',
-                method: 'POST',
-                data: {
-                    name: $('#modal-add-new-vid-object-house').find('#new_name_object_house').val(),
-                    id_edit: id_edit
-                }
-            }).done(function (data) {
-
-                if (data.is_success === 1) {
-
-                    /*  set data*/
-                    $('#modal-add-new-vid-object-house').find('#object_house_for_edit option[value=' + id_edit + ']').text(data.name);//select edit
-                    $('#modal-add-new-vid-object-house').find('#object_house_for_delete option[value=' + id_edit + ']').text(data.name);//select delete
-                    $('#object_house_id option[value=' + id_edit + ']').text(data.name);//select on form
-
-                    /* refresh update select */
-                    $('#modal-add-new-vid-object-house').find('#object_house_for_edit').select2('destroy');
-                    $('#modal-add-new-vid-object-house').find('#object_house_for_edit').select2();
-
-                    /* refresh delete select */
-                    $('#modal-add-new-vid-object-house').find('#object_house_for_delete').select2('destroy');
-                    $('#modal-add-new-vid-object-house').find('#object_house_for_delete').select2();
-
-                    /* refresh select on form */
-                    $('#object_house_id').select2('destroy');
-                    $('#object_house_id').select2({
-                        placeholder: "Выберите из списка",
-                        allowClear: true,
-                        "language": {
-                            "noResults": function () {
-                                return "Ничего не найдено";
-                            }
+                        #search-rig{
+                            cursor: pointer;
                         }
-                    });
 
 
-                    $('#modal-add-new-vid-object-house').find('#new_name_object_house').val('');
-
-                    $('.md-close').click();
-                    toastr.success(data.message, 'Успех:', {timeOut: 5000});
-                } else {
-                    toastr.warning(data.message, 'Внимание:', {timeOut: 5000});
-                }
-            });
-
-        }
-
-
-
-        /* delete object house vid from bd */
-        function deleteObjectHouse() {//delete in modal
-
-            var id = $('#modal-add-new-vid-object-house').find('#object_house_for_delete').val();
-
-            $.ajax({
-                dataType: "json",
-                url: '{{ base_url('/dones/delete_object_house_ajax')}}',
-                method: 'POST',
-                data: {
-                    id: id
-                }
-            });
-            $('#object_house_id option[value=' + id + ']').remove();
-            $('#modal-add-new-vid-object-house').find('#object_house_for_edit option[value=' + id + ']').remove();//edit select
-            $('#modal-add-new-vid-object-house').find('#object_house_for_delete option[value=' + id + ']').remove();
-            toastr.success('Тип был удален из БД', 'Info:', {timeOut: 5000});
-
-
-
-            /* refresh update select */
-            $('#modal-add-new-vid-object-house').find('#object_house_for_edit').trigger("change");//select edit
-
-
-            /* refresh delete select */
-            $('#modal-add-new-vid-object-house').find('#object_house_for_delete').trigger("change");
-
-            /* refresh select on form */
-            $('#object_house_id').trigger("change");// on form
-        }
-
-
-
-        /* add Add new vid material of house object to bd */
-        function AddObjectMaterial() {//add in modal
-            $.ajax({
-                dataType: "json",
-                url: '{{ base_url('/dones/add_object_material_ajax')}}',
-                method: 'POST',
-                data: {
-                    name: $('#modal-add-new-vid-object-material').find('#new_object_material').val()
-                }
-            }).done(function (data) {
-
-                if (data.is_success === 1) {
-                    $('#object_material_id').append('<option value="' + data.id + '">' + data.name + '</option>');
-                    $('#object_material_id').trigger("change");
-
-                    $('#object_material_for_edit').append('<option value="' + data.id + '">' + data.name + '</option>');
-                    $('#object_material_for_edit').trigger("change");
-
-
-                    $('#object_material_for_delete').append('<option value="' + data.id + '">' + data.name + '</option>');
-                    $('#object_material_for_delete').trigger("change");
-
-                    $('#modal-add-new-vid-object-material').find('#new_object_material').val('');
-
-                    $('.md-close').click();
-                    toastr.success(data.message, 'Успех:', {timeOut: 5000});
-                } else {
-                    toastr.warning(data.message, 'Внимание:', {timeOut: 5000});
-                }
-            });
-
-        }
-
-
-        /* edit object material vid to bd */
-        function EditObjectMaterial() {//edit in modal
-
-            var id_edit = $('#modal-add-new-vid-object-material').find('#object_material_for_edit').val();
-
-            $.ajax({
-                dataType: "json",
-                url: '{{ base_url('/dones/edit_object_material_ajax')}}',
-                method: 'POST',
-                data: {
-                    name: $('#modal-add-new-vid-object-material').find('#new_name_object_material').val(),
-                    id_edit: id_edit
-                }
-            }).done(function (data) {
-
-                if (data.is_success === 1) {
-
-                    /*  set data*/
-                    $('#modal-add-new-vid-object-material').find('#object_material_for_edit option[value=' + id_edit + ']').text(data.name);//select edit
-                    $('#modal-add-new-vid-object-material').find('#object_material_for_delete option[value=' + id_edit + ']').text(data.name);//select delete
-                    $('#object_material_id option[value=' + id_edit + ']').text(data.name);//select on form
-
-                    /* refresh update select */
-                    $('#modal-add-new-vid-object-material').find('#object_material_for_edit').select2('destroy');
-                    $('#modal-add-new-vid-object-material').find('#object_material_for_edit').select2();
-
-                    /* refresh delete select */
-                    $('#modal-add-new-vid-object-material').find('#object_material_for_delete').select2('destroy');
-                    $('#modal-add-new-vid-object-material').find('#object_material_for_delete').select2();
-
-                    /* refresh select on form */
-                    $('#object_material_id').select2('destroy');
-                    $('#object_material_id').select2({
-                        placeholder: "Выберите из списка",
-                        allowClear: true,
-                        "language": {
-                            "noResults": function () {
-                                return "Ничего не найдено";
-                            }
+                        #modal-search-rig .select2-container {
+                            width: 168px !important;
                         }
-                    });
 
-
-                    $('#modal-add-new-vid-object-material').find('#new_name_object_material').val('');
-
-                    $('.md-close').click();
-                    toastr.success(data.message, 'Успех:', {timeOut: 5000});
-                } else {
-                    toastr.warning(data.message, 'Внимание:', {timeOut: 5000});
-                }
-            });
-
-        }
-
-
-        /* delete object material vid from bd */
-        function deleteObjectMaterial() {//delete in modal
-
-            var id = $('#modal-add-new-vid-object-material').find('#object_material_for_delete').val();
-
-            $.ajax({
-                dataType: "json",
-                url: '{{ base_url('/dones/delete_object_material_ajax')}}',
-                method: 'POST',
-                data: {
-                    id: id
-                }
-            });
-            $('#object_material_id option[value=' + id + ']').remove();
-            $('#modal-add-new-vid-object-material').find('#object_material_for_edit option[value=' + id + ']').remove();//edit select
-            $('#modal-add-new-vid-object-material').find('#object_material_for_delete option[value=' + id + ']').remove();
-            toastr.success('Тип был удален из БД', 'Info:', {timeOut: 5000});
-
-
-
-            /* refresh update select */
-            $('#modal-add-new-vid-object-material').find('#object_material_for_edit').trigger("change");//select edit
-
-
-            /* refresh delete select */
-            $('#modal-add-new-vid-object-material').find('#object_material_for_delete').trigger("change");
-
-            /* refresh select on form */
-            $('#object_material_id').trigger("change");// on form
-        }
-
-
-
-        /* add Add new vid roof of house object to bd */
-        function AddObjectRoof() {//add in modal
-            $.ajax({
-                dataType: "json",
-                url: '{{ base_url('/dones/add_object_roof_ajax')}}',
-                method: 'POST',
-                data: {
-                    name: $('#modal-add-new-vid-object-roof').find('#new_object_roof').val()
-                }
-            }).done(function (data) {
-
-                if (data.is_success === 1) {
-                    $('#object_roof_id').append('<option value="' + data.id + '">' + data.name + '</option>');
-                    $('#object_roof_id').trigger("change");
-
-                    $('#object_roof_for_edit').append('<option value="' + data.id + '">' + data.name + '</option>');
-                    $('#object_roof_for_edit').trigger("change");
-
-
-                    $('#object_roof_for_delete').append('<option value="' + data.id + '">' + data.name + '</option>');
-                    $('#object_roof_for_delete').trigger("change");
-
-                    $('#modal-add-new-vid-object-roof').find('#new_object_roof').val('');
-
-                    $('.md-close').click();
-                    toastr.success(data.message, 'Успех:', {timeOut: 5000});
-                } else {
-                    toastr.warning(data.message, 'Внимание:', {timeOut: 5000});
-                }
-            });
-
-        }
-
-
-
-        /* edit object roof vid to bd */
-        function EditObjectRoof() {//edit in modal
-
-            var id_edit = $('#modal-add-new-vid-object-roof').find('#object_roof_for_edit').val();
-
-            $.ajax({
-                dataType: "json",
-                url: '{{ base_url('/dones/edit_object_roof_ajax')}}',
-                method: 'POST',
-                data: {
-                    name: $('#modal-add-new-vid-object-roof').find('#new_name_object_roof').val(),
-                    id_edit: id_edit
-                }
-            }).done(function (data) {
-
-                if (data.is_success === 1) {
-
-                    /*  set data*/
-                    $('#modal-add-new-vid-object-roof').find('#object_roof_for_edit option[value=' + id_edit + ']').text(data.name);//select edit
-                    $('#modal-add-new-vid-object-roof').find('#object_roof_for_delete option[value=' + id_edit + ']').text(data.name);//select delete
-                    $('#object_roof_id option[value=' + id_edit + ']').text(data.name);//select on form
-
-                    /* refresh update select */
-                    $('#modal-add-new-vid-object-roof').find('#object_roof_for_edit').select2('destroy');
-                    $('#modal-add-new-vid-object-roof').find('#object_roof_for_edit').select2();
-
-                    /* refresh delete select */
-                    $('#modal-add-new-vid-object-roof').find('#object_roof_for_delete').select2('destroy');
-                    $('#modal-add-new-vid-object-roof').find('#object_roof_for_delete').select2();
-
-                    /* refresh select on form */
-                    $('#object_roof_id').select2('destroy');
-                    $('#object_roof_id').select2({
-                        placeholder: "Выберите из списка",
-                        allowClear: true,
-                        "language": {
-                            "noResults": function () {
-                                return "Ничего не найдено";
-                            }
+                        {#        #modal-search-str-cars .select2-container {
+                                    width: 290px !important;
+                                }#}
+                        #modal-search-str-cars .select-cars-region-cls .select2-container {
+                            width: 227px !important;
                         }
-                    });
-
-
-                    $('#modal-add-new-vid-object-roof').find('#new_name_object_roof').val('');
-
-                    $('.md-close').click();
-                    toastr.success(data.message, 'Успех:', {timeOut: 5000});
-                } else {
-                    toastr.warning(data.message, 'Внимание:', {timeOut: 5000});
-                }
-            });
-
-        }
-
-
-
-        /* delete object roof vid from bd */
-        function deleteObjectRoof() {//delete in modal
-
-            var id = $('#modal-add-new-vid-object-roof').find('#object_roof_for_delete').val();
-
-            $.ajax({
-                dataType: "json",
-                url: '{{ base_url('/dones/delete_object_roof_ajax')}}',
-                method: 'POST',
-                data: {
-                    id: id
-                }
-            });
-            $('#object_roof_id option[value=' + id + ']').remove();
-            $('#modal-add-new-vid-object-roof').find('#object_roof_for_edit option[value=' + id + ']').remove();//edit select
-            $('#modal-add-new-vid-object-roof').find('#object_roof_for_delete option[value=' + id + ']').remove();
-            toastr.success('Тип был удален из БД', 'Info:', {timeOut: 5000});
-
-
-
-            /* refresh update select */
-            $('#modal-add-new-vid-object-roof').find('#object_roof_for_edit').trigger("change");//select edit
-
-
-            /* refresh delete select */
-            $('#modal-add-new-vid-object-roof').find('#object_roof_for_delete').trigger("change");
-
-            /* refresh select on form */
-            $('#object_roof_id').trigger("change");// on form
-        }
-
-
-
-
-        /* add Add new vid people status to bd */
-        function AddPeopleStatus() {//add in modal
-            $.ajax({
-                dataType: "json",
-                url: '{{ base_url('/dones/add_people_status_ajax')}}',
-                method: 'POST',
-                data: {
-                    name: $('#modal-add-new-vid-people-status').find('#new_people_status').val()
-                }
-            }).done(function (data) {
-
-                if (data.is_success === 1) {
-                    $('#people_status_id').append('<option value="' + data.id + '">' + data.name + '</option>');
-                    $('#people_status_id').trigger("change");
-
-                    $('#people_status_for_edit').append('<option value="' + data.id + '">' + data.name + '</option>');
-                    $('#people_status_for_edit').trigger("change");
-
-
-                    $('#people_status_for_delete').append('<option value="' + data.id + '">' + data.name + '</option>');
-                    $('#people_status_for_delete').trigger("change");
-
-                    $('#modal-add-new-vid-people-status').find('#new_people_status').val('');
-
-                    $('.md-close').click();
-                    toastr.success(data.message, 'Успех:', {timeOut: 5000});
-                } else {
-                    toastr.warning(data.message, 'Внимание:', {timeOut: 5000});
-                }
-            });
-
-        }
-
-
-
-        /* edit people status vid to bd */
-        function EditPeopleStatus() {//edit in modal
-
-            var id_edit = $('#modal-add-new-vid-people-status').find('#people_status_for_edit').val();
-
-            $.ajax({
-                dataType: "json",
-                url: '{{ base_url('/dones/edit_people_status_ajax')}}',
-                method: 'POST',
-                data: {
-                    name: $('#modal-add-new-vid-people-status').find('#new_name_people_status').val(),
-                    id_edit: id_edit
-                }
-            }).done(function (data) {
-
-                if (data.is_success === 1) {
-
-                    /*  set data*/
-                    $('#modal-add-new-vid-people-status').find('#people_status_for_edit option[value=' + id_edit + ']').text(data.name);//select edit
-                    $('#modal-add-new-vid-people-status').find('#people_status_for_delete option[value=' + id_edit + ']').text(data.name);//select delete
-                    $('#people_status_id option[value=' + id_edit + ']').text(data.name);//select on form
-
-                    /* refresh update select */
-                    $('#modal-add-new-vid-people-status').find('#people_status_for_edit').select2('destroy');
-                    $('#modal-add-new-vid-people-status').find('#people_status_for_edit').select2();
-
-                    /* refresh delete select */
-                    $('#modal-add-new-vid-people-status').find('#people_status_for_delete').select2('destroy');
-                    $('#modal-add-new-vid-people-status').find('#people_status_for_delete').select2();
-
-                    /* refresh select on form */
-                    $('#people_status_id').select2('destroy');
-                    $('#people_status_id').select2({
-                        placeholder: "Выберите из списка",
-                        allowClear: true,
-                        "language": {
-                            "noResults": function () {
-                                return "Ничего не найдено";
-                            }
+                        #modal-search-str-cars .select-cars-locals-cls .select2-container {
+                            width: 282px !important;
                         }
-                    });
 
-
-                    $('#modal-add-new-vid-people-status').find('#new_name_people_status').val('');
-
-                    $('.md-close').click();
-                    toastr.success(data.message, 'Успех:', {timeOut: 5000});
-                } else {
-                    toastr.warning(data.message, 'Внимание:', {timeOut: 5000});
-                }
-            });
-
-        }
-
-
-
-
-        /* delete people status vid from bd */
-        function deletePeopleStatus() {//delete in modal
-
-            var id = $('#modal-add-new-vid-people-status').find('#people_status_for_delete').val();
-
-            $.ajax({
-                dataType: "json",
-                url: '{{ base_url('/dones/delete_people_status_ajax')}}',
-                method: 'POST',
-                data: {
-                    id: id
-                }
-            });
-            $('#people_status_id option[value=' + id + ']').remove();
-            $('#modal-add-new-vid-people-status').find('#people_status_for_edit option[value=' + id + ']').remove();//edit select
-            $('#modal-add-new-vid-people-status').find('#people_status_for_delete option[value=' + id + ']').remove();
-            toastr.success('Тип был удален из БД', 'Info:', {timeOut: 5000});
-
-
-
-            /* refresh update select */
-            $('#modal-add-new-vid-people-status').find('#people_status_for_edit').trigger("change");//select edit
-
-
-            /* refresh delete select */
-            $('#modal-add-new-vid-people-status').find('#people_status_for_delete').trigger("change");
-
-            /* refresh select on form */
-            $('#people_status_id').trigger("change");// on form
-        }
-
-
-
-
-
-
-        /* add Add new vid water source to bd */
-        function AddWaterSource() {//add in modal
-            $.ajax({
-                dataType: "json",
-                url: '{{ base_url('/dones/add_water_source_ajax')}}',
-                method: 'POST',
-                data: {
-                    name: $('#modal-add-new-vid-type-water-source').find('#new_type_water_source').val()
-                }
-            }).done(function (data) {
-
-                if (data.is_success === 1) {
-                    $('#div-water-source #water-source-table .water_source_type').append('<option value="' + data.id + '">' + data.name + '</option>');
-                    $('#div-water-source #water-source-table .water_source_type').trigger("change");
-
-                    $('#type_water_source_for_edit').append('<option value="' + data.id + '">' + data.name + '</option>');
-                    $('#type_water_source_for_edit').trigger("change");
-
-
-                    $('#type_water_source_for_delete').append('<option value="' + data.id + '">' + data.name + '</option>');
-                    $('#type_water_source_for_delete').trigger("change");
-
-                    $('#modal-add-new-vid-type-water-source').find('#new_type_water_source').val('');
-
-                    $('.md-close').click();
-                    toastr.success(data.message, 'Успех:', {timeOut: 5000});
-                } else {
-                    toastr.warning(data.message, 'Внимание:', {timeOut: 5000});
-                }
-            });
-
-        }
-
-
-
-
-
-        /* edit water source vid to bd */
-        function EditWaterSource() {//edit in modal
-
-            var id_edit = $('#modal-add-new-vid-type-water-source').find('#type_water_source_for_edit').val();
-
-            $.ajax({
-                dataType: "json",
-                url: '{{ base_url('/dones/edit_water_source_ajax')}}',
-                method: 'POST',
-                data: {
-                    name: $('#modal-add-new-vid-type-water-source').find('#new_name_type_water_source').val(),
-                    id_edit: id_edit
-                }
-            }).done(function (data) {
-
-                if (data.is_success === 1) {
-
-                    /*  set data*/
-                    $('#modal-add-new-vid-type-water-source').find('#type_water_source_for_edit option[value=' + id_edit + ']').text(data.name);//select edit
-                    $('#modal-add-new-vid-type-water-source').find('#type_water_source_for_delete option[value=' + id_edit + ']').text(data.name);//select delete
-                    $('#div-water-source #water-source-table').find('.water_source_type option[value=' + id_edit + ']').text(data.name);//select on form
-
-                    /* refresh update select */
-                    $('#modal-add-new-vid-type-water-source').find('#type_water_source_for_edit').select2('destroy');
-                    $('#modal-add-new-vid-type-water-source').find('#type_water_source_for_edit').select2();
-
-                    /* refresh delete select */
-                    $('#modal-add-new-vid-type-water-source').find('#type_water_source_for_delete').select2('destroy');
-                    $('#modal-add-new-vid-type-water-source').find('#type_water_source_for_delete').select2();
-
-                    /* refresh select on form */
-                    $('#div-water-source #water-source-table .water_source_type').select2('destroy');
-                    $('#div-water-source #water-source-table .water_source_type').select2({
-                        placeholder: "Выберите из списка",
-                        allowClear: true,
-                        "language": {
-                            "noResults": function () {
-                                return "Ничего не найдено";
-                            }
+                        #modal-search-str-cars .select-cars-pasp-cls .select2-container {
+                            width: 500px !important;
                         }
-                    });
 
+                        #modal-search-str-cars .select-cars-cls .select2-container {
+                            width: 500px !important;
+                        }
 
-                    $('#modal-add-new-vid-type-water-source').find('#new_name_type_water_source').val('');
 
-                    $('.md-close').click();
-                    toastr.success(data.message, 'Успех:', {timeOut: 5000});
-                } else {
-                    toastr.warning(data.message, 'Внимание:', {timeOut: 5000});
-                }
-            });
+                        {#        #modal-search-str-inf  .select2-container {
+                                    width: 350px !important;
+                                }#}
+                        #modal-search-str-inf .select-pasp-cls .select2-container {
+                            width: 500px !important;
+                        }
+                        #modal-search-str-inf .select-regions-cls .select2-container {
+                            width: 227px !important;
+                        }
+                        #modal-search-str-inf .select-locals-cls .select2-container {
+                            width: 282px !important;
+                        }
 
-        }
 
 
+                        #innerservice-table .select2-container {
+                            width: 300px !important;
+                        }
 
+                        #innerservice-table .td_innerservice_name .select2-container {
+                            width: 300px !important;
+                        }
+                        #water-source-table .td_water-source-type .select2-container {
+                            width: 290px !important;
+                        }
 
 
-        /* delete water source vid from bd */
-        function deleteWaterSource() {//delete in modal
+                        #law_face_office_belong .select2-container, #individual-face-div .select2-container  {
+                            width: 240px !important;
+                        }
 
-            var id = $('#modal-add-new-vid-type-water-source').find('#type_water_source_for_delete').val();
+                        #object-api-card .select2-container{
+                            width: 312px !important;
+                        }
 
-            $.ajax({
-                dataType: "json",
-                url: '{{ base_url('/dones/delete_water_source_ajax')}}',
-                method: 'POST',
-                data: {
-                    id: id
-                }
-            });
-            $('#div-water-source #water-source-table .water_source_type option[value=' + id + ']').remove();
-            $('#modal-add-new-vid-type-water-source').find('#type_water_source_for_edit option[value=' + id + ']').remove();//edit select
-            $('#modal-add-new-vid-type-water-source').find('#type_water_source_for_delete option[value=' + id + ']').remove();
-            toastr.success('Тип был удален из БД', 'Info:', {timeOut: 5000});
 
 
 
-            /* refresh update select */
-            $('#modal-add-new-vid-type-water-source').find('#type_water_source_for_edit').trigger("change");//select edit
-
-
-            /* refresh delete select */
-            $('#modal-add-new-vid-type-water-source').find('#type_water_source_for_delete').trigger("change");
-
-            /* refresh select on form */
-            $('#div-water-source #water-source-table .water_source_type').trigger("change");// on form
-        }
-
-
-
-
-        function notEnvolve(what, t) {
-            var is_check = $(t).is(":checked");
-
-            if (is_check === true) {
-
-                $('#' + what).find('.card-body').hide();
-
-                if (what === 'div-silymchs') {// silymchs - don't show serach cars
-                    $('#' + what).find('#a-search-str-cars').hide();
-
-                }
-
-                if (what === 'div-str') {// str - don't show serach str
-                    $('#' + what).find('#a-search-str').hide();
-                    $('#' + what).find('.refresh-str').hide();
-
-                }
-
-                if (what === 'div-informing') {// informing - don't show get dolj
-                    $('#' + what).find('.dolj-add').hide();
-
-                }
-
-
-
-                if (what === 'div-trunks') {// wide table for trunks block
-                    $('#' + what).find('#trunks_is_wide_table').prop('disabled', true);
-                    $('#' + what).find('#trunks_is_wide_table').prop('checked', false);
-
-                    hide_actions_ls();
-
-                }
-
-            } else {
-
-                $('#' + what).find('.card-body').show();
-
-
-                if (what === 'div-silymchs') {// silymchs - don't show serach cars
-                    $('#' + what).find('#a-search-str-cars').show();
-
-                }
-
-
-                if (what === 'div-str') {// str - don't show serach str
-                    $('#' + what).find('#a-search-str').show();
-                    $('#' + what).find('.refresh-str').show();
-
-                }
-
-
-                if (what === 'div-trunks') {// wide table for trunks block
-                    $('#' + what).find('#trunks_is_wide_table').prop('disabled', false);
-
-                }
-
-                if (what === 'div-informing') {// informing - don't show get dolj
-                    $('#' + what).find('.dolj-add').show();
-
-                }
-            }
-
-        }
-
-        {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_not_involved_silymchs == 1 %}
-            $('#div-silymchs').find('.card-body').hide();
-            $('#div-silymchs').find('#a-search-str-cars').hide();
-        {%endif%}
-        {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_not_involved_str == 1 %}
-            $('#div-str').find('.card-body').hide();
-            $('#div-str').find('#a-search-str').hide();
-            $('#div-str').find('.refresh-str').hide();
-        {%endif%}
-        {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_not_involved_innerservice == 1 %}
-            $('#div-innerservice').find('.card-body').hide();
-        {%endif%}
-        {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_not_involved_informing == 1 %}
-            $('#div-informing').find('.card-body').hide();
-        {%endif%}
-        {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_not_involved_trunks == 1 %}
-            $('#div-trunks').find('.card-body').hide();
-        {%endif%}
-
-
-            $(document).ready(function () {
-                $('body').on('change', '#trunks_is_wide_table', function (e) {
-
-                    e.preventDefault();
-
-                    var is_check = $(this).is(":checked");
-                    var actions_ls = $('.actions_ls_btn_trunks');
-                    var actions_ls_field = $('.actions_ls_trunks');
-
-                    if (is_check === true) {
-                        show_actions_ls();
-
-                    } else {
-                        hide_actions_ls();
-                    }
-
-                    // return false;
-                });
-            });
-
-            function hide_actions_ls() {
-                var actions_ls = $('.actions_ls_btn_trunks');
-                var actions_ls_field = $('.actions_ls_trunks');
-                actions_ls.addClass('hide');
-                actions_ls_field.addClass('hide');
-            }
-            function show_actions_ls() {
-                var actions_ls = $('.actions_ls_btn_trunks');
-                var actions_ls_field = $('.actions_ls_trunks');
-                actions_ls.removeClass('hide');
-            }
-
-
-            $('body').on('click', '#createStandart .accordion .dt-class', function (e) {
-
-                e.preventDefault();
-                var arr = [];
-                var inpt = $('#createStandart input[name="settings_accordion"]');
-                var tabs = $('form#createStandart .accordion .accordion-title');
-
-                $(tabs).each(function (index, value) {
-                    if ($(this).hasClass('is-collapsed')) {
-                    } else {
-                        var name = $(this).attr('aria-controls');
-                        arr.push(name);
-                    }
-                });
-                inpt.val(arr);
-
-            });
-
-
-
-        {#
-                    $('form#createStandart').submit(function(e){
-
-                 // Запрещаем стандартное поведение для кнопки submit
-                 e.preventDefault();
-
-                 var data=$('#form-sd-media').serializeArray();
-
-
-            });#}
-
-
-
-        {#                $(document).ready(function () {
-                            $('form#createStandart textarea').keydown(function (event) {
-                                if (event.keyCode == 13) {
-                                    event.preventDefault();
-                                    return true;
+                        {#       #div-silymchs table {
+                                    counter-reset: row-num;
                                 }
-                            });#}
-
-        {#                $('form#createStandart textarea').keydown(function (event) {
-                                if (event.keyCode == 13) {
-                                    event.preventDefault();
-                                    return false;
+                               #div-silymchs table tr {
+                                    counter-increment: row-num;
                                 }
-                            });#}
+                               #div-silymchs table tr td:first-child::before {
+                                    content: counter(row-num);
+                                }#}
 
-                                $(document).on("keypress", ":input:not(textarea)", function (event) {
-                                    return event.keyCode != 13;
+
+                        {#        .select2-results .select2-results__option[aria-disabled=true] {
+                                    display: none;
+                                }#}
+
+
+
+
+
+                    </style>
+
+                {% endblock %}
+
+                {% block footer %}
+
+
+                    <img src="{{ base_url('/assets/images/updown/32.ico')}}" alt="Наверх" title="Наверх" id="Go_Top"
+                         style="position: fixed; bottom: 60px; right: 2px; cursor: pointer; width: 36px;z-index: 1000;    border: solid 1px #254aa2;
+                         margin-top: 0px;
+                         padding-top: 3px;
+                         padding-bottom: 0px;">
+
+                    <img src="{{ base_url('/assets/images/updown/35.ico')}}" alt="Вниз" title="Вниз" id="Go_Bottom"
+                         style="position: fixed; bottom: 20px; right: 2px; cursor: pointer; width: 36px; z-index: 1000;    border: solid 1px #254aa2;
+                         margin-top: 0px;
+                         padding-top: 3px;
+                         padding-bottom: 0px;">
+
+
+
+
+                    <script src="{{ base_url('/assets/accordion/index.js')}}"></script>
+                    <script type="text/javascript" src="{{ base_url('assets/js/jquery.downCount.js') }}"></script>
+
+                    <script src="{{ base_url('/assets/js/mask/jquery.maskedinput.min.js')}}"></script>
+
+
+
+
+
+                    <script type="text/javascript"
+                    src="{{ base_url('assets/daterangepicker/moment.min.js') }}"></script>
+                    <script type="text/javascript"
+                    src="{{ base_url('assets/daterangepicker/daterangepicker.js') }}"></script>
+
+                    {#<script src="{{ base_url('/assets/js/dd/moment.min.js')}}"></script>#}
+
+                    {#<script src="{{ base_url('/assets/js/dd/locale/ru.js')}}"></script>#}
+                    {#    <script src="{{ base_url('/assets/js/dd/js/bootstrap-datetimepicker.min.js')}}"></script>#}
+                    <script src="{{ base_url('/assets/js/manual_datetimepicker.js')}}?{{now|date('H:i:s')}}"></script>
+                    <script src="{{ base_url('/assets/js/name.js')}}"></script>
+
+
+
+                    <script src="{{ base_url('/assets/js/form-standart/journal_table.js')}}?{{now|date('H:i:s')}}"></script>
+                    <script src="{{ base_url('/assets/js/form-standart/str_table.js')}}?{{now|date('H:i:s')}}"></script>
+                    <script src="{{ base_url('/assets/js/form-standart/final_block.js')}}?{{now|date('H:i:s')}}"></script>
+
+                    <script src="{{ base_url('/assets/js/form-standart/search_rig.js')}}?{{now|date('H:i:s')}}"></script>
+                    <script src="{{ base_url('/assets/js/form-standart/search_str_cars.js')}}?{{now|date('H:i:s')}}"></script>
+                    <script src="{{ base_url('/assets/js/form-standart/search_str_inf.js')}}?{{now|date('H:i:s')}}"></script>
+
+                    <script src="{{ base_url('/assets/datatables/jquery.dataTables.js')}}"></script>
+
+
+
+                    <script src="{{ base_url('/assets/js/form-standart/media_multi.js')}}?{{now|date('H:i:s')}}"></script>
+                    <script src="{{ base_url('/assets/js/form-standart/media.js')}}?{{now|date('H:i:s')}}"></script>
+
+
+
+
+                    <script src="{{ base_url('/assets/js/form-standart/preview_standart.js')}}?{{now|date('H:i:s')}}"></script>
+
+                    {%include '/create/standart/owner/actions_js.twig'%}
+
+                    {%if is_edit_dones is not defined  %}
+                        <script src="{{ base_url('/assets/js/timer.js')}}"></script>
+
+                    {%endif%}
+
+
+
+
+                    {%if settings is defined and settings.is_map is defined and 'yes' %}
+                        <script src="{{ base_url('/assets/libs/leaflet-control-geocoder-master/dist/leaflet-src.js')}}"></script>
+                        <script src="{{ base_url('/assets/libs/leaflet-control-geocoder-master/dist/Control.Geocoder.js')}}"></script>
+
+                        <script src="{{ base_url('/assets/libs/leaflet-control-geocoder-master/esri-leaflet.js')}}"
+                                integrity="sha512-6LVib9wGnqVKIClCduEwsCub7iauLXpwrd5njR2J507m3A2a4HXJDLMiSZzjcksag3UluIfuW1KzuWVI5n/cuQ=="
+                        crossorigin=""></script>
+
+                        {%include '/create/standart/parts/map_js.twig'%}
+
+                    {%endif%}
+
+
+
+
+
+                    <script>
+
+                        {% if rig is defined%}
+                            setPreviewData();
+                        {%endif%}
+
+
+                            jQuery(function () {
+                                $("#Go_Top").hide();
+                                if ($(window).scrollTop() >= 250)
+                                    $("#Go_Top").fadeIn("slow")
+                                $(window).scroll(function () {
+                                    if ($(window).scrollTop() <= 250)
+                                        $("#Go_Top").fadeOut("slow")
+                                    else
+                                        $("#Go_Top").fadeIn("slow")
                                 });
 
+                                $("#Go_Bottom").hide();
+                                if ($(window).scrollTop() <= $(document).height() - 999)
+                                    $("#Go_Bottom").fadeIn("slow")
+                                $(window).scroll(function () {
+                                    if ($(window).scrollTop() >= $(document).height() - 999)
+                                        $("#Go_Bottom").fadeOut("slow")
+                                    else
+                                        $("#Go_Bottom").fadeIn("slow")
+                                });
+
+                                $("#Go_Top").click(function () {
+                                    $("html, body").animate({scrollTop: 0}, "slow")
+                                })
+                                $("#Go_Bottom").click(function () {
+                                    $("html, body").animate({scrollTop: $(document).height()}, "slow")
+                                })
+                            });
 
 
 
-                                /*  add default doljnosty */
-                                $('body').on('click', '#btn-add-dolj', function (event) {
-
-                                    var url = '{{base_url('/dones/get_dolj')}}';
 
 
-                                    $('#preload-update-data-search-rig').css('display', 'block');
-                                    $('body').css('opacity', 0.5);
 
-                                    $.post(url, {}, function (res) {
+                            jQuery("#lat_id").mask("99.999999");//долгота
+                            jQuery("#long_id").mask("99.999999");//широта
 
+                            $(document).ready(function () {
 
-                                        if (parseInt(JSON.parse(res)['is_error']) === 0) {
+                                jQuery("#vid_hs_2").chained("#vid_hs_1");
+                            });
 
-
-                                            $(JSON.parse(res)['result']).each(function (index, val) {
-
-                                                $(val).each(function (index_1, value) {
-
-                                                    $('#informing-block-div #div-informing').find('#add-row-informing').trigger('click');
-                                                    var $row = $('#informing-block-div #div-informing .table tbody').find('.informing_row:last');
-                                                    $row.find('td').find('.informing_fio').val(value.fio);
-                                                });
-                                            });
-
-                                            /*  delete empty first row*/
-                                            $('#informing-block-div #div-informing').find('.informing_fio').each(function (i, v) {
-                                                var id_row = ($(this).closest('.informing_row')).attr('id');
-                                                var $row_check = $('#informing-block-div #div-informing .table tbody').find('#' + id_row);
-                                                if ($row_check.find('td').find('.informing_fio').val() === '') {
-                                                    $row_check.remove();
-                                                }
-                                            });
+                    </script>
 
 
-                                            $('#preload-update-data-search-rig').css('display', 'none');
-                                            $('body').css('opacity', 1);
+                    <script>
 
 
-                                            toastr.success('Данные по должностям успешно получены', 'Успех!', {progressBar: true, timeOut: 2500});
-                                            $('#modal-dolj-add').css('opacity', '');
-                                            $('#modal-dolj-add').click();
-                                        } else {
 
-                                            $('body').css('opacity', 1);
-                                            toastr.error('Информация не найдена', 'Ошибка!', {progressBar: true, timeOut: 2500});
 
+                        /* add Add Work Innerservice to bd */
+                        function AddWorkInnerservice() {//add in modal
+                            $.ajax({
+                                dataType: "json",
+                                url: '{{ base_url('/dones/add_work_innerservice_ajax')}}',
+                                method: 'POST',
+                                data: {
+                                    name: $('#modal-add-new-work-innerservice').find('#new_name_work_innerservice').val()
+                                }
+                            }).done(function (data) {
+
+                                if (data.is_success === 1) {
+                                    $('.work_innerservice').append('<option value="' + data.id + '">' + data.work_name + '</option>');
+                                    $('.work_innerservice ').trigger("change");
+
+                                    $('#name_work_innerservice_for_edit').append('<option value="' + data.id + '">' + data.work_name + '</option>');
+                                    $('#name_work_innerservice_for_edit').trigger("change");
+
+
+                                    $('#name_work_innerservice_for_delete').append('<option value="' + data.id + '">' + data.work_name + '</option>');
+                                    $('#name_work_innerservice_for_delete').trigger("change");
+
+                                    $('#new_name_work_innerservice').val('');
+
+                                    $('.md-close').click();
+                                    toastr.success(data.message, 'Успех:', {timeOut: 5000});
+                                } else {
+                                    toastr.warning(data.message, 'Внимание:', {timeOut: 5000});
+                                }
+                            });
+
+                        }
+
+                        /* edit Work Innerservice to bd */
+                        function EditWorkInnerservice() {//edit in modal
+
+                            var id_edit = $('#modal-add-new-work-innerservice').find('#name_work_innerservice_for_edit').val();
+
+                            $.ajax({
+                                dataType: "json",
+                                url: '{{ base_url('/dones/edit_work_innerservice_ajax')}}',
+                                method: 'POST',
+                                data: {
+                                    name: $('#modal-add-new-work-innerservice').find('#edit_name_work_innerservice').val(),
+                                    id_edit: id_edit
+                                }
+                            }).done(function (data) {
+
+                                if (data.is_success === 1) {
+
+                                    /*  set data*/
+                                    $('#name_work_innerservice_for_edit option[value=' + id_edit + ']').text(data.work_name);//select edit
+                                    $('#name_work_innerservice_for_delete option[value=' + id_edit + ']').text(data.work_name);//select delete
+                                    $('.work_innerservice option[value=' + id_edit + ']').text(data.work_name);//select on form
+
+
+                                    /* refresh update select */
+                                    $('#name_work_innerservice_for_edit').select2('destroy');
+                                    $('#name_work_innerservice_for_edit').select2();
+                                    $('#name_work_innerservice_for_edit').trigger("change");//select edit
+
+
+                                    /* refresh delete select */
+                                    $('#name_work_innerservice_for_delete').select2('destroy');
+                                    $('#name_work_innerservice_for_delete').select2();
+                                    $('#name_work_innerservice_for_delete').trigger("change");
+
+                                    /* refresh select on form */
+                                    $('.work_innerservice').select2('destroy');
+                                    $('.work_innerservice').select2({
+                                        placeholder: "Выберите из списка",
+                                        allowClear: true,
+                                        "language": {
+                                            "noResults": function () {
+                                                return "Ничего не найдено";
+                                            }
+                                        }
+                                    });
+                                    $('.work_innerservice').trigger("change");// on form
+
+
+                                    $('#edit_name_work_innerservice').val('');
+
+                                    $('.md-close').click();
+                                    toastr.success(data.message, 'Успех:', {timeOut: 5000});
+                                } else {
+                                    toastr.warning(data.message, 'Внимание:', {timeOut: 5000});
+                                }
+                            });
+
+                        }
+
+
+
+
+                        /* delete work innerservice from bd */
+                        function deleteWorkInnerservice() {//delete in modal
+
+                            var id = $('#name_work_innerservice_for_delete option:selected').val();
+
+                            $.ajax({
+                                dataType: "json",
+                                url: '{{ base_url('/dones/delete_work_innerservice_ajax')}}',
+                                method: 'POST',
+                                data: {
+                                    id: id
+                                }
+                            });
+                            $('.work_innerservice option[value=' + id + ']').remove();
+                            $('#name_work_innerservice_for_edit option[value=' + id + ']').remove();//edit select
+                            $('#name_work_innerservice_for_delete option[value=' + id + ']').remove();
+                            toastr.success('Тип был удален из БД', 'Info:', {timeOut: 5000});
+
+
+
+                            /* refresh update select */
+                            //$('#name_work_innerservice_for_edit').select2('destroy');
+                            //$('#name_work_innerservice_for_edit').select2();
+                            $('#name_work_innerservice_for_edit').trigger("change");//select edit
+
+
+                            /* refresh delete select */
+                            //$('#name_work_innerservice_for_delete').select2('destroy');
+                            //$('#name_work_innerservice_for_delete').select2();
+                            $('#name_work_innerservice_for_delete').trigger("change");
+
+                            /* refresh select on form */
+                            //$('.work_innerservice').select2('destroy');
+                            //$('.work_innerservice').select2();
+                            $('.work_innerservice').trigger("change");// on form
+                        }
+
+
+
+
+
+                        /* add Add new vid of house object to bd */
+                        function AddObjectHouse() {//add in modal
+                            $.ajax({
+                                dataType: "json",
+                                url: '{{ base_url('/dones/add_object_house_ajax')}}',
+                                method: 'POST',
+                                data: {
+                                    name: $('#modal-add-new-vid-object-house').find('#new_object_house').val()
+                                }
+                            }).done(function (data) {
+
+                                if (data.is_success === 1) {
+                                    $('#object_house_id').append('<option value="' + data.id + '">' + data.name + '</option>');
+                                    $('#object_house_id').trigger("change");
+
+                                    $('#object_house_for_edit').append('<option value="' + data.id + '">' + data.name + '</option>');
+                                    $('#object_house_for_edit').trigger("change");
+
+
+                                    $('#object_house_for_delete').append('<option value="' + data.id + '">' + data.name + '</option>');
+                                    $('#object_house_for_delete').trigger("change");
+
+                                    $('#modal-add-new-vid-object-house').find('#new_object_house').val('');
+
+                                    $('.md-close').click();
+                                    toastr.success(data.message, 'Успех:', {timeOut: 5000});
+                                } else {
+                                    toastr.warning(data.message, 'Внимание:', {timeOut: 5000});
+                                }
+                            });
+
+                        }
+
+
+
+                        /* edit object house vid to bd */
+                        function EditObjectHouse() {//edit in modal
+
+                            var id_edit = $('#modal-add-new-vid-object-house').find('#object_house_for_edit').val();
+
+                            $.ajax({
+                                dataType: "json",
+                                url: '{{ base_url('/dones/edit_object_house_ajax')}}',
+                                method: 'POST',
+                                data: {
+                                    name: $('#modal-add-new-vid-object-house').find('#new_name_object_house').val(),
+                                    id_edit: id_edit
+                                }
+                            }).done(function (data) {
+
+                                if (data.is_success === 1) {
+
+                                    /*  set data*/
+                                    $('#modal-add-new-vid-object-house').find('#object_house_for_edit option[value=' + id_edit + ']').text(data.name);//select edit
+                                    $('#modal-add-new-vid-object-house').find('#object_house_for_delete option[value=' + id_edit + ']').text(data.name);//select delete
+                                    $('#object_house_id option[value=' + id_edit + ']').text(data.name);//select on form
+
+                                    /* refresh update select */
+                                    $('#modal-add-new-vid-object-house').find('#object_house_for_edit').select2('destroy');
+                                    $('#modal-add-new-vid-object-house').find('#object_house_for_edit').select2();
+
+                                    /* refresh delete select */
+                                    $('#modal-add-new-vid-object-house').find('#object_house_for_delete').select2('destroy');
+                                    $('#modal-add-new-vid-object-house').find('#object_house_for_delete').select2();
+
+                                    /* refresh select on form */
+                                    $('#object_house_id').select2('destroy');
+                                    $('#object_house_id').select2({
+                                        placeholder: "Выберите из списка",
+                                        allowClear: true,
+                                        "language": {
+                                            "noResults": function () {
+                                                return "Ничего не найдено";
+                                            }
                                         }
                                     });
 
 
-                                });
+                                    $('#modal-add-new-vid-object-house').find('#new_name_object_house').val('');
+
+                                    $('.md-close').click();
+                                    toastr.success(data.message, 'Успех:', {timeOut: 5000});
+                                } else {
+                                    toastr.warning(data.message, 'Внимание:', {timeOut: 5000});
+                                }
+                            });
+
+                        }
 
 
 
-                                $('body').on('change', '#object_house_id', function (e) {
+                        /* delete object house vid from bd */
+                        function deleteObjectHouse() {//delete in modal
+
+                            var id = $('#modal-add-new-vid-object-house').find('#object_house_for_delete').val();
+
+                            $.ajax({
+                                dataType: "json",
+                                url: '{{ base_url('/dones/delete_object_house_ajax')}}',
+                                method: 'POST',
+                                data: {
+                                    id: id
+                                }
+                            });
+                            $('#object_house_id option[value=' + id + ']').remove();
+                            $('#modal-add-new-vid-object-house').find('#object_house_for_edit option[value=' + id + ']').remove();//edit select
+                            $('#modal-add-new-vid-object-house').find('#object_house_for_delete option[value=' + id + ']').remove();
+                            toastr.success('Тип был удален из БД', 'Info:', {timeOut: 5000});
+
+
+
+                            /* refresh update select */
+                            $('#modal-add-new-vid-object-house').find('#object_house_for_edit').trigger("change");//select edit
+
+
+                            /* refresh delete select */
+                            $('#modal-add-new-vid-object-house').find('#object_house_for_delete').trigger("change");
+
+                            /* refresh select on form */
+                            $('#object_house_id').trigger("change");// on form
+                        }
+
+
+
+                        /* add Add new vid material of house object to bd */
+                        function AddObjectMaterial() {//add in modal
+                            $.ajax({
+                                dataType: "json",
+                                url: '{{ base_url('/dones/add_object_material_ajax')}}',
+                                method: 'POST',
+                                data: {
+                                    name: $('#modal-add-new-vid-object-material').find('#new_object_material').val()
+                                }
+                            }).done(function (data) {
+
+                                if (data.is_success === 1) {
+                                    $('#object_material_id').append('<option value="' + data.id + '">' + data.name + '</option>');
+                                    $('#object_material_id').trigger("change");
+
+                                    $('#object_material_for_edit').append('<option value="' + data.id + '">' + data.name + '</option>');
+                                    $('#object_material_for_edit').trigger("change");
+
+
+                                    $('#object_material_for_delete').append('<option value="' + data.id + '">' + data.name + '</option>');
+                                    $('#object_material_for_delete').trigger("change");
+
+                                    $('#modal-add-new-vid-object-material').find('#new_object_material').val('');
+
+                                    $('.md-close').click();
+                                    toastr.success(data.message, 'Успех:', {timeOut: 5000});
+                                } else {
+                                    toastr.warning(data.message, 'Внимание:', {timeOut: 5000});
+                                }
+                            });
+
+                        }
+
+
+                        /* edit object material vid to bd */
+                        function EditObjectMaterial() {//edit in modal
+
+                            var id_edit = $('#modal-add-new-vid-object-material').find('#object_material_for_edit').val();
+
+                            $.ajax({
+                                dataType: "json",
+                                url: '{{ base_url('/dones/edit_object_material_ajax')}}',
+                                method: 'POST',
+                                data: {
+                                    name: $('#modal-add-new-vid-object-material').find('#new_name_object_material').val(),
+                                    id_edit: id_edit
+                                }
+                            }).done(function (data) {
+
+                                if (data.is_success === 1) {
+
+                                    /*  set data*/
+                                    $('#modal-add-new-vid-object-material').find('#object_material_for_edit option[value=' + id_edit + ']').text(data.name);//select edit
+                                    $('#modal-add-new-vid-object-material').find('#object_material_for_delete option[value=' + id_edit + ']').text(data.name);//select delete
+                                    $('#object_material_id option[value=' + id_edit + ']').text(data.name);//select on form
+
+                                    /* refresh update select */
+                                    $('#modal-add-new-vid-object-material').find('#object_material_for_edit').select2('destroy');
+                                    $('#modal-add-new-vid-object-material').find('#object_material_for_edit').select2();
+
+                                    /* refresh delete select */
+                                    $('#modal-add-new-vid-object-material').find('#object_material_for_delete').select2('destroy');
+                                    $('#modal-add-new-vid-object-material').find('#object_material_for_delete').select2();
+
+                                    /* refresh select on form */
+                                    $('#object_material_id').select2('destroy');
+                                    $('#object_material_id').select2({
+                                        placeholder: "Выберите из списка",
+                                        allowClear: true,
+                                        "language": {
+                                            "noResults": function () {
+                                                return "Ничего не найдено";
+                                            }
+                                        }
+                                    });
+
+
+                                    $('#modal-add-new-vid-object-material').find('#new_name_object_material').val('');
+
+                                    $('.md-close').click();
+                                    toastr.success(data.message, 'Успех:', {timeOut: 5000});
+                                } else {
+                                    toastr.warning(data.message, 'Внимание:', {timeOut: 5000});
+                                }
+                            });
+
+                        }
+
+
+                        /* delete object material vid from bd */
+                        function deleteObjectMaterial() {//delete in modal
+
+                            var id = $('#modal-add-new-vid-object-material').find('#object_material_for_delete').val();
+
+                            $.ajax({
+                                dataType: "json",
+                                url: '{{ base_url('/dones/delete_object_material_ajax')}}',
+                                method: 'POST',
+                                data: {
+                                    id: id
+                                }
+                            });
+                            $('#object_material_id option[value=' + id + ']').remove();
+                            $('#modal-add-new-vid-object-material').find('#object_material_for_edit option[value=' + id + ']').remove();//edit select
+                            $('#modal-add-new-vid-object-material').find('#object_material_for_delete option[value=' + id + ']').remove();
+                            toastr.success('Тип был удален из БД', 'Info:', {timeOut: 5000});
+
+
+
+                            /* refresh update select */
+                            $('#modal-add-new-vid-object-material').find('#object_material_for_edit').trigger("change");//select edit
+
+
+                            /* refresh delete select */
+                            $('#modal-add-new-vid-object-material').find('#object_material_for_delete').trigger("change");
+
+                            /* refresh select on form */
+                            $('#object_material_id').trigger("change");// on form
+                        }
+
+
+
+                        /* add Add new vid roof of house object to bd */
+                        function AddObjectRoof() {//add in modal
+                            $.ajax({
+                                dataType: "json",
+                                url: '{{ base_url('/dones/add_object_roof_ajax')}}',
+                                method: 'POST',
+                                data: {
+                                    name: $('#modal-add-new-vid-object-roof').find('#new_object_roof').val()
+                                }
+                            }).done(function (data) {
+
+                                if (data.is_success === 1) {
+                                    $('#object_roof_id').append('<option value="' + data.id + '">' + data.name + '</option>');
+                                    $('#object_roof_id').trigger("change");
+
+                                    $('#object_roof_for_edit').append('<option value="' + data.id + '">' + data.name + '</option>');
+                                    $('#object_roof_for_edit').trigger("change");
+
+
+                                    $('#object_roof_for_delete').append('<option value="' + data.id + '">' + data.name + '</option>');
+                                    $('#object_roof_for_delete').trigger("change");
+
+                                    $('#modal-add-new-vid-object-roof').find('#new_object_roof').val('');
+
+                                    $('.md-close').click();
+                                    toastr.success(data.message, 'Успех:', {timeOut: 5000});
+                                } else {
+                                    toastr.warning(data.message, 'Внимание:', {timeOut: 5000});
+                                }
+                            });
+
+                        }
+
+
+
+                        /* edit object roof vid to bd */
+                        function EditObjectRoof() {//edit in modal
+
+                            var id_edit = $('#modal-add-new-vid-object-roof').find('#object_roof_for_edit').val();
+
+                            $.ajax({
+                                dataType: "json",
+                                url: '{{ base_url('/dones/edit_object_roof_ajax')}}',
+                                method: 'POST',
+                                data: {
+                                    name: $('#modal-add-new-vid-object-roof').find('#new_name_object_roof').val(),
+                                    id_edit: id_edit
+                                }
+                            }).done(function (data) {
+
+                                if (data.is_success === 1) {
+
+                                    /*  set data*/
+                                    $('#modal-add-new-vid-object-roof').find('#object_roof_for_edit option[value=' + id_edit + ']').text(data.name);//select edit
+                                    $('#modal-add-new-vid-object-roof').find('#object_roof_for_delete option[value=' + id_edit + ']').text(data.name);//select delete
+                                    $('#object_roof_id option[value=' + id_edit + ']').text(data.name);//select on form
+
+                                    /* refresh update select */
+                                    $('#modal-add-new-vid-object-roof').find('#object_roof_for_edit').select2('destroy');
+                                    $('#modal-add-new-vid-object-roof').find('#object_roof_for_edit').select2();
+
+                                    /* refresh delete select */
+                                    $('#modal-add-new-vid-object-roof').find('#object_roof_for_delete').select2('destroy');
+                                    $('#modal-add-new-vid-object-roof').find('#object_roof_for_delete').select2();
+
+                                    /* refresh select on form */
+                                    $('#object_roof_id').select2('destroy');
+                                    $('#object_roof_id').select2({
+                                        placeholder: "Выберите из списка",
+                                        allowClear: true,
+                                        "language": {
+                                            "noResults": function () {
+                                                return "Ничего не найдено";
+                                            }
+                                        }
+                                    });
+
+
+                                    $('#modal-add-new-vid-object-roof').find('#new_name_object_roof').val('');
+
+                                    $('.md-close').click();
+                                    toastr.success(data.message, 'Успех:', {timeOut: 5000});
+                                } else {
+                                    toastr.warning(data.message, 'Внимание:', {timeOut: 5000});
+                                }
+                            });
+
+                        }
+
+
+
+                        /* delete object roof vid from bd */
+                        function deleteObjectRoof() {//delete in modal
+
+                            var id = $('#modal-add-new-vid-object-roof').find('#object_roof_for_delete').val();
+
+                            $.ajax({
+                                dataType: "json",
+                                url: '{{ base_url('/dones/delete_object_roof_ajax')}}',
+                                method: 'POST',
+                                data: {
+                                    id: id
+                                }
+                            });
+                            $('#object_roof_id option[value=' + id + ']').remove();
+                            $('#modal-add-new-vid-object-roof').find('#object_roof_for_edit option[value=' + id + ']').remove();//edit select
+                            $('#modal-add-new-vid-object-roof').find('#object_roof_for_delete option[value=' + id + ']').remove();
+                            toastr.success('Тип был удален из БД', 'Info:', {timeOut: 5000});
+
+
+
+                            /* refresh update select */
+                            $('#modal-add-new-vid-object-roof').find('#object_roof_for_edit').trigger("change");//select edit
+
+
+                            /* refresh delete select */
+                            $('#modal-add-new-vid-object-roof').find('#object_roof_for_delete').trigger("change");
+
+                            /* refresh select on form */
+                            $('#object_roof_id').trigger("change");// on form
+                        }
+
+
+
+
+                        /* add Add new vid people status to bd */
+                        function AddPeopleStatus() {//add in modal
+                            $.ajax({
+                                dataType: "json",
+                                url: '{{ base_url('/dones/add_people_status_ajax')}}',
+                                method: 'POST',
+                                data: {
+                                    name: $('#modal-add-new-vid-people-status').find('#new_people_status').val()
+                                }
+                            }).done(function (data) {
+
+                                if (data.is_success === 1) {
+                                    $('#people_status_id').append('<option value="' + data.id + '">' + data.name + '</option>');
+                                    $('#people_status_id').trigger("change");
+
+                                    $('#people_status_for_edit').append('<option value="' + data.id + '">' + data.name + '</option>');
+                                    $('#people_status_for_edit').trigger("change");
+
+
+                                    $('#people_status_for_delete').append('<option value="' + data.id + '">' + data.name + '</option>');
+                                    $('#people_status_for_delete').trigger("change");
+
+                                    $('#modal-add-new-vid-people-status').find('#new_people_status').val('');
+
+                                    $('.md-close').click();
+                                    toastr.success(data.message, 'Успех:', {timeOut: 5000});
+                                } else {
+                                    toastr.warning(data.message, 'Внимание:', {timeOut: 5000});
+                                }
+                            });
+
+                        }
+
+
+
+                        /* edit people status vid to bd */
+                        function EditPeopleStatus() {//edit in modal
+
+                            var id_edit = $('#modal-add-new-vid-people-status').find('#people_status_for_edit').val();
+
+                            $.ajax({
+                                dataType: "json",
+                                url: '{{ base_url('/dones/edit_people_status_ajax')}}',
+                                method: 'POST',
+                                data: {
+                                    name: $('#modal-add-new-vid-people-status').find('#new_name_people_status').val(),
+                                    id_edit: id_edit
+                                }
+                            }).done(function (data) {
+
+                                if (data.is_success === 1) {
+
+                                    /*  set data*/
+                                    $('#modal-add-new-vid-people-status').find('#people_status_for_edit option[value=' + id_edit + ']').text(data.name);//select edit
+                                    $('#modal-add-new-vid-people-status').find('#people_status_for_delete option[value=' + id_edit + ']').text(data.name);//select delete
+                                    $('#people_status_id option[value=' + id_edit + ']').text(data.name);//select on form
+
+                                    /* refresh update select */
+                                    $('#modal-add-new-vid-people-status').find('#people_status_for_edit').select2('destroy');
+                                    $('#modal-add-new-vid-people-status').find('#people_status_for_edit').select2();
+
+                                    /* refresh delete select */
+                                    $('#modal-add-new-vid-people-status').find('#people_status_for_delete').select2('destroy');
+                                    $('#modal-add-new-vid-people-status').find('#people_status_for_delete').select2();
+
+                                    /* refresh select on form */
+                                    $('#people_status_id').select2('destroy');
+                                    $('#people_status_id').select2({
+                                        placeholder: "Выберите из списка",
+                                        allowClear: true,
+                                        "language": {
+                                            "noResults": function () {
+                                                return "Ничего не найдено";
+                                            }
+                                        }
+                                    });
+
+
+                                    $('#modal-add-new-vid-people-status').find('#new_name_people_status').val('');
+
+                                    $('.md-close').click();
+                                    toastr.success(data.message, 'Успех:', {timeOut: 5000});
+                                } else {
+                                    toastr.warning(data.message, 'Внимание:', {timeOut: 5000});
+                                }
+                            });
+
+                        }
+
+
+
+
+                        /* delete people status vid from bd */
+                        function deletePeopleStatus() {//delete in modal
+
+                            var id = $('#modal-add-new-vid-people-status').find('#people_status_for_delete').val();
+
+                            $.ajax({
+                                dataType: "json",
+                                url: '{{ base_url('/dones/delete_people_status_ajax')}}',
+                                method: 'POST',
+                                data: {
+                                    id: id
+                                }
+                            });
+                            $('#people_status_id option[value=' + id + ']').remove();
+                            $('#modal-add-new-vid-people-status').find('#people_status_for_edit option[value=' + id + ']').remove();//edit select
+                            $('#modal-add-new-vid-people-status').find('#people_status_for_delete option[value=' + id + ']').remove();
+                            toastr.success('Тип был удален из БД', 'Info:', {timeOut: 5000});
+
+
+
+                            /* refresh update select */
+                            $('#modal-add-new-vid-people-status').find('#people_status_for_edit').trigger("change");//select edit
+
+
+                            /* refresh delete select */
+                            $('#modal-add-new-vid-people-status').find('#people_status_for_delete').trigger("change");
+
+                            /* refresh select on form */
+                            $('#people_status_id').trigger("change");// on form
+                        }
+
+
+
+
+
+
+                        /* add Add new vid water source to bd */
+                        function AddWaterSource() {//add in modal
+                            $.ajax({
+                                dataType: "json",
+                                url: '{{ base_url('/dones/add_water_source_ajax')}}',
+                                method: 'POST',
+                                data: {
+                                    name: $('#modal-add-new-vid-type-water-source').find('#new_type_water_source').val()
+                                }
+                            }).done(function (data) {
+
+                                if (data.is_success === 1) {
+                                    $('#div-water-source #water-source-table .water_source_type').append('<option value="' + data.id + '">' + data.name + '</option>');
+                                    $('#div-water-source #water-source-table .water_source_type').trigger("change");
+
+                                    $('#type_water_source_for_edit').append('<option value="' + data.id + '">' + data.name + '</option>');
+                                    $('#type_water_source_for_edit').trigger("change");
+
+
+                                    $('#type_water_source_for_delete').append('<option value="' + data.id + '">' + data.name + '</option>');
+                                    $('#type_water_source_for_delete').trigger("change");
+
+                                    $('#modal-add-new-vid-type-water-source').find('#new_type_water_source').val('');
+
+                                    $('.md-close').click();
+                                    toastr.success(data.message, 'Успех:', {timeOut: 5000});
+                                } else {
+                                    toastr.warning(data.message, 'Внимание:', {timeOut: 5000});
+                                }
+                            });
+
+                        }
+
+
+
+
+
+                        /* edit water source vid to bd */
+                        function EditWaterSource() {//edit in modal
+
+                            var id_edit = $('#modal-add-new-vid-type-water-source').find('#type_water_source_for_edit').val();
+
+                            $.ajax({
+                                dataType: "json",
+                                url: '{{ base_url('/dones/edit_water_source_ajax')}}',
+                                method: 'POST',
+                                data: {
+                                    name: $('#modal-add-new-vid-type-water-source').find('#new_name_type_water_source').val(),
+                                    id_edit: id_edit
+                                }
+                            }).done(function (data) {
+
+                                if (data.is_success === 1) {
+
+                                    /*  set data*/
+                                    $('#modal-add-new-vid-type-water-source').find('#type_water_source_for_edit option[value=' + id_edit + ']').text(data.name);//select edit
+                                    $('#modal-add-new-vid-type-water-source').find('#type_water_source_for_delete option[value=' + id_edit + ']').text(data.name);//select delete
+                                    $('#div-water-source #water-source-table').find('.water_source_type option[value=' + id_edit + ']').text(data.name);//select on form
+
+                                    /* refresh update select */
+                                    $('#modal-add-new-vid-type-water-source').find('#type_water_source_for_edit').select2('destroy');
+                                    $('#modal-add-new-vid-type-water-source').find('#type_water_source_for_edit').select2();
+
+                                    /* refresh delete select */
+                                    $('#modal-add-new-vid-type-water-source').find('#type_water_source_for_delete').select2('destroy');
+                                    $('#modal-add-new-vid-type-water-source').find('#type_water_source_for_delete').select2();
+
+                                    /* refresh select on form */
+                                    $('#div-water-source #water-source-table .water_source_type').select2('destroy');
+                                    $('#div-water-source #water-source-table .water_source_type').select2({
+                                        placeholder: "Выберите из списка",
+                                        allowClear: true,
+                                        "language": {
+                                            "noResults": function () {
+                                                return "Ничего не найдено";
+                                            }
+                                        }
+                                    });
+
+
+                                    $('#modal-add-new-vid-type-water-source').find('#new_name_type_water_source').val('');
+
+                                    $('.md-close').click();
+                                    toastr.success(data.message, 'Успех:', {timeOut: 5000});
+                                } else {
+                                    toastr.warning(data.message, 'Внимание:', {timeOut: 5000});
+                                }
+                            });
+
+                        }
+
+
+
+
+
+                        /* delete water source vid from bd */
+                        function deleteWaterSource() {//delete in modal
+
+                            var id = $('#modal-add-new-vid-type-water-source').find('#type_water_source_for_delete').val();
+
+                            $.ajax({
+                                dataType: "json",
+                                url: '{{ base_url('/dones/delete_water_source_ajax')}}',
+                                method: 'POST',
+                                data: {
+                                    id: id
+                                }
+                            });
+                            $('#div-water-source #water-source-table .water_source_type option[value=' + id + ']').remove();
+                            $('#modal-add-new-vid-type-water-source').find('#type_water_source_for_edit option[value=' + id + ']').remove();//edit select
+                            $('#modal-add-new-vid-type-water-source').find('#type_water_source_for_delete option[value=' + id + ']').remove();
+                            toastr.success('Тип был удален из БД', 'Info:', {timeOut: 5000});
+
+
+
+                            /* refresh update select */
+                            $('#modal-add-new-vid-type-water-source').find('#type_water_source_for_edit').trigger("change");//select edit
+
+
+                            /* refresh delete select */
+                            $('#modal-add-new-vid-type-water-source').find('#type_water_source_for_delete').trigger("change");
+
+                            /* refresh select on form */
+                            $('#div-water-source #water-source-table .water_source_type').trigger("change");// on form
+                        }
+
+
+
+
+                        function notEnvolve(what, t) {
+                            var is_check = $(t).is(":checked");
+
+                            if (is_check === true) {
+
+                                $('#' + what).find('.card-body').hide();
+
+                                if (what === 'div-silymchs') {// silymchs - don't show serach cars
+                                    $('#' + what).find('#a-search-str-cars').hide();
+
+                                }
+
+                                if (what === 'div-str') {// str - don't show serach str
+                                    $('#' + what).find('#a-search-str').hide();
+                                    $('#' + what).find('.refresh-str').hide();
+
+                                }
+
+                                if (what === 'div-informing') {// informing - don't show get dolj
+                                    $('#' + what).find('.dolj-add').hide();
+
+                                }
+
+
+
+                                if (what === 'div-trunks') {// wide table for trunks block
+                                    $('#' + what).find('#trunks_is_wide_table').prop('disabled', true);
+                                    $('#' + what).find('#trunks_is_wide_table').prop('checked', false);
+
+                                    hide_actions_ls();
+
+                                }
+
+                            } else {
+
+                                $('#' + what).find('.card-body').show();
+
+
+                                if (what === 'div-silymchs') {// silymchs - don't show serach cars
+                                    $('#' + what).find('#a-search-str-cars').show();
+
+                                }
+
+
+                                if (what === 'div-str') {// str - don't show serach str
+                                    $('#' + what).find('#a-search-str').show();
+                                    $('#' + what).find('.refresh-str').show();
+
+                                }
+
+
+                                if (what === 'div-trunks') {// wide table for trunks block
+                                    $('#' + what).find('#trunks_is_wide_table').prop('disabled', false);
+
+                                }
+
+                                if (what === 'div-informing') {// informing - don't show get dolj
+                                    $('#' + what).find('.dolj-add').show();
+
+                                }
+                            }
+
+                        }
+
+                        {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_not_involved_silymchs == 1 %}
+                            $('#div-silymchs').find('.card-body').hide();
+                            $('#div-silymchs').find('#a-search-str-cars').hide();
+                        {%endif%}
+                        {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_not_involved_str == 1 %}
+                            $('#div-str').find('.card-body').hide();
+                            $('#div-str').find('#a-search-str').hide();
+                            $('#div-str').find('.refresh-str').hide();
+                        {%endif%}
+                        {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_not_involved_innerservice == 1 %}
+                            $('#div-innerservice').find('.card-body').hide();
+                        {%endif%}
+                        {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_not_involved_informing == 1 %}
+                            $('#div-informing').find('.card-body').hide();
+                        {%endif%}
+                        {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_not_involved_trunks == 1 %}
+                            $('#div-trunks').find('.card-body').hide();
+                        {%endif%}
+
+
+                            $(document).ready(function () {
+                                $('body').on('change', '#trunks_is_wide_table', function (e) {
 
                                     e.preventDefault();
 
-                                    var floor = $('#object-floor-flat-div');
-                                    var rooms = $('#object_cnt_rooms_div');
+                                    var is_check = $(this).is(":checked");
+                                    var actions_ls = $('.actions_ls_btn_trunks');
+                                    var actions_ls_field = $('.actions_ls_trunks');
 
-                                    if (parseInt($(this).val()) === {{id_object_many_floor}}) {
-
-                                        floor.removeClass('hide');
-                                        floor.removeClass('show');
-                                        floor.addClass('show');
-
-                                        rooms.removeClass('hide');
-                                        rooms.removeClass('show');
-                                        rooms.addClass('show');
-
+                                    if (is_check === true) {
+                                        show_actions_ls();
 
                                     } else {
-
-                                        floor.removeClass('hide');
-                                        floor.removeClass('show');
-                                        floor.addClass('hide');
-
-                                        rooms.removeClass('hide');
-                                        rooms.removeClass('show');
-                                        rooms.addClass('hide');
+                                        hide_actions_ls();
                                     }
 
+                                    // return false;
                                 });
+                            });
+
+                            function hide_actions_ls() {
+                                var actions_ls = $('.actions_ls_btn_trunks');
+                                var actions_ls_field = $('.actions_ls_trunks');
+                                actions_ls.addClass('hide');
+                                actions_ls_field.addClass('hide');
+                            }
+                            function show_actions_ls() {
+                                var actions_ls = $('.actions_ls_btn_trunks');
+                                var actions_ls_field = $('.actions_ls_trunks');
+                                actions_ls.removeClass('hide');
+                            }
 
 
+                            $('body').on('click', '#createStandart .accordion .dt-class', function (e) {
 
-                                $('body').on('change', '#is_owner_multi', function (e) {
+                                e.preventDefault();
+                                var arr = [];
+                                var inpt = $('#createStandart input[name="settings_accordion"]');
+                                var tabs = $('form#createStandart .accordion .accordion-title');
 
-                                    e.preventDefault();
-
-                                    var is_multi = $(this).is(':checked');
-                                    var descr = $('.div_owner_multi_descr');
-
-                                    if (is_multi) {
-                                        descr.removeClass('hide');
-                                        descr.removeClass('show');
-                                        descr.addClass('show');
-
+                                $(tabs).each(function (index, value) {
+                                    if ($(this).hasClass('is-collapsed')) {
                                     } else {
-                                        descr.removeClass('hide');
-                                        descr.removeClass('show');
-                                        descr.addClass('hide');
-
+                                        var name = $(this).attr('aria-controls');
+                                        arr.push(name);
                                     }
-                                    setPreviewOwner();
                                 });
+                                inpt.val(arr);
 
-
-                                $('body').on('change', '#is_owner_multi_law', function (e) {
-
-                                    e.preventDefault();
-
-                                    var is_multi = $(this).is(':checked');
-                                    var descr = $('.div_owner_multi_descr_law');
-
-                                    if (is_multi) {
-                                        descr.removeClass('hide');
-                                        descr.removeClass('show');
-                                        descr.addClass('show');
-
-                                    } else {
-                                        descr.removeClass('hide');
-                                        descr.removeClass('show');
-                                        descr.addClass('hide');
-
-                                    }
-                                    setPreviewLawFace();
-
-                                });
+                            });
 
 
 
+                        {#
+                                    $('form#createStandart').submit(function(e){
 
-    </script>
+                                 // Запрещаем стандартное поведение для кнопки submit
+                                 e.preventDefault();
+
+                                 var data=$('#form-sd-media').serializeArray();
+
+
+                            });#}
+
+
+
+                        {#                $(document).ready(function () {
+                                            $('form#createStandart textarea').keydown(function (event) {
+                                                if (event.keyCode == 13) {
+                                                    event.preventDefault();
+                                                    return true;
+                                                }
+                                            });#}
+
+                        {#                $('form#createStandart textarea').keydown(function (event) {
+                                                if (event.keyCode == 13) {
+                                                    event.preventDefault();
+                                                    return false;
+                                                }
+                                            });#}
+
+                                                $(document).on("keypress", ":input:not(textarea)", function (event) {
+                                                    return event.keyCode != 13;
+                                                });
+
+
+
+
+                                                /*  add default doljnosty */
+                                                $('body').on('click', '#btn-add-dolj', function (event) {
+
+                                                    var url = '{{base_url('/dones/get_dolj')}}';
+
+
+                                                    $('#preload-update-data-search-rig').css('display', 'block');
+                                                    $('body').css('opacity', 0.5);
+
+                                                    $.post(url, {}, function (res) {
+
+
+                                                        if (parseInt(JSON.parse(res)['is_error']) === 0) {
+
+
+                                                            $(JSON.parse(res)['result']).each(function (index, val) {
+
+                                                                $(val).each(function (index_1, value) {
+
+                                                                    $('#informing-block-div #div-informing').find('#add-row-informing').trigger('click');
+                                                                    var $row = $('#informing-block-div #div-informing .table tbody').find('.informing_row:last');
+                                                                    $row.find('td').find('.informing_fio').val(value.fio);
+                                                                });
+                                                            });
+
+                                                            /*  delete empty first row*/
+                                                            $('#informing-block-div #div-informing').find('.informing_fio').each(function (i, v) {
+                                                                var id_row = ($(this).closest('.informing_row')).attr('id');
+                                                                var $row_check = $('#informing-block-div #div-informing .table tbody').find('#' + id_row);
+                                                                if ($row_check.find('td').find('.informing_fio').val() === '') {
+                                                                    $row_check.remove();
+                                                                }
+                                                            });
+
+
+                                                            $('#preload-update-data-search-rig').css('display', 'none');
+                                                            $('body').css('opacity', 1);
+
+
+                                                            toastr.success('Данные по должностям успешно получены', 'Успех!', {progressBar: true, timeOut: 2500});
+                                                            $('#modal-dolj-add').css('opacity', '');
+                                                            $('#modal-dolj-add').click();
+                                                        } else {
+
+                                                            $('body').css('opacity', 1);
+                                                            toastr.error('Информация не найдена', 'Ошибка!', {progressBar: true, timeOut: 2500});
+
+                                                        }
+                                                    });
+
+
+                                                });
+
+
+
+                                                $('body').on('change', '#object_house_id', function (e) {
+
+                                                    e.preventDefault();
+
+                                                    var floor = $('#object-floor-flat-div');
+                                                    var rooms = $('#object_cnt_rooms_div');
+
+                                                    if (parseInt($(this).val()) === {{id_object_many_floor}}) {
+
+                                                        floor.removeClass('hide');
+                                                        floor.removeClass('show');
+                                                        floor.addClass('show');
+
+                                                        rooms.removeClass('hide');
+                                                        rooms.removeClass('show');
+                                                        rooms.addClass('show');
+
+
+                                                    } else {
+
+                                                        floor.removeClass('hide');
+                                                        floor.removeClass('show');
+                                                        floor.addClass('hide');
+
+                                                        rooms.removeClass('hide');
+                                                        rooms.removeClass('show');
+                                                        rooms.addClass('hide');
+                                                    }
+
+                                                });
+
+
+
+                                                $('body').on('change', '#is_owner_multi', function (e) {
+
+                                                    e.preventDefault();
+
+                                                    var is_multi = $(this).is(':checked');
+                                                    var descr = $('.div_owner_multi_descr');
+
+                                                    if (is_multi) {
+                                                        descr.removeClass('hide');
+                                                        descr.removeClass('show');
+                                                        descr.addClass('show');
+
+                                                    } else {
+                                                        descr.removeClass('hide');
+                                                        descr.removeClass('show');
+                                                        descr.addClass('hide');
+
+                                                    }
+                                                    setPreviewOwner();
+                                                });
+
+
+                                                $('body').on('change', '#is_owner_multi_law', function (e) {
+
+                                                    e.preventDefault();
+
+                                                    var is_multi = $(this).is(':checked');
+                                                    var descr = $('.div_owner_multi_descr_law');
+
+                                                    if (is_multi) {
+                                                        descr.removeClass('hide');
+                                                        descr.removeClass('show');
+                                                        descr.addClass('show');
+
+                                                    } else {
+                                                        descr.removeClass('hide');
+                                                        descr.removeClass('show');
+                                                        descr.addClass('hide');
+
+                                                    }
+                                                    setPreviewLawFace();
+
+                                                });
+
+
+
+
+                    </script>
 
 
 
@@ -1597,7 +1607,7 @@
 
 
 
-{% endblock %}
+                {% endblock %}
 
 
 

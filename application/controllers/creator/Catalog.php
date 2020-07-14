@@ -50,10 +50,12 @@ class Catalog extends My_Controller
         $filter = [];
 
         // period for select SD
-        $id_range=$this->dones_model->get_range_filter_sd($this->data['active_user']['id_user']);
-        $this->data['id_range']=(isset($id_range['id_range'])) ? $id_range['id_range'] : 0;
-        $filter['id_range']=(isset($id_range['id_range'])) ? $id_range['id_range'] : 0;
+        $id_range = $this->dones_model->get_range_filter_sd($this->data['active_user']['id_user']);
+        $this->data['id_range'] = (isset($id_range['id_range'])) ? $id_range['id_range'] : 0;
+        $filter['id_range'] = (isset($id_range['id_range'])) ? $id_range['id_range'] : 0;
 
+
+        $id_current_user = $this->data['active_user']['id_user'];
 
         if ($this->data['active_user']['level'] == Main_model::LEVEL_ID_ROCHS) {
 
@@ -76,6 +78,8 @@ class Catalog extends My_Controller
             if (isset($this->data['outs']) && !empty($this->data['outs'])) {
                 foreach ($this->data['outs'] as $key => $value) {
                     $this->data['outs'][$key]['statuses'] = $this->dones_model->get_statuses_by_id_dones($value['id'], 0, false); //only active statuses
+                    //edit after refuse. all levels
+                    $this->data['outs'][$key]['dates_actions'] = [];
 
                     if (isset($this->data['outs'][$key]['statuses']) && !empty($this->data['outs'][$key]['statuses'])) {
                         $this->data['outs'][$key]['statuses_id'] = array_column($this->data['outs'][$key]['statuses'], 'id_action');
@@ -85,7 +89,7 @@ class Catalog extends My_Controller
                                 $this->data['outs'][$key]['dates_actions'][$row['id_action']] = $row['date_action'];
 
 
-                            if ($row['id_action'] == 5) {
+                            if ($row['id_action'] == Logs_model::ACTION_REFUSE_SD_UMCHS) {
 
                                 $this->data['outs'][$key]['statuses_detail'][$row['id_action']][$row['id_user_action']] = $row;
                             } else {
@@ -113,6 +117,9 @@ class Catalog extends My_Controller
             if (isset($this->data['outs']) && !empty($this->data['outs'])) {
                 foreach ($this->data['outs'] as $key => $value) {
                     $this->data['outs'][$key]['statuses'] = $this->dones_model->get_statuses_by_id_dones($value['id'], 0, false); //only active statuses
+                    //edit after refuse. all levels
+                    $this->data['outs'][$key]['dates_actions'] = [];
+
 
                     if (isset($this->data['outs'][$key]['statuses']) && !empty($this->data['outs'][$key]['statuses'])) {
                         $this->data['outs'][$key]['statuses_id'] = array_column($this->data['outs'][$key]['statuses'], 'id_action');
@@ -135,6 +142,10 @@ class Catalog extends My_Controller
                             }
                         }
 
+
+
+
+
                         if ($is_other_refuse > 0) {
                             $this->data['outs'][$key]['is_other_refuse'] = $is_other_refuse . ' ' . declination_word_by_number($is_other_refuse, array('замечание', 'замечания', 'замечаний'));
                             $this->data['outs'][$key]['is_other_refuse_cnt'] = $is_other_refuse;
@@ -149,13 +160,17 @@ class Catalog extends My_Controller
             if (isset($this->data['outs']) && !empty($this->data['outs'])) {
                 foreach ($this->data['outs'] as $key => $value) {
                     $this->data['outs'][$key]['statuses'] = $this->dones_model->get_statuses_by_id_dones($value['id'], 0, false); //only active statuses
+                    //edit after refuse. all levels
+                    $this->data['outs'][$key]['dates_actions'] = [];
+                    //edit after refuse. action per user
+                    $this->data['outs'][$key]['dates_actions_by_user'] = [];
+
 
                     if (isset($this->data['outs'][$key]['statuses']) && !empty($this->data['outs'][$key]['statuses'])) {
                         $this->data['outs'][$key]['statuses_id'] = array_column($this->data['outs'][$key]['statuses'], 'id_action');
 
                         $is_other_refuse = 0;
                         foreach ($this->data['outs'][$key]['statuses'] as $row) {//detail actions
-
                             if (!isset($this->data['outs'][$key]['dates_actions'][$row['id_action']]) || (isset($this->data['outs'][$key]['dates_actions'][$row['id_action']]) && $row['date_action'] > $this->data['outs'][$key]['dates_actions'][$row['id_action']]))
                                 $this->data['outs'][$key]['dates_actions'][$row['id_action']] = $row['date_action'];
 
@@ -186,12 +201,57 @@ class Catalog extends My_Controller
             }
         }
 
-        //media
+
         if (isset($this->data['outs']) && !empty($this->data['outs'])) {
             foreach ($this->data['outs'] as $key => $value) {
 
+                //media
                 $media = $this->dones_model->get_dones_media($value['id']);
                 $this->data['outs'][$key]['media'] = $media;
+
+
+
+
+                $this->data['outs'][$key]['edit_after_refuse_umchs']=0;
+                $this->data['outs'][$key]['edit_after_refuse_rcu']=0;
+
+                $refuse_date_rcu= isset($this->data['outs'][$key]['dates_actions'][Logs_model::ACTION_REFUSE_SD_RCU]) ? $this->data['outs'][$key]['dates_actions'][Logs_model::ACTION_REFUSE_SD_RCU] : '';
+                $refuse_date_umchs= isset($this->data['outs'][$key]['dates_actions'][Logs_model::ACTION_REFUSE_SD_UMCHS]) ? $this->data['outs'][$key]['dates_actions'][Logs_model::ACTION_REFUSE_SD_UMCHS] : '';
+                $edit_date = (isset($this->data['outs'][$key]['dates_actions'][Logs_model::ACTION_EDIT_SD])) ? $this->data['outs'][$key]['dates_actions'][Logs_model::ACTION_EDIT_SD] : "";
+                $set_number_date = (isset($this->data['outs'][$key]['dates_actions'][Logs_model::ACTION_SET_NUMBER_SD])) ? $this->data['outs'][$key]['dates_actions'][Logs_model::ACTION_SET_NUMBER_SD] : '';
+
+
+                    // if edit was after refuse rcu. for all levels
+                    if ($edit_date>$refuse_date_rcu) {
+                        $this->data['outs'][$key]['edit_after_refuse_rcu'] = 1;
+                    } elseif($set_number_date>$refuse_date_rcu) {
+                        $this->data['outs'][$key]['edit_after_refuse_rcu'] = 1;
+                    }
+
+                    // if edit was after refuse umchs. for all levels
+                    if ($edit_date>$refuse_date_umchs) {
+                        $this->data['outs'][$key]['edit_after_refuse_umchs'] = 1;
+                    } elseif ($set_number_date>$refuse_date_umchs) {
+                        $this->data['outs'][$key]['edit_after_refuse_umchs'] = 1;
+                    }
+
+                // for level RCU. was or no edit after refuse
+                if ($this->data['active_user']['level'] == Main_model::LEVEL_ID_RCU) {
+
+                    $this->data['outs'][$key]['edit_after_refuse_rcu']=0;
+
+                    // if edit was after refuse rcu
+                    $refuse_date_user = (isset($this->data['outs'][$key]['dates_actions_by_user'][Logs_model::ACTION_REFUSE_SD_RCU][$id_current_user])) ? $this->data['outs'][$key]['dates_actions_by_user'][Logs_model::ACTION_REFUSE_SD_RCU][$id_current_user] : '';
+
+                    if (($edit_date > $refuse_date_user) ) {
+                        $this->data['outs'][$key]['edit_after_refuse_rcu'] = 1;
+                    } elseif ($set_number_date > $refuse_date_user) {
+                        $this->data['outs'][$key]['edit_after_refuse_rcu'] = 1;
+                    }
+                    elseif(empty($refuse_date_user) && ($edit_date>$refuse_date_rcu || $set_number_date>$refuse_date_rcu) ){
+                       $this->data['outs'][$key]['edit_after_refuse_rcu'] = 1;
+                    }
+                }
             }
         }
 

@@ -28,11 +28,12 @@
                     <a class="nav-link {%if is_elem == 0%}active{%endif%}" data-toggle="tab" href="#video_sd_{{start_video}}" style='color:green'>Видео {{start_video}}</a>
                 </li>
                 {%set start_video=start_video+1%}
+                {%set is_elem=is_elem+1%}
             {%endif%}
 
         {%endfor%}
 
-                {%for elem in media%}
+        {%for elem in media%}
 
             {%if elem.type == 'audio'%}
 
@@ -40,6 +41,7 @@
                     <a class="nav-link {%if is_elem == 0%}active{%endif%}" data-toggle="tab" href="#audio_sd_{{start_audio}}" style='color:green'>Аудио {{start_audio}}</a>
                 </li>
                 {%set start_audio=start_audio+1%}
+                {%set is_elem=is_elem+1%}
             {%endif%}
 
         {%endfor%}
@@ -52,14 +54,16 @@
         <li class="nav-item {%if is_elem == 0%}active{%endif%}" id="li-tab-doc" >
             <a class="nav-link {%if is_elem == 0%}active{%endif%}" data-toggle="tab" href="#sd_doc" style="color:green">Word</a>
         </li>
+        {%set is_elem=is_elem+1%}
     {%endif%}
 
 
-        {% if dones.file_pdf is not empty %}
+    {% if dones.file_pdf is not empty %}
 
         <li class="nav-item {%if is_elem == 0%}active{%endif%}" id="li-tab-pdf" >
             <a class="nav-link {%if is_elem == 0%}active{%endif%}" data-toggle="tab" href="#sd_pdf" style="color:green">PDF</a>
         </li>
+        {%set is_elem=is_elem+1%}
     {%endif%}
 
 
@@ -70,6 +74,7 @@
     {%set start_photo=1%}
     {%set start_video=1%}
     {%set start_audio=1%}
+    {%set is_elem=0%}
 
 
 
@@ -82,6 +87,7 @@
                     <img src="{{ base_url("/data/sd_photo/"~elem.file) }}" class="issue-img-catalog">
                 </div>
                 {%set start_photo=start_photo+1%}
+                {%set is_elem=is_elem+1%}
             {%endif%}
 
         {%endfor%}
@@ -94,22 +100,40 @@
                     <video controls class="issue-video-catalog">
                         <source src='{{ base_url("/data/sd_video/"~elem.file) }}' >
                     </video>
+                      <br>
+                    <a href="{{ base_url("/data/sd_video/"~elem.file) }}" download>скачать {{elem.file}}</a>
+
+{#        <video id="video-player" class="video-js issue-video-catalog" playsinline controls  width="100%"
+               controlsList="nodownload"
+               poster="{{ data.activeElement.thumb }}" preload="auto">
+            <source src="{{ base_url("/data/sd_video/"~elem.file) }}" type="video/mp4">
+        </video>#}
+
                 </div>
                 {%set start_video=start_video+1%}
+                {%set is_elem=is_elem+1%}
             {%endif%}
 
         {%endfor%}
 
 
-                {%for elem in media%}
+        {%for elem in media%}
 
             {%if elem.type == 'audio'%}
                 <div class="tab-pane fade {%if is_elem == 0%}active{%endif%} {%if is_elem == 0%}show{%endif%}" id="audio_sd_{{start_audio}}">
                     <audio controls class="issue-audio-catalog">
                         <source src='{{ base_url("/data/sd_audio/"~elem.file) }}' >
                     </audio>
+
+                    <br>
+                    <a href="{{ base_url("/data/sd_audio/"~elem.file) }}" download>скачать {{elem.file}}</a>
+
                 </div>
+
+
+
                 {%set start_audio=start_audio+1%}
+                {%set is_elem=is_elem+1%}
             {%endif%}
 
         {%endfor%}
@@ -124,16 +148,19 @@
             К СД прикреплен документ.
             <a href="{{ base_url("/data/sd_doc/"~dones.file_doc) }}"> <i class="fa fa-file-word-o " aria-hidden="true"></i> Скачать документ</a>
         </div>
+        {%set is_elem=is_elem+1%}
     {%endif%}
 
 
-        {% if dones.file_pdf is not empty %}
+    {% if dones.file_pdf is not empty %}
 
         <div class="tab-pane fade {%if is_elem == 0%}active{%endif%} {%if is_elem == 0%}show{%endif%}" id="sd_pdf">
             <br>
             К СД прикреплен документ.
             <a href="{{ base_url("/data/sd_pdf/"~dones.file_pdf) }}" download> <i class="fa fa-file-pdf-o " aria-hidden="true"></i> Скачать документ</a>
         </div>
+        {%set is_elem=is_elem+1%}
     {%endif%}
+
 
 </div>

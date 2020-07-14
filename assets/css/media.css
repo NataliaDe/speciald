@@ -81,3 +81,35 @@ div#upload-img .upload-info {
     margin: 1.75rem auto;
 }
 }
+
+
+
+.issue-img-multi {
+    width: 247px;
+    /* height: 200px; */
+}
+
+@media (min-width: 576px){
+#modal-media-multi .modal-dialog {
+    max-width: 860px;
+    margin: 1.75rem auto;
+}
+}
+
+.issue-img-multi,.issue-video-multi,.issue-audio-multi{
+    margin-left: 20px;
+}
+.delete-img-multi,.delete-icon-video-multi, .delete-icon-audio-multi{
+    position: absolute;
+    color: red;
+}
+
+.issue-video-multi {
+    width: 383px;
+    /* height: 200px; */
+}
+
+.isset_media{
+    color: green;
+}
+

@@ -59,7 +59,14 @@
                 </div>
             </div>
             {%include '/create/simple/blocks/preview_for_word.twig'%}
-            {%include '/create/standart/modals/modal-media.twig'%}
+
+            {%if settings is defined and settings.mode_load_media is defined and 'wide' in settings.mode_load_media%}
+                {%include '/create/standart/modals/modal-media-multi.twig'%}
+
+            {%else%}
+                {%include '/create/standart/modals/modal-media.twig'%}
+            {%endif%}
+
 
             <center>
                 {%if  dones.is_see == 1  %}
@@ -103,7 +110,7 @@
     <link rel="stylesheet" href="{{ base_url('/assets/css/timer.css') }}">
     <link href="{{ base_url('/assets/daterangepicker/daterangepicker.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ base_url('assets/datatables/jquery.dataTables.css') }}">
-    <link rel="stylesheet" href="{{ base_url('/assets/css/media.css') }}">
+    <link rel="stylesheet" href="{{ base_url('/assets/css/media.css') }}?{{now|date('H:i:s')}}">
 
     <link rel="stylesheet" href="{{ base_url('/assets/css/form-simple/preview.css') }}">
 
@@ -130,6 +137,7 @@
 
 
     <script src="{{ base_url('/assets/js/form-standart/media.js')}}?{{now|date('H:i:s')}}"></script>
+    <script src="{{ base_url('/assets/js/form-standart/media_multi.js')}}?{{now|date('H:i:s')}}"></script>
 
     {%if is_edit_dones is not defined  %}
         <script src="{{ base_url('/assets/js/timer.js')}}"></script>

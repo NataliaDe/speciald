@@ -114,7 +114,7 @@ class Dones extends My_Controller
 
 
         /* map centers */
-            $this->data['map_center'] = $this->main_model->get_map_center_by_region($this->data['active_user']['id_region']);
+        $this->data['map_center'] = $this->main_model->get_map_center_by_region($this->data['active_user']['id_region']);
 
 
 
@@ -293,22 +293,22 @@ class Dones extends My_Controller
             }
 
             echo json_encode([
-                'opening_block'   => $this->twig->render('create/standart/opening_block', $this->data, true),
-                'middle_block'    => $this->twig->render('create/standart/middle_block', $this->data, true),
-                'silymchs'        => $this->twig->render('create/standart/middle-block/silymchs', $this->data, true),
-                'innerservice'    => $this->twig->render('create/standart/middle-block/innerservice', $this->data, true),
-                'informing'       => $this->twig->render('create/standart/middle-block/informing', $this->data, true),
-                'final_block'     => $this->twig->render('create/standart/final_block', $this->data, true),
-                'str_block'       => $this->twig->render('create/standart/middle-block/str', $this->data, true),
-                'trunks_block'    => $this->twig->render('create/standart/middle-block/trunks', $this->data, true),
-                'object_data'     => $this->twig->render('create/standart/parts/object_data', $this->data, true),
-                'object_floor'    => $this->twig->render('create/standart/parts/object_floor', $this->data, true),
-                'object_floor_flat'    => $this->twig->render('create/standart/parts/object_floor_flat', $this->data, true),
-                'people_rig_data' => $this->twig->render('create/standart/parts/people_rig_data', $this->data, true),
-                'law_face_office_belong'     => $this->twig->render('create/standart/owner/parts/law_face_office_belong', $this->data, true),
-                'owner_from_jour'     => $this->twig->render('create/standart/owner/parts/owner_from_jour', $this->data, true),
-                'is_data'         => $is_data,
-                'id_face_belong'=> (($this->data['rig']['id_owner_category'] != 0 || !empty($this->data['rig']['owner_fio'])) ? 1 : 0)
+                'opening_block'          => $this->twig->render('create/standart/opening_block', $this->data, true),
+                'middle_block'           => $this->twig->render('create/standart/middle_block', $this->data, true),
+                'silymchs'               => $this->twig->render('create/standart/middle-block/silymchs', $this->data, true),
+                'innerservice'           => $this->twig->render('create/standart/middle-block/innerservice', $this->data, true),
+                'informing'              => $this->twig->render('create/standart/middle-block/informing', $this->data, true),
+                'final_block'            => $this->twig->render('create/standart/final_block', $this->data, true),
+                'str_block'              => $this->twig->render('create/standart/middle-block/str', $this->data, true),
+                'trunks_block'           => $this->twig->render('create/standart/middle-block/trunks', $this->data, true),
+                'object_data'            => $this->twig->render('create/standart/parts/object_data', $this->data, true),
+                'object_floor'           => $this->twig->render('create/standart/parts/object_floor', $this->data, true),
+                'object_floor_flat'      => $this->twig->render('create/standart/parts/object_floor_flat', $this->data, true),
+                'people_rig_data'        => $this->twig->render('create/standart/parts/people_rig_data', $this->data, true),
+                'law_face_office_belong' => $this->twig->render('create/standart/owner/parts/law_face_office_belong', $this->data, true),
+                'owner_from_jour'        => $this->twig->render('create/standart/owner/parts/owner_from_jour', $this->data, true),
+                'is_data'                => $is_data,
+                'id_face_belong'         => (($this->data['rig']['id_owner_category'] != 0 || !empty($this->data['rig']['owner_fio'])) ? 1 : 0)
             ]);
             die;
         }
@@ -334,20 +334,20 @@ class Dones extends My_Controller
         $this->data['bread_crumb'] = array(array('/dones' => 'Создать специальное донесение'),
             array('Простое'));
 
-                /* settings */
+        /* settings */
         $this->data['settings'] = $this->user_model->get_user_settings_type_sd($this->data['active_user']['id_user'], Main_model::TYPE_SD_STANDART);
         $this->data['settings'] = $this->user_model->get_user_settings_options_format($this->data['settings']);
 
-                        /* map centers */
-            $this->data['map_center'] = $this->main_model->get_map_center_by_region($this->data['active_user']['id_region']);
+        /* map centers */
+        $this->data['map_center'] = $this->main_model->get_map_center_by_region($this->data['active_user']['id_region']);
 
 
 
         $this->data['vid_specd'] = $this->main_model->get_vid_specd();
-        $this->data['minirovanie_id']= Main_model::VID_SD_MINIROVANIE;
+        $this->data['minirovanie_id'] = Main_model::VID_SD_MINIROVANIE;
 
 
-                /* default number sd */
+        /* default number sd */
         $request_region = $this->data['active_user']['id_region'];
         if ($this->data['active_user']['id_organ'] == Main_model::ORGAN_ID_ROSN || $this->data['active_user']['id_organ'] == Main_model::ORGAN_ID_UGZ ||
             $this->data['active_user']['id_organ'] == Main_model::ORGAN_ID_AVIA) {
@@ -414,7 +414,6 @@ class Dones extends My_Controller
                     else {//get data by last duty ch
                         $diviz_organ_of_pasp[$key] = array_merge($row, $this->str_model->get_mainrcu_by_id_pasp($row['id_pasp'])); //rcu
                     }
-
                 }
 
                 $current_ch = $diviz_organ_of_pasp[$key]['ch'];
@@ -618,15 +617,15 @@ class Dones extends My_Controller
         if (!empty($man_per_car_id) && !empty($trunks)) {//man per car
             foreach ($trunks as $key => $value) {
 
-               // if ($value['is_return'] == 1 && (empty($value['cnt']) || $value['cnt'] == 0)) {
-                   // unset($trunks[$key]);
-               // } else {
-                    if (!empty($value['id_teh']) && $value['id_teh'] != NULL && isset($man_per_car_id[$value['id_teh']])) {//man per car from str
-                        $trunks[$key]['man_per_car'] = $man_per_car_id[$value['id_teh']];
-                    } else {// man per car = min br from kusis
-                        $trunks[$key]['man_per_car'] = $value['min_br'];
-                        $trunks[$key]['man_per_car_note'] = 'указан мин.б.р.';
-                    }
+                // if ($value['is_return'] == 1 && (empty($value['cnt']) || $value['cnt'] == 0)) {
+                // unset($trunks[$key]);
+                // } else {
+                if (!empty($value['id_teh']) && $value['id_teh'] != NULL && isset($man_per_car_id[$value['id_teh']])) {//man per car from str
+                    $trunks[$key]['man_per_car'] = $man_per_car_id[$value['id_teh']];
+                } else {// man per car = min br from kusis
+                    $trunks[$key]['man_per_car'] = $value['min_br'];
+                    $trunks[$key]['man_per_car_note'] = 'указан мин.б.р.';
+                }
                 //}
             }
         }
@@ -1300,7 +1299,8 @@ class Dones extends My_Controller
 
         $post = $this->input->post();
         $dones = array();
-//print_r($post);exit();
+//print_r($post);
+//exit();
         $id_dones = (isset($post['id_dones']) && !empty($post['id_dones'])) ? intval($post['id_dones']) : 0; //id of edit dones
 
 
@@ -1387,7 +1387,7 @@ class Dones extends My_Controller
         $dones['official_creator_position'] = (isset($post['official_creator_position']) && !empty($post['official_creator_position'])) ? trim($post['official_creator_position']) : '';
         $dones['official_destination'] = (isset($post['official_destination']) && !empty($post['official_destination'])) ? trim($post['official_destination']) : '';
 
-/* show or no blocks */
+        /* show or no blocks */
         $dones['is_show_address'] = (isset($post['is_show_address']) && !empty($post['is_show_address'])) ? 1 : 0;
         $dones['is_show_object'] = (isset($post['is_show_object']) && !empty($post['is_show_object'])) ? 1 : 0;
         $dones['is_show_prevention'] = (isset($post['is_show_prevention']) && !empty($post['is_show_prevention'])) ? 1 : 0;
@@ -1396,7 +1396,7 @@ class Dones extends My_Controller
         /* owner */
         $dones['id_face_belong'] = (isset($post['id_face_belong']) && !empty($post['id_face_belong'])) ? intval($post['id_face_belong']) : 0;
 
-        if($dones['id_face_belong'] == 1){// individual face
+        if ($dones['id_face_belong'] == 1) {// individual face
             $dones['id_owner_category'] = (isset($post['id_owner_category']) && !empty($post['id_owner_category'])) ? intval($post['id_owner_category']) : 0;
             $dones['owner_fio'] = (isset($post['owner_fio']) && !empty($post['owner_fio'])) ? trim($post['owner_fio']) : '';
             $dones['owner_year_birthday'] = (isset($post['owner_year_birthday']) && !empty($post['owner_year_birthday'])) ? intval($post['owner_year_birthday']) : '';
@@ -1409,13 +1409,11 @@ class Dones extends My_Controller
 
             $dones['law_face_office_belong'] = 0;
             $dones['law_face_name_owner'] = '';
-            $dones['is_show_owner']=(isset($post['is_show_owner']) && !empty($post['is_show_owner'])) ? intval($post['is_show_owner']) : 0;
+            $dones['is_show_owner'] = (isset($post['is_show_owner']) && !empty($post['is_show_owner'])) ? intval($post['is_show_owner']) : 0;
 
-            $dones['is_owner_multi']=(isset($post['is_owner_multi']) && !empty($post['is_owner_multi'])) ? 1 : 0;
-            $dones['owner_multi_descr']=(isset($post['owner_multi_descr']) && !empty($post['owner_multi_descr']) && $dones['is_owner_multi'] == 1) ? trim($post['owner_multi_descr']) : '';
-
-        }
-        elseif($dones['id_face_belong'] == 2){// law face
+            $dones['is_owner_multi'] = (isset($post['is_owner_multi']) && !empty($post['is_owner_multi'])) ? 1 : 0;
+            $dones['owner_multi_descr'] = (isset($post['owner_multi_descr']) && !empty($post['owner_multi_descr']) && $dones['is_owner_multi'] == 1) ? trim($post['owner_multi_descr']) : '';
+        } elseif ($dones['id_face_belong'] == 2) {// law face
             $dones['id_owner_category'] = 0;
             $dones['owner_fio'] = '';
             $dones['owner_year_birthday'] = '';
@@ -1423,55 +1421,52 @@ class Dones extends My_Controller
             $dones['owner_position'] = '';
             $dones['owner_job'] = '';
             $dones['owner_character'] = '';
-            $dones['owner_is_uhet'] =  0;
-            $dones['owner_live_together'] =  0;
+            $dones['owner_is_uhet'] = 0;
+            $dones['owner_live_together'] = 0;
 
             $dones['law_face_office_belong'] = (isset($post['law_face_office_belong']) && !empty($post['law_face_office_belong'])) ? intval($post['law_face_office_belong']) : 0;
             $dones['law_face_name_owner'] = (isset($post['law_face_name_owner']) && !empty($post['law_face_name_owner'])) ? trim($post['law_face_name_owner']) : '';
 
-            $dones['is_show_owner']=(isset($post['is_show_owner_law']) && !empty($post['is_show_owner_law'])) ? intval($post['is_show_owner_law']) : 0;
+            $dones['is_show_owner'] = (isset($post['is_show_owner_law']) && !empty($post['is_show_owner_law'])) ? intval($post['is_show_owner_law']) : 0;
 
-            $dones['is_owner_multi']=(isset($post['is_owner_multi_law']) && !empty($post['is_owner_multi_law'])) ? 1 : 0;
-            $dones['owner_multi_descr']=(isset($post['owner_multi_descr_law']) && !empty($post['owner_multi_descr_law']) && $dones['is_owner_multi'] == 1) ? trim($post['owner_multi_descr_law']) : '';
-        }
-        else{
-              $dones['id_owner_category'] = 0;
+            $dones['is_owner_multi'] = (isset($post['is_owner_multi_law']) && !empty($post['is_owner_multi_law'])) ? 1 : 0;
+            $dones['owner_multi_descr'] = (isset($post['owner_multi_descr_law']) && !empty($post['owner_multi_descr_law']) && $dones['is_owner_multi'] == 1) ? trim($post['owner_multi_descr_law']) : '';
+        } else {
+            $dones['id_owner_category'] = 0;
             $dones['owner_fio'] = '';
             $dones['owner_year_birthday'] = '';
             $dones['owner_address'] = '';
             $dones['owner_position'] = '';
             $dones['owner_job'] = '';
             $dones['owner_character'] = '';
-            $dones['owner_is_uhet'] =  0;
-            $dones['owner_live_together'] =  0;
+            $dones['owner_is_uhet'] = 0;
+            $dones['owner_live_together'] = 0;
 
             $dones['law_face_office_belong'] = 0;
             $dones['law_face_name_owner'] = '';
-            $dones['is_show_owner']=0;
+            $dones['is_show_owner'] = 0;
 
-            $dones['is_owner_multi']=0;
-            $dones['owner_multi_descr']= '';
+            $dones['is_owner_multi'] = 0;
+            $dones['owner_multi_descr'] = '';
         }
 
 
-        if(isset($dones['is_show_owner']) && $dones['is_show_owner'] == 1){
-            $dones['owner_word']=(isset($post['owner_word']) && !empty($post['owner_word'])) ? trim($post['owner_word']) : '';
-        }
-        else{
-           $dones['owner_word']='' ;
+        if (isset($dones['is_show_owner']) && $dones['is_show_owner'] == 1) {
+            $dones['owner_word'] = (isset($post['owner_word']) && !empty($post['owner_word'])) ? trim($post['owner_word']) : '';
+        } else {
+            $dones['owner_word'] = '';
         }
 
 
         /* object text */
-        if(isset($dones['is_show_object']) && $dones['is_show_object'] == 1){
-            $dones['object_word']=(isset($post['object_word']) && !empty($post['object_word'])) ? trim($post['object_word']) : '';
-        }
-        else{
-           $dones['object_word']='' ;
+        if (isset($dones['is_show_object']) && $dones['is_show_object'] == 1) {
+            $dones['object_word'] = (isset($post['object_word']) && !empty($post['object_word'])) ? trim($post['object_word']) : '';
+        } else {
+            $dones['object_word'] = '';
         }
 
 
-        /* start text SD*/
+        /* start text SD */
         $dones['is_show_opening_descr'] = (isset($post['is_show_opening_descr']) && !empty($post['is_show_opening_descr'])) ? 1 : 0;
         $dones['opening_word'] = (isset($post['opening_word']) && !empty($post['opening_word'])) ? trim($post['opening_word']) : '';
 
@@ -1626,7 +1621,7 @@ class Dones extends My_Controller
         }
 
 
-        /*---------------- live together --------------*/
+        /* ---------------- live together -------------- */
 
         //delete live_together
         $this->dones_model->delete_dones_live_together($id_dones_new);
@@ -1675,10 +1670,9 @@ class Dones extends My_Controller
 
                     $dones_silymchs['is_return'] = (isset($row['is_return']) && !empty($row['is_return'])) ? 1 : 0;
 
-                    if($dones_silymchs['is_return'] == 0){
+                    if ($dones_silymchs['is_return'] == 0) {
                         $dones_silymchs['time_arrival'] = (isset($row['time_arrival']) && !empty($row['time_arrival'])) ? $row['time_arrival'] : '';
-                    }
-                    else{
+                    } else {
                         $dones_silymchs['time_arrival'] = '';
                     }
 
@@ -2038,7 +2032,6 @@ class Dones extends My_Controller
             $object['id_api_source'] = (isset($post['id_api_source']) && !empty($post['id_api_source'])) ? intval($post['id_api_source']) : 0;
             $object['is_api_worked'] = (isset($post['is_api_worked']) && !empty($post['is_api_worked'])) ? intval($post['is_api_worked']) : 0;
             $object['is_api_influence'] = (isset($post['is_api_influence']) && !empty($post['is_api_influence'])) ? intval($post['is_api_influence']) : 0;
-
         } else {// individual face
             $object['api_date'] = NULL;
             $object['id_api_source'] = 0;
@@ -2050,7 +2043,6 @@ class Dones extends My_Controller
             $object['aps_name'] = (isset($post['api_date']) && !empty($post['aps_name'])) ? trim($post['aps_name']) : '';
             $object['is_aps_worked'] = (isset($post['is_aps_worked']) && !empty($post['is_aps_worked'])) ? intval($post['is_aps_worked']) : 0;
             $object['is_aps_influence'] = (isset($post['is_aps_influence']) && !empty($post['is_aps_influence'])) ? intval($post['is_aps_influence']) : 0;
-
         } else {// law face
             $object['aps_name'] = '';
             $object['is_aps_worked'] = 0;
@@ -2071,33 +2063,77 @@ class Dones extends My_Controller
         /* media */
         $this->dones_model->delete_dones_media($id_dones_new);
 
-        if (isset($post['sd_media']) && !empty($post['sd_media'])) {
+        if (!empty($settings) && isset($settings['mode_load_media']) && in_array('wide', $settings['mode_load_media'])) {
 
-            foreach ($post['sd_media'] as $type => $row) {
+            if (isset($post['sd_media_multi']) && !empty($post['sd_media_multi'])) {
 
-                if (!empty($row)) {
-                    foreach ($row as $file) {
-                        $media = [];
-                        if (!empty($file)) {
-                            $media['id_dones'] = $id_dones_new;
-                            $media['file'] = $file;
-                            $media['type'] = $type;
+                //$sd_photo_multi= explode(',', $post['sd_media_multi']);
+                $delete_photo = [];
+                if (isset($post['delete_photo_multi']) && !empty($post['delete_photo_multi'])) {
+                    $delete_photo = $post['delete_photo_multi'];
+                }
+                $delete_video = [];
+                if (isset($post['delete_video_multi']) && !empty($post['delete_video_multi'])) {
+                    $delete_video = $post['delete_video_multi'];
+                }
 
-                            $this->dones_model->add_dones_media($media);
+                $delete_audio = [];
+                if (isset($post['delete_audio_multi']) && !empty($post['delete_audio_multi'])) {
+                    $delete_audio = $post['delete_audio_multi'];
+                }
+
+                foreach ($post['sd_media_multi'] as $type => $row) {
+
+                    if (!empty($row)) {
+                        $photos = explode(',', $row);
+                        foreach ($photos as $file) {
+                            $media = [];
+                            if (!empty($file)) {
+                                if (($type == 'photo' && !in_array($file, $delete_photo)) || ($type == 'video' && !in_array($file, $delete_video)) || ($type == 'audio' && !in_array($file, $delete_audio))) {
+                                    $media['id_dones'] = $id_dones_new;
+                                    $media['file'] = $file;
+                                    $media['type'] = $type;
+
+                                    $this->dones_model->add_dones_media($media);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            if (isset($post['sd_media']) && !empty($post['sd_media'])) {
+
+                foreach ($post['sd_media'] as $type => $row) {
+
+                    if (!empty($row)) {
+                        foreach ($row as $file) {
+                            $media = [];
+                            if (!empty($file)) {
+                                $media['id_dones'] = $id_dones_new;
+                                $media['file'] = $file;
+                                $media['type'] = $type;
+
+                                $this->dones_model->add_dones_media($media);
+                            }
                         }
                     }
                 }
             }
         }
 
+
+
+
+
         /*  settings accordion */
-        $settings_accordion['value']=(isset($post['settings_accordion']) && !empty($post['settings_accordion'])) ? $post['settings_accordion'] : '';
-        $settings_accordion['id_user']=$this->data['active_user']['id_user'];
-        $settings_accordion['id_dones']=$id_dones_new;
+        $settings_accordion['value'] = (isset($post['settings_accordion']) && !empty($post['settings_accordion'])) ? $post['settings_accordion'] : '';
+        $settings_accordion['id_user'] = $this->data['active_user']['id_user'];
+        $settings_accordion['id_dones'] = $id_dones_new;
         $settings_accordion['date_insert'] = date('Y-m-d H:i:s');
-        $this->dones_model->delete_settings_accordion($id_dones_new,$settings_accordion['id_user']);
-        if(!empty($settings_accordion['value']))
-        $this->dones_model->add_settings_accordion($settings_accordion);
+        $this->dones_model->delete_settings_accordion($id_dones_new, $settings_accordion['id_user']);
+        if (!empty($settings_accordion['value']))
+            $this->dones_model->add_settings_accordion($settings_accordion);
 
         redirect('/creator/catalog');
     }
@@ -2125,8 +2161,8 @@ class Dones extends My_Controller
         $this->data['settings'] = $this->user_model->get_user_settings_type_sd($this->data['active_user']['id_user'], Main_model::TYPE_SD_STANDART);
         $this->data['settings'] = $this->user_model->get_user_settings_options_format($this->data['settings']);
 
-                /* map centers */
-            $this->data['map_center'] = $this->main_model->get_map_center_by_region($this->data['active_user']['id_region']);
+        /* map centers */
+        $this->data['map_center'] = $this->main_model->get_map_center_by_region($this->data['active_user']['id_region']);
 
 
 
@@ -2241,7 +2277,6 @@ class Dones extends My_Controller
             $this->data['dones']['object_data']['object_floor_text'] = get_text_by_floor(intval($this->data['dones']['object_data']['object_floor']));
         }
 //print_r();exit();
-
         //media
         $media = $this->dones_model->get_dones_media($id_dones);
         $this->data['dones']['media'] = $media;
@@ -2260,7 +2295,7 @@ class Dones extends My_Controller
 //        }
 
         /*  settings accordion */
-        $this->data['settings_accordion']=$this->dones_model->get_settings_accordion($id_dones,$this->data['active_user']['id_user']);
+        $this->data['settings_accordion'] = $this->dones_model->get_settings_accordion($id_dones, $this->data['active_user']['id_user']);
 
 
         $this->twig->display('create/standart/form_standart', $this->data);
@@ -2699,18 +2734,18 @@ class Dones extends My_Controller
             $new_dones['owner_position'] = $dones['owner_position'];
             $new_dones['owner_job'] = $dones['owner_job'];
             $new_dones['owner_character'] = $dones['owner_character'];
-            $new_dones['owner_is_uhet'] =  $dones['owner_is_uhet'];
-            $new_dones['owner_live_together'] =  $dones['owner_live_together'];
+            $new_dones['owner_is_uhet'] = $dones['owner_is_uhet'];
+            $new_dones['owner_live_together'] = $dones['owner_live_together'];
             $new_dones['law_face_office_belong'] = $dones['law_face_office_belong'];
             $new_dones['law_face_name_owner'] = $dones['law_face_name_owner'];
-            $new_dones['is_show_owner']=$dones['is_show_owner'];
-            $new_dones['owner_word']=$dones['owner_word'];
-            $new_dones['object_word']=$dones['object_word'];
-            $new_dones['is_owner_multi']=$dones['is_owner_multi'];
-            $new_dones['owner_multi_descr']= $dones['owner_multi_descr'];
+            $new_dones['is_show_owner'] = $dones['is_show_owner'];
+            $new_dones['owner_word'] = $dones['owner_word'];
+            $new_dones['object_word'] = $dones['object_word'];
+            $new_dones['is_owner_multi'] = $dones['is_owner_multi'];
+            $new_dones['owner_multi_descr'] = $dones['owner_multi_descr'];
 
 
-                    /* start text SD */
+            /* start text SD */
             $new_dones['is_show_opening_descr'] = $dones['is_show_opening_descr'];
             $new_dones['opening_word'] = $dones['opening_word'];
 
@@ -2760,7 +2795,7 @@ class Dones extends My_Controller
             /* detail inf block */
             $new_dones['detail_inf'] = (isset($dones['detail_inf']) && !empty($dones['detail_inf'])) ? trim($dones['detail_inf']) : '';
 
-            $new_dones['is_water_source'] =$dones['is_water_source'];
+            $new_dones['is_water_source'] = $dones['is_water_source'];
 
             /* prevention block */
             $new_dones['prevention_time'] = (isset($dones['prevention_time']) && !empty($dones['prevention_time'])) ? $dones['prevention_time'] : '';
@@ -2823,8 +2858,8 @@ class Dones extends My_Controller
 
             /* live together */
             $this->dones_model->delete_dones_live_together($id_dones_new);
-            if(isset($live_together) && !empty($live_together)){
-                 foreach ($live_together as $k => $row) {
+            if (isset($live_together) && !empty($live_together)) {
+                foreach ($live_together as $k => $row) {
                     $dones_live_together = array();
                     $dones_live_together['id_dones'] = $id_dones_new;
                     $dones_live_together['fio'] = $row['fio'];
@@ -2832,7 +2867,7 @@ class Dones extends My_Controller
                     $dones_live_together['note'] = $row['note'];
                     $dones_live_together['sort'] = $row['sort'];
                     $this->dones_model->add_dones_live_together($dones_live_together);
-                 }
+                }
             }
 
 
@@ -3241,19 +3276,59 @@ class Dones extends My_Controller
         /* media */
         $this->dones_model->delete_dones_media($id_dones_new);
 
-        if (isset($post['sd_media']) && !empty($post['sd_media'])) {
+        if (!empty($settings) && isset($settings['mode_load_media']) && in_array('wide', $settings['mode_load_media'])) {
 
-            foreach ($post['sd_media'] as $type => $row) {
+            if (isset($post['sd_media_multi']) && !empty($post['sd_media_multi'])) {
 
-                if (!empty($row)) {
-                    foreach ($row as $file) {
-                        $media = [];
-                        if (!empty($file)) {
-                            $media['id_dones'] = $id_dones_new;
-                            $media['file'] = $file;
-                            $media['type'] = $type;
+                //$sd_photo_multi= explode(',', $post['sd_media_multi']);
+                $delete_photo = [];
+                if (isset($post['delete_photo_multi']) && !empty($post['delete_photo_multi'])) {
+                    $delete_photo = $post['delete_photo_multi'];
+                }
+                $delete_video = [];
+                if (isset($post['delete_video_multi']) && !empty($post['delete_video_multi'])) {
+                    $delete_video = $post['delete_video_multi'];
+                }
 
-                            $this->dones_model->add_dones_media($media);
+                $delete_audio = [];
+                if (isset($post['delete_audio_multi']) && !empty($post['delete_audio_multi'])) {
+                    $delete_audio = $post['delete_audio_multi'];
+                }
+
+                foreach ($post['sd_media_multi'] as $type => $row) {
+
+                    if (!empty($row)) {
+                        $photos = explode(',', $row);
+                        foreach ($photos as $file) {
+                            $media = [];
+                            if (!empty($file)) {
+                                if (($type == 'photo' && !in_array($file, $delete_photo)) || ($type == 'video' && !in_array($file, $delete_video)) || ($type == 'audio' && !in_array($file, $delete_audio))) {
+                                    $media['id_dones'] = $id_dones_new;
+                                    $media['file'] = $file;
+                                    $media['type'] = $type;
+
+                                    $this->dones_model->add_dones_media($media);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            if (isset($post['sd_media']) && !empty($post['sd_media'])) {
+
+                foreach ($post['sd_media'] as $type => $row) {
+
+                    if (!empty($row)) {
+                        foreach ($row as $file) {
+                            $media = [];
+                            if (!empty($file)) {
+                                $media['id_dones'] = $id_dones_new;
+                                $media['file'] = $file;
+                                $media['type'] = $type;
+
+                                $this->dones_model->add_dones_media($media);
+                            }
                         }
                     }
                 }
@@ -3278,13 +3353,13 @@ class Dones extends My_Controller
         $this->data['settings'] = $this->user_model->get_user_settings_type_sd($this->data['active_user']['id_user'], Main_model::TYPE_SD_STANDART);
         $this->data['settings'] = $this->user_model->get_user_settings_options_format($this->data['settings']);
 
-                        /* map centers */
-            $this->data['map_center'] = $this->main_model->get_map_center_by_region($this->data['active_user']['id_region']);
+        /* map centers */
+        $this->data['map_center'] = $this->main_model->get_map_center_by_region($this->data['active_user']['id_region']);
 
 
 
         $this->data['vid_specd'] = $this->main_model->get_vid_specd();
-        $this->data['minirovanie_id']= Main_model::VID_SD_MINIROVANIE;
+        $this->data['minirovanie_id'] = Main_model::VID_SD_MINIROVANIE;
 
         $this->data['dones'] = $this->create_model->get_dones_by_id($id_dones);
 
@@ -3392,8 +3467,6 @@ class Dones extends My_Controller
             echo json_encode(array('is_error' => 1, 'msg' => 'Необходимо выбрать подразделение'));
         }
     }
-
-
 
     public function get_dolj()
     {
