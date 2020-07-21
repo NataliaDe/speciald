@@ -68,6 +68,7 @@
 
                     {%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_not_involved_trunks == 0 and dones.trunks is defined and dones.trunks is not empty%}
                         {%set arr_trunks=dones.trunks%}
+                        {%set is_likv_before_arrival=dones.is_likv_before_arrival%}
                     {%endif%}
 
 
@@ -167,7 +168,7 @@
 
 
                                 <td>
-                                    <input type="time" class="form-control time_loc_trunks"   onchange="setTimeFireLoc(this);" placeholder="" name="trunks[{{x}}][time_loc]" value="{%if trunk.time_loc is defined and trunk.time_loc is not empty and trunk.time_loc is not null and trunk.time_loc != '0000-00-00 00:00:00'%}{{trunk.time_loc|date('H:i')}}{%endif%}">
+                                    <input type="time" class="form-control time_loc_trunks" {{(trunk.is_likv_before_arrival == 1 or is_likv_before_arrival is defined and is_likv_before_arrival == 1) ? 'disabled' : ''}}  onchange="setTimeFireLoc(this);" placeholder="" name="trunks[{{x}}][time_loc]" value="{%if trunk.time_loc is defined and trunk.time_loc is not empty and trunk.time_loc is not null and trunk.time_loc != '0000-00-00 00:00:00' and trunk.is_likv_before_arrival != 1%}{{trunk.time_loc|date('H:i')}}{%endif%}">
 
                                 </td>
 
@@ -178,7 +179,7 @@
 
 
                                 <td>
-                                    <input type="time" class="form-control time_likv_trunks"  onchange="setTimeFireLikv(this);"   placeholder="" name="trunks[{{x}}][time_likv]" value="{%if trunk.time_likv is defined and trunk.time_likv is not empty and trunk.time_likv is not null and trunk.time_likv != '0000-00-00 00:00:00'%}{{trunk.time_likv|date('H:i')}}{%endif%}">
+                                    <input type="time" class="form-control time_likv_trunks" {{(trunk.is_likv_before_arrival == 1 or is_likv_before_arrival is defined and is_likv_before_arrival == 1) ? 'disabled' : ''}}  onchange="setTimeFireLikv(this);"   placeholder="" name="trunks[{{x}}][time_likv]" value="{%if trunk.time_likv is defined and trunk.time_likv is not empty and trunk.time_likv is not null and trunk.time_likv != '0000-00-00 00:00:00' and trunk.is_likv_before_arrival != 1%}{{trunk.time_likv|date('H:i')}}{%endif%}">
 
                                 </td>
 

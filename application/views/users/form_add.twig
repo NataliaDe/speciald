@@ -44,7 +44,6 @@
             <div class="col-lg-2">
                 <label for="id_organ">Подразд.</label>
                 <div class="form-group">
-
                     <select class="form-control select2-select-deselect" name="id_organ" id="id_organ"  >
                         <option value="0">Не выбрано</option>
                         {% for organ in organs %}
@@ -215,6 +214,10 @@
             });
         jQuery("#id_local").chained("#id_region");
         jQuery("#id_organ").chained("#id_local");
+        {% if user is defined and (user.id_organ == 0 or user.id_organ is empty) %}
+            $('#id_organ').val(0).trigger('change');
+        {%endif%}
+
         {% if user is defined and user.id_organ == ORGAN_ID_RCU %}
             var option = new Option('Суперадмин', 1, true);
             $('#is_admin').append(option).trigger('change');

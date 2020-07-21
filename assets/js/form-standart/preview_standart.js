@@ -122,9 +122,12 @@ $('body').on('input change keyup', '#createStandart #middle-block-div input[name
 });
 
 
-$('body').on('click', '.daterangepicker .applyBtn ', function (e) {
+$('#createStandart #middle-block-div input[name="time_msg"]').on('apply.daterangepicker', function (e, picker) {
     setPreviewData();
 });
+//$('body').on('click', '.daterangepicker .applyBtn ', function (e) {
+//    setPreviewData();
+//});
 
 
 $('body').on('change', '#createStandart #middle-block-div #lat_id', function (e) {
@@ -1096,11 +1099,11 @@ function setPreviewOwner() {
 
 
 
-        if(is_show_multi === true && owner_multi_descr !== ''){
-                        if (preview === '')
+        if (is_show_multi === true && owner_multi_descr !== '') {
+            if (preview === '')
                 preview = owner_multi_descr;
             else
-                preview = preview + '\n'+owner_multi_descr;
+                preview = preview + '\n' + owner_multi_descr;
         }
 
 
@@ -1167,11 +1170,11 @@ function setPreviewLawFace() {
         }
 
 
-                if(is_show_multi === true && owner_multi_descr !== ''){
-                        if (preview === '')
+        if (is_show_multi === true && owner_multi_descr !== '') {
+            if (preview === '')
                 preview = owner_multi_descr;
             else
-                preview = preview + '\n'+owner_multi_descr;
+                preview = preview + '\n' + owner_multi_descr;
         }
     } else {
 

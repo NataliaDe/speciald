@@ -85,6 +85,7 @@ class User_model extends CI_Model
         $data['created_by'] = $this->session->userdata('id_user');
         $data['date_create'] = date('Y-m-d H:i:s');
         $this->db->insert('users', $data);
+        return $this->db->insert_id();
     }
 
     public function get_all_active_permissions()

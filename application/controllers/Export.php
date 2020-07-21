@@ -353,9 +353,9 @@ class Export extends My_Controller
                             'man_per_car_trunk'    => $row['man_per_car'],
                             's_fire_arrival_trunk' => (isset($row['s_fire_arrival']) && !empty($row['s_fire_arrival'])) ? $row['s_fire_arrival'] : '-',
                             'time_arrival_trunk'   => ((isset($row['time_arrival']) && !empty($row['time_arrival'])) ? (\DateTime::createFromFormat('H:i:s', $row['time_arrival'])->format('H-i')) : ''),
-                            'time_loc_trunk'       => ((isset($row['time_loc']) && !empty($row['time_loc'])) ? (\DateTime::createFromFormat('H:i:s', $row['time_loc'])->format('H-i')) : ''),
+                            'time_loc_trunk'       => ((isset($row['time_loc']) && !empty($row['time_loc'])) ? (\DateTime::createFromFormat('H:i:s', $row['time_loc'])->format('H-i')) : (($dones['is_likv_before_arrival'] == 1) ? '-' : '')),
                             's_fire_loc_trunk'     => (isset($row['s_fire_loc']) && !empty($row['s_fire_loc'])) ? $row['s_fire_loc'] : '-',
-                            'time_likv_trunk'      => ((isset($row['time_likv']) && !empty($row['time_likv'])) ? (\DateTime::createFromFormat('H:i:s', $row['time_likv'])->format('H-i')) : ''),
+                            'time_likv_trunk'      => ((isset($row['time_likv']) && !empty($row['time_likv'])) ? (\DateTime::createFromFormat('H:i:s', $row['time_likv'])->format('H-i')) : (($dones['is_likv_before_arrival'] == 1) ? '-' : '')),
                             'action_ls_trunk'      => (isset($row['actions_ls']) && !empty($row['actions_ls']) && $row['actions_ls'] != '-') ? $row['actions_ls'] : ''
                         );
                     } else {
@@ -369,9 +369,9 @@ class Export extends My_Controller
                             'time_pod_trunk'       => ((isset($row['time_pod']) && !empty($row['time_pod'])) ? (\DateTime::createFromFormat('H:i:s', $row['time_pod'])->format('H-i')) : '-'),
                             'means_trunks_trunk'   => (!empty($row['means_trunks'])) ? $row['means_trunks'] : '-',
                             'water_po_out_trunk'   => ((isset($row['water_po_out']) && !empty($row['water_po_out'])) ? ((strpos($row['water_po_out'], '.') === false) ? $row['water_po_out'] : str_replace(".", ",", $row['water_po_out'])) : '-'),
-                            'time_loc_trunk'       => ((isset($row['time_loc']) && !empty($row['time_loc'])) ? (\DateTime::createFromFormat('H:i:s', $row['time_loc'])->format('H-i')) : ''),
+                            'time_loc_trunk'       => ((isset($row['time_loc']) && !empty($row['time_loc'])) ? (\DateTime::createFromFormat('H:i:s', $row['time_loc'])->format('H-i')) : (($dones['is_likv_before_arrival'] == 1) ? '-' : '')),
                             's_fire_loc_trunk'     => (isset($row['s_fire_loc']) && !empty($row['s_fire_loc'])) ? $row['s_fire_loc'] : '-',
-                            'time_likv_trunk'      => ((isset($row['time_likv']) && !empty($row['time_likv'])) ? (\DateTime::createFromFormat('H:i:s', $row['time_likv'])->format('H-i')) : ''),
+                            'time_likv_trunk'      => ((isset($row['time_likv']) && !empty($row['time_likv'])) ? (\DateTime::createFromFormat('H:i:s', $row['time_likv'])->format('H-i')) : (($dones['is_likv_before_arrival'] == 1) ? '-' : '')),
                         );
                     }
                 }

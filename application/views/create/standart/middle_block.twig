@@ -16,8 +16,24 @@
     <div class="card-body">
         {# Дата и время сообщения: 2019-06-26 12:10:04 | Дата и время локализации: 2019-06-26 12:10:05 | Дата и время ликвидации: 2019-06-26 12:10:06#}
 
+
+
+        <div class="form-row create-form-row">
+            <div class="form-group col-md-2">
+                <div class="checkbox checkbox-success" >
+                    <input  type="checkbox" name="is_likv_before_arrival" value="1" id="is_likv_before_arrival" {%if (is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_likv_before_arrival is  defined and dones.is_likv_before_arrival == 1) or (rig is defined and rig.is_likv_before_arrival == 1) %}checked{%endif%}>
+                    <label for="is_likv_before_arrival">
+                        ликвидация до прибытия
+                    </label>
+                </div>
+
+            </div>
+        </div>
+
+
         <div class="form-row create-form-row">
             <input type="hidden" class="form-control"  placeholder="" name="id_rig_current" value="{%if id_rig_current is defined and id_rig_current is not empty%}{{id_rig_current}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.id_rig is not empty %}{{dones.id_rig}}{%endif%}">
+
 
             <div class="form-group col-md-2">
                 <label for="time_msg" >Дата и время сообщения:</label>
@@ -27,10 +43,15 @@
                 {%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.time_msg is not empty and dones.time_msg != '0000-00-00 00:00:00'%}
                     {%set time_msg=dones.time_msg|date('d.m.Y H:i:s')%}
                 {%endif%}
-                <input type="text" autocomplete="off" class="form-control calendar-standart-time-msg {%if settings is defined and settings.is_seconds_show is defined and 'yes' in settings.is_seconds_show%}date-time-sec-cal{%else%} date-time-without-sec-cal {%endif%} "  placeholder="" name="time_msg"
+                <input type="text" autocomplete="off" class="form-control preview-start-text calendar-standart-time-msg {%if settings is defined and settings.is_seconds_show is defined and 'yes' in settings.is_seconds_show%}date-time-sec-cal{%else%} date-time-without-sec-cal {%endif%} "  placeholder="" name="time_msg"
                        value="{%if settings is defined and settings.is_seconds_show is defined and 'yes' in settings.is_seconds_show and time_msg is not empty%}{{time_msg|date('d.m.Y H:i:s')}}{%elseif time_msg is not empty%}{{time_msg|date('d.m.Y H:i')}}{%endif%}">
             </div>
 
+
+                            {%set is_likv_before_arrival=0%}
+                {%if (is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_likv_before_arrival is  defined and dones.is_likv_before_arrival == 1) or (rig is defined and rig.is_likv_before_arrival == 1) %}
+                {%set is_likv_before_arrival=1%}
+                {%endif%}
 
             <div class="form-group col-md-2">
                 {%if rig is defined and rig.time_loc is not empty and rig.time_loc is not null and rig.time_loc != '0000-00-00 00:00:00'%}
@@ -38,8 +59,9 @@
                 {%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.time_loc is not empty and dones.time_loc != '0000-00-00 00:00:00'%}
                     {%set localization=dones.time_loc|date('d.m.Y H:i:s')%}
                 {%endif%}
+
                 <label for="time_loc" >Дата и время локализации:</label>
-                <input type="text" autocomplete="off" class="form-control  {%if settings is defined and settings.is_seconds_show is defined and 'yes' in settings.is_seconds_show%}date-time-sec-cal{%else%} date-time-without-sec-cal {%endif%}"  placeholder="" name="time_loc" value="{%if settings is defined and settings.is_seconds_show is defined and 'yes' in settings.is_seconds_show and localization is defined%}{{localization|date('d.m.Y H:i:s')}}{%elseif localization is defined%}{{localization|date('d.m.Y H:i')}}{%endif%}">
+                <input type="text" autocomplete="off" {%if is_likv_before_arrival == 1%}disabled{%endif%} class="form-control {%if settings is defined and settings.is_seconds_show is defined and 'yes' in settings.is_seconds_show%}date-time-sec-cal{%else%} date-time-without-sec-cal {%endif%}"  placeholder="" name="time_loc" value="{%if settings is defined and settings.is_seconds_show is defined and 'yes' in settings.is_seconds_show and localization is defined and is_likv_before_arrival == 0%}{{localization|date('d.m.Y H:i:s')}}{%elseif localization is defined and is_likv_before_arrival == 0%}{{localization|date('d.m.Y H:i')}}{%endif%}">
             </div>
 
 
@@ -50,7 +72,7 @@
                     {%set likvidation=dones.time_likv|date('d.m.Y H:i:s')%}
                 {%endif%}
                 <label for="time_likv" >Дата и время ликвидации:</label>
-                <input type="text" autocomplete="off" class="form-control {%if settings is defined and settings.is_seconds_show is defined and 'yes' in settings.is_seconds_show%}date-time-sec-cal{%else%} date-time-without-sec-cal {%endif%}"  placeholder="" name="time_likv" value="{%if settings is defined and settings.is_seconds_show is defined and 'yes' in settings.is_seconds_show and likvidation is defined%}{{likvidation|date('d.m.Y H:i:s')}}{%elseif likvidation is defined%}{{likvidation|date('d.m.Y H:i')}}{%endif%}">
+                <input type="text" {%if is_likv_before_arrival == 1%}disabled{%endif%} autocomplete="off" class="form-control {%if settings is defined and settings.is_seconds_show is defined and 'yes' in settings.is_seconds_show%}date-time-sec-cal{%else%} date-time-without-sec-cal {%endif%}"  placeholder="" name="time_likv" value="{%if settings is defined and settings.is_seconds_show is defined and 'yes' in settings.is_seconds_show and likvidation is defined and is_likv_before_arrival == 0%}{{likvidation|date('d.m.Y H:i:s')}}{%elseif likvidation is defined and is_likv_before_arrival == 0%}{{likvidation|date('d.m.Y H:i')}}{%endif%}">
             </div>
 
 

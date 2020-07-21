@@ -5,9 +5,12 @@ $('body').on('input change keyup', '.calendar-simple-time-msg', function (e) {
 });
 
 
-$('body').on('click', '.daterangepicker .applyBtn ', function (e) {
+$('#createSimple #accordion2 input[name="time_msg"]').on('apply.daterangepicker', function (e, picker) {
     setPreviewData();
 });
+//$('body').on('click', '.daterangepicker .applyBtn ', function (e) {
+//    setPreviewData();
+//});
 
 
 $('body').on('change', '#lat_id', function (e) {

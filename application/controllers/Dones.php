@@ -1482,17 +1482,25 @@ class Dones extends My_Controller
             $dones['time_msg'] = (isset($post['time_msg']) && !empty($post['time_msg'])) ? (\DateTime::createFromFormat('d.m.Y H:i', trim($post['time_msg']))->format('Y-m-d H:i:s')) : NULL;
         }
 
-        if (!empty($settings) && isset($settings['is_seconds_show']) && in_array('yes', $settings['is_seconds_show'])) {
-            $dones['time_loc'] = (isset($post['time_loc']) && !empty($post['time_loc'])) ? (\DateTime::createFromFormat('d.m.Y H:i:s', trim($post['time_loc']))->format('Y-m-d H:i:s')) : null;
+        $dones['is_likv_before_arrival'] = (isset($post['is_likv_before_arrival']) && !empty($post['is_likv_before_arrival'])) ? 1 : 0;
+
+        if ($dones['is_likv_before_arrival'] == 1) {
+            $dones['time_loc'] = NULL;
+            $dones['time_likv'] = NULL;
         } else {
-            $dones['time_loc'] = (isset($post['time_loc']) && !empty($post['time_loc'])) ? (\DateTime::createFromFormat('d.m.Y H:i', trim($post['time_loc']))->format('Y-m-d H:i:s')) : null;
+            if (!empty($settings) && isset($settings['is_seconds_show']) && in_array('yes', $settings['is_seconds_show'])) {
+                $dones['time_loc'] = (isset($post['time_loc']) && !empty($post['time_loc'])) ? (\DateTime::createFromFormat('d.m.Y H:i:s', trim($post['time_loc']))->format('Y-m-d H:i:s')) : null;
+            } else {
+                $dones['time_loc'] = (isset($post['time_loc']) && !empty($post['time_loc'])) ? (\DateTime::createFromFormat('d.m.Y H:i', trim($post['time_loc']))->format('Y-m-d H:i:s')) : null;
+            }
+
+            if (!empty($settings) && isset($settings['is_seconds_show']) && in_array('yes', $settings['is_seconds_show'])) {
+                $dones['time_likv'] = (isset($post['time_likv']) && !empty($post['time_likv'])) ? (\DateTime::createFromFormat('d.m.Y H:i:s', trim($post['time_likv']))->format('Y-m-d H:i:s')) : null;
+            } else {
+                $dones['time_likv'] = (isset($post['time_likv']) && !empty($post['time_likv'])) ? (\DateTime::createFromFormat('d.m.Y H:i', trim($post['time_likv']))->format('Y-m-d H:i:s')) : null;
+            }
         }
 
-        if (!empty($settings) && isset($settings['is_seconds_show']) && in_array('yes', $settings['is_seconds_show'])) {
-            $dones['time_likv'] = (isset($post['time_likv']) && !empty($post['time_likv'])) ? (\DateTime::createFromFormat('d.m.Y H:i:s', trim($post['time_likv']))->format('Y-m-d H:i:s')) : null;
-        } else {
-            $dones['time_likv'] = (isset($post['time_likv']) && !empty($post['time_likv'])) ? (\DateTime::createFromFormat('d.m.Y H:i', trim($post['time_likv']))->format('Y-m-d H:i:s')) : null;
-        }
 
         $dones['podr_take_msg'] = (isset($post['podr_take_msg']) && !empty($post['podr_take_msg'])) ? trim($post['podr_take_msg']) : '';
         $dones['disp_take_msg'] = (isset($post['disp_take_msg']) && !empty($post['disp_take_msg'])) ? trim($post['disp_take_msg']) : '';
@@ -1921,9 +1929,9 @@ class Dones extends My_Controller
                     $dones_trunks['time_pod'] = (isset($row['time_pod']) && !empty($row['time_pod'])) ? (\DateTime::createFromFormat('H:i', $row['time_pod'])->format('H:i')) : NULL;
                     $dones_trunks['means_trunks'] = (isset($row['means_trunks']) && !empty($row['means_trunks'])) ? trim($row['means_trunks']) : '';
                     $dones_trunks['water_po_out'] = (isset($row['water_po_out']) && !empty($row['water_po_out'])) ? trim($row['water_po_out']) : '';
-                    $dones_trunks['time_loc'] = (isset($row['time_loc']) && !empty($row['time_loc'])) ? (\DateTime::createFromFormat('H:i', $row['time_loc'])->format('H:i')) : NULL;
+                    $dones_trunks['time_loc'] = (isset($row['time_loc']) && !empty($row['time_loc']) && $dones['is_likv_before_arrival'] == 0) ? (\DateTime::createFromFormat('H:i', $row['time_loc'])->format('H:i')) : NULL;
                     $dones_trunks['s_fire_loc'] = (isset($row['s_fire_loc']) && !empty($row['s_fire_loc'])) ? trim($row['s_fire_loc']) : '';
-                    $dones_trunks['time_likv'] = (isset($row['time_likv']) && !empty($row['time_likv'])) ? (\DateTime::createFromFormat('H:i', $row['time_likv'])->format('H:i')) : NULL;
+                    $dones_trunks['time_likv'] = (isset($row['time_likv']) && !empty($row['time_likv']) && $dones['is_likv_before_arrival'] == 0) ? (\DateTime::createFromFormat('H:i', $row['time_likv'])->format('H:i')) : NULL;
 
                     if ($dones['is_wide_table_trunks'] == 1) {
                         $dones_trunks['actions_ls'] = (isset($row['actions_ls']) && !empty($row['actions_ls'])) ? trim($row['actions_ls']) : '';
@@ -2756,6 +2764,7 @@ class Dones extends My_Controller
             /* description of RIG */
             $new_dones['id_rig'] = (isset($dones['id_rig_current']) && !empty($dones['id_rig_current'])) ? intval($dones['id_rig_current']) : 0;
             $new_dones['time_msg'] = (isset($dones['time_msg']) && !empty($dones['time_msg'])) ? $dones['time_msg'] : NULL;
+            $new_dones['is_likv_before_arrival'] = $dones['is_likv_before_arrival'];
             $new_dones['time_loc'] = (isset($dones['time_loc']) && !empty($dones['time_loc'])) ? $dones['time_loc'] : NULL;
             $new_dones['time_likv'] = (isset($dones['time_likv']) && !empty($dones['time_likv'])) ? $dones['time_likv'] : NULL;
             $new_dones['podr_take_msg'] = (isset($dones['podr_take_msg']) && !empty($dones['podr_take_msg'])) ? trim($dones['podr_take_msg']) : '';

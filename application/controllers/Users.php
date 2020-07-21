@@ -135,6 +135,12 @@ class Users extends My_Controller
                 $data['is_admin'] = 0;
             }
 
+            //edit
+            if ($id_user != 0)
+                $this->user_model->edit_user($id_user, $data);
+            else
+                $id_user=$this->user_model->add_user($data);
+
 
             $id_user_journal = $post['id_user_journal'];
 
@@ -143,12 +149,6 @@ class Users extends My_Controller
             } else {//reset sd user
                 $this->user_model->set_user_sd_to_journal($id_user_journal, null);
             }
-
-            //edit
-            if ($id_user != 0)
-                $this->user_model->edit_user($id_user, $data);
-            else
-                $this->user_model->add_user($data);
 
             if ($data['can_edit'] == 1) {
                 $is_user_for_journal = $this->user_model->get_cnt_users_for_is_guest($data);
