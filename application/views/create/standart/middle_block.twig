@@ -336,9 +336,9 @@
             </div>
 
 
-            <div class="form-group col-md-3 new-field">
+            <div class="form-group col-md-6 new-field">
                 <label for="garnison_main" >Ответственный по гарнизону:</label>
-                <input type="text" class="form-control"  placeholder="" name="garnison_main" value="{%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.garnison_main is not empty %}{{dones.garnison_main|trim}}{%endif%}">
+                <input type="text" class="form-control"  placeholder="" name="garnison_main" value="{%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.garnison_main is not empty %}{{dones.garnison_main|trim}}{%elseif head_garnison is defined and head_garnison is not empty%}{{head_garnison}}{%endif%}">
             </div>
         </div>
 

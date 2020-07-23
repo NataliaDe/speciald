@@ -1,0 +1,2 @@
+ALTER TABLE `users`
+	ADD COLUMN `id_grochs` INT(11) NOT NULL DEFAULT '0' COMMENT '=ss.locorg.id ГРОЧС для связи с КУСиС. Только для уровня УМЧС, РОЧС. кроме РОСН, УГЗ, Авиации, РЦУ (для них храним id_organ)' AFTER `id_organ`;

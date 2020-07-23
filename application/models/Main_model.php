@@ -10,56 +10,43 @@ if (!defined('BASEPATH')) {
 class Main_model extends CI_Model
 {
 
-	const LEVEL_ID_RCU=1;//RCU
-	const LEVEL_ID_UMCHS=2;//UMCHS
-	const LEVEL_ID_ROCHS=3;//ROCHS
+    const LEVEL_ID_RCU = 1; //RCU
+    const LEVEL_ID_UMCHS = 2; //UMCHS
+    const LEVEL_ID_ROCHS = 3; //ROCHS
 
-	/* each level has property 'can_edit' and 'is_admin'.
-	UMCHS level : umchs, rosn g.Minsk(all rosn), ugz g.Minsk(all), avia g.Minsk(all).
-	ROCHS level: rochs, rosn, ugz, avia.
-	*/
+    /* each level has property 'can_edit' and 'is_admin'.
+      UMCHS level : umchs, rosn g.Minsk(all rosn), ugz g.Minsk(all), avia g.Minsk(all).
+      ROCHS level: rochs, rosn, ugz, avia.
+     */
+    const ORGAN_ID_RCU = 5; //RCU
+    const ORGAN_ID_UMCHS = 4; //UMCHS
+    const ORGAN_ID_PASO = 6; //PASO
+    const ORGAN_ID_PASO_OBJECT = 7; //PASO OBJECT
+    const ORGAN_ID_GOCHS = 1; //GOCHS
+    const ORGAN_ID_ROCHS = 2; //ROCHS
+    const ORGAN_ID_GROCHS = 3; //GROCHS
+    const ORGAN_ID_ROSN = 8; //ROSN
+    const ORGAN_ID_UGZ = 9; //UGZ
+    const ORGAN_ID_AVIA = 12; //AVIA
+    const REGION_BREST = 1;
+    const REGION_VITEBSK = 2;
+    const REGION_MINSK = 3;
+    const REGION_GOMEL = 4;
+    const REGION_GRODNO = 5;
+    const REGION_MOGILEV = 6;
+    const REGION_MINOBL = 7;
+    const PHOTO_CNT_PER_SD = 4;
+    const VIDEO_CNT_PER_SD = 2;
+    const AUDIO_CNT_PER_SD = 1;
+    const TYPE_SD_STANDART = 1;
+    const TYPE_SD_SIMPLE = 2;
+    const VID_SD_MINIROVANIE = 130;
+    const REGION_ID_RCU = 50; //RCU
+    const OBJECT_MANY_FLOOR = 12;
 
-	const ORGAN_ID_RCU=5;//RCU
-	const ORGAN_ID_UMCHS=4;//UMCHS
+    const DIVIZ_COU=8;
 
-	const ORGAN_ID_PASO=6;//PASO
-	const ORGAN_ID_PASO_OBJECT=7;//PASO OBJECT
-
-	const ORGAN_ID_GOCHS=1;//GOCHS
-	const ORGAN_ID_ROCHS=2;//ROCHS
-	const ORGAN_ID_GROCHS=3;//GROCHS
-
-	const ORGAN_ID_ROSN=8;//ROSN
-	const ORGAN_ID_UGZ=9;//UGZ
-	const ORGAN_ID_AVIA=12;//AVIA
-
-
-        const REGION_BREST=1;
-        const REGION_VITEBSK=2;
-        const REGION_MINSK=3;
-        const REGION_GOMEL=4;
-        const REGION_GRODNO=5;
-        const REGION_MOGILEV=6;
-        const REGION_MINOBL=7;
-
-
-        const PHOTO_CNT_PER_SD=4;
-        const VIDEO_CNT_PER_SD=2;
-        const AUDIO_CNT_PER_SD=1;
-
-        const TYPE_SD_STANDART=1;
-        const TYPE_SD_SIMPLE=2;
-
-        const VID_SD_MINIROVANIE = 130;
-
-        const REGION_ID_RCU=50;//RCU
-
-        const OBJECT_MANY_FLOOR = 12;
-
-
-
-
-
+    const POS_HEAD_GARNISON=14;// str.maincou. pos duty
 
     public function __construct()
     {
@@ -85,14 +72,20 @@ class Main_model extends CI_Model
     }
 
     // cp organs
-    public function get_organs_in_local()
+    public function get_organs_in_local($in_organ = false)
     {
 
-        $this->db->select("o.name, l.id_local, l.id_organ as id")
-            ->join('ss.organs as o', 'o.id=l.id_organ', 'left')
-            ->where_in('o.id', array(5, 8, 9, 12))
-            // ->group_by('o.name')
-            ->order_by('o.name', 'ASC');
+        $this->db->select("o.name, l.id_local, l.id_organ as id,l.id_organ,reg.id as id_region");
+        $this->db->join('ss.organs as o', 'o.id=l.id_organ', 'left');
+        $this->db->join('ss.locals as loc', 'loc.id=l.id_local', 'left');
+        $this->db->join('ss.regions as reg', 'reg.id=loc.id_region', 'left');
+        //->where_in('o.id', array(5, 8, 9, 12))
+        // ->group_by('o.name')
+
+        if (!empty($in_organ) && $in_organ !== FALSE)
+            $this->db->where_in('o.id', $in_organ);
+
+        $this->db->order_by('o.name', 'ASC');
 
         return $this->db->get('ss.locorg as l')->result_array();
     }
@@ -352,7 +345,7 @@ class Main_model extends CI_Model
                 ->result_array();
     }
 
-        public function get_firereason()
+    public function get_firereason()
     {
         return $this->db->select('*')
                 ->from('journal.firereason')
@@ -363,8 +356,7 @@ class Main_model extends CI_Model
                 ->result_array();
     }
 
-
-        public function get_first_part_number_sd($id_region)
+    public function get_first_part_number_sd($id_region)
     {
         $res = $this->db->select('first_part')
             ->from('number_sd')
@@ -374,8 +366,7 @@ class Main_model extends CI_Model
         return $res['first_part'];
     }
 
-
-        public function get_face_belong()
+    public function get_face_belong()
     {
         return $this->db->select('*')
                 ->from('face_belong')
@@ -383,7 +374,7 @@ class Main_model extends CI_Model
                 ->result_array();
     }
 
-            public function get_api_source()
+    public function get_api_source()
     {
         return $this->db->select('*')
                 ->from('api_source')
@@ -392,7 +383,7 @@ class Main_model extends CI_Model
                 ->result_array();
     }
 
-        public function get_map_center_by_local($id_local)
+    public function get_map_center_by_local($id_local)
     {
         return $this->db->select('*')
                 ->from('speciald.map_center_locals')
@@ -401,12 +392,69 @@ class Main_model extends CI_Model
                 ->row_array();
     }
 
-            public function get_map_center_by_region($id_region)
+    public function get_map_center_by_region($id_region)
     {
         return $this->db->select('*')
                 ->from('speciald.map_center_regions')
                 ->where('id_region', $id_region)
                 ->get()
                 ->row_array();
+    }
+
+    public function get_grochs_list($not_in_organ = false, $id_grochs=false)
+    {
+
+        $this->db->select("`reg`.`id`            AS `id_region`,
+  `reg`.`name`          AS `regionn`,
+  (CASE WHEN (`organ`.`id` = 8) THEN `organ`.`name` WHEN (`reg`.`name` = 'г.Минск') THEN CONVERT(CONCAT('Минское ГУМЧС') USING utf8) ELSE CONCAT(REPLACE(`reg`.`name`,'ая','ое'),' ','ОУМЧС') END) AS `region_name`,
+  `loc`.`id`            AS `id_local`,
+  `loc`.`name`          AS `local_name`,
+  `organ`.`id`          AS `id_organ`,
+  (CASE WHEN (`organ`.`id` = 7) THEN CONCAT(`organ`.`name`,' № ',`gr`.`no`) ELSE `organ`.`name` END) AS `organ_name`,
+  (CASE WHEN (`organ`.`id` = 7) THEN CONCAT(`organ`.`name`,' № ',`gr`.`no`,' ',REPLACE(`loc`.`name`,'ий','ого'),' ',`orgg`.`name`) WHEN (`organ`.`id` = 13) THEN CONCAT(`organ`.`name`,' ',`loc`.`name`)
+  ELSE  CONCAT(`loc`.`name`,' ',`organ`.`name`)  END) AS `full_grochs_name`,
+  `gr`.`id`    AS `id_locorg`");
+        $this->db->join('ss.`organs` `organ`', '`gr`.`id_organ` = `organ`.`id`', 'left');
+        $this->db->join('ss.`organs` `orgg`', '`gr`.`oforg` = `orgg`.`id`', 'left');
+        $this->db->join('ss.`locals` `loc`', '`gr`.`id_local` = `loc`.`id`', 'left');
+        $this->db->join('ss.`regions` `reg`', '`loc`.`id_region` = `reg`.`id`', 'left');
+
+        if (!empty($not_in_organ) && $not_in_organ !== FALSE)
+            $this->db->where_not_in('organ.id', $not_in_organ);
+
+        if ($id_grochs !== FALSE)
+            $this->db->where('gr.id', $id_grochs);
+
+        $this->db->group_by('gr.`id`');
+        $this->db->order_by('loc.name', 'ASC');
+
+        return $this->db->get('ss.`locorg` `gr`')->result_array();
+    }
+
+    public function get_id_umchs_by_region($id_region, $id_organ)
+    {
+        $this->db->select("l.*");
+        $this->db->join('ss.`locals` `loc`', '`l`.`id_local` = `loc`.`id`', 'left');
+        $this->db->where_in('loc.id_region', $id_region);
+        $this->db->where_in('l.id_organ', $id_organ);
+        $this->db->limit(1);
+
+        $res = $this->db->get('ss.locorg as l')->row_array();
+        return $res['id'];
+    }
+
+        public function get_head_garnison_from_str($id_grochs,$id_pos_duty,$id_divizion)
+    {
+        $this->db->select("m.*");
+        $this->db->join('ss.`records` `rec`', '`rec`.`id` = `m`.`id_card`', 'left');
+        $this->db->where('m.id_pos_duty', $id_pos_duty);
+        $this->db->where('rec.id_divizion', $id_divizion);
+        $this->db->where('rec.id_loc_org', $id_grochs);
+        $this->db->where('m.is_duty', 1);
+        $this->db->group_by('m.id_pos_duty');
+        $this->db->limit(1);
+
+        $res = $this->db->get('str.maincou as m')->row_array();
+        return $res;
     }
 }

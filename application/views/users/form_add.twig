@@ -41,7 +41,7 @@
             </div>
 
 
-            <div class="col-lg-2">
+            <div class="col-lg-2 ">
                 <label for="id_organ">Подразд.</label>
                 <div class="form-group">
                     <select class="form-control select2-select-deselect" name="id_organ" id="id_organ"  >
@@ -52,6 +52,25 @@
                     </select>
                 </div>
             </div>
+
+
+{#            <div class="col-lg-2 class-grochs {% if (user is defined and user.id_grochs != 0 and user.id_local != 0) or (user is defined and user.id_local != 0)%} show {%else%} hide {%endif%}">
+                <label for="id_grochs">связать с Г(Р)ОЧС <i class="fa fa-info-circle info-all" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="учитывается, если не выбрано подразделение"></i></label>
+                <div class="form-group">
+                    <select class="form-control select2-select-deselect" name="id_grochs" id="id_grochs" >
+                        <option value="0" class="1" >Не выбран</option>
+                        <option value="0" class="2" >Не выбран</option>
+                        <option value="0" class="3" >Не выбран</option>
+                        <option value="0" class="4" >Не выбран</option>
+                        <option value="0" class="5" >Не выбран</option>
+                        <option value="0" class="6" >Не выбран</option>
+                        <option value="0" class="7" >Не выбран</option>
+                        {% for organ in grochs %}
+                            <option value="{{ organ.id_locorg }}" class="{{organ.id_region}}" {% if user is defined and user.id_grochs == organ.id_locorg%} selected {%endif%}>{{ organ.full_grochs_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>#}
 
 
 
@@ -154,17 +173,17 @@
 
 
 
-                <div class="row">
-                    <div class="form-group col-md-3">
-                        <label for="hs_vid" >Связать с пользователем ЖЦ <i class="fa fa-info-circle info-all" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Это позволит автоматически авторизовываться из ЖЦ"></i></label>
-                        <select class="form-control select2-single" name="id_user_journal" id="id_user_journal"  >
-                            <option></option>
-                        {% for uj in users_journal %}
-                            <option value="{{ uj.id_user }}" {% if user is defined and user.id == uj.id_user_sd%} selected {%endif%}>{{ uj.user_name }} {{ uj.locorg_name }}</option>
-                        {% endfor %}
-                        </select>
-                    </div>
-                </div>
+        <div class="row">
+            <div class="form-group col-md-3">
+                <label for="hs_vid" >Связать с пользователем ЖЦ <i class="fa fa-info-circle info-all" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Это позволит автоматически авторизовываться из ЖЦ"></i></label>
+                <select class="form-control select2-single" name="id_user_journal" id="id_user_journal"  >
+                    <option></option>
+                    {% for uj in users_journal %}
+                        <option value="{{ uj.id_user }}" {% if user is defined and user.id == uj.id_user_sd%} selected {%endif%}>{{ uj.user_name }} {{ uj.locorg_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
 
         <br>
         <div class="row">
@@ -194,6 +213,11 @@
 
 
 {% block head %}
+    <style>
+        .class-grochs .select2-container{
+            width: 287px !important;
+        }
+    </style>
 
 {% endblock %}
 
@@ -201,19 +225,19 @@
     <script>
         $(document).ready(function () {
 
-             $('.select2-select').select2();
-
+        $('.select2-select').select2();
         $('.select2-select-deselect').select2({
-                placeholder: "Выберите из списка",
+        placeholder: "Выберите из списка",
                 allowClear: true,
                 "language": {
-                    "noResults": function () {
-                        return "Ничего не найдено";
-                    }
+                "noResults": function () {
+                return "Ничего не найдено";
                 }
-            });
+                }
+        });
         jQuery("#id_local").chained("#id_region");
         jQuery("#id_organ").chained("#id_local");
+        jQuery("#id_grochs").chained("#id_region");
         {% if user is defined and (user.id_organ == 0 or user.id_organ is empty) %}
             $('#id_organ').val(0).trigger('change');
         {%endif%}
@@ -257,6 +281,7 @@
             $("#is_admin option[value='1']").remove();
             $('#is_admin').trigger('change');
             }
+
             });
             $('#addUserForm')
                     .bootstrapValidator({
@@ -270,93 +295,114 @@
                                                 max: 10,
                                                 message: 'от 3 до 10 символов'
                                             },#}
-                                    regexp: {
-                                    regexp: /^[a-zA-Z0-9_]+$/,
-                                            message: 'буквы англ.алфавита, цифры, нижнее подчеркивание '
-                                    }
-                                    }
-                            },
-                                    password: {
-                                    message: 'The username is not valid',
-                                            validators: {
-                                            notEmpty: {
-                                            message: 'Введите пароль'
-                                            },{#                                    stringLength: {
+                                                                        regexp: {
+                                                                        regexp: /^[a-zA-Z0-9_]+$/,
+                                                                                message: 'буквы англ.алфавита, цифры, нижнее подчеркивание '
+                                                                        }
+                                                                        }
+                                                                },
+                                                                        password: {
+                                                                        message: 'The username is not valid',
+                                                                                validators: {
+                                                                                notEmpty: {
+                                                                                message: 'Введите пароль'
+                                                                                },{#                                    stringLength: {
                                                 min: 3,
                                                 max: 7,
                                                 message: 'от 3 до 7 символов'
                                             },#}
-                                                    regexp: {
-                                                    regexp: /^[a-zA-Z0-9_]+$/,
-                                                            message: 'буквы англ.алфавита, цифры, нижнее подчеркивание '
-                                                    }
-                                            }
-                                    },
-                                    fio: {
-                                    message: 'The username is not valid',
-                                            validators: {
-                                            notEmpty: {
-                                            message: 'Введите имя пользователя'
-                                            },{#                                    stringLength: {
+                                                                                        regexp: {
+                                                                                        regexp: /^[a-zA-Z0-9_]+$/,
+                                                                                                message: 'буквы англ.алфавита, цифры, нижнее подчеркивание '
+                                                                                        }
+                                                                                }
+                                                                        },
+                                                                        fio: {
+                                                                        message: 'The username is not valid',
+                                                                                validators: {
+                                                                                notEmpty: {
+                                                                                message: 'Введите имя пользователя'
+                                                                                },{#                                    stringLength: {
                                                 min: 3,
                                                 max: 30,
                                                 message: 'от 3 до 30 символов'
                                             },#}
-                                                    regexp: {
-                                                    regexp: /^[а-яА-Я0-9\s-.]+$/,
-                                                            message: 'буквы русск.алфавита, пробел,- '
-                                                    }
-                                            }
-                                    },
-                                creator_name: {
-                                    message: 'The username is not valid',
-                                            validators: {
-                                            notEmpty: {
-                                            message: 'Заполните поле'
-                                            },{#                                    stringLength: {
+                                                                                        regexp: {
+                                                                                        regexp: /^[а-яА-Я0-9\s-.]+$/,
+                                                                                                message: 'буквы русск.алфавита, пробел,- '
+                                                                                        }
+                                                                                }
+                                                                        },
+                                                                        creator_name: {
+                                                                        message: 'The username is not valid',
+                                                                                validators: {
+                                                                                notEmpty: {
+                                                                                message: 'Заполните поле'
+                                                                                },{#                                    stringLength: {
                                                 min: 3,
                                                 max: 30,
                                                 message: 'от 3 до 30 символов'
                                             },#}
-                                                    regexp: {
-                                                    regexp: /^[а-яА-Я]/,
-                                                            message: 'буквы русск.алфавита '
-                                                    }
-                                            }
-                                    }
-                            }
+                                                                                        regexp: {
+                                                                                        regexp: /^[а-яА-Я]/,
+                                                                                                message: 'буквы русск.алфавита '
+                                                                                        }
+                                                                                }
+                                                                        }
+                                                                }
 
-                    });
-            $(function () {
-            var buttonpressed;
-            $('#save').click(function () {
-            buttonpressed = $(this).attr('id');
-            });
-            $('form#addUserForm').submit(function (e) {
-            if (buttonpressed === 'save') {
+                                                        });
+                                                $(function () {
+                                                var buttonpressed;
+                                                $('#save').click(function () {
+                                                buttonpressed = $(this).attr('id');
+                                                });
+                                                $('form#addUserForm').submit(function (e) {
+                                                if (buttonpressed === 'save') {
 
-            // Запрещаем стандартное поведение для кнопки submit
-            e.preventDefault();
-            var realArray = $('#addUserForm').serializeArray();
-            $.ajax({
-            url: '{{base_url('/users/is_user_unique')}}',
-                    dataType: 'json',
-                    type: 'POST',
-                    data: realArray,
-                    success: function (data) {
+                                                // Запрещаем стандартное поведение для кнопки submit
+                                                e.preventDefault();
+                                                var realArray = $('#addUserForm').serializeArray();
+                                                $.ajax({
+                                                url: '{{base_url('/users/is_user_unique')}}',
+                                                        dataType: 'json',
+                                                        type: 'POST',
+                                                        data: realArray,
+                                                        success: function (data) {
 
-                    if (data.error) {
-                    toastr.error(data.error, 'Ошибка:', {progressBar: true, timeOut: 2500});
-                    } else if (data.success) {
-                    $('form#addUserForm').unbind('submit').submit();
-                    }
-                    }
-            });
-            }
-            buttonpressed = '';
-            });
-            });
+                                                        if (data.error) {
+                                                        toastr.error(data.error, 'Ошибка:', {progressBar: true, timeOut: 2500});
+                                                        } else if (data.success) {
+                                                        $('form#addUserForm').unbind('submit').submit();
+                                                        }
+                                                        }
+                                                });
+                                                }
+                                                buttonpressed = '';
+                                                });
+                                                });
+{#                                                $('#id_local').change(function (e) {
 
+
+                                                if ($(this).val() !== '' && parseInt($(this).val()) !== 0){
+                                                $('.class-grochs').removeClass('hide');
+                                                $('.class-grochs').removeClass('show');
+                                                $('.class-grochs').addClass('show');
+
+                                                 $('#id_grochs').val(0);
+                                                 $('#id_grochs').trigger('change');
+
+                                                }
+                                                else{
+
+                                                 $('#id_grochs').val(0);
+                                                 $('#id_grochs').trigger('change');
+
+                                                $('.class-grochs').removeClass('hide');
+                                                $('.class-grochs').removeClass('show');
+                                                $('.class-grochs').addClass('hide');
+                                                }
+                                                });#}
 
 
 

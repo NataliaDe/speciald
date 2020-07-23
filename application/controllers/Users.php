@@ -32,7 +32,8 @@ class Users extends My_Controller
 
             $this->data['regions'] = $this->main_model->get_regions();
             $this->data['locals'] = $this->main_model->get_locals();
-            $this->data['organs'] = $this->main_model->get_organs_in_local();
+            $this->data['organs'] = $this->main_model->get_organs_in_local(array(5,8,9,12));
+            $this->data['grochs'] = $this->main_model->get_grochs_list(array(4,5,8,9,12));
             $this->data['positions'] = $this->main_model->get_positions();
             $this->data['ranks'] = $this->main_model->get_ranks();
 
@@ -61,6 +62,21 @@ class Users extends My_Controller
         $this->data['ids_user_sd_journal']= array_column ($ids_user_sd_journal, 'id_user_sd');
 
         $this->data['all_users'] = $this->user_model->get_all_active_permissions();
+
+        if (!empty($this->data['all_users'])) {
+            foreach ($this->data['all_users'] as $key => $value) {
+                if (!empty($value['id_grochs']) && $value['id_grochs'] != 0) {
+                    $grochs = $this->main_model->get_grochs_list(FALSE, $value['id_grochs']);
+
+                    if (isset($grochs) && !empty($grochs)) {
+                        foreach ($grochs as $row) {
+                            $connect_with_grochs = $row['full_grochs_name'];
+                        }
+                        $this->data['all_users'][$key]['connect_with_grochs'] = $connect_with_grochs;
+                    }
+                }
+            }
+        }
         $this->data['title'] = 'Пользователи';
         $this->twig->display('users/index', $this->data);
     }
@@ -135,6 +151,20 @@ class Users extends My_Controller
                 $data['is_admin'] = 0;
             }
 
+
+//            if ($data['id_organ'] == 0) {
+//                if ($data['level'] == Main_model::LEVEL_ID_ROCHS) {
+//
+//                    $data['id_grochs'] = (isset($post['id_grochs']) && !empty($post['id_grochs'])) ? intval($post['id_grochs']) : 0;
+//                } elseif ($data['level'] == Main_model::LEVEL_ID_UMCHS) {
+//                    $id_grochs = $this->main_model->get_id_umchs_by_region($data['id_region'], Main_model::ORGAN_ID_UMCHS);
+//                    $data['id_grochs'] = $id_grochs;
+//                }
+//            } else {
+//                $data['id_grochs'] = 0;
+//            }
+
+
             //edit
             if ($id_user != 0)
                 $this->user_model->edit_user($id_user, $data);
@@ -143,11 +173,10 @@ class Users extends My_Controller
 
 
             $id_user_journal = $post['id_user_journal'];
-
             if (isset($id_user_journal) && !empty($id_user_journal)) {
                 $this->user_model->set_user_sd_to_journal($id_user_journal, $id_user);
             } else {//reset sd user
-                $this->user_model->set_user_sd_to_journal($id_user_journal, null);
+                $this->user_model->reset_user_sd_in_journal($id_user, null);
             }
 
             if ($data['can_edit'] == 1) {

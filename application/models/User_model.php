@@ -282,4 +282,17 @@ class User_model extends CI_Model
         }
         return $result;
     }
+
+
+        public function get_data_user_journal_by_user_sd($id_user_sd)
+    {
+        $res = $this->db->select('*')
+            ->from('journal.user')
+            ->where('id_user_sd', $id_user_sd)
+            ->get()
+            ->row_array();
+
+        return $res;
+    }
+
 }

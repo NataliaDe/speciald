@@ -167,6 +167,16 @@ class Dones extends My_Controller
         /* END default number sd */
 
 
+            //head garnison. from str
+//        if (isset($this->data['active_user']['id_grochs']) && !empty($this->data['active_user']['id_grochs'])) {
+//            $garnison = $this->get_head_garnison_from_str($this->data['active_user']['id_grochs'], Main_model::POS_HEAD_GARNISON, Main_model::DIVIZ_COU);
+//            $this->data['head_garnison'] = $garnison;
+//        }
+            $journal_user = $this->user_model->get_data_user_journal_by_user_sd($this->data['active_user']['id_user']);
+            if (isset($journal_user) && !empty($journal_user) && isset($journal_user['id_locorg']) && !empty($journal_user['id_locorg'])) {
+                $garnison = $this->get_head_garnison_from_str($journal_user['id_locorg'], Main_model::POS_HEAD_GARNISON, Main_model::DIVIZ_COU);
+                $this->data['head_garnison'] = $garnison;
+            }
 
 
 
@@ -3485,5 +3495,17 @@ class Dones extends My_Controller
         $result = array(0 => array('fio' => 'Начальник гарнизона'), 1 => array('fio' => 'Ответственный по гарнизону'), 2 => array('fio' => 'Ответственный ИНиП'));
 
         echo json_encode(array('result' => $result, 'is_error' => 0));
+    }
+
+
+    public function get_head_garnison_from_str($id_grochs, $pos, $diviz)
+    {
+        $main_cou = $this->main_model->get_head_garnison_from_str($id_grochs, $pos, $diviz);
+        $garnison = '';
+        if (isset($main_cou) && !empty($main_cou)) {
+            $garnison = $main_cou['fio_text'];
+        }
+
+        return $garnison;
     }
 }

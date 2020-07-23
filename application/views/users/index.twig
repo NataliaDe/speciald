@@ -61,7 +61,7 @@
                         <td>{% if user.can_edit == 1%} Создатель {%else%}Просмоторщик{%endif%}</td>
                         <td>{{user.admin_name}}</td>
                         <td>{{user.region_name}}</td>
-                        <td>{{user.local_name}}</td>
+                        <td>{{user.local_name}} {#{%if user.connect_with_grochs is defined%}<br><i style='color:green'>связан с {{user.connect_with_grochs}}</i>{%endif%}#}</td>
                         <td>{{user.organ_name}}</td>
                         <td>{{user.level_name}}</td>
                         <td>{{user.login}}<br>{{user.password}}</td>
