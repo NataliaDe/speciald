@@ -385,9 +385,13 @@ $('body').on('change', '#createStandart  #object_house_id', function (e) {
 
 $('body').on('change', '#createStandart  #object-office-belong-id', function (e) {
     setPreviewDataObject();
+});
 
+$('body').on('input change keyup', '#createStandart textarea[name="type_damage"]', function (e) {
+    setPreviewDataObject();
 
 });
+
 $('body').on('change', '#createStandart #is_api_worked', function (e) {
 
     var is_api_worked = $(this).is(":checked");
@@ -593,6 +597,8 @@ function setPreviewDataObject() {
     var object_is_electric = $('#createStandart #object_is_electric').is(":checked");
     var object_is_api = $('#createStandart #object_is_api').is(":checked");
 
+    var type_damage = $('#createStandart textarea[name="type_damage"]').val();
+
 
     var room = '';
 
@@ -699,6 +705,8 @@ function setPreviewDataObject() {
         }
 
 
+
+
         if (parseInt(id_face_belong) === 1) {
 
             if (object_is_api === true) {
@@ -765,6 +773,14 @@ function setPreviewDataObject() {
             }
         }
 
+
+
+        if (type_damage !== '') {
+            if (preview === '')
+                preview = '. Тип повреждения: ' + type_damage;
+            else
+                preview = preview + '. Тип повреждения: ' + type_damage;
+        }
 
         if (preview !== '')
             preview = preview + '.';

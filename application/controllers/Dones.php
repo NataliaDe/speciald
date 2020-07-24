@@ -2026,6 +2026,7 @@ class Dones extends My_Controller
         $object = array();
         $object['id_dones'] = $id_dones_new;
         $object['object'] = (isset($post['object']) && !empty($post['object'])) ? trim($post['object']) : '';
+        $object['type_damage'] = (isset($post['type_damage']) && !empty($post['type_damage'])) ? trim($post['type_damage']) : '';
         $object['object_office_belong'] = (isset($post['object_office_belong']) && !empty($post['object_office_belong'])) ? intval($post['object_office_belong']) : 0;
         $object['object_house'] = (isset($post['object_house']) && !empty($post['object_house'])) ? intval($post['object_house']) : 0;
         $object['object_floor'] = (isset($post['object_floor']) && !empty($post['object_floor'])) ? trim($post['object_floor']) : '';
@@ -3087,6 +3088,7 @@ class Dones extends My_Controller
         if (isset($object) && !empty($object)) {
             $dones_object['id_dones'] = $id_dones_new;
             $dones_object['object'] = (isset($object['object']) && !empty($object['object'])) ? trim($object['object']) : '';
+            $dones_object['type_damage'] = (isset($object['type_damage']) && !empty($object['type_damage'])) ? trim($object['type_damage']) : '';
             $dones_object['object_office_belong'] = (isset($object['object_office_belong']) && !empty($object['object_office_belong'])) ? intval($object['object_office_belong']) : 0;
             $dones_object['object_house'] = (isset($object['object_house']) && !empty($object['object_house'])) ? intval($object['object_house']) : 0;
             $dones_object['object_floor'] = (isset($object['object_floor']) && !empty($object['object_floor'])) ? trim($object['object_floor']) : '';
