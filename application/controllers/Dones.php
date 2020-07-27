@@ -106,6 +106,7 @@ class Dones extends My_Controller
         $this->data['id_object_avtotransport'] = Main_model::OBJECT_AVTO_TRANSPORT;
 
         $this->data['avtotransport_vid']= $this->main_model->get_avtotransport_vid();
+        $this->data['theme_messages']= $this->main_model->get_theme_messages();
 
         $this->data['bread_crumb'] = array(array('/dones' => 'Создать специальное донесение'),
             array('Стандартное'));
@@ -1485,6 +1486,7 @@ class Dones extends My_Controller
 
 
         $dones['opening_description'] = (isset($post['opening_description']) && !empty($post['opening_description'])) ? trim($post['opening_description']) : '';
+        $dones['id_theme_message'] = (isset($post['id_theme_message']) && !empty($post['id_theme_message']) && $dones['is_show_opening_descr'] == 0) ? intval($post['id_theme_message']) : 0;
 
         /* description of RIG */
         $dones['id_rig'] = (isset($post['id_rig_current']) && !empty($post['id_rig_current'])) ? intval($post['id_rig_current']) : 0;
@@ -2192,6 +2194,7 @@ class Dones extends My_Controller
         $this->data['id_object_avtotransport'] = Main_model::OBJECT_AVTO_TRANSPORT;
 
         $this->data['avtotransport_vid']= $this->main_model->get_avtotransport_vid();
+        $this->data['theme_messages']= $this->main_model->get_theme_messages();
 
         $this->data['bread_crumb'] = array(array('/' => 'Редактировать специальное донесение'),
             array('ID = ' . $id_dones)
@@ -2793,6 +2796,7 @@ class Dones extends My_Controller
 
             $new_dones['opening_description'] = (isset($dones['opening_description']) && !empty($dones['opening_description'])) ? trim($dones['opening_description']) : '';
 
+            $new_dones['id_theme_message'] = $dones['id_theme_message'];
 
             /* description of RIG */
             $new_dones['id_rig'] = (isset($dones['id_rig_current']) && !empty($dones['id_rig_current'])) ? intval($dones['id_rig_current']) : 0;

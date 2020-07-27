@@ -44,10 +44,8 @@ class Main_model extends CI_Model
     const REGION_ID_RCU = 50; //RCU
     const OBJECT_MANY_FLOOR = 12;
     const OBJECT_AVTO_TRANSPORT = 17;
-
-    const DIVIZ_COU=8;
-
-    const POS_HEAD_GARNISON=14;// str.maincou. pos duty
+    const DIVIZ_COU = 8;
+    const POS_HEAD_GARNISON = 14; // str.maincou. pos duty
 
     public function __construct()
     {
@@ -402,7 +400,7 @@ class Main_model extends CI_Model
                 ->row_array();
     }
 
-    public function get_grochs_list($not_in_organ = false, $id_grochs=false)
+    public function get_grochs_list($not_in_organ = false, $id_grochs = false)
     {
 
         $this->db->select("`reg`.`id`            AS `id_region`,
@@ -444,7 +442,7 @@ class Main_model extends CI_Model
         return $res['id'];
     }
 
-        public function get_head_garnison_from_str($id_grochs,$id_pos_duty,$id_divizion)
+    public function get_head_garnison_from_str($id_grochs, $id_pos_duty, $id_divizion)
     {
         $this->db->select("m.*");
         $this->db->join('ss.`records` `rec`', '`rec`.`id` = `m`.`id_card`', 'left');
@@ -459,12 +457,19 @@ class Main_model extends CI_Model
         return $res;
     }
 
-
-            public function get_avtotransport_vid()
+    public function get_avtotransport_vid()
     {
         $this->db->select("*");
         $this->db->group_by('name');
         $res = $this->db->get('avtotransport_vid')->result_array();
+        return $res;
+    }
+
+    public function get_theme_messages()
+    {
+        $this->db->select("*");
+        $this->db->group_by('name');
+        $res = $this->db->get('theme_messages')->result_array();
         return $res;
     }
 }
