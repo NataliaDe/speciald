@@ -44,7 +44,7 @@
                     </a>
                 </label>
                 <select  class="form-control select2-single object_house" name="object_house" id="object_house_id" >
-                    <option></option>
+                    <option value=""></option>
                     {% for vid in object_house %}
                         <option value="{{ vid.id }}" {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.object is defined and dones.object is not empty and dones.object.object_house== vid.id %}selected{%endif%} >{{ vid.name }}</option>
                     {% endfor %}
@@ -56,7 +56,7 @@
 
 
 
-            <div class="form-group col-md-1" id="object-floor-div">
+            <div class="form-group col-md-1 {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.object is defined  and dones.object.object_house == id_object_avtotransport %}hide{%else%}show{%endif%}" id="object-floor-div">
                 {%include '/create/standart/parts/object_floor.twig'%}
             </div>
 
@@ -71,14 +71,14 @@
 
 
 
-            <div class="form-group col-md-2">
+            <div class="form-group col-md-2 {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.object is defined  and dones.object.object_house == id_object_avtotransport %}hide{%else%}show{%endif%}" id="object-size-div" >
                 <label for="object_size" >Размеры:</label>
                 <input type="text" class="form-control"  placeholder="" name="object_size"  value="{%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.object is defined and dones.object is not empty %}{{dones.object.object_size}}{%endif%}">
             </div>
 
 
 
-            <div class="form-group col-md-2">
+            <div class="form-group col-md-2 {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.object is defined  and dones.object.object_house == id_object_avtotransport %}hide{%else%}show{%endif%}" id="object-electric-div">
                 <label for="object_size" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
                 <div class="checkbox checkbox-warning">
                     <input  type="checkbox" name="object_is_electric" value="1" id="object_is_electric" {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.object is defined and dones.object is not empty and dones.object.object_is_electric == 1 %}checked{%endif%}>
@@ -94,10 +94,10 @@
 
 
 
-        <div class="form-row create-form-row">
+        <div class="form-row create-form-row "  >
 
 
-            <div class="form-group col-md-2">
+            <div class="form-group col-md-2 {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.object is defined and dones.object is not empty and dones.object.object_house == id_object_avtotransport  %}hide{%else%}show{%endif%}" id="object-material-div">
                 <label for="object_material" >Материал стен
                     <a href="#" class="add-new-vid-object-material" data-placement="right" title="Добавить новый вид" data-toggle="modal" data-target="#modal-add-new-vid-object-material">
                         <i class="fa fa-pencil-square-o " aria-hidden="true" style="color:green;padding-left: 10px; cursor: pointer"></i>
@@ -115,7 +115,7 @@
 
 
 
-            <div class="form-group col-md-2">
+            <div class="form-group col-md-2 {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.object is defined and dones.object is not empty and dones.object.object_house == id_object_avtotransport  %}hide{%else%}show{%endif%}" id="object-roof-div">
                 <label for="object_roof" >Материал кровли
                     <a href="#" class="add-new-vid-object-roof" data-placement="right" title="Добавить новый вид" data-toggle="modal" data-target="#modal-add-new-vid-object-roof">
                         <i class="fa fa-pencil-square-o " aria-hidden="true" style="color:green;padding-left: 10px; cursor: pointer"></i>
@@ -136,7 +136,7 @@
             <div class="form-group col-md-1">
             </div>
 
-            <div class="form-group col-md-2 {%if (((rig.id_owner_category is defined and rig.id_owner_category is not empty) or (rig.owner_fio is not empty)) ) or (is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.object is defined and dones.object is not empty and  dones.id_face_belong == 1) %}show{%else%}hide{%endif%}" id="div-is-api">
+            <div class="form-group col-md-2 {%if (((rig.id_owner_category is defined and rig.id_owner_category is not empty) or (rig.owner_fio is not empty)) ) or (is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.object is defined and dones.object is not empty and  dones.id_face_belong == 1 and dones.object.object_house != id_object_avtotransport)%}show{%else%}hide{%endif%}" id="div-is-api">
                 <label for="object_is_api" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
                 <div class="checkbox checkbox-success">
                     <input  type="checkbox" name="object_is_api" value="1" id="object_is_api" {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.object is defined and dones.object is not empty and dones.object.object_is_api == 1 %}checked{%endif%}>
@@ -149,7 +149,7 @@
 
 
 
-                    <div class="form-group col-md-2 {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.object is defined and dones.object is not empty and  dones.id_face_belong == 2  %}show{%else%}hide{%endif%}" id="div-is-aps">
+                    <div class="form-group col-md-2 {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.object is defined and dones.object is not empty and  dones.id_face_belong == 2 and dones.object.object_house != id_object_avtotransport %}show{%else%}hide{%endif%}" id="div-is-aps">
                         <label for="is_aps" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
                         <div class="checkbox checkbox-success">
                             <input  type="checkbox" name="is_aps" value="1" id="is_aps" {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.object is defined and dones.object is not empty and dones.object.is_aps == 1 %}checked{%endif%}>
@@ -164,7 +164,7 @@
 
 
 
-        <div class="card {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.object is defined and dones.object is not empty and dones.object.object_is_api == 1 and dones.id_face_belong == 1  %}show{%else%}hide{%endif%}" id="object-api-card">
+        <div class="card {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.object is defined and dones.object is not empty and dones.object.object_is_api == 1 and dones.id_face_belong == 1 and dones.object.object_house != id_object_avtotransport  %}show{%else%}hide{%endif%}" id="object-api-card">
             <div class="card-header" style="background-color: #abdaab5c">
                 Информация по АПИ
             </div>
@@ -176,13 +176,25 @@
 
 
 
-        <div class="card {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.object is defined and dones.object is not empty and dones.object.is_aps == 1 and dones.id_face_belong == 2  %}show{%else%}hide{%endif%}" id="object-aps-card">
+        <div class="card {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.object is defined and dones.object is not empty and dones.object.is_aps == 1 and dones.id_face_belong == 2 and dones.object.object_house != id_object_avtotransport  %}show{%else%}hide{%endif%}" id="object-aps-card">
             <div class="card-header" style="background-color: #abdaab5c">
                 Информация по АПС
             </div>
             <!-- /.panel-heading -->
             <div class="card-body" style="background-color: #e1f1e157">
                 {%include '/create/standart/object/object_aps_card.twig'%}
+            </div>
+        </div>
+
+
+
+        <div class="card avtotransport-object {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.object is defined and dones.object is not empty and dones.object.object_house == id_object_avtotransport %}show{%else%}hide{%endif%}" id="avtotransport-object">
+            <div class="card-header" style="background-color: #abdaab5c">
+                Автотранспорт
+            </div>
+            <!-- /.panel-heading -->
+            <div class="card-body" style="background-color: #e1f1e157">
+                {%include '/create/standart/object/object_avtotransport_card.twig'%}
             </div>
         </div>
 

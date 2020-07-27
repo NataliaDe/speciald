@@ -465,6 +465,24 @@ $('body').on('input change keyup', '#createStandart input[name="object_cnt_rooms
 });
 
 
+
+$('body').on('change', '#createStandart #avtotransport-object #avto_vid', function (e) {
+    setPreviewDataObject();
+
+});
+$('body').on('input change keyup', '#createStandart #avtotransport-object #avto_year', function (e) {
+    setPreviewDataObject();
+
+});
+$('body').on('input change keyup', '#createStandart #avtotransport-object #avto_type_fuel', function (e) {
+    setPreviewDataObject();
+
+});
+$('body').on('input change keyup', '#createStandart #avtotransport-object #avto_register_sign', function (e) {
+    setPreviewDataObject();
+
+});
+
 function getFloorNumber(object_floor) {
 
     var $text = '';
@@ -631,6 +649,12 @@ function setPreviewDataObject() {
     var is_aps_influence = $('#createStandart #is_aps_influence').is(":checked");
     var aps_name = $('#createStandart textarea[name="aps_name"]').val();
 
+    //avto
+    var avto_vid = $('#createStandart #avtotransport-object  #avto_vid option:selected').text();
+    var avto_year = $('#createStandart #avtotransport-object  #avto_year').val();
+    var avto_fuel = $('#createStandart #avtotransport-object  #avto_type_fuel').val();
+    var avto_reg_sign = $('#createStandart #avtotransport-object  #avto_register_sign').val();
+
     var preview = '';
 
     if (is_show_object === true) {
@@ -648,132 +672,172 @@ function setPreviewDataObject() {
 
 
 
-
-        if (object_house_val !== '') {
+        /* 17 - avtotransport
+         *
+         *
+         */
+        if (object_house_val !== '' && parseInt(object_house_val) !== 17) {
             if (preview === '')
                 preview = object_house;
             else
                 preview = preview + ' (' + object_house + ')';
         }
 
-        if (material_val !== '') {
 
-            if (preview === '')
-                preview = 'Дом ' + material;
-            else
-                preview = preview + ' ' + material;
-        }
+        if (parseInt(object_house_val) !== 17) {
+            if (material_val !== '') {
 
-        if ($text !== '') {
-            if (preview === '')
-                preview = $text;
-            else
-                preview = preview + ', ' + $text;
-        }
+                if (preview === '')
+                    preview = 'Дом ' + material;
+                else
+                    preview = preview + ' ' + material;
+            }
 
-        if (roof_id !== '') {
-            if (preview === '')
-                preview = 'кровля' + roof;
-            else
-                preview = preview + ', ' + 'кровля ' + roof;
-        }
+            if ($text !== '') {
+                if (preview === '')
+                    preview = $text;
+                else
+                    preview = preview + ', ' + $text;
+            }
 
-        if (object_is_electric === true) {
-            if (preview === '')
-                preview = 'электрофицирован';
-            else
-                preview = preview + ', ' + 'электрофицирован';
+            if (roof_id !== '') {
+                if (preview === '')
+                    preview = 'кровля' + roof;
+                else
+                    preview = preview + ', ' + 'кровля ' + roof;
+            }
+
+            if (object_is_electric === true) {
+                if (preview === '')
+                    preview = 'электрофицирован';
+                else
+                    preview = preview + ', ' + 'электрофицирован';
+            } else {
+                if (preview === '')
+                    preview = 'не электрофицирован';
+                else
+                    preview = preview + ', ' + 'не электрофицирован';
+            }
+
+
+            if (parseInt(object_house_val) === 12) {// many flat house
+                if (room !== '') {
+                    if (preview === '')
+                        preview = room;
+                    else
+                        preview = preview + ', ' + room;
+                }
+
+
+                if (object_floor_flat !== '' && object_floor_flat > 0 && arr_floor[object_floor_flat] !== 'undefined' && arr_floor[object_floor_flat] !== undefined) {
+                    if (preview === '')
+                        preview = 'расположена на ' + arr_floor[object_floor_flat] + ' этаже';
+                    else
+                        preview = preview + ', расположена на ' + arr_floor[object_floor_flat] + ' этаже';
+                }
+            }
+
+
+
+
+            if (parseInt(id_face_belong) === 1) {
+
+                if (object_is_api === true) {
+                    if (preview === '')
+                        preview = 'АПИ установлен';
+                    else
+                        preview = preview + ', ' + 'АПИ установлен';
+
+
+                    if (api_date !== '')
+                        preview = preview + ' ' + api_date;
+
+                    if (id_api_source_val !== '')
+                        preview = preview + ' ' + ' (источник финансирования: ' + id_api_source + ')';
+
+                    if (is_api_worked === true) {
+                        preview = preview + ' и сработал';
+                        if (is_api_influence === false) {
+                            preview = preview + ' (на обнаружение загорания не повлиял)';
+                        } else {
+                            preview = preview + ' (повлиял на обнаружение загорания)';
+                        }
+                    } else {
+                        preview = preview + ' и не сработал';
+                    }
+
+                } else {
+                    if (preview === '')
+                        preview = 'АПИ не установлен';
+                    else
+                        preview = preview + ', ' + 'АПИ не установлен';
+                }
+            } else if (parseInt(id_face_belong) === 2) {//law
+
+                if (is_aps === true) {
+                    if (preview === '')
+                        preview = 'АПС установлена';
+                    else
+                        preview = preview + ', ' + 'АПС установлена';
+
+
+                    if (aps_name !== '') {
+                        preview = preview + ' (' + aps_name + ')';
+                    }
+
+                    if (is_aps_worked === true) {
+                        preview = preview + ' и сработала';
+                        if (is_aps_influence === false) {
+                            preview = preview + ' (на обнаружение загорания не повлияла)';
+                        } else {
+                            preview = preview + ' (повлияла на обнаружение загорания)';
+                        }
+                    } else {
+                        preview = preview + ' и не сработала';
+                    }
+
+
+
+                } else {
+                    if (preview === '')
+                        preview = 'АПС отсутствует';
+                    else
+                        preview = preview + ', ' + 'АПС отсутствует';
+                }
+            }
+
         } else {
-            if (preview === '')
-                preview = 'не электрофицирован';
-            else
-                preview = preview + ', ' + 'не электрофицирован';
-        }
 
-        if (room !== '') {
-            if (preview === '')
-                preview = room;
-            else
-                preview = preview + ', ' + room;
-        }
-
-        if (object_floor_flat !== '' && object_floor_flat > 0 && arr_floor[object_floor_flat] !== 'undefined' && arr_floor[object_floor_flat] !== undefined) {
-            if (preview === '')
-                preview = 'расположена на ' + arr_floor[object_floor_flat] + ' этаже';
-            else
-                preview = preview + ', расположена на ' + arr_floor[object_floor_flat] + ' этаже';
-        }
-
-
-
-
-        if (parseInt(id_face_belong) === 1) {
-
-            if (object_is_api === true) {
+            if (avto_vid !== '') {
                 if (preview === '')
-                    preview = 'АПИ установлен';
+                    preview = avto_vid;
                 else
-                    preview = preview + ', ' + 'АПИ установлен';
-
-
-                if (api_date !== '')
-                    preview = preview + ' ' + api_date;
-
-                if (id_api_source_val !== '')
-                    preview = preview + ' ' + ' (источник финансирования: ' + id_api_source + ')';
-
-                if (is_api_worked === true) {
-                    preview = preview + ' и сработал';
-                    if (is_api_influence === false) {
-                        preview = preview + ' (на обнаружение загорания не повлиял)';
-                    } else {
-                        preview = preview + ' (повлиял на обнаружение загорания)';
-                    }
-                } else {
-                    preview = preview + ' и не сработал';
-                }
-
-            } else {
-                if (preview === '')
-                    preview = 'АПИ не установлен';
-                else
-                    preview = preview + ', ' + 'АПИ не установлен';
+                    preview = preview + ' ' + avto_vid;
             }
-        } else if (parseInt(id_face_belong) === 2) {//law
 
-            if (is_aps === true) {
+            if (avto_year !== '' && avto_year > 0) {
                 if (preview === '')
-                    preview = 'АПС установлена';
+                    preview = avto_year;
                 else
-                    preview = preview + ', ' + 'АПС установлена';
-
-
-                if (aps_name !== '') {
-                    preview = preview + ' (' + aps_name + ')';
-                }
-
-                if (is_aps_worked === true) {
-                    preview = preview + ' и сработала';
-                    if (is_aps_influence === false) {
-                        preview = preview + ' (на обнаружение загорания не повлияла)';
-                    } else {
-                        preview = preview + ' (повлияла на обнаружение загорания)';
-                    }
-                } else {
-                    preview = preview + ' и не сработала';
-                }
-
-
-
-            } else {
-                if (preview === '')
-                    preview = 'АПС отсутствует';
-                else
-                    preview = preview + ', ' + 'АПС отсутствует';
+                    preview = preview + ', ' + avto_year + ' г.в.';
             }
+
+            if (avto_reg_sign !== '') {
+                if (preview === '')
+                    preview = avto_reg_sign;
+                else
+                    preview = preview + ', г.н. ' + avto_reg_sign;
+            }
+
+
+            if (avto_fuel !== '') {
+                if (preview === '')
+                    preview = avto_fuel;
+                else
+                    preview = preview + '. Тип топлива: ' + avto_fuel;
+            }
+
         }
-
-
 
         if (type_damage !== '') {
             if (preview === '')

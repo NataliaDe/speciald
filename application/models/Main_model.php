@@ -43,6 +43,7 @@ class Main_model extends CI_Model
     const VID_SD_MINIROVANIE = 130;
     const REGION_ID_RCU = 50; //RCU
     const OBJECT_MANY_FLOOR = 12;
+    const OBJECT_AVTO_TRANSPORT = 17;
 
     const DIVIZ_COU=8;
 
@@ -455,6 +456,15 @@ class Main_model extends CI_Model
         $this->db->limit(1);
 
         $res = $this->db->get('str.maincou as m')->row_array();
+        return $res;
+    }
+
+
+            public function get_avtotransport_vid()
+    {
+        $this->db->select("*");
+        $this->db->group_by('name');
+        $res = $this->db->get('avtotransport_vid')->result_array();
         return $res;
     }
 }
