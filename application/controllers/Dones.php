@@ -103,6 +103,9 @@ class Dones extends My_Controller
         $this->data['is_show_btn_search_rig'] = 1; //show btn "search rig"
 
         $this->data['id_object_many_floor'] = Main_model::OBJECT_MANY_FLOOR;
+        $this->data['id_object_avtotransport'] = Main_model::OBJECT_AVTO_TRANSPORT;
+
+        $this->data['avtotransport_vid']= $this->main_model->get_avtotransport_vid();
 
         $this->data['bread_crumb'] = array(array('/dones' => 'Создать специальное донесение'),
             array('Стандартное'));
@@ -2068,6 +2071,22 @@ class Dones extends My_Controller
             $object['is_aps_influence'] = 0;
         }
 
+
+        if(isset($post['avtotransport']) && !empty($post['avtotransport']) && $object['object_house'] == Main_model::OBJECT_AVTO_TRANSPORT){
+            foreach ($post['avtotransport'] as $row) {
+                $object['avto_vid']=(isset($row['avto_vid']) && !empty($row['avto_vid'])) ? intval($row['avto_vid']) : '0';
+                $object['avto_year']=(isset($row['avto_year']) && !empty($row['avto_year'])) ? intval($row['avto_year']) : '0';
+                $object['avto_type_fuel']=(isset($row['avto_type_fuel']) && !empty($row['avto_type_fuel'])) ? trim($row['avto_type_fuel']) : '';
+                $object['avto_register_sign']=(isset($row['avto_register_sign']) && !empty($row['avto_register_sign'])) ? trim($row['avto_register_sign']) : '';
+            }
+        }
+        else{
+             $object['avto_vid']=0;
+             $object['avto_year']=0;
+             $object['avto_type_fuel']='';
+             $object['avto_register_sign']='';
+        }
+
         $id_object = (isset($post['id_object']) && !empty($post['id_object'])) ? intval($post['id_object']) : 0; //edit id of table object
 
         if ($id_object == 0) {//add new object
@@ -2170,6 +2189,9 @@ class Dones extends My_Controller
         $this->data['is_show_btn_search_rig'] = 1; //show btn "search rig"
 
         $this->data['id_object_many_floor'] = Main_model::OBJECT_MANY_FLOOR;
+        $this->data['id_object_avtotransport'] = Main_model::OBJECT_AVTO_TRANSPORT;
+
+        $this->data['avtotransport_vid']= $this->main_model->get_avtotransport_vid();
 
         $this->data['bread_crumb'] = array(array('/' => 'Редактировать специальное донесение'),
             array('ID = ' . $id_dones)
@@ -3110,6 +3132,12 @@ class Dones extends My_Controller
             $dones_object['aps_name'] = $object['aps_name'];
             $dones_object['is_aps_worked'] = $object['is_aps_worked'];
             $dones_object['is_aps_influence'] = $object['is_aps_influence'];
+
+
+            $dones_object['avto_vid'] = $object['avto_vid'];
+            $dones_object['avto_year'] = $object['avto_year'];
+            $dones_object['avto_type_fuel'] = $object['avto_type_fuel'];
+            $dones_object['avto_register_sign'] = $object['avto_register_sign'];
 
 
             $this->create_model->add_new_dones_object($dones_object);

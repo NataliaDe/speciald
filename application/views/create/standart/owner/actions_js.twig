@@ -3,17 +3,21 @@
 
         e.preventDefault();
         var face = $(this).val();
-//alert(face);
+
+        var object_house_id=$('#object_house_id').val();
+
 
         if (parseInt(face) === 1) {
+
             $('#law-face-div').removeClass('show');
             $('#law-face-div').removeClass('hide');
             $('#law-face-div').addClass('hide');
 
+if (parseInt(object_house_id) !== {{id_object_avtotransport}}){
             $('#individual-face-div').removeClass('show');
             $('#individual-face-div').removeClass('hide');
             $('#individual-face-div').addClass('show');
-
+            }
 
 //hide aps
             $('#div-is-aps').removeClass('hide');
@@ -21,26 +25,34 @@
             $('#div-is-aps').addClass('hide');
 
 //show api
+if (parseInt(object_house_id) !== {{id_object_avtotransport}}){
+
             $('#div-is-api').removeClass('hide');
             $('#div-is-api').removeClass('show');
             $('#div-is-api').addClass('show');
+            }
 
             setPreviewOwner();
             setPreviewDataObject();
 
         } else if (parseInt(face) === 2) {
+
+            if (parseInt(object_house_id) !== {{id_object_avtotransport}}){
             $('#law-face-div').removeClass('show');
             $('#law-face-div').removeClass('hide');
             $('#law-face-div').addClass('show');
+        }
 
             $('#individual-face-div').removeClass('show');
             $('#individual-face-div').removeClass('hide');
             $('#individual-face-div').addClass('hide');
 
 //show aps
+if (parseInt(object_house_id) !== {{id_object_avtotransport}}){
             $('#div-is-aps').removeClass('hide');
             $('#div-is-aps').removeClass('show');
             $('#div-is-aps').addClass('show');
+            }
 
 //hide api
             $('#div-is-api').removeClass('hide');
@@ -367,6 +379,156 @@
         }
     });
 
+
+
+
+    function hide_or_show_div_by_id(id_div,new_class) {
+            var is_aps = $('#'+id_div);
+            is_aps.removeClass('hide');
+            is_aps.removeClass('show');
+            is_aps.addClass(new_class);
+        }
+
+
+            $('body').on('change', '#object_house_id', function (e) {
+
+            e.preventDefault();
+            var floor = $('#object-floor-flat-div');
+            var rooms = $('#object_cnt_rooms_div');
+            var object_floor = $('#object-floor-div');
+            var object_size = $('#object-size-div');
+            var object_electric = $('#object-electric-div');
+            var object_charact = $('#object-charact-div');
+            var material = $('#object-material-div');
+            var roof = $('#object-roof-div');
+            var face = $('#createStandart #id_face_belong').val();
+
+
+
+            if (parseInt($(this).val()) === {{id_object_many_floor}}) {
+
+                floor.removeClass('hide');
+                floor.removeClass('show');
+                floor.addClass('show');
+                rooms.removeClass('hide');
+                rooms.removeClass('show');
+                rooms.addClass('show');
+                object_floor.removeClass('hide');
+                object_floor.removeClass('show');
+                object_floor.addClass('show');
+                object_size.removeClass('hide');
+                object_size.removeClass('show');
+                object_size.addClass('show');
+                object_electric.removeClass('hide');
+                object_electric.removeClass('show');
+                object_electric.addClass('show');
+                object_charact.removeClass('hide');
+                object_charact.removeClass('show');
+                object_charact.addClass('show');
+                material.removeClass('hide');
+                material.removeClass('show');
+                material.addClass('show');
+                roof.removeClass('hide');
+                roof.removeClass('show');
+                roof.addClass('show');
+
+                if (parseInt(face) === 2) {//legal
+                    hide_or_show_div_by_id('div-is-aps', 'show');
+                } else if (parseInt(face) === 1) {//physical
+                    hide_or_show_div_by_id('div-is-api', 'show');
+               }
+
+                                               //show avtotransport card
+                hide_or_show_div_by_id('avtotransport-object', 'hide');
+
+            }
+
+            else if (parseInt($(this).val()) === {{id_object_avtotransport}}){
+                floor.removeClass('hide');
+                floor.removeClass('show');
+                floor.addClass('hide');
+
+                rooms.removeClass('hide');
+                rooms.removeClass('show');
+                rooms.addClass('hide');
+
+                object_floor.removeClass('hide');
+                object_floor.removeClass('show');
+                object_floor.addClass('hide');
+
+                object_size.removeClass('hide');
+                object_size.removeClass('show');
+                object_size.addClass('hide');
+
+                object_electric.removeClass('hide');
+                object_electric.removeClass('show');
+                object_electric.addClass('hide');
+
+                if (parseInt(face) === 2) {//legal
+                    $('#createStandart #is_aps').prop('checked', false);
+                    $('#createStandart #is_aps').change();
+                hide_or_show_div_by_id('div-is-aps', 'hide');
+                } else if (parseInt(face) === 1) {//physical
+
+                    $('#createStandart #object_is_api').prop('checked', false);
+                    $('#createStandart #object_is_api').change();
+                    hide_or_show_div_by_id('div-is-api', 'hide');
+                }
+
+                object_charact.removeClass('hide');
+                object_charact.removeClass('show');
+                object_charact.addClass('hide');
+                material.removeClass('hide');
+                material.removeClass('show');
+                material.addClass('hide');
+                roof.removeClass('hide');
+                roof.removeClass('show');
+                roof.addClass('hide');
+
+
+                //show avtotransport card
+                hide_or_show_div_by_id('avtotransport-object', 'show');
+
+            }
+            else {
+
+                floor.removeClass('hide');
+                floor.removeClass('show');
+                floor.addClass('hide');
+                rooms.removeClass('hide');
+                rooms.removeClass('show');
+                rooms.addClass('hide');
+                object_floor.removeClass('hide');
+                object_floor.removeClass('show');
+                object_floor.addClass('show');
+                object_size.removeClass('hide');
+                object_size.removeClass('show');
+                object_size.addClass('show');
+                object_electric.removeClass('hide');
+                object_electric.removeClass('show');
+                object_electric.addClass('show');
+                object_charact.removeClass('hide');
+                object_charact.removeClass('show');
+                object_charact.addClass('show');
+                material.removeClass('hide');
+                material.removeClass('show');
+                material.addClass('show');
+                roof.removeClass('hide');
+                roof.removeClass('show');
+                roof.addClass('show');
+
+                if (parseInt(face) === 2) {//legal
+                    hide_or_show_div_by_id('div-is-aps', 'show');
+                } else if (parseInt(face) === 1) {//physical
+                    hide_or_show_div_by_id('div-is-api', 'show');
+                }
+
+                                //show avtotransport card
+                hide_or_show_div_by_id('avtotransport-object', 'hide');
+
+            }
+
+            });
 
 
 
