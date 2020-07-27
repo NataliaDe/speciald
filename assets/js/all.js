@@ -55,6 +55,17 @@ $(document).ready(function () {
     });
 
 
+        $('.select2-single-theme-msg').select2({
+        placeholder: "Поступило сообщение",
+        allowClear: true,
+        "language": {
+            "noResults": function () {
+                return "Ничего не найдено";
+            }
+        }
+    });
+
+
 
 
 });

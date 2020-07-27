@@ -156,6 +156,14 @@ $('body').on('input change keyup', '#createStandart #middle-block-div textarea[n
 
 
 $('body').on('change', '#createStandart  #is_show_opening_descr', function (e) {
+
+    if($(this).is(':checked')){
+        $('.theme-msg').hide();
+    }
+    else{
+        $('.theme-msg').show();
+    }
+
     setPreviewData();
 });
 $('body').on('input change keyup', '#createStandart  input[name="official_creator_name"]', function (e) {
@@ -165,6 +173,12 @@ $('body').on('input change keyup', '#createStandart  input[name="people_fio"]', 
     setPreviewData();
 });
 $('body').on('input change keyup', '#createStandart  input[name="people_phone"]', function (e) {
+    setPreviewData();
+});
+
+
+$('body').on('change', '#createStandart  #id_theme_message', function (e) {
+
     setPreviewData();
 });
 
@@ -179,6 +193,8 @@ function setPreviewData() {
     var lat = $('#createStandart #middle-block-div #lat_id').val();
     var long = $('#createStandart #middle-block-div #long_id').val();
     var is_show_opening_descr = $('#createStandart #is_show_opening_descr').is(":checked");
+
+    var theme_msg = $('#createStandart  #id_theme_message option:selected').text();
 
 
 
@@ -303,7 +319,10 @@ function setPreviewData() {
             preview = preview + ' с телефона ' + people_phone;
         }
 
-        preview = preview + ' поступило сообщение о пожаре жилого дома';
+        //preview = preview + ' поступило сообщение о пожаре жилого дома';
+        preview = preview + ' поступило сообщение '+theme_msg;
+
+
 
 
         if (address !== '') {
