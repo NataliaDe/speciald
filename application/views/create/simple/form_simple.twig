@@ -18,7 +18,9 @@
             {%endif%}
 
             <input type="hidden" name="type_sd" value="{{type_sd}}">
+            <input type="hidden" name="id_template" value="{{id_template is defined ? id_template : (dones.id_template is defined ? dones.id_template : '')}}">
 
+            <a href="#" data-toggle="modal" data-target="#show-error" class="hide" id="a-show-error"></a>
 
             {%include '/create/dones_header_block.twig'%}
 
@@ -41,7 +43,17 @@
 
                         {%include '/create/simple/blocks/date_msg.twig'%}
 
-                        {%include '/create/standart/opening_block.twig'%}
+                        <div id="content-template">
+
+
+                            <div id="simple-ct1" class="{%if type_sd == 2 and ((is_edit_dones is defined and dones is defined and dones.id_template == 'ct_1') or (id_template is defined and id_template=='ct_1'))  %}show{%else%}hide{%endif%}">
+                                {%include '/create/simple/template_1/table.twig'%}
+
+                            </div>
+                            <div id="simple-opening" class="{%if type_sd == 2 and (((is_edit_dones is defined and dones is defined and dones.id_template == '') or is_edit_dones is not defined) and (id_template is not defined or id_template == '' ))  %}show{%else%}hide{%endif%}">
+                                {%include '/create/standart/opening_block.twig'%}
+                            </div>
+                        </div>
                     </dd>
                 </dl>
 
@@ -95,6 +107,9 @@
 
 
     {%include '/create/simple/modals/modal-template-add.twig'%}
+    {%include '/create/simple/modals/modal-ct1-add.twig'%}
+    {%include '/create/simple/modals/modals.twig'%}
+    {%include '/create/modals/modals.twig'%}
 
 
     {%if settings is defined and settings.is_map is defined and 'yes' %}
@@ -118,9 +133,17 @@
     {%if settings is defined and settings.is_map is defined and 'yes' %}
         <link rel="stylesheet" href="{{ base_url('/assets/libs/leaflet-control-geocoder-master/dist/leaflet.css') }}" />
         <link rel="stylesheet" href="{{ base_url('/assets/libs/leaflet-control-geocoder-master/dist/Control.Geocoder.css') }}" />
-        <link rel="stylesheet" href="{{ base_url('/assets/css/form-standart/map.css') }}">
+        <link rel="stylesheet" href="{{ base_url('/assets/css/form-standart/map.css') }}?{{now|date('H:i:s')}}">
 
     {%endif%}
+
+
+    <style>
+
+        #modal-list-disp .select2-container {
+            width: 400px !important;
+        }
+        </style>
 
 {% endblock %}
 
@@ -159,6 +182,8 @@
 
     {%endif%}
 
+
+    {%include '/create/simple/actions.twig'%}
 
     <script>
 
@@ -248,6 +273,25 @@
             $('body').on('click', '#btn-add-template', function (event) {
 
 
+
+
+        $('#createSimple #content-template #simple-ct1').removeClass('hide');
+        $('#createSimple #content-template #simple-ct1').removeClass('show');
+        $('#createSimple #content-template #simple-ct1').addClass('hide');
+
+        $('#createSimple #content-template #simple-opening').removeClass('hide');
+        $('#createSimple #content-template #simple-opening').removeClass('show');
+        $('#createSimple #content-template #simple-opening').addClass('show');
+
+                $('#createSimple #simple-date-msg').removeClass('hide');
+        $('#createSimple #simple-date-msg').removeClass('show');
+        $('#createSimple #simple-date-msg').addClass('show');
+
+                $('#createSimple #preview-simple-block').removeClass('hide');
+        $('#createSimple #preview-simple-block').removeClass('show');
+        $('#createSimple #preview-simple-block').addClass('show');
+
+
                 var old_text = $('#createSimple #opening_description_id').val();
                 var add = "1. По прибытии к месту вызова установлено,\n2. Характеристика объекта –\n3. Хозяин Ф.И.О., г.р., место работы и должность –\n4. В результате пожара огнем повреждено.";
 
@@ -260,6 +304,10 @@
 
                 $('#createSimple #opening_description_id').val(new_text);
                 $('#createSimple #opening_description_id').change();
+
+                $('#createSimple input[name="official_destination"]').val('Главный оперативный дежурный РЦУРЧС');
+                $('#createSimple input[name="id_template"]').val('');
+
                 $('#modal-template-add').click();
 
 

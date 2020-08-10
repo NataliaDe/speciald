@@ -25,7 +25,7 @@
 
 
 
-            <div class="form-group col-md-4">
+            <div class="form-group col-md-9">
                 <label for="prevention_who" >Кем:</label>
                 <input type="text" class="form-control"  placeholder="" name="prevention_who"  value="{%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.prevention_who is not empty %}{{dones.prevention_who|trim}}{%endif%}">
             </div>
@@ -40,9 +40,9 @@
 
 
 
-            <div class="form-group col-md-6">
+            <div class="form-group col-md-11">
                 <label for="prevention_result" >Результаты профилактической работы: <i class="fa fa-info-circle info-all" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="+ проводимые мероприятия для формирования в обществе культуры, безопасной жизнедеятельности"></i></label>
-                <textarea class="form-control" cols="3" rows="3"  name="prevention_result">{%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.prevention_result is not empty %}{{dones.prevention_result|trim}}{%endif%}</textarea>
+                <textarea class="form-control" cols="20" rows="6"  name="prevention_result">{%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.prevention_result is not empty %}{{dones.prevention_result|trim}}{%endif%}</textarea>
             </div>
 
 

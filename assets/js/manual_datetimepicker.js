@@ -245,3 +245,8 @@ $('.date-time-without-sec-cal').on('apply.daterangepicker', function (event, pic
 
 
 /*------------------ END date + time without seconds - depend user settings ---------------------*/
+
+
+
+
+

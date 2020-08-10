@@ -1,5 +1,12 @@
 <div class="form-row create-form-row">
 
+        <div class="form-group col-md-2">
+
+        <label for="avto_mark">Марка</label>
+        <input type="text" id="avto_mark" class="form-control"  placeholder="" name="avtotransport[{{i}}][avto_mark]"  value="{%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.object.avto_mark is defined and dones.object.avto_mark is not empty %}{{dones.object.avto_mark|trim}}{%endif%}">
+
+    </div>
+
 {%set i=0%}
     <div class="form-group col-md-2">
         <label for="avtotransport_vid" >Вид</label>

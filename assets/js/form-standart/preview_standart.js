@@ -484,6 +484,10 @@ $('body').on('input change keyup', '#createStandart input[name="object_cnt_rooms
 });
 
 
+$('body').on('input change keyup', '#createStandart #avtotransport-object #avto_mark', function (e) {
+    setPreviewDataObject();
+
+});
 
 $('body').on('change', '#createStandart #avtotransport-object #avto_vid', function (e) {
     setPreviewDataObject();
@@ -673,6 +677,7 @@ function setPreviewDataObject() {
     var avto_year = $('#createStandart #avtotransport-object  #avto_year').val();
     var avto_fuel = $('#createStandart #avtotransport-object  #avto_type_fuel').val();
     var avto_reg_sign = $('#createStandart #avtotransport-object  #avto_register_sign').val();
+    var avto_mark = $('#createStandart #avtotransport-object  #avto_mark').val();
 
     var preview = '';
 
@@ -826,6 +831,13 @@ function setPreviewDataObject() {
             }
 
         } else {
+
+            if (avto_mark !== '') {
+                if (preview === '')
+                    preview = avto_mark;
+                else
+                    preview = preview + ' ' + avto_mark;
+            }
 
             if (avto_vid !== '') {
                 if (preview === '')

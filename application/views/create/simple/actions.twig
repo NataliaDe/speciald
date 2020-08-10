@@ -1,0 +1,505 @@
+<script>
+
+    /*  add template 1 text */
+    $('body').on('click', '#btn-add-ct1', function (event) {
+
+
+        $('#createSimple #content-template #simple-ct1').removeClass('hide');
+        $('#createSimple #content-template #simple-ct1').removeClass('show');
+        $('#createSimple #content-template #simple-ct1').addClass('show');
+
+        $('#createSimple #content-template #simple-opening').removeClass('hide');
+        $('#createSimple #content-template #simple-opening').removeClass('show');
+        $('#createSimple #content-template #simple-opening').addClass('hide');
+
+        $('#createSimple #simple-date-msg').removeClass('hide');
+        $('#createSimple #simple-date-msg').removeClass('show');
+        $('#createSimple #simple-date-msg').addClass('hide');
+
+        $('#createSimple #preview-simple-block').removeClass('hide');
+        $('#createSimple #preview-simple-block').removeClass('show');
+        $('#createSimple #preview-simple-block').addClass('hide');
+
+
+        $('#createSimple input[name="official_destination"]').val('Оперативному дежурному УМЧС');
+        $('#createSimple input[name="id_template"]').val('ct_1');
+        $('#modal-ct1-add').click();
+
+
+    });
+
+
+    $('body').on('change', 'select[name="ct_1_id_short_description"]', function (event) {
+
+        var name = $('select[name="ct_1_id_short_description"] option:selected').attr('data-name');
+
+
+        if (name !== 'undefined' && name !== undefined)
+            $('#createSimple textarea[name="short_description"]').val(name);
+        else
+            $('#createSimple textarea[name="short_description"]').val('');
+
+
+    });
+
+
+    $('body').on('change', 'select[name="ct_1_id_goal_rig"]', function (event) {
+
+        var name = $('select[name="ct_1_id_goal_rig"] option:selected').attr('data-name');
+
+
+        if (name !== 'undefined' && name !== undefined)
+            $('#createSimple textarea[name="ct_1_goal_rig"]').val(name);
+        else
+            $('#createSimple textarea[name="ct_1_goal_rig"]').val('');
+
+
+    });
+
+    $('body').on('change', 'select[name="is_opg"]', function (event) {
+
+        var val = $(this).val();
+
+
+        if (parseInt(val) === 0) {
+            $('#createSimple textarea[name="opg_text"]').val('');
+            $('#createSimple textarea[name="opg_text"]').prop('disabled', true);
+
+            $('#createSimple #content-template .show-list-opg-str').removeClass('hide');
+            $('#createSimple #content-template .show-list-opg-str').removeClass('show');
+            $('#createSimple #content-template .show-list-opg-str').addClass('hide');
+        } else {
+            $('#createSimple textarea[name="opg_text"]').prop('disabled', false);
+
+            $('#createSimple #content-template .show-list-opg-str').removeClass('hide');
+            $('#createSimple #content-template .show-list-opg-str').removeClass('show');
+            $('#createSimple #content-template .show-list-opg-str').addClass('show');
+        }
+
+
+    });
+
+
+    $('body').on('click', '#btn-add-list-opg', function (event) {
+
+        var arr = [];
+        var selected = $('#modal-list-opg .is_add_to_opg:checked');
+        $(selected).each(function () {
+
+            arr.push($(this).attr('data-name'));
+
+        });
+
+        if (arr.length > 0) {
+            $('#createSimple textarea[name="opg_text"]').val(arr.join(', '));
+        }
+        $('#modal-list-opg').click();
+
+    });
+
+
+
+    $('body').on('click', '#btn-add-list-disp', function (event) {
+
+
+        var selected = $('#modal-list-disp #id_disp option:selected');
+        if (selected.val() !== '') {
+
+            $('#createSimple input[name="ct_1_fio_sign"]').val(selected.val());
+            $('#createSimple input[name="ct_1_position_sign"]').val(selected.attr('data-position'));
+            $('#createSimple input[name="ct_1_podr_sign"]').val(selected.attr('data-podr'));
+            $('#createSimple input[name="ct_1_rank_sign"]').val(selected.attr('data-rank'));
+
+            $('#modal-list-disp').click();
+        }
+    });
+
+
+    $('form#createSimple').submit(function (e) {
+
+        // Запрещаем стандартное поведение для кнопки submit
+        e.preventDefault();
+
+        var id_template = $('#createSimple input[name="id_template"]').val();
+
+        if (id_template === 'ct_1') {
+
+            var short_description = $('#createSimple textarea[name="short_description"]').val();
+            var ct_1_goal_rig = $('#createSimple textarea[name="ct_1_goal_rig"]').val();
+            var ct_1_time_msg = $('#createSimple input[name="ct_1_time_msg"]').val();
+            var address = $('#createSimple textarea[name="address"]').val();
+            var object = $('#createSimple textarea[name="ct_1_object"]').val();
+            var applicant = $('#createSimple textarea[name="ct_1_applicant"]').val();
+            var ct_1_opening_description = $('#createSimple textarea[name="ct_1_opening_description"]').val();
+            var ct_1_silymchs = $('#createSimple textarea[name="ct_1_silymchs"]').val();
+            var ct_1_senior = $('#createSimple textarea[name="ct_1_senior"]').val();
+            var ct_1_innerservice = $('#createSimple textarea[name="ct_1_innerservice"]').val();
+            var is_opg = $('#createSimple select[name="is_opg"]').val();
+            var opg_text = $('#createSimple textarea[name="opg_text"]').val();
+            var ct_1_arrival_situation = $('#createSimple textarea[name="ct_1_arrival_situation"]').val();
+            var ct_1_come_in = $('#createSimple textarea[name="ct_1_come_in"]').val();
+            var ct_1_taken_measures = $('#createSimple textarea[name="ct_1_taken_measures"]').val();
+            var ct_1_affected = $('#createSimple textarea[name="ct_1_affected"]').val();
+            var ct_1_effects = $('#createSimple textarea[name="ct_1_effects"]').val();
+            var ct_1_note = $('#createSimple textarea[name="ct_1_note"]').val();
+            var ct_1_position_sign = $('#createSimple input[name="ct_1_position_sign"]').val();
+            var ct_1_podr_sign = $('#createSimple input[name="ct_1_podr_sign"]').val();
+            var ct_1_rank_sign = $('#createSimple input[name="ct_1_rank_sign"]').val();
+            var ct_1_fio_sign = $('#createSimple input[name="ct_1_fio_sign"]').val();
+
+            if (short_description === '') {
+                $('#a-show-error').click();
+                $('#show-error .modal-body p').html('Заполните поле &laquo;О чем СД&raquo;');
+                $('#createSimple textarea[name="short_description"]').removeClass('error-inpt');
+                $('#createSimple textarea[name="short_description"]').addClass('error-inpt');
+                //$('#createSimple').scrollTo('textarea[name="short_description"]');
+                //alert($('textarea[name="short_description"]').offset().top);
+                $('html, body').animate({
+                    scrollTop: ($('#createSimple textarea[name="short_description"]').offset().top - 125)
+                }, 500);
+                return false;
+
+            } else {
+                $('#createSimple textarea[name="short_description"]').removeClass('error-inpt');
+            }
+
+            if (ct_1_goal_rig === '') {
+                $('#a-show-error').click();
+                $('#show-error .modal-body p').html('Заполните поле &laquo;Цель выезда (вид работ)&raquo;');
+                $('#createSimple textarea[name="ct_1_goal_rig"]').removeClass('error-inpt');
+                $('#createSimple textarea[name="ct_1_goal_rig"]').addClass('error-inpt');
+
+                $('html, body').animate({
+                    scrollTop: ($('#createSimple textarea[name="ct_1_goal_rig"]').offset().top - 125)
+                }, 500);
+                return false;
+
+            } else {
+                $('#createSimple textarea[name="ct_1_goal_rig"]').removeClass('error-inpt');
+            }
+
+            if (ct_1_time_msg === '') {
+                $('#a-show-error').click();
+                $('#show-error .modal-body p').html('Заполните поле &laquo;Дата, время&raquo;');
+                $('#createSimple input[name="ct_1_time_msg"]').removeClass('error-inpt');
+                $('#createSimple input[name="ct_1_time_msg"]').addClass('error-inpt');
+
+                $('html, body').animate({
+                    scrollTop: ($('#createSimple  input[name="ct_1_time_msg"]').offset().top - 125)
+                }, 500);
+                return false;
+
+            } else {
+                $('#createSimple input[name="ct_1_time_msg"]').removeClass('error-inpt');
+            }
+
+
+            if (address === '') {
+                $('#a-show-error').click();
+                $('#show-error .modal-body p').html('Заполните поле &laquo;Адрес&raquo;');
+                $('#createSimple textarea[name="address"]').removeClass('error-inpt');
+                $('#createSimple textarea[name="address"]').addClass('error-inpt');
+
+                $('html, body').animate({
+                    scrollTop: ($('#createSimple textarea[name="address"]').offset().top - 125)
+                }, 500);
+                return false;
+
+            } else {
+                $('#createSimple textarea[name="address"]').removeClass('error-inpt');
+            }
+
+            if (object === '') {
+                $('#a-show-error').click();
+                $('#show-error .modal-body p').html('Заполните поле &laquo;Характеристика объекта (этажность, кол-во квартир, этаж происшествия)&raquo;');
+                $('#createSimple textarea[name="ct_1_object"]').removeClass('error-inpt');
+                $('#createSimple textarea[name="ct_1_object"]').addClass('error-inpt');
+
+                $('html, body').animate({
+                    scrollTop: ($('#createSimple textarea[name="ct_1_object"]').offset().top - 125)
+                }, 500);
+                return false;
+
+            } else {
+                $('#createSimple textarea[name="ct_1_object"]').removeClass('error-inpt');
+            }
+
+
+            if (applicant === '') {
+                $('#a-show-error').click();
+                $('#show-error .modal-body p').html('Заполните поле &laquo;От кого поступило&raquo;');
+                $('#createSimple textarea[name="ct_1_applicant"]').removeClass('error-inpt');
+                $('#createSimple textarea[name="ct_1_applicant"]').addClass('error-inpt');
+
+                $('html, body').animate({
+                    scrollTop: ($('#createSimple textarea[name="ct_1_applicant"]').offset().top - 125)
+                }, 500);
+                return false;
+
+            } else {
+                $('#createSimple textarea[name="ct_1_applicant"]').removeClass('error-inpt');
+            }
+
+            if (ct_1_opening_description === '') {
+                $('#a-show-error').click();
+                $('#show-error .modal-body p').html('Заполните поле &laquo;Содержание сообщения&raquo;');
+                $('#createSimple textarea[name="ct_1_opening_description"]').removeClass('error-inpt');
+                $('#createSimple textarea[name="ct_1_opening_description"]').addClass('error-inpt');
+
+                $('html, body').animate({
+                    scrollTop: ($('#createSimple textarea[name="ct_1_opening_description"]').offset().top - 125)
+                }, 500);
+                return false;
+
+            } else {
+                $('#createSimple textarea[name="ct_1_opening_description"]').removeClass('error-inpt');
+            }
+
+            if (ct_1_silymchs === '') {
+                $('#a-show-error').click();
+                $('#show-error .modal-body p').html('Заполните поле &laquo;Направленные СиС&raquo;');
+                $('#createSimple textarea[name="ct_1_silymchs"]').removeClass('error-inpt');
+                $('#createSimple textarea[name="ct_1_silymchs"]').addClass('error-inpt');
+
+                $('html, body').animate({
+                    scrollTop: ($('#createSimple textarea[name="ct_1_silymchs"]').offset().top - 125)
+                }, 500);
+                return false;
+
+            } else {
+                $('#createSimple textarea[name="ct_1_silymchs"]').removeClass('error-inpt');
+            }
+
+            if (ct_1_senior === '') {
+                $('#a-show-error').click();
+                $('#show-error .modal-body p').html('Заполните поле &laquo;старший&raquo;');
+                $('#createSimple textarea[name="ct_1_senior"]').removeClass('error-inpt');
+                $('#createSimple textarea[name="ct_1_senior"]').addClass('error-inpt');
+
+                $('html, body').animate({
+                    scrollTop: ($('#createSimple textarea[name="ct_1_senior"]').offset().top - 125)
+                }, 500);
+                return false;
+
+            } else {
+                $('#createSimple textarea[name="ct_1_senior"]').removeClass('error-inpt');
+            }
+
+            if (ct_1_innerservice === '') {
+                $('#a-show-error').click();
+                $('#show-error .modal-body p').html('Заполните поле &laquo;Службы взаимодействия&raquo;');
+                $('#createSimple textarea[name="ct_1_innerservice"]').removeClass('error-inpt');
+                $('#createSimple textarea[name="ct_1_innerservice"]').addClass('error-inpt');
+
+                $('html, body').animate({
+                    scrollTop: ($('#createSimple textarea[name="ct_1_innerservice"]').offset().top - 125)
+                }, 500);
+                return false;
+
+            } else {
+                $('#createSimple textarea[name="ct_1_innerservice"]').removeClass('error-inpt');
+            }
+
+
+var field = $('#createSimple textarea[name="opg_text"]');
+            if (parseInt(is_opg) === 1 && opg_text === '') {
+                $('#a-show-error').click();
+
+                $('#show-error .modal-body p').html('Заполните поле &laquo;Состав ОГ&raquo;');
+                field.removeClass('error-inpt');
+                field.addClass('error-inpt');
+
+                $('html, body').animate({
+                    scrollTop: (field.offset().top - 125)
+                }, 500);
+                return false;
+
+            } else {
+                field.removeClass('error-inpt');
+            }
+
+
+var field = $('#createSimple textarea[name="ct_1_arrival_situation"]');
+            if (ct_1_arrival_situation === '') {
+                $('#a-show-error').click();
+
+                $('#show-error .modal-body p').html('Заполните поле &laquo;Обстановка по прибытию&raquo;');
+                field.removeClass('error-inpt');
+                field.addClass('error-inpt');
+
+                $('html, body').animate({
+                    scrollTop: (field.offset().top - 125)
+                }, 500);
+                return false;
+
+            } else {
+                field.removeClass('error-inpt');
+            }
+
+
+var field = $('#createSimple textarea[name="ct_1_come_in"]');
+            if (ct_1_come_in === '') {
+                $('#a-show-error').click();
+
+                $('#show-error .modal-body p').html('Заполните поле &laquo;Как проникали&raquo;');
+                field.removeClass('error-inpt');
+                field.addClass('error-inpt');
+
+                $('html, body').animate({
+                    scrollTop: (field.offset().top - 125)
+                }, 500);
+                return false;
+
+            } else {
+                field.removeClass('error-inpt');
+            }
+
+var field = $('#createSimple textarea[name="ct_1_taken_measures"]');
+            if (ct_1_taken_measures === '') {
+                $('#a-show-error').click();
+
+                $('#show-error .modal-body p').html('Заполните поле &laquo;Принятые меры&raquo;');
+                field.removeClass('error-inpt');
+                field.addClass('error-inpt');
+
+                $('html, body').animate({
+                    scrollTop: (field.offset().top - 125)
+                }, 500);
+                return false;
+
+            } else {
+                field.removeClass('error-inpt');
+            }
+
+
+var field = $('#createSimple textarea[name="ct_1_affected"]');
+            if (ct_1_affected === '') {
+                $('#a-show-error').click();
+
+                $('#show-error .modal-body p').html('Заполните поле &laquo;Принятые меры&raquo;');
+                field.removeClass('error-inpt');
+                field.addClass('error-inpt');
+
+                $('html, body').animate({
+                    scrollTop: (field.offset().top - 125)
+                }, 500);
+                return false;
+
+            } else {
+                field.removeClass('error-inpt');
+            }
+
+            var field = $('#createSimple textarea[name="ct_1_effects"]');
+            if (ct_1_effects === '') {
+                $('#a-show-error').click();
+
+                $('#show-error .modal-body p').html('Заполните поле &laquo;Ущерб&raquo;');
+                field.removeClass('error-inpt');
+                field.addClass('error-inpt');
+
+                $('html, body').animate({
+                    scrollTop: (field.offset().top - 125)
+                }, 500);
+                return false;
+
+            } else {
+                field.removeClass('error-inpt');
+            }
+
+            var field = $('#createSimple textarea[name="ct_1_note"]');
+            if (ct_1_note === '') {
+                $('#a-show-error').click();
+
+                $('#show-error .modal-body p').html('Заполните поле &laquo;Примечание (Категория собственника или проживающего. Психофизическое состояние хозяина (визуально)&raquo;');
+                field.removeClass('error-inpt');
+                field.addClass('error-inpt');
+
+                $('html, body').animate({
+                    scrollTop: (field.offset().top - 125)
+                }, 500);
+                return false;
+
+            } else {
+                field.removeClass('error-inpt');
+            }
+
+
+            var field = $('#createSimple input[name="ct_1_position_sign"]');
+            if (ct_1_position_sign === '') {
+                $('#a-show-error').click();
+
+                $('#show-error .modal-body p').html('Заполните поле &laquo;Должность&raquo;');
+                field.removeClass('error-inpt');
+                field.addClass('error-inpt');
+
+                $('html, body').animate({
+                    scrollTop: (field.offset().top - 125)
+                }, 500);
+                return false;
+
+            } else {
+                field.removeClass('error-inpt');
+            }
+
+
+            var field = $('#createSimple input[name="ct_1_podr_sign"]');
+            if (ct_1_podr_sign === '') {
+                $('#a-show-error').click();
+
+                $('#show-error .modal-body p').html('Заполните поле &laquo;Подразделение&raquo;');
+                field.removeClass('error-inpt');
+                field.addClass('error-inpt');
+
+                $('html, body').animate({
+                    scrollTop: (field.offset().top - 125)
+                }, 500);
+                return false;
+
+            } else {
+                field.removeClass('error-inpt');
+            }
+
+                        var field = $('#createSimple input[name="ct_1_rank_sign"]');
+            if (ct_1_rank_sign === '') {
+                $('#a-show-error').click();
+
+                $('#show-error .modal-body p').html('Заполните поле &laquo;Звание&raquo;');
+                field.removeClass('error-inpt');
+                field.addClass('error-inpt');
+
+                $('html, body').animate({
+                    scrollTop: (field.offset().top - 125)
+                }, 500);
+                return false;
+
+            } else {
+                field.removeClass('error-inpt');
+            }
+
+
+                        var field = $('#createSimple input[name="ct_1_fio_sign"]');
+            if (ct_1_fio_sign === '') {
+                $('#a-show-error').click();
+
+                $('#show-error .modal-body p').html('Заполните поле &laquo;ФИО диспетчера&raquo;');
+                field.removeClass('error-inpt');
+                field.addClass('error-inpt');
+
+                $('html, body').animate({
+                    scrollTop: (field.offset().top - 125)
+                }, 500);
+                return false;
+
+            } else {
+                field.removeClass('error-inpt');
+            }
+
+
+        }
+
+        //later you decide you want to submit
+        $(this).unbind('submit').submit();
+
+    });
+
+</script>

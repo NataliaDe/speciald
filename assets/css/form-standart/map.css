@@ -1,7 +1,7 @@
 #map, .show-map-show {
     position: absolute;
     width: 99%;
-    height: 90%;
+    height: 99%;
 
 
 }
@@ -12,12 +12,17 @@
 
 /* panel opening description */
 #panel_map.open_panel {
-    left: 70%;
-    top: 40%;
+/*    left: 70%;
+    top: 40%;*/
+    left: 34%;
+    top: 10%;
 }
 #panel_map {
-    width: 29%;
-    height: 46%;
+/*    width: 29%;
+    height: 46%;*/
+    width: 66%;
+    height: 80%;
+
 /*    background-color: rgba(255, 255, 255, 0.96);*/
 background-color: rgba(238, 238, 238, 0);
     z-index: 500;

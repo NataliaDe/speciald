@@ -1,1 +1,169 @@
 {#list filter#}
+
+
+<div class="accordion" id="accordionExample">
+
+    <div class="card">
+        <div class="card-header" id="headingThree">
+            <h2 class="mb-0">
+                <button class="btn btn-link btn-block text-left collapsed button-filter" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="{{filter.is_open_filter == 1 ? 'true' : 'false'}}" aria-controls="collapseThree">
+                    {{filter.is_open_filter == 1 ? 'Скрыть фильтр' : 'Показать фильтр'}}
+
+                </button>
+            </h2>
+        </div>
+        <div id="collapseThree" class="collapse {{filter.is_open_filter == 1 ? 'show' : ''}}" aria-labelledby="headingThree" data-parent="#accordionExample">
+            <div class="card-body">
+
+
+                <form method="post" id="catalog-filter" action="">
+                    <div class="form-row create-form-row sittings-block">
+                        {#  <div class="form-group col-md-1 ">
+                              <label for="id_dones" >ID СД</label>
+                              <input type="text" class="form-control input-search-progress"  placeholder="Поиск" name="id_dones" value="">
+
+
+                          </div>#}
+
+                        <div class="form-group col-md-1 search-input with-progress">
+                            <label for="id_dones" >ID СД</label>
+
+
+                            <span class="typing-progress-background"></span>
+                            <span class="typing-progress"></span>
+                            <input type="text" name="id_dones" class="form-control input-search-progress" placeholder="Поиск"
+                               value="{{(filter.id_dones is defined and filter.id_dones is not empty) ? filter.id_dones : ''}}">
+                        </div>
+
+
+
+
+
+                        <div class="col-md-1 form-group">
+                            <label for="date_doness" >Дата СД</label>
+                            <input type="text" class="form-control date-cal-default-empty"  placeholder="" name="date_dones" value="{{(filter.date_dones is defined and filter.date_dones is not empty) ? filter.date_dones|date("d.m.Y") : ''}}">
+                        </div>
+
+
+                        <div class="form-group col-md-1 search-input with-progress">
+                            <label for="number_dones" >№ СД</label>
+
+                            <span class="typing-progress-background"></span>
+                            <span class="typing-progress"></span>
+                            <input type="text" class="form-control input-search-progress"  placeholder="Поиск" name="number_dones" value="{{(filter.number_dones is defined and filter.number_dones is not empty) ? filter.number_dones : ''}}">
+                        </div>
+
+                        {#        <div class="form-group col-md-1">
+                        <label for="number_dones" >№ СД</label>
+                                    <input type="text" class="form-control"  placeholder="Поиск" name="number_dones" value="">
+
+
+                                </div>#}
+
+
+                        {#        <div class="form-group col-md-2">
+                                    <label for="address_dones" >Адрес</label>
+                                    <input type="text" class="form-control"  placeholder="Поиск" name="address_dones" value="">
+
+
+                                </div>#}
+
+                        <div class="form-group col-md-2 search-input with-progress">
+                            <label for="address_dones" >Адрес</label>
+
+                            <span class="typing-progress-background"></span>
+                            <span class="typing-progress"></span>
+                            <input type="text" class="form-control input-search-progress"  placeholder="Поиск" name="address_dones" value="{{(filter.address_dones is defined and filter.address_dones is not empty) ? filter.address_dones : ''}}">
+
+                        </div>
+
+
+
+                        <div class="form-group col-md-2 search-input with-progress">
+                            <label for="creator_dones" >Создатель</label>
+
+                            <span class="typing-progress-background"></span>
+                            <span class="typing-progress"></span>
+
+
+                            <input type="text" class="form-control input-search-progress"  placeholder="Поиск" name="creator_name" value="{{(filter.creator_name is defined and filter.creator_name is not empty) ? filter.creator_name : ''}}">
+
+                        </div>
+                        {#        <div class="form-group col-md-2">
+                                    <label for="creator_dones" >Создатель</label>
+                                    <input type="text" class="form-control"  placeholder="Поиск" name="creator_name" value="">
+
+
+                                </div>#}
+
+
+
+                        <div class="form-group col-md-2 search-input with-progress">
+                            <label for="short_description" >Краткое описание</label>
+
+                            <span class="typing-progress-background"></span>
+                            <span class="typing-progress"></span>
+                            <input type="text" class="form-control input-search-progress"  placeholder="Поиск"  name="short_description" value="{{(filter.short_description is defined and filter.short_description is not empty) ? filter.short_description : ''}}">
+
+                        </div>
+                        {#        <div class="form-group col-md-2">
+                                    <label for="short_decription" >Краткое описание</label>
+                                    <input type="text" class="form-control"  placeholder="Поиск" name="short_decription" value="">
+
+
+                                </div>#}
+
+
+
+                        <div class="form-group col-md-1 filter-vid-sd-div">
+                            <label for="specd_vid" >Вид СД</label>
+                            <select class="form-control catalog-filter-vid filters" name="specd_vid" id="specd_vid"  >
+                                <option value="" selected>Все</option>
+                                {% for vid in vid_specd %}
+
+                                    <option {{(filter.specd_vid is defined and filter.specd_vid is not empty and filter.specd_vid == vid.id) ? 'selected' : ''}} value="{{ vid.id }}" >{{ vid.name }}</option>
+
+
+                                {% endfor %}
+                            </select>
+                        </div>
+
+
+
+
+                        <div class="form-group col-md-1 filter-status-sd">
+                            <label for="status_sd" >Статус</label>
+                            <select class="form-control catalog-filter-vid filters" name="status_sd"   >
+                                <option value="" selected>Все</option>
+                                <option  value="6" {{(filter.status_sd is defined and filter.status_sd is not empty and filter.status_sd == 6) ? 'selected' : ''}}>Подтверждено РЦУРЧС</option>
+                                <option  value="4" {{(filter.status_sd is defined and filter.status_sd is not empty and filter.status_sd == 4) ? 'selected' : ''}} >Подтверждено УМЧС</option>
+                                <option  value="1" {{(filter.status_sd is defined and filter.status_sd is not empty and filter.status_sd == 1) ? 'selected' : ''}} >Ожидает исполнения</option>
+                                {#<option  value="2" >Ожидает исполнения УМЧС</option>#}
+                                <option  value="7" {{(filter.status_sd is defined and filter.status_sd is not empty and filter.status_sd == 7) ? 'selected' : ''}} >Замечания от РЦУРЧС</option>
+                                <option  value="5" {{(filter.status_sd is defined and filter.status_sd is not empty and filter.status_sd == 5) ? 'selected' : ''}}>Замечания от УМЧС</option>
+                            </select>
+                        </div>
+
+
+                        <div class="form-group col-md-2">
+                            <button class="btn btn-sm btn-primary reset_filter" type="button">Сбросить фильтры</button>
+                        </div>
+
+                    </div>
+
+
+
+
+
+
+                    <div class="form-row create-form-row">
+
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+

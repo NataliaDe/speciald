@@ -1,5 +1,5 @@
-<div class="form-row create-form-row">
-    <div class="form-group col-md-2">
+<div class="form-row create-form-row" >
+    <div class="form-group col-md-2 {%if (id_template is defined and id_template == 'ct_1') or (is_edit_dones is defined and dones is defined and dones.id_template == 'ct_1')%}hide{%else%}show{%endif%}" id="simple-date-msg">
         <label for="time_msg" >Дата и время сообщения:</label>
         {%set time_msg=''%}
         {% if rig is defined and rig.time_msg is not empty and rig.time_msg is not null and rig.time_msg != '0000-00-00 00:00:00' %}

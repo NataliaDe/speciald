@@ -94,6 +94,10 @@ class Export extends My_Controller
         $dones = $this->create_model->get_dones_by_id($id_dones);
         $type_sd = $dones['type'];
 
+        if($type_sd == Main_model::TYPE_SD_SIMPLE && $dones['id_template'] == 'ct_1'){
+            redirect('/export/ct_1_to_word/'.$id_dones);
+        }
+
         $silymchs = $this->create_model->get_dones_silymchs($id_dones);
 
         $trunks = $this->create_model->get_dones_trunks($id_dones);
@@ -961,6 +965,58 @@ class Export extends My_Controller
         header('Expires: 0');
         $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
         $objWriter->save("php://output");
+    }
+
+    public function ct_1_to_word($id_dones)
+    {
+        $dones = $this->create_model->get_dones_by_id($id_dones);
+        $type_sd = $dones['type'];
+
+
+            $this->config->load('storage', TRUE);
+            $templates_path = $this->config->item('templates_path', 'storage');
+
+            $name_file = 'ct_1.docx';
+            $documentTemplate = $templates_path . '/' . $name_file;
+
+            $phpWord = new PhpOffice\PhpWord\PhpWord();
+
+            $templateProcessor = new PhpOffice\PhpWord\TemplateProcessor($documentTemplate);
+
+            $parser = new HTMLtoOpenXML\Parser();
+
+
+            $templateProcessor->setValue('official_creator_name', $dones['official_creator_name']);
+            $templateProcessor->setValue('specd_date', ((isset($dones['specd_date']) && !empty($dones['specd_date'])) ? (\DateTime::createFromFormat('Y-m-d', $dones['specd_date'])->format('d.m.Y')) : ''));
+            $templateProcessor->setValue('ct_1_goal_rig', $dones['ct_1_goal_rig']);
+            $templateProcessor->setValue('time_msg', ((isset($dones['time_msg']) && !empty($dones['time_msg'])) ? (\DateTime::createFromFormat('Y-m-d H:i:s', $dones['time_msg'])->format('d.m.Y H-i')) : ''));
+            $templateProcessor->setValue('address', trim($dones['address']));
+            $templateProcessor->setValue('ct_1_object', trim($dones['ct_1_object']));
+            $templateProcessor->setValue('ct_1_applicant', trim($dones['ct_1_applicant']));
+            $templateProcessor->setValue('opening_description', trim($dones['opening_description']));
+            $templateProcessor->setValue('ct_1_silymchs', trim($dones['ct_1_silymchs']));
+            $templateProcessor->setValue('ct_1_senior', trim($dones['ct_1_senior']));
+            $templateProcessor->setValue('ct_1_innerservice', trim($dones['ct_1_innerservice']));
+            $templateProcessor->setValue('is_opg', (($dones['is_opg'] == 1)) ? 'да' : 'нет');
+            $templateProcessor->setValue('opg_text', trim($dones['opg_text']));
+            $templateProcessor->setValue('ct_1_arrival_situation', trim($dones['ct_1_arrival_situation']));
+            $templateProcessor->setValue('ct_1_come_in', trim($dones['ct_1_come_in']));
+            $templateProcessor->setValue('ct_1_taken_measures', trim($dones['ct_1_taken_measures']));
+            $templateProcessor->setValue('ct_1_affected', trim($dones['ct_1_affected']));
+            $templateProcessor->setValue('ct_1_effects', trim($dones['ct_1_effects']));
+            $templateProcessor->setValue('ct_1_note', trim($dones['ct_1_note']));
+
+            $templateProcessor->setValue('ct_1_position_sign', trim($dones['ct_1_position_sign']));
+            $templateProcessor->setValue('ct_1_podr_sign', trim($dones['ct_1_podr_sign']));
+            $templateProcessor->setValue('ct_1_rank_sign', trim($dones['ct_1_rank_sign']));
+            $templateProcessor->setValue('ct_1_fio_sign', trim($dones['ct_1_fio_sign']));
+
+                        $file_download = 'СД ' . $dones['specd_number'] . '.docx';
+
+            header('Content-Disposition: attachment; filename="' . $file_download . '"');
+            $templateProcessor->saveAs('php://output');
+
+        //echo $id_dones;
     }
 
     public function sd_to_word_old($id_dones = 0)

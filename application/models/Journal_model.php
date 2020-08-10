@@ -259,4 +259,17 @@ WHEN (`inf`.`id_destination` <> 0 AND (`d`.`pos_place` IS NULL OR `d`.`pos_place
                 ->get()
                 ->result_array();
     }
+
+
+       public function get_view_work()
+    {
+        $this->db->select("w.*,r.name as reason_name");
+        $this->db->join('journal.reasonrig as r', 'r.id=w.id_reasonrig');
+        $this->db->order_by('name');
+        $this->db->where('w.is_delete',0);
+        $this->db->where('r.is_delete',0);
+        $this->db->where('w.id != ',0);
+        $res = $this->db->get('journal.workview as w')->result_array();
+        return $res;
+    }
 }

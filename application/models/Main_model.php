@@ -40,12 +40,15 @@ class Main_model extends CI_Model
     const AUDIO_CNT_PER_SD = 1;
     const TYPE_SD_STANDART = 1;
     const TYPE_SD_SIMPLE = 2;
+    const TYPE_SD_TEMPLATE = 3;
     const VID_SD_MINIROVANIE = 130;
     const REGION_ID_RCU = 50; //RCU
     const OBJECT_MANY_FLOOR = 12;
     const OBJECT_AVTO_TRANSPORT = 17;
     const DIVIZ_COU = 8;
     const POS_HEAD_GARNISON = 14; // str.maincou. pos duty
+    const POS_HEAD_INSPECTOR = 13; // str.maincou. pos duty
+    const POS_DISP = 6; // str.maincou. pos duty
 
     public function __construct()
     {
@@ -472,4 +475,59 @@ class Main_model extends CI_Model
         $res = $this->db->get('theme_messages')->result_array();
         return $res;
     }
+
+
+        public function get_posduty_from_str_by_ch($id_grochs, $id_divizion)
+    {
+        $this->db->select("m.*");
+        $this->db->join('ss.`records` `rec`', '`rec`.`id` = `m`.`id_card`', 'left');
+        $this->db->where('rec.id_divizion', $id_divizion);
+        $this->db->where('rec.id_loc_org', $id_grochs);
+        $this->db->group_by('m.ch');
+        $this->db->group_by('m.id_pos_duty');
+
+
+        $res = $this->db->get('str.maincou as m')->result_array();
+        //echo $this->db->last_query();
+        return $res;
+    }
+
+            public function get_posduty_listfio_from_str_by_ch($id_grochs, $id_divizion)
+    {
+        $this->db->select("m.*, lf.fio, r.name as rank_name");
+        $this->db->join('ss.`records` `rec`', '`rec`.`id` = `m`.`id_card`', 'left');
+        $this->db->join('str.`listfio` `lf`', '`lf`.`id` = `m`.`id_fio`', 'left');
+        $this->db->join('str.`rank` `r`', '`r`.`id` = `lf`.`id_rank`', 'left');
+        $this->db->where('rec.id_divizion', $id_divizion);
+        $this->db->where('rec.id_loc_org', $id_grochs);
+        $this->db->group_by('m.ch');
+        $this->db->group_by('m.id_pos_duty');
+        $this->db->order_by('is_duty','desc');
+
+
+        $res = $this->db->get('str.maincou as m')->result_array();
+        //echo $this->db->last_query();
+        return $res;
+    }
+
+
+        public function get_filter_by_user($id_user)
+    {
+        $this->db->select("*");
+        $this->db->where('id_user',$id_user);
+        $res = $this->db->get('speciald.filter_user')->row_array();
+        return $res;
+    }
+
+        public function edit_filter_user($data, $id)
+    {
+        $this->db->where('id', $id);
+        $this->db->update('speciald.filter_user', $data);
+    }
+
+        public function add_filter_user($data)
+    {
+        $this->db->insert('speciald.filter_user', $data);
+    }
+
 }

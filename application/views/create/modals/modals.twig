@@ -1,0 +1,73 @@
+
+<div class="modal fade" id="show-error" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <h4 class="modal-title ff-l" id="myModalLabel">Внимание</h4>
+
+                <button class="close danger" type="button" data-dismiss="modal" style="font-weight: bolder;">×</button>
+
+            </div>
+
+            <div class="modal-body">
+                <p></p>
+            </div>
+            <div class="modal-footer">
+
+                <button  type="button" class="btn btn-secondary" data-dismiss="modal" >Закрыть</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="modal-list-disp" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <h4 class="modal-title ff-l" id="myModalLabel">Выбрать диспетчера</h4>
+
+                <button class="close danger" type="button" data-dismiss="modal" style="font-weight: bolder;">×</button>
+
+            </div>
+
+            <div class="modal-body">
+
+                Информация берется из <a href="/str" target="_blank">ПС &laquo;Строевая записка&raquo;</a>.
+                <br><br>
+
+                {%if list_disp is defined and list_disp is not empty%}
+
+
+
+
+
+                    <label for="id_disp">Диспетчер</label>
+
+                    <select class="form-control select2-single" name="id_disp" id="id_disp"  >
+
+                        <option value=""></option>
+                        {%for disp in list_disp%}
+                            <option value="{{ disp.fio }}" data-rank="{{disp.rank}}" data-position="{{disp.position}}" data-podr="{{disp.podr}}" >
+
+                                {{ disp.fio }} {{disp.rank}} (смена {{disp.ch}}, {{disp.dateduty|date('d.m.Y')}})</option>
+                        {% endfor %}
+                    </select>
+
+
+
+
+
+
+                {%endif%}
+
+            </div>
+            <div class="modal-footer">
+
+                <button id="btn-add-list-disp"  type="button" class="btn btn-warning" >Добавить</button>
+                <button  type="button" class="btn btn-secondary" data-dismiss="modal" >Отмена</button>
+            </div>
+        </div>
+    </div>
+</div>
+

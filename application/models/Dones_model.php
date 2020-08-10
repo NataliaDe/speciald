@@ -289,6 +289,48 @@ class Dones_model extends CI_Model
             $this->db->group_end();
         }
 
+                                      if (isset($filter['id_dones']) && !empty($filter['id_dones'])) {
+
+            $this->db->like('d.id', $filter['id_dones']);
+
+        }
+
+                                                if (isset($filter['date_dones']) && !empty($filter['date_dones'])) {
+
+            $this->db->where('d.specd_date', $filter['date_dones']);
+
+        }
+                                        if (isset($filter['number_dones']) && !empty($filter['number_dones'])) {
+
+            $this->db->like('d.specd_number', $filter['number_dones']);
+
+        }
+
+                                if (isset($filter['address_dones']) && !empty($filter['address_dones'])) {
+
+            $this->db->like('d.address', $filter['address_dones']);
+
+        }
+
+                if (isset($filter['creator_name']) && !empty($filter['creator_name'])) {
+
+
+            $this->db->like('author.auth_organ', $filter['creator_name']);
+
+        }
+                        if (isset($filter['short_description']) && !empty($filter['short_description'])) {
+$this->db->group_start();
+            $this->db->like('d.short_description', $filter['short_description']);
+             $this->db->or_like('d.opening_description', $filter['short_description']);
+$this->db->group_end();
+        }
+
+                                                        if (isset($filter['specd_vid']) && !empty($filter['specd_vid'])) {
+
+            $this->db->where('d.specd_vid', $filter['specd_vid']);
+
+        }
+
         $this->db->order_by('d.date_insert', 'DESC');
 
 

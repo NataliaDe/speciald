@@ -84,4 +84,15 @@ class Ss_model extends CI_Model
             ->row_array();
         return $res['name'];
     }
+
+        public function get_locorg_name_by_id($id)
+    {
+        $res = $this->db->select('auth')
+            ->from('ss.caption')
+            ->where('locorg_id', $id)
+            ->limit(1)
+            ->get()
+            ->row_array();
+        return $res['auth'];
+    }
 }

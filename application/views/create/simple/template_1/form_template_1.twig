@@ -1,0 +1,336 @@
+{% extends 'layout.twig' %}
+
+{% block title %}{{title}}{% endblock %}
+
+{% block content %}
+
+    {%include '/parts/bread_crumb.twig'%}
+    <br> <br>
+    <!-- content -->
+
+    <form role="form" id="createTemplate1" method="POST" action="{{base_url('/dones/common_template_1_save')}}" enctype=multipart/form-data>
+        {#<div class="container">#}
+
+        {%if is_edit_dones is defined and dones is defined and dones.is_see == 1  %}
+
+            <fieldset disabled>
+            {%endif%}
+
+            <input type="hidden" name="type_sd" value="{{type_sd}}">
+
+            {%include 'create/common_templates/template_1/official_block.twig'%}
+            <br><br>
+            {%include 'create/common_templates/template_1/table.twig'%}
+
+
+            <div class="form-group col-md-12">
+                <label for="is_test_sd" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                <div class="checkbox checkbox-danger">
+                    <input  type="checkbox" name="is_test_sd" value="1" id="is_test_sd" {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_test_sd == 1 %}checked{%endif%}>
+                    <label for="is_test_sd" style="color:red">
+                        Тестовое СД. После окончания тестирования ПС можно удалить.
+                    </label>
+                </div>
+            </div>
+
+
+
+
+
+
+            {#{%include '/create/standart/preview/opening_description.twig'%}#}
+
+
+
+
+            <center>
+
+
+                {%if  dones.is_see == 1  %}
+
+                {%else%}
+                    <button type="submit" class="btn btn-danger">Сохранить</button>
+                    <a href="{{base_url('/creator/catalog')}}"><button type="button" class="btn btn-secondary" >Отмена</button></a>
+                {%endif%}
+
+            </center>
+
+            {%if is_edit_dones is defined and dones is defined and dones.is_see == 1  %}
+
+            </fieldset>
+        {%endif%}
+
+        {%if is_edit_dones is defined and dones is defined and dones.is_see == 1  %}
+            <center>
+                <a href="{{base_url('/creator/catalog')}}"><button type="button" class="btn btn-secondary" >Отмена</button></a>
+            </center>
+        {%endif%}
+
+    </form>
+
+    <!-- .content -->
+
+
+
+
+    {%include 'create/standart/modals/modal-search-rig.twig'%}
+    {%include 'create/standart/modals/modal-search-str-cars.twig'%}
+    {%include 'create/standart/modals/modal-search-str-inf.twig'%}
+
+
+
+
+
+
+{% endblock %}
+
+
+
+
+{% block head %}
+
+
+    <link rel="stylesheet" href="{{ base_url('/assets/css/timer.css') }}">
+
+    <link rel="stylesheet" href="{{ base_url('/assets/css/media.css') }}?{{now|date('H:i:s')}}">
+
+
+    <link href="{{ base_url('/assets/daterangepicker/daterangepicker.css') }}" rel="stylesheet">
+
+
+
+    <link rel="stylesheet" href="{{ base_url('assets/datatables/jquery.dataTables.css') }}">
+
+    <link rel="stylesheet" href="{{ base_url('/assets/css/preview_standart.css') }}">
+
+
+    {%if settings is defined and settings.is_map is defined and 'yes' %}
+        <link rel="stylesheet" href="{{ base_url('/assets/libs/leaflet-control-geocoder-master/dist/leaflet.css') }}" />
+        <link rel="stylesheet" href="{{ base_url('/assets/libs/leaflet-control-geocoder-master/dist/Control.Geocoder.css') }}" />
+        <link rel="stylesheet" href="{{ base_url('/assets/css/form-standart/map.css') }}">
+
+    {%endif%}
+
+
+    <style>
+        #lat_id:before {
+            content: "широта";
+        }
+
+        #search-rig{
+            cursor: pointer;
+        }
+
+
+        #modal-search-rig .select2-container {
+            width: 168px !important;
+        }
+
+        #modal-search-str-cars .select-cars-region-cls .select2-container {
+            width: 227px !important;
+        }
+        #modal-search-str-cars .select-cars-locals-cls .select2-container {
+            width: 282px !important;
+        }
+
+        #modal-search-str-cars .select-cars-pasp-cls .select2-container {
+            width: 500px !important;
+        }
+
+        #modal-search-str-cars .select-cars-cls .select2-container {
+            width: 500px !important;
+        }
+
+
+        #modal-search-str-inf .select-pasp-cls .select2-container {
+            width: 500px !important;
+        }
+        #modal-search-str-inf .select-regions-cls .select2-container {
+            width: 227px !important;
+        }
+        #modal-search-str-inf .select-locals-cls .select2-container {
+            width: 282px !important;
+        }
+
+
+
+        #innerservice-table .select2-container {
+            width: 300px !important;
+        }
+
+        #innerservice-table .td_innerservice_name .select2-container {
+            width: 300px !important;
+        }
+        #water-source-table .td_water-source-type .select2-container {
+            width: 290px !important;
+        }
+
+
+        #law_face_office_belong .select2-container, #individual-face-div .select2-container  {
+            width: 240px !important;
+        }
+
+        #object-api-card .select2-container{
+            width: 312px !important;
+        }
+
+
+        #object-api-card .select2-container{
+            width: 312px !important;
+        }
+
+        #object-material-div .select2-container, #object-roof-div .select2-container{
+            width: 299px !important;
+        }
+                #avtotransport-object .select2-container{
+            width: 267px !important;
+        }
+
+
+        .theme-msg .select2-container{
+            width: 470px !important;
+        }
+
+
+
+
+        #table-description{
+    width: 85%;
+    margin-left: 20px;
+    border: 1px solid #dee2e6;
+        }
+
+        #table-description tbody tr td{
+            border: 1px solid #dee2e6;
+        }
+
+        .ct_1_bold_td{
+            font-weight: 800;
+        }
+    </style>
+
+{% endblock %}
+
+{% block footer %}
+
+
+    <img src="{{ base_url('/assets/images/updown/32.ico')}}" alt="Наверх" title="Наверх" id="Go_Top"
+         style="position: fixed; bottom: 60px; right: 2px; cursor: pointer; width: 36px;z-index: 1000;    border: solid 1px #254aa2;
+         margin-top: 0px;
+         padding-top: 3px;
+         padding-bottom: 0px;">
+
+    <img src="{{ base_url('/assets/images/updown/35.ico')}}" alt="Вниз" title="Вниз" id="Go_Bottom"
+         style="position: fixed; bottom: 20px; right: 2px; cursor: pointer; width: 36px; z-index: 1000;    border: solid 1px #254aa2;
+         margin-top: 0px;
+         padding-top: 3px;
+         padding-bottom: 0px;">
+
+
+
+
+    <script src="{{ base_url('/assets/accordion/index.js')}}"></script>
+    <script type="text/javascript" src="{{ base_url('assets/js/jquery.downCount.js') }}"></script>
+
+    <script src="{{ base_url('/assets/js/mask/jquery.maskedinput.min.js')}}"></script>
+
+
+
+
+
+    <script type="text/javascript"
+    src="{{ base_url('assets/daterangepicker/moment.min.js') }}"></script>
+    <script type="text/javascript"
+    src="{{ base_url('assets/daterangepicker/daterangepicker.js') }}"></script>
+
+    {#<script src="{{ base_url('/assets/js/dd/moment.min.js')}}"></script>#}
+
+    {#<script src="{{ base_url('/assets/js/dd/locale/ru.js')}}"></script>#}
+    {#    <script src="{{ base_url('/assets/js/dd/js/bootstrap-datetimepicker.min.js')}}"></script>#}
+    <script src="{{ base_url('/assets/js/manual_datetimepicker.js')}}?{{now|date('H:i:s')}}"></script>
+    <script src="{{ base_url('/assets/js/name.js')}}"></script>
+
+
+
+    <script src="{{ base_url('/assets/js/form-standart/journal_table.js')}}?{{now|date('H:i:s')}}"></script>
+    <script src="{{ base_url('/assets/js/form-standart/str_table.js')}}?{{now|date('H:i:s')}}"></script>
+    <script src="{{ base_url('/assets/js/form-standart/final_block.js')}}?{{now|date('H:i:s')}}"></script>
+
+    <script src="{{ base_url('/assets/js/form-standart/search_rig.js')}}?{{now|date('H:i:s')}}"></script>
+    <script src="{{ base_url('/assets/js/form-standart/search_str_cars.js')}}?{{now|date('H:i:s')}}"></script>
+    <script src="{{ base_url('/assets/js/form-standart/search_str_inf.js')}}?{{now|date('H:i:s')}}"></script>
+
+    <script src="{{ base_url('/assets/datatables/jquery.dataTables.js')}}"></script>
+
+
+    {%include '/create/standart/owner/actions_js.twig'%}
+
+    {%if is_edit_dones is not defined  %}
+        <script src="{{ base_url('/assets/js/timer.js')}}"></script>
+
+    {%endif%}
+
+
+
+
+
+
+    <script>
+
+        {% if rig is defined%}
+            setPreviewData();
+        {%endif%}
+
+
+            jQuery(function () {
+            $("#Go_Top").hide();
+            if ($(window).scrollTop() >= 250)
+                    $("#Go_Top").fadeIn("slow")
+                    $(window).scroll(function () {
+            if ($(window).scrollTop() <= 250)
+                    $("#Go_Top").fadeOut("slow")
+                    else
+                    $("#Go_Top").fadeIn("slow")
+            });
+            $("#Go_Bottom").hide();
+            if ($(window).scrollTop() <= $(document).height() - 999)
+                    $("#Go_Bottom").fadeIn("slow")
+                    $(window).scroll(function () {
+            if ($(window).scrollTop() >= $(document).height() - 999)
+                    $("#Go_Bottom").fadeOut("slow")
+                    else
+                    $("#Go_Bottom").fadeIn("slow")
+            });
+            $("#Go_Top").click(function () {
+            $("html, body").animate({scrollTop: 0}, "slow")
+            })
+                    $("#Go_Bottom").click(function () {
+            $("html, body").animate({scrollTop: $(document).height()}, "slow")
+            })
+            });
+
+    </script>
+
+
+    <script>
+
+
+
+
+                                $(document).on("keypress", ":input:not(textarea)", function (event) {
+                                return event.keyCode != 13;
+                                });
+
+
+    </script>
+
+
+
+
+
+
+
+{% endblock %}
+
+
+

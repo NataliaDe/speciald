@@ -67,6 +67,37 @@ $(document).ready(function () {
 
 
 
+        $('.select2-single-short-descr').select2({
+        placeholder: "О чем",
+        allowClear: true,
+        "language": {
+            "noResults": function () {
+                return "Ничего не найдено";
+            }
+        }
+    });
+
+
+            $('.select2-single-is-opg').select2({
+        allowClear: false,
+        "language": {
+            "noResults": function () {
+                return "Ничего не найдено";
+            }
+        }
+    });
+
+
+        $('.catalog-filter-vid').select2({
+        placeholder: "Все",
+        allowClear: true,
+        "language": {
+            "noResults": function () {
+                return "Ничего не найдено";
+            }
+        }
+    });
+
 
 });
 

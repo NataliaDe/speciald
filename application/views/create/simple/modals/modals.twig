@@ -1,0 +1,57 @@
+
+<div class="modal fade" id="modal-list-opg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <h4 class="modal-title ff-l" id="myModalLabel">Добавить в состав оперативной группы</h4>
+
+                <button class="close danger" type="button" data-dismiss="modal" style="font-weight: bolder;">×</button>
+
+            </div>
+
+            <div class="modal-body">
+
+                Информация берется из <a href="/str" target="_blank">ПС &laquo;Строевая записка&raquo;</a>.
+
+                {%if list_opg is defined and list_opg is not empty%}
+
+                    <table class="table table-without-border">
+                        {%for ch,opg in list_opg%}
+
+                            <tr>
+
+                                <td colspan="2">
+                                    <span style="{{opg.is_duty == 1 ? 'color:green;': ''}} font-weight:700">смена {{ch}}, {{opg.dateduty|date('d.m.Y')}}</span>
+                                </td>
+                            </tr>
+
+                            {%for p in opg.man%}
+                                <tr>
+                                    <td>
+                                        <input  type="checkbox" class="is_add_to_opg" value="1" data-name="{{p.fio_text}}">
+                                    </td>
+                                    <td class="fio_add_to_opg" data-fio="{{p.fio_text}}">
+                                        {{p.fio_text}}
+                                    </td>
+                                </tr>
+
+                            {%endfor%}
+
+                        {%endfor%}
+                    </table>
+
+
+                {%endif%}
+
+            </div>
+            <div class="modal-footer">
+
+                <button id="btn-add-list-opg"  type="button" class="btn btn-warning" >Добавить</button>
+                <button  type="button" class="btn btn-secondary" data-dismiss="modal" >Отмена</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

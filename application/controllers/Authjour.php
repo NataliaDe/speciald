@@ -26,6 +26,7 @@ class Authjour extends CI_Controller
     public $rank;
     public $creator_name;
     public $id_rig;
+    public $id_template=0;
 
     public function __construct()
     {
@@ -39,7 +40,7 @@ class Authjour extends CI_Controller
         $this->load->helper(['generate_salt']);
     }
 
-    public function index($id_user_speciald = 0, $id_rig = 0)
+    public function index($id_user_speciald = 0, $id_rig = 0, $type_sd = 'standart',$id_template=0)
     {
 
         $id_user_speciald = intval($id_user_speciald);
@@ -48,17 +49,22 @@ class Authjour extends CI_Controller
         $this->id_user_speciald = $id_user_speciald;
 
         $this->id_rig = $id_rig;
-
+        $this->id_template=$id_template;
 
         $user_sd = $this->user_model->get_user_by_id($id_user_speciald);
 
-        $this->id_user_journal=$this->user_model->get_user_journal_by_user_sd($id_user_speciald);
+        $this->id_user_journal = $this->user_model->get_user_journal_by_user_sd($id_user_speciald);
 
-        if (isset($user_sd) && !empty($user_sd) && $id_rig != 0  && $id_user_speciald != 0) {
+        if (isset($user_sd) && !empty($user_sd) && $id_rig != 0 && $id_user_speciald != 0) {
 
             $this->login();
 
-            redirect('dones/form_standart');
+            if ($type_sd == 'simple'){
+                redirect('dones/form_simple/1');
+
+            }
+            else
+                redirect('dones/form_standart');
         } else {
 
             redirect($this->session->userdata('role') . '/catalog');
@@ -72,6 +78,8 @@ class Authjour extends CI_Controller
         $this->session->set_userdata($user);
         $this->session->set_userdata('id_rig', $this->id_rig);
         $this->session->set_userdata('id_user_jour', $this->id_user_journal);
+
+        $this->session->set_userdata('id_template', $this->id_template);
 
 
         $remember_me = 1;
@@ -104,6 +112,5 @@ class Authjour extends CI_Controller
     {
         $this->session->sess_destroy();
         delete_cookie("key_cookie_speciald");
-
     }
 }

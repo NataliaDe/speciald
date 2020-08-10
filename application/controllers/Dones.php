@@ -182,6 +182,8 @@ class Dones extends My_Controller
                 $this->data['head_garnison'] = $garnison;
             }
 
+            $this->data['list_disp']= $this->get_list_disp_from_str();
+
 
 
         if ($is_default == 1) {//show empty form
@@ -337,7 +339,7 @@ class Dones extends My_Controller
     }
 
     //form simple
-    public function form_simple()
+    public function form_simple($is_default=0)
     {
 
         $this->data['type_sd'] = Main_model::TYPE_SD_SIMPLE;
@@ -354,6 +356,8 @@ class Dones extends My_Controller
 
         /* map centers */
         $this->data['map_center'] = $this->main_model->get_map_center_by_region($this->data['active_user']['id_region']);
+
+        $this->data['view_work'] = $this->journal_model->get_view_work();
 
 
 
@@ -387,6 +391,76 @@ class Dones extends My_Controller
 
         $this->data['default_number_sd'] = $this->data['first_part_number_sd'] . '/' . $all_cnt_dones . '/' . $cnt_dones_per_region;
         /* END default number sd */
+
+
+        /* OPG group from str. where duty_ch=1 */
+        $journal_user = $this->user_model->get_data_user_journal_by_user_sd($this->data['active_user']['id_user']);
+        if (isset($journal_user) && !empty($journal_user) && isset($journal_user['id_locorg']) && !empty($journal_user['id_locorg'])) {
+            $garnison = $this->get_head_garnison_from_str($journal_user['id_locorg'], Main_model::POS_HEAD_GARNISON, Main_model::DIVIZ_COU);
+            $this->data['head_garnison'] = $garnison;
+            $inspector = $this->get_head_garnison_from_str($journal_user['id_locorg'], Main_model::POS_HEAD_INSPECTOR, Main_model::DIVIZ_COU);
+            $this->data['head_inspector'] = $inspector;
+
+            if (!empty($garnison))
+                $this->data['opg_content'][] = $garnison;
+            if (!empty($inspector))
+                $this->data['opg_content'][] = $inspector;
+        }
+
+
+        if ($is_default == 2 && $this->input->is_ajax_request()) {//get data from rig and fill form
+            $id_rig = $this->input->get('id_rig');
+        }
+        // auto from journal rig
+        elseif ($is_default == 1 && isset($this->data['active_user']['id_rig']) && $this->data['active_user']['id_rig'] != 0) {
+            $id_rig = $this->data['active_user']['id_rig'];
+            $id_template=$this->data['active_user']['id_template'];
+
+        }
+
+         if (isset($id_rig) && !empty($id_rig)) {
+            $this->data['id_rig_current'] = $id_rig;
+            $this->data['rig'] = $this->journal_model->get_rig_by_id($id_rig);
+            $this->data['rig']['people'] = $this->journal_model->get_people_by_rig_id($id_rig);
+            $this->data['rig']['silymchs'] = $this->journal_model->get_silymchs_by_rig_id_sort_distance($id_rig);
+            $this->data['rig']['ct_1_silymchs']=[];
+            $this->data['rig']['cnt_view_teh']=[];
+
+            if (isset($this->data['rig']['silymchs']) && !empty($this->data['rig']['silymchs'])) {
+                foreach ($this->data['rig']['silymchs'] as $key => $value) {
+                    if(isset($this->data['rig']['cnt_view_teh'][$value['pasp_name_full']][$value['view_teh']]))
+                    $this->data['rig']['cnt_view_teh'][$value['pasp_name_full']][$value['view_teh']]++;
+                    else
+                        $this->data['rig']['cnt_view_teh'][$value['pasp_name_full']][$value['view_teh']]=1;
+                }
+
+                if(isset($this->data['rig']['cnt_view_teh']) && !empty($this->data['rig']['cnt_view_teh'])){
+                    foreach ($this->data['rig']['cnt_view_teh'] as $pasp => $teh) {
+
+                        foreach ($teh as $view => $cnt) {
+                            $this->data['rig']['ct_1_silymchs'][]=$cnt.' '.$view.' '.$pasp;
+
+                        }
+
+
+                    }
+                }
+
+
+            }
+
+
+
+
+
+            if (isset($id_template) && !empty($id_template))
+                $this->data['id_template'] = $id_template;
+        }
+
+
+        $this->data['list_opg']= $this->get_data_for_opg_from_str();
+        $this->data['list_disp']= $this->get_list_disp_from_str();
+        //print_r($this->data['list_opg']);exit();
 
         $this->twig->display('create/simple/form_simple', $this->data);
     }
@@ -2080,6 +2154,7 @@ class Dones extends My_Controller
                 $object['avto_year']=(isset($row['avto_year']) && !empty($row['avto_year'])) ? intval($row['avto_year']) : '0';
                 $object['avto_type_fuel']=(isset($row['avto_type_fuel']) && !empty($row['avto_type_fuel'])) ? trim($row['avto_type_fuel']) : '';
                 $object['avto_register_sign']=(isset($row['avto_register_sign']) && !empty($row['avto_register_sign'])) ? trim($row['avto_register_sign']) : '';
+                $object['avto_mark']=(isset($row['avto_mark']) && !empty($row['avto_mark'])) ? trim($row['avto_mark']) : '';
             }
         }
         else{
@@ -2087,6 +2162,7 @@ class Dones extends My_Controller
              $object['avto_year']=0;
              $object['avto_type_fuel']='';
              $object['avto_register_sign']='';
+             $object['avto_mark']='';
         }
 
         $id_object = (isset($post['id_object']) && !empty($post['id_object'])) ? intval($post['id_object']) : 0; //edit id of table object
@@ -2216,6 +2292,8 @@ class Dones extends My_Controller
         $this->data['face_belong'] = $this->main_model->get_face_belong();
         $this->data['owner_categories'] = $this->journal_model->get_owner_categories();
         $this->data['api_source'] = $this->main_model->get_api_source();
+
+        $this->data['list_disp']= $this->get_list_disp_from_str();
 
 
         if ($this->session->userdata('can_edit') == 0) {// viewer can see SD
@@ -2870,6 +2948,31 @@ class Dones extends My_Controller
 
 
 
+
+
+            /* templates */
+            $new_dones['id_template'] = $dones['id_template'];
+            $new_dones['type_template'] = $dones['type_template'];
+            $new_dones['ct_1_id_short_description'] = $dones['ct_1_id_short_description'];
+            $new_dones['ct_1_id_goal_rig'] = $dones['ct_1_id_goal_rig'];
+            $new_dones['ct_1_goal_rig'] = $dones['ct_1_goal_rig'];
+            $new_dones['ct_1_object'] = $dones['ct_1_object'];
+            $new_dones['ct_1_applicant'] = $dones['ct_1_applicant'];
+            $new_dones['ct_1_silymchs'] = $dones['ct_1_silymchs'];
+            $new_dones['ct_1_senior'] = $dones['ct_1_senior'];
+            $new_dones['ct_1_innerservice'] = $dones['ct_1_innerservice'];
+            $new_dones['ct_1_arrival_situation'] = $dones['ct_1_arrival_situation'];
+            $new_dones['ct_1_come_in'] = $dones['ct_1_come_in'];
+            $new_dones['ct_1_taken_measures'] = $dones['ct_1_taken_measures'];
+            $new_dones['ct_1_affected'] = $dones['ct_1_affected'];
+            $new_dones['ct_1_effects'] = $dones['ct_1_effects'];
+            $new_dones['ct_1_note'] = $dones['ct_1_note'];
+            $new_dones['ct_1_position_sign'] = $dones['ct_1_position_sign'];
+            $new_dones['ct_1_podr_sign'] = $dones['ct_1_podr_sign'];
+            $new_dones['ct_1_rank_sign'] = $dones['ct_1_rank_sign'];
+            $new_dones['ct_1_fio_sign'] = $dones['ct_1_fio_sign'];
+
+
             if ($this->data['active_user']['is_guest'] == 1) {
                 $new_dones['fio_jour'] = $this->data['active_user']['auth_fio'];
                 $new_dones['position_name_jour'] = $this->data['active_user']['position_name'];
@@ -3142,6 +3245,7 @@ class Dones extends My_Controller
             $dones_object['avto_year'] = $object['avto_year'];
             $dones_object['avto_type_fuel'] = $object['avto_type_fuel'];
             $dones_object['avto_register_sign'] = $object['avto_register_sign'];
+            $dones_object['avto_mark']=$object['avto_mark'];
 
 
             $this->create_model->add_new_dones_object($dones_object);
@@ -3267,6 +3371,51 @@ class Dones extends My_Controller
         // type SD
         $dones['type'] = Main_model::TYPE_SD_SIMPLE;
 
+
+            /* templates */
+            if (isset($post['id_template']) && !empty($post['id_template'])) {
+            $dones['id_template'] = (isset($post['id_template']) && !empty($post['id_template'])) ? $post['id_template'] : '';
+
+            if ($post['id_template'] == 'ct_1') {
+
+                $dones['type_template'] = 'common';
+
+                $dones['ct_1_id_short_description'] = (isset($post['ct_1_id_short_description']) && !empty($post['ct_1_id_short_description'])) ? intval($post['ct_1_id_short_description']) : 0;
+                $dones['ct_1_id_goal_rig'] = (isset($post['ct_1_id_goal_rig']) && !empty($post['ct_1_id_goal_rig'])) ? intval($post['ct_1_id_goal_rig']) : 0;
+                $dones['ct_1_goal_rig'] = (isset($post['ct_1_goal_rig']) && !empty($post['ct_1_goal_rig'])) ? trim($post['ct_1_goal_rig']) : '';
+
+
+                if (!empty($settings) && isset($settings['is_seconds_show']) && in_array('yes', $settings['is_seconds_show'])) {
+                    $dones['time_msg'] = (isset($post['ct_1_time_msg']) && !empty($post['ct_1_time_msg'])) ? (\DateTime::createFromFormat('d.m.Y H:i:s', trim($post['ct_1_time_msg']))->format('Y-m-d H:i:s')) : NULL;
+                } else {
+                    $dones['time_msg'] = (isset($post['ct_1_time_msg']) && !empty($post['ct_1_time_msg'])) ? (\DateTime::createFromFormat('d.m.Y H:i', trim($post['ct_1_time_msg']))->format('Y-m-d H:i:s')) : NULL;
+                }
+                $dones['address'] = (isset($post['address']) && !empty($post['address'])) ? trim($post['address']) : '';
+
+                $dones['ct_1_object'] = (isset($post['ct_1_object']) && !empty($post['ct_1_object'])) ? trim($post['ct_1_object']) : '';
+                $dones['ct_1_applicant'] = (isset($post['ct_1_applicant']) && !empty($post['ct_1_applicant'])) ? trim($post['ct_1_applicant']) : '';
+
+                $dones['opening_description'] = (isset($post['ct_1_opening_description']) && !empty($post['ct_1_opening_description'])) ? trim($post['ct_1_opening_description']) : '';
+                $dones['ct_1_silymchs'] = (isset($post['ct_1_silymchs']) && !empty($post['ct_1_silymchs'])) ? trim($post['ct_1_silymchs']) : '';
+                $dones['ct_1_senior'] = (isset($post['ct_1_senior']) && !empty($post['ct_1_senior'])) ? trim($post['ct_1_senior']) : '';
+                $dones['ct_1_innerservice'] = (isset($post['ct_1_innerservice']) && !empty($post['ct_1_innerservice'])) ? trim($post['ct_1_innerservice']) : '';
+                $dones['is_opg'] = (isset($post['is_opg']) && !empty($post['is_opg'])) ? intval($post['is_opg']) : 0;
+                $dones['opg_text'] = (isset($post['opg_text']) && !empty($post['opg_text']) && $dones['is_opg'] == 1) ? trim($post['opg_text']) : '';
+                $dones['ct_1_arrival_situation'] = (isset($post['ct_1_arrival_situation']) && !empty($post['ct_1_arrival_situation'])) ? trim($post['ct_1_arrival_situation']) : '';
+                $dones['ct_1_come_in'] = (isset($post['ct_1_come_in']) && !empty($post['ct_1_come_in'])) ? trim($post['ct_1_come_in']) : '';
+                $dones['ct_1_taken_measures'] = (isset($post['ct_1_taken_measures']) && !empty($post['ct_1_taken_measures'])) ? trim($post['ct_1_taken_measures']) : '';
+                $dones['ct_1_affected'] = (isset($post['ct_1_affected']) && !empty($post['ct_1_affected'])) ? trim($post['ct_1_affected']) : '';
+                $dones['ct_1_effects'] = (isset($post['ct_1_effects']) && !empty($post['ct_1_effects'])) ? trim($post['ct_1_effects']) : '';
+                $dones['ct_1_note'] = (isset($post['ct_1_note']) && !empty($post['ct_1_note'])) ? trim($post['ct_1_note']) : '';
+
+                $dones['ct_1_position_sign'] = (isset($post['ct_1_position_sign']) && !empty($post['ct_1_position_sign'])) ? trim($post['ct_1_position_sign']) : '';
+                $dones['ct_1_podr_sign'] = (isset($post['ct_1_podr_sign']) && !empty($post['ct_1_podr_sign'])) ? trim($post['ct_1_podr_sign']) : '';
+                $dones['ct_1_rank_sign'] = (isset($post['ct_1_rank_sign']) && !empty($post['ct_1_rank_sign'])) ? trim($post['ct_1_rank_sign']) : '';
+                $dones['ct_1_fio_sign'] = (isset($post['ct_1_fio_sign']) && !empty($post['ct_1_fio_sign'])) ? trim($post['ct_1_fio_sign']) : '';
+            }
+        }
+
+
         /* insert/edit dones */
         if ($id_dones == 0) {//create a new
             if ($this->data['active_user']['is_guest'] == 1) {
@@ -3277,7 +3426,6 @@ class Dones extends My_Controller
                 if (isset($this->data['active_user']['id_user_jour']) && !empty($this->data['active_user']['id_user_jour']))
                     $dones['id_user_jour'] = $this->data['active_user']['id_user_jour'];
             }
-
 
 
             $id_dones_new = $this->create_model->add_new_dones($dones);
@@ -3408,7 +3556,7 @@ class Dones extends My_Controller
 
         /* map centers */
         $this->data['map_center'] = $this->main_model->get_map_center_by_region($this->data['active_user']['id_region']);
-
+        $this->data['view_work'] = $this->journal_model->get_view_work();
 
 
         $this->data['vid_specd'] = $this->main_model->get_vid_specd();
@@ -3418,6 +3566,10 @@ class Dones extends My_Controller
 
         $statuses = $this->dones_model->get_statuses_by_id_dones($id_dones, 0, false);
         $statuses_id = array_column($statuses, 'id_action');
+
+
+         $this->data['list_opg']= $this->get_data_for_opg_from_str();
+        $this->data['list_disp']= $this->get_list_disp_from_str();
 
 
 
@@ -3541,5 +3693,96 @@ class Dones extends My_Controller
         }
 
         return $garnison;
+    }
+
+
+    public function get_data_for_opg_from_str()
+    {
+
+        $list_opg=[];
+        /* OPG group from str*/
+        $journal_user = $this->user_model->get_data_user_journal_by_user_sd($this->data['active_user']['id_user']);
+
+        if (isset($journal_user) && !empty($journal_user) && isset($journal_user['id_locorg']) && !empty($journal_user['id_locorg'])) {
+
+            $main_cou = $this->main_model->get_posduty_from_str_by_ch($journal_user['id_locorg'], Main_model::DIVIZ_COU);
+
+             if (isset($main_cou) && !empty($main_cou)) {
+                foreach ($main_cou as $value) {
+                    if (in_array($value['id_pos_duty'], [Main_model::POS_HEAD_GARNISON, Main_model::POS_HEAD_INSPECTOR])) {
+
+                        $list_opg[$value['ch']]['dateduty'] = $value['dateduty'];
+                        $list_opg[$value['ch']]['is_duty'] = $value['is_duty'];
+                        $list_opg[$value['ch']]['man'][] = $value;
+                    }
+                }
+            }
+
+
+        }
+
+        return $list_opg;
+//print_r($this->data['list_opg']);
+//        echo json_encode([
+//            'innerHtml' => $this->twig->render('create/simple/template_1/modal_data_opg', $this->data, true)
+//        ]);
+    }
+
+
+    public function get_list_disp_from_str()
+    {
+
+        $list_disp=[];
+        /* dispetchers from str */
+        $journal_user = $this->user_model->get_data_user_journal_by_user_sd($this->data['active_user']['id_user']);
+
+        if (isset($journal_user) && !empty($journal_user) && isset($journal_user['id_locorg']) && !empty($journal_user['id_locorg'])) {
+
+            $main_cou = $this->main_model->get_posduty_listfio_from_str_by_ch($journal_user['id_locorg'], Main_model::DIVIZ_COU);
+
+             if (isset($main_cou) && !empty($main_cou)) {
+                foreach ($main_cou as $value) {
+                    if (in_array($value['id_pos_duty'], [Main_model::POS_DISP])) {
+
+                        $man['dateduty'] = $value['dateduty'];
+                        $man['ch'] = $value['ch'];
+                        $man['is_duty'] = $value['is_duty'];
+                        $man['fio'] = $value['fio'];
+
+                        $rank = mb_strtolower($value['rank_name']);
+                        $rank = explode(' ', $rank);
+                        $rank_sign = '';
+                        foreach ($rank as $k => $value) {
+                            if ($value == 'вн.сл.')
+                                $key = $k;
+                        }
+                        if (isset($key)) {
+                            for ($i = 0; $i < $key; $i++) {
+                                if ($rank_sign == '') {
+                                    $rank_sign = $rank[$i];
+                                } else {
+                                    $rank_sign = $rank_sign . ' ' . $rank[$i];
+                                }
+                            }
+                        }
+                        if (!empty($rank_sign))
+                            $rank_sign = $rank_sign . ' ' . 'внутренней службы';
+
+                        $man['rank'] = $rank_sign;
+                        $man['position'] ='Диспетчер';
+                        $man['podr'] = 'ЦОУ '.$this->ss_model->get_locorg_name_by_id($journal_user['id_locorg']);
+
+
+                        $list_disp[]=$man;
+                    }
+                }
+            }
+
+
+        }
+//print_r($list_disp);exit();
+        return $list_disp;
+//print_r($this->data['list_opg']);
+
     }
 }

@@ -1,4 +1,4 @@
-<div id="preview-simple-block" class="fixed t-left close_panel left-panel">
+<div id="preview-simple-block" class="fixed t-left close_panel left-panel {%if (id_template is defined and id_template == 'ct_1') or (is_edit_dones is defined and dones is defined and dones.id_template == 'ct_1')%}hide{%else%}show{%endif%}">
     <a id="preview-simple-block_button"  aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Предпросмотр (начальный текст)"> <i class="fa fa-tripadvisor"></i> </a>
 
     <div id="preview-simple-block-inner">
