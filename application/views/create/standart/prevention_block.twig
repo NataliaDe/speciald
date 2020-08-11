@@ -18,7 +18,7 @@
 
             <div class="form-group col-md-2" >
                 <label for="prevention_time"  >Когда:</label>
-                <input type="text" autocomplete="off" class="form-control date-cal-default-empty"  placeholder="" name="prevention_time" value="{%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.prevention_time is not empty and dones.prevention_time != '0000-00-00' %}{{dones.prevention_time|date('d.m.Y')}}{%else%}{{date('now')|date('d.m.Y')}}{%endif%}">
+                <input type="text" autocomplete="off" class="form-control prevention-date-calendar"  placeholder="" name="prevention_time" value="{%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.prevention_time is not empty and dones.prevention_time != '0000-00-00' %}{{dones.prevention_time|date('d.m.Y')}}{%else%}{{date('now')|date('d.m.Y')}}{%endif%}">
             </div>
 
 

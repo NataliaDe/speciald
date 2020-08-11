@@ -903,9 +903,58 @@ function setPreviewDataObject() {
 
 
 /* prevention */
-$('body').on('input change keyup blur', '#createStandart #accordion7 input[name="prevention_time"]', function (e) {
+
+
+
+
+
+$('.prevention-date-calendar').daterangepicker({
+    singleDatePicker: true,
+    showDropdowns: true,
+    "autoApply": true,
+    autoUpdateInput: false,
+
+    locale: {
+        format: 'DD.MM.YYYY',
+        applyLabel: 'Применить',
+        cancelLabel: 'Отменить',
+        "daysOfWeek": [
+            "Вс",
+            "Пн",
+            "Вт",
+            "Ср",
+            "Чт",
+            "Пт",
+            "Сб"
+        ],
+        "monthNames": [
+            "Январь",
+            "Февраль",
+            "Март",
+            "Апрель",
+            "Май",
+            "Июнь",
+            "Июль",
+            "Август",
+            "Сентябрь",
+            "Октябрь",
+            "Ноябрь",
+            "Декабрь"
+        ],
+        "firstDay": 1
+    }
+});
+
+$('.prevention-date-calendar').on('apply.daterangepicker', function (event, picker) {
+    var date = picker.startDate.format('DD.MM.YYYY');
+    $(this).val(date);
     setPreviewDataPrevent();
 });
+
+
+//$('body').on('input change keyup blur', '#createStandart #accordion7 input[name="prevention_time"]', function (e) {
+//    setPreviewDataPrevent();
+//});
 $('body').on('input change keyup', '#createStandart #accordion7 input[name="prevention_who"]', function (e) {
     setPreviewDataPrevent();
 });

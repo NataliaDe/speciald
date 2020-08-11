@@ -3,8 +3,8 @@ body{
     background-color: #f8f8f8;
 }
 
-table thead, table tfoot tr{
-    background-color: #343a402e;
+.catalog-table thead, table tfoot tr{
+    background-color: #ffffff;
 }
 
 table.dataTable tfoot th, table.dataTable tfoot td {
@@ -466,3 +466,10 @@ input[type="checkbox"][readonly] {
 }
 
 
+.reset_filter{
+    margin-top: 23px;
+}
+
+#catalog-filter .sittings-block{
+    line-height: 0.8;
+}

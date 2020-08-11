@@ -142,13 +142,10 @@
         });
 
 
-        $('body').on('blur', '#catalog-filter input[name="date_dones"]', function (e) {
-            update();
-        });
 
-{#                    $('body').on('click', '.show-calendar .drp-calendar .calendar-table .table-condensed tbody tr td', function (e) {
-            update();
-        });#}
+        {#                    $('body').on('click', '.show-calendar .drp-calendar .calendar-table .table-condensed tbody tr td', function (e) {
+                    update();
+                });#}
 
 
 
@@ -263,6 +260,109 @@
 
 
 
+        $('.only-date').daterangepicker({
+            singleDatePicker: true,
+            showDropdowns: true,
+            "autoApply": true,
+            autoUpdateInput: false,
+
+            locale: {
+                format: 'DD.MM.YYYY',
+                applyLabel: 'Применить',
+                cancelLabel: 'Отменить',
+                "daysOfWeek": [
+                    "Вс",
+                    "Пн",
+                    "Вт",
+                    "Ср",
+                    "Чт",
+                    "Пт",
+                    "Сб"
+                ],
+                "monthNames": [
+                    "Январь",
+                    "Февраль",
+                    "Март",
+                    "Апрель",
+                    "Май",
+                    "Июнь",
+                    "Июль",
+                    "Август",
+                    "Сентябрь",
+                    "Октябрь",
+                    "Ноябрь",
+                    "Декабрь"
+                ],
+                "firstDay": 1
+            }
+        });
+
+        $('.only-date').on('apply.daterangepicker', function (event, picker) {
+            var date = picker.startDate.format('DD.MM.YYYY');
+            $(this).val(date);
+            update();
+        });
+
+
+
+
+        $(function () {
+            $('input[name="date_dones"]').daterangepicker({
+
+{#                "autoApply": false,
+                autoUpdateInput: false,#}
+
+                opens: 'left',
+                locale: {
+                    format: 'DD.MM.YYYY',
+                    applyLabel: 'Применить',
+                    cancelLabel: 'Отменить',
+                    "daysOfWeek": [
+                        "Вс",
+                        "Пн",
+                        "Вт",
+                        "Ср",
+                        "Чт",
+                        "Пт",
+                        "Сб"
+                    ],
+                    "monthNames": [
+                        "Январь",
+                        "Февраль",
+                        "Март",
+                        "Апрель",
+                        "Май",
+                        "Июнь",
+                        "Июль",
+                        "Август",
+                        "Сентябрь",
+                        "Октябрь",
+                        "Ноябрь",
+                        "Декабрь"
+                    ],
+                    "firstDay": 1
+                }
+            }, function (start, end, label) {
+
+                //console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+                setTimeout(function () {
+                    //update();
+                }, 800);
+            });
+
+            $('body').on('change', 'input[name="date_dones"]', function (e) {
+                update();
+            });
+
+
+            $('input[name="date_dones"]').val('');
+
+        {%if (filter.start_date_dones is defined and filter.start_date_dones is not empty) and (filter.end_date_dones is defined and filter.end_date_dones is not empty)%}
+
+                    $('input[name="date_dones"]').val("{{filter.start_date_dones|date("d.m.Y")}} - {{filter.end_date_dones|date("d.m.Y")}}");
+
+        {%endif%}
+                });
     </script>
 {% endblock %}
 

@@ -44,7 +44,7 @@ class Dones_model extends CI_Model
     public function get_dones_by_grochs($filter, $id_organ = false)
     {
 
-        $this->db->select('d.*, author.id_local as author_local_id, vid.name as specd_vid_name');
+        $this->db->select('d.*, author.id_local as author_local_id, vid.name as specd_vid_name, author.id_organ as author_id_organ');
         $this->db->join('permissions as author', 'author.id_user=d.created_by', 'left');
         $this->db->join('vid_specd as vid', 'vid.id=d.specd_vid', 'left');
 
@@ -102,6 +102,47 @@ class Dones_model extends CI_Model
             $this->db->group_end();
         }
 
+
+
+        if (isset($filter['id_dones']) && !empty($filter['id_dones'])) {
+
+            $this->db->like('d.id', $filter['id_dones']);
+        }
+
+        if ((isset($filter['start_date_dones']) && !empty($filter['start_date_dones'])) && (isset($filter['end_date_dones']) && !empty($filter['end_date_dones']))) {
+
+            $this->db->group_start();
+            $this->db->where('d.specd_date >=', $filter['start_date_dones']);
+            $this->db->where('d.specd_date <=', $filter['end_date_dones']);
+            $this->db->group_end();
+        }
+        if (isset($filter['number_dones']) && !empty($filter['number_dones'])) {
+
+            $this->db->like('d.specd_number', $filter['number_dones']);
+        }
+
+        if (isset($filter['address_dones']) && !empty($filter['address_dones'])) {
+
+            $this->db->like('d.address', $filter['address_dones']);
+        }
+
+        if (isset($filter['creator_name']) && !empty($filter['creator_name'])) {
+
+
+            $this->db->like('author.auth_organ', $filter['creator_name']);
+        }
+        if (isset($filter['short_description']) && !empty($filter['short_description'])) {
+            $this->db->group_start();
+            $this->db->like('d.short_description', $filter['short_description']);
+            $this->db->or_like('d.opening_description', $filter['short_description']);
+            $this->db->group_end();
+        }
+
+        if (isset($filter['specd_vid']) && !empty($filter['specd_vid'])) {
+
+            $this->db->where('d.specd_vid', $filter['specd_vid']);
+        }
+
         $this->db->order_by('d.date_insert', 'DESC');
 
 
@@ -153,7 +194,7 @@ class Dones_model extends CI_Model
     public function get_dones_by_region($filter, $id_organ = false)
     {
 
-        $this->db->select('d.*, author.id_local as author_local_id,author.id_region as author_region_id, vid.name as specd_vid_name, author.auth_organ');
+        $this->db->select('d.*, author.id_local as author_local_id,author.id_region as author_region_id, vid.name as specd_vid_name, author.auth_organ,author.id_organ as author_id_organ');
         $this->db->join('permissions as author', 'author.id_user=d.created_by', 'left');
         $this->db->join('vid_specd as vid', 'vid.id=d.specd_vid', 'left');
 
@@ -211,6 +252,48 @@ class Dones_model extends CI_Model
             $this->db->group_end();
         }
 
+
+
+
+        if (isset($filter['id_dones']) && !empty($filter['id_dones'])) {
+
+            $this->db->like('d.id', $filter['id_dones']);
+        }
+
+        if ((isset($filter['start_date_dones']) && !empty($filter['start_date_dones'])) && (isset($filter['end_date_dones']) && !empty($filter['end_date_dones']))) {
+
+            $this->db->group_start();
+            $this->db->where('d.specd_date >=', $filter['start_date_dones']);
+            $this->db->where('d.specd_date <=', $filter['end_date_dones']);
+            $this->db->group_end();
+        }
+        if (isset($filter['number_dones']) && !empty($filter['number_dones'])) {
+
+            $this->db->like('d.specd_number', $filter['number_dones']);
+        }
+
+        if (isset($filter['address_dones']) && !empty($filter['address_dones'])) {
+
+            $this->db->like('d.address', $filter['address_dones']);
+        }
+
+        if (isset($filter['creator_name']) && !empty($filter['creator_name'])) {
+
+
+            $this->db->like('author.auth_organ', $filter['creator_name']);
+        }
+        if (isset($filter['short_description']) && !empty($filter['short_description'])) {
+            $this->db->group_start();
+            $this->db->like('d.short_description', $filter['short_description']);
+            $this->db->or_like('d.opening_description', $filter['short_description']);
+            $this->db->group_end();
+        }
+
+        if (isset($filter['specd_vid']) && !empty($filter['specd_vid'])) {
+
+            $this->db->where('d.specd_vid', $filter['specd_vid']);
+        }
+
         $this->db->order_by('d.date_insert', 'DESC');
 
 
@@ -254,9 +337,9 @@ class Dones_model extends CI_Model
         if (isset($filter['id_range']) && $filter['id_range'] == 1) {
             $date = new DateTime();
             $date->modify('-1 month');
-            $from= $date->format('Y-m-d');
-            $to=new DateTime();
-            $to=$to->format('Y-m-d');
+            $from = $date->format('Y-m-d');
+            $to = new DateTime();
+            $to = $to->format('Y-m-d');
 
             $this->db->group_start();
             $this->db->where('d.specd_date >=', $from);
@@ -264,24 +347,23 @@ class Dones_model extends CI_Model
             $this->db->group_end();
         }
         //by current year
-        elseif (isset($filter['id_range']) && $filter['id_range'] == 2){
-                        $date = new DateTime();
+        elseif (isset($filter['id_range']) && $filter['id_range'] == 2) {
+            $date = new DateTime();
             $date->modify('-1 year');
-            $from= $date->format('Y-m-d');
-            $to=new DateTime();
-            $to=$to->format('Y-m-d');
+            $from = $date->format('Y-m-d');
+            $to = new DateTime();
+            $to = $to->format('Y-m-d');
 
             $this->db->group_start();
             $this->db->where('d.specd_date >=', $from);
             $this->db->where('d.specd_date <=', $to);
             $this->db->group_end();
-        }
-                elseif(isset($filter['id_range']) && $filter['id_range'] == 3){
-                        $date = new DateTime();
+        } elseif (isset($filter['id_range']) && $filter['id_range'] == 3) {
+            $date = new DateTime();
             $date->modify('-24 hours');
-            $from= $date->format('Y-m-d');
-            $to=new DateTime();
-            $to=$to->format('Y-m-d');
+            $from = $date->format('Y-m-d');
+            $to = new DateTime();
+            $to = $to->format('Y-m-d');
 
             $this->db->group_start();
             $this->db->where('d.specd_date >=', $from);
@@ -289,46 +371,43 @@ class Dones_model extends CI_Model
             $this->db->group_end();
         }
 
-                                      if (isset($filter['id_dones']) && !empty($filter['id_dones'])) {
+        if (isset($filter['id_dones']) && !empty($filter['id_dones'])) {
 
             $this->db->like('d.id', $filter['id_dones']);
-
         }
 
-                                                if (isset($filter['date_dones']) && !empty($filter['date_dones'])) {
+        if ((isset($filter['start_date_dones']) && !empty($filter['start_date_dones'])) && (isset($filter['end_date_dones']) && !empty($filter['end_date_dones']))) {
 
-            $this->db->where('d.specd_date', $filter['date_dones']);
-
+            $this->db->group_start();
+            $this->db->where('d.specd_date >=', $filter['start_date_dones']);
+            $this->db->where('d.specd_date <=', $filter['end_date_dones']);
+            $this->db->group_end();
         }
-                                        if (isset($filter['number_dones']) && !empty($filter['number_dones'])) {
+        if (isset($filter['number_dones']) && !empty($filter['number_dones'])) {
 
             $this->db->like('d.specd_number', $filter['number_dones']);
-
         }
 
-                                if (isset($filter['address_dones']) && !empty($filter['address_dones'])) {
+        if (isset($filter['address_dones']) && !empty($filter['address_dones'])) {
 
             $this->db->like('d.address', $filter['address_dones']);
-
         }
 
-                if (isset($filter['creator_name']) && !empty($filter['creator_name'])) {
+        if (isset($filter['creator_name']) && !empty($filter['creator_name'])) {
 
 
             $this->db->like('author.auth_organ', $filter['creator_name']);
-
         }
-                        if (isset($filter['short_description']) && !empty($filter['short_description'])) {
-$this->db->group_start();
+        if (isset($filter['short_description']) && !empty($filter['short_description'])) {
+            $this->db->group_start();
             $this->db->like('d.short_description', $filter['short_description']);
-             $this->db->or_like('d.opening_description', $filter['short_description']);
-$this->db->group_end();
+            $this->db->or_like('d.opening_description', $filter['short_description']);
+            $this->db->group_end();
         }
 
-                                                        if (isset($filter['specd_vid']) && !empty($filter['specd_vid'])) {
+        if (isset($filter['specd_vid']) && !empty($filter['specd_vid'])) {
 
             $this->db->where('d.specd_vid', $filter['specd_vid']);
-
         }
 
         $this->db->order_by('d.date_insert', 'DESC');

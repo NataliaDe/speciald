@@ -32,16 +32,18 @@
                             <span class="typing-progress-background"></span>
                             <span class="typing-progress"></span>
                             <input type="text" name="id_dones" class="form-control input-search-progress" placeholder="Поиск"
-                               value="{{(filter.id_dones is defined and filter.id_dones is not empty) ? filter.id_dones : ''}}">
+                                   value="{{(filter.id_dones is defined and filter.id_dones is not empty) ? filter.id_dones : ''}}">
                         </div>
 
 
 
 
 
-                        <div class="col-md-1 form-group">
+                        <div class="col-md-2 form-group">
+
+
                             <label for="date_doness" >Дата СД</label>
-                            <input type="text" class="form-control date-cal-default-empty"  placeholder="" name="date_dones" value="{{(filter.date_dones is defined and filter.date_dones is not empty) ? filter.date_dones|date("d.m.Y") : ''}}">
+                            <input type="text" class="form-control "  placeholder="" name="date_dones" value="{%if (filter.start_date_dones is defined and filter.start_date_dones is not empty) and (filter.end_date_dones is defined and filter.end_date_dones is not empty)%}{{filter.start_date_dones|date("d.m.Y")}} - {{filter.end_date_dones|date("d.m.Y")}}{%endif%}">
                         </div>
 
 
@@ -131,16 +133,17 @@
 
 
 
-                        <div class="form-group col-md-1 filter-status-sd">
+                        <div class="form-group col-md-2 filter-status-sd">
                             <label for="status_sd" >Статус</label>
                             <select class="form-control catalog-filter-vid filters" name="status_sd"   >
                                 <option value="" selected>Все</option>
                                 <option  value="6" {{(filter.status_sd is defined and filter.status_sd is not empty and filter.status_sd == 6) ? 'selected' : ''}}>Подтверждено РЦУРЧС</option>
                                 <option  value="4" {{(filter.status_sd is defined and filter.status_sd is not empty and filter.status_sd == 4) ? 'selected' : ''}} >Подтверждено УМЧС</option>
-                                <option  value="1" {{(filter.status_sd is defined and filter.status_sd is not empty and filter.status_sd == 1) ? 'selected' : ''}} >Ожидает исполнения</option>
-                                {#<option  value="2" >Ожидает исполнения УМЧС</option>#}
+                                <option  value="1" {{(filter.status_sd is defined and filter.status_sd is not empty and filter.status_sd == 1) ? 'selected' : ''}} >Ожидает исполнения РЦУРЧС</option>
+                                <option  value="2" {{(filter.status_sd is defined and filter.status_sd is not empty and filter.status_sd == 2) ? 'selected' : ''}}>Ожидает исполнения УМЧС</option>
                                 <option  value="7" {{(filter.status_sd is defined and filter.status_sd is not empty and filter.status_sd == 7) ? 'selected' : ''}} >Замечания от РЦУРЧС</option>
                                 <option  value="5" {{(filter.status_sd is defined and filter.status_sd is not empty and filter.status_sd == 5) ? 'selected' : ''}}>Замечания от УМЧС</option>
+                                <option  value="8" {{(filter.status_sd is defined and filter.status_sd is not empty and filter.status_sd == 8) ? 'selected' : ''}}>Не требует подтверждения УМЧС</option>
                             </select>
                         </div>
 

@@ -1,5 +1,5 @@
 {#{{dump(outs)}}#}
-<table class="table table-condensed table-hover  table-bordered table-custom"  id="catalogUmchsTable">
+<table class="table table-condensed table-hover  table-bordered table-custom catalog-table"  id="catalogUmchsTable">
 
     <!-- строка 1 -->
     <thead>
@@ -159,9 +159,9 @@
                                    data-url="{{base_url('history/detail_refuse_sd')}}" data-level="2">
                                     <i class="fa fa-times" aria-hidden="true"></i>
                                     Замечания
-                                      {%if out.edit_after_refuse_umchs is defined and out.edit_after_refuse_umchs == 1%}
-                                <i class="fa fa-check-circle-o check-refuse-info-edit" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Выполнялось редактирование."></i>
-                                {%endif%}
+                                    {%if out.edit_after_refuse_umchs is defined and out.edit_after_refuse_umchs == 1%}
+                                        <i class="fa fa-check-circle-o check-refuse-info-edit" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Выполнялось редактирование."></i>
+                                    {%endif%}
                                 </a>
                             {%elseif out.author_id_organ in [8,9,12,5]%}
 
@@ -285,7 +285,7 @@
                                 <i class="fa fa-times" aria-hidden="true"></i>
                                 Замечания
                                 {%if out.edit_after_refuse_rcu is defined and out.edit_after_refuse_rcu == 1%}
-                                <i class="fa fa-check-circle-o check-refuse-info-edit" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Выполнялось редактирование."></i>
+                                    <i class="fa fa-check-circle-o check-refuse-info-edit" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Выполнялось редактирование."></i>
                                 {%endif%}
                             </a>
 
@@ -419,80 +419,80 @@
         var table = $('#catalogUmchsTable').DataTable({
             "pageLength": 50,
     {#"order": [[0, "desc"]],#}
-                        "order": [],
-                                "searching": false,
+                "order": [],
+                "searching": false,
 
-                        language: {
-                            "processing": "Подождите...",
-                            "search": "Поиск:",
-                            "lengthMenu": "Показать _MENU_ записей",
-                            "info": "Записи с _START_ до _END_ из _TOTAL_ записей",
-                            "infoEmpty": "Записи с 0 до 0 из 0 записей",
-                            "infoFiltered": "(отфильтровано из _MAX_ записей)",
-                            "infoPostFix": "",
-                            "loadingRecords": "Загрузка записей...",
-                            "zeroRecords": "Записи отсутствуют.",
-                            "emptyTable": "В таблице отсутствуют данные",
-                            "paginate": {
-                                "first": "Первая",
-                                "previous": "Предыдущая",
-                                "next": "Следующая",
-                                "last": "Последняя"
-                            },
-                            "aria": {
-                                "sortAscending": ": активировать для сортировки столбца по возрастанию",
-                                "sortDescending": ": активировать для сортировки столбца по убыванию"
-                            }
+                language: {
+                    "processing": "Подождите...",
+                    "search": "Поиск:",
+                    "lengthMenu": "Показать _MENU_ записей",
+                    "info": "Записи с _START_ до _END_ из _TOTAL_ записей",
+                    "infoEmpty": "Записи с 0 до 0 из 0 записей",
+                    "infoFiltered": "(отфильтровано из _MAX_ записей)",
+                    "infoPostFix": "",
+                    "loadingRecords": "Загрузка записей...",
+                    "zeroRecords": "Записи отсутствуют.",
+                    "emptyTable": "В таблице отсутствуют данные",
+                    "paginate": {
+                        "first": "Первая",
+                        "previous": "Предыдущая",
+                        "next": "Следующая",
+                        "last": "Последняя"
+                    },
+                    "aria": {
+                        "sortAscending": ": активировать для сортировки столбца по возрастанию",
+                        "sortDescending": ": активировать для сортировки столбца по убыванию"
+                    }
 
-                        }
-                    });
-
-
-                    {#$('#catalogUmchsTable tfoot th').each(function (i) {
-
-                        if (i !== 6 && i !== 7 && i !== 8 && i !== 9 && i !== 10 && i !== 11) {
+                }
+            });
 
 
-                            if (i === 5) {
+    {#$('#catalogUmchsTable tfoot th').each(function (i) {
 
-                                var y = 'catalogUmchsTable';
-                                var select = $('<select class="' + i + '  noprint" id="sel' + y + i + '"><option value=""></option></select>')
-                                        .appendTo($(this).empty())
-                                        .on('change', function () {
+        if (i !== 6 && i !== 7 && i !== 8 && i !== 9 && i !== 10 && i !== 11) {
 
-                                            var val = $(this).val();
 
-                                            table.column(i) //Only the first column
-                                                    .search(val ? '^' + $(this).val() + '$' : val, true, false)
-                                                    .draw();
-                                        });
+            if (i === 5) {
 
-                                var x = $('#catalogUmchsTable tfoot th').index($(this));
-                                table.column(i).data().unique().sort().each(function (d, j) {
-                                    select.append('<option   value="' + d + '" >' + d + '</option>');
-                                });
+                var y = 'catalogUmchsTable';
+                var select = $('<select class="' + i + '  noprint" id="sel' + y + i + '"><option value=""></option></select>')
+                        .appendTo($(this).empty())
+                        .on('change', function () {
 
-                            } else {
+                            var val = $(this).val();
 
-                                var title = $('#catalogUmchsTable tfoot th').eq($(this).index()).text();
-                                var x = $('#catalogUmchsTable tfoot th').index($(this));
-                                var y = 'catalogUmchsTable';
-                                //$(this).html( '<input type="text" placeholder="Поиск '+title+'" />' );
-                                $(this).html('<input type="text" class="noprint" id="inpt' + y + x + '" placeholder="Поиск"  />');
-                                // document.getElementById("inpt11").html('placeholder="<i class="fa fa-search" aria-hidden="true"></i>"');
-                            }
+                            table.column(i) //Only the first column
+                                    .search(val ? '^' + $(this).val() + '$' : val, true, false)
+                                    .draw();
+                        });
 
-                        }
-                    });
-
-                    $("#catalogUmchsTable tfoot input").on('keyup change', function () {
-                        table
-                                .column($(this).parent().index() + ':visible')
-                                .search(this.value)
-                                .draw();
-                    });#}
-
+                var x = $('#catalogUmchsTable tfoot th').index($(this));
+                table.column(i).data().unique().sort().each(function (d, j) {
+                    select.append('<option   value="' + d + '" >' + d + '</option>');
                 });
+
+            } else {
+
+                var title = $('#catalogUmchsTable tfoot th').eq($(this).index()).text();
+                var x = $('#catalogUmchsTable tfoot th').index($(this));
+                var y = 'catalogUmchsTable';
+                //$(this).html( '<input type="text" placeholder="Поиск '+title+'" />' );
+                $(this).html('<input type="text" class="noprint" id="inpt' + y + x + '" placeholder="Поиск"  />');
+                // document.getElementById("inpt11").html('placeholder="<i class="fa fa-search" aria-hidden="true"></i>"');
+            }
+
+        }
+    });
+
+    $("#catalogUmchsTable tfoot input").on('keyup change', function () {
+        table
+                .column($(this).parent().index() + ':visible')
+                .search(this.value)
+                .draw();
+    });#}
+
+                        });
 
 
 

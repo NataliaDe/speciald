@@ -33,6 +33,8 @@ class Catalog extends My_Controller
 
             $this->data['active_item_menu'] = 'catalog';
 
+            $this->data['vid_specd'] = $this->main_model->get_vid_specd();
+
             $this->load->helper('declination_helper');
 
             //TWIG
@@ -49,13 +51,64 @@ class Catalog extends My_Controller
         $this->data['title'] = 'Спец.донесения. Список';
 
         $filter = [];
+        $id_current_user = $this->data['active_user']['id_user'];
+
+
+
+        if ($this->input->is_ajax_request()) {//filter
+            $post = $this->input->post();
+            $filter['id_dones'] = $bd_filter['id_dones'] = (isset($post['id_dones']) && !empty($post['id_dones'])) ? intval($post['id_dones']) : '';
+            //$filter['date_dones'] = $bd_filter['date_dones'] = (isset($post['date_dones']) && !empty($post['date_dones'])) ? (\DateTime::createFromFormat('d.m.Y', trim($post['date_dones']))->format('Y-m-d')) : '';
+
+
+
+            $daterange = (isset($post['date_dones']) && !empty($post['date_dones'])) ? $post['date_dones'] : '';
+
+            if (!empty($post['date_dones'])) {
+                $arr_daterange = explode(' - ', $daterange);
+                $start_date = $arr_daterange[0];
+                $end_date = $arr_daterange[1];
+                $filter['start_date_dones'] = $bd_filter['start_date_dones'] = (isset($start_date) && !empty($start_date)) ? (\DateTime::createFromFormat('d.m.Y', trim($start_date))->format('Y-m-d')) : '';
+                $filter['end_date_dones'] = $bd_filter['end_date_dones'] = (isset($end_date) && !empty($end_date)) ? (\DateTime::createFromFormat('d.m.Y', trim($end_date))->format('Y-m-d')) : '';
+            }
+
+            //$filter['date_dones'] = $bd_filter['date_dones'] = (isset($post['date_dones']) && !empty($post['date_dones'])) ? (\DateTime::createFromFormat('d.m.Y', trim($post['date_dones']))->format('Y-m-d')) : '';
+
+            $filter['number_dones'] = $bd_filter['number_dones'] = (isset($post['number_dones']) && !empty($post['number_dones'])) ? $post['number_dones'] : '';
+            $filter['address_dones'] = $bd_filter['address_dones'] = (isset($post['address_dones']) && !empty($post['address_dones'])) ? $post['address_dones'] : '';
+            $filter['creator_name'] = $bd_filter['creator_name'] = (isset($post['creator_name']) && !empty($post['creator_name'])) ? $post['creator_name'] : '';
+            $filter['short_description'] = $bd_filter['short_description'] = (isset($post['short_description']) && !empty($post['short_description'])) ? $post['short_description'] : '';
+            $filter['specd_vid'] = $bd_filter['specd_vid'] = (isset($post['specd_vid']) && !empty($post['specd_vid'])) ? intval($post['specd_vid']) : '';
+            $filter['status_sd'] = $bd_filter['status_sd'] = (isset($post['status_sd']) && !empty($post['status_sd'])) ? intval($post['status_sd']) : '';
+
+            $filter['is_open_filter'] = $bd_filter['is_open_filter'] = 1;
+
+            $filter_users = $this->main_model->get_filter_by_user($id_current_user);
+            if (isset($filter_users['id']) && !empty($filter_users['id'])) {
+                //update
+                $f_u['value'] = json_encode($bd_filter);
+                $f_u['last_update'] = date("Y-m-d H:i:s");
+                $this->main_model->edit_filter_user($f_u, $filter_users['id']);
+            } else {
+                $f_u['value'] = json_encode($bd_filter);
+                $f_u['id_user'] = $id_current_user;
+                $f_u['date_create'] = $f_u['last_update'] = date("Y-m-d H:i:s");
+                $this->main_model->add_filter_user($f_u);
+            }
+        } else {
+            $filter_users = $this->main_model->get_filter_by_user($id_current_user);
+            if (!empty($filter_users['value'])) {
+                //print_r($filter_users['value']);
+                $filter = json_decode($filter_users['value'], TRUE);
+            }
+        }
 
         // period for select SD
         $id_range = $this->dones_model->get_range_filter_sd($this->data['active_user']['id_user']);
         $this->data['id_range'] = (isset($id_range['id_range'])) ? $id_range['id_range'] : 0;
         $filter['id_range'] = (isset($id_range['id_range'])) ? $id_range['id_range'] : 0;
 
-        $id_current_user = $this->data['active_user']['id_user'];
+
 
         if ($this->data['active_user']['level'] == Main_model::LEVEL_ID_ROCHS) {
 
@@ -197,6 +250,52 @@ class Catalog extends My_Controller
         if (isset($this->data['outs']) && !empty($this->data['outs'])) {
             foreach ($this->data['outs'] as $key => $value) {
 
+
+
+                if (isset($filter['status_sd']) && !empty($filter['status_sd'])) {
+                    if (isset($value['statuses_id']) && !empty($value['statuses_id'])) {
+//                        if(in_array($filter['status_sd'], array(1))){
+//                            if(in_array(Logs_model::ACTION_PROVE_SD_RCU, $value['statuses_id']) || in_array(Logs_model::ACTION_PROVE_SD_UMCHS, $value['statuses_id']) ||
+//                                in_array(Logs_model::ACTION_REFUSE_SD_RCU, $value['statuses_id']) || in_array(Logs_model::ACTION_REFUSE_SD_UMCHS, $value['statuses_id'])){
+// unset($this->data['outs'][$key]);
+//                            continue;
+//
+//                                }
+//                        }
+//
+//                        elseif (!in_array($filter['status_sd'], $value['statuses_id'])) {
+//                            unset($this->data['outs'][$key]);
+//                            continue;
+//                        }
+
+
+                        if (isset($filter['status_sd']) && !empty($filter['status_sd'])) {
+                            if (isset($value['statuses_id']) && !empty($value['statuses_id'])) {
+
+                                if ($filter['status_sd'] == 1) {
+                                    if (in_array(Logs_model::ACTION_PROVE_SD_RCU, $value['statuses_id']) || in_array(Logs_model::ACTION_REFUSE_SD_RCU, $value['statuses_id'])) {
+                                        unset($this->data['outs'][$key]);
+                                        continue;
+                                    }
+                                } elseif ($filter['status_sd'] == 2) {
+                                    if ((in_array(Logs_model::ACTION_PROVE_SD_UMCHS, $value['statuses_id']) || in_array(Logs_model::ACTION_REFUSE_SD_UMCHS, $value['statuses_id'])) || in_array($value['author_id_organ'], array(Main_model::ORGAN_ID_AVIA, Main_model::ORGAN_ID_RCU, Main_model::ORGAN_ID_ROSN, Main_model::ORGAN_ID_UGZ))) {
+                                        unset($this->data['outs'][$key]);
+                                        continue;
+                                    }
+                                } elseif ($filter['status_sd'] == 8) {
+                                    if (!in_array($value['author_id_organ'], array(Main_model::ORGAN_ID_AVIA, Main_model::ORGAN_ID_RCU, Main_model::ORGAN_ID_ROSN, Main_model::ORGAN_ID_UGZ))) {
+                                        unset($this->data['outs'][$key]);
+                                        continue;
+                                    }
+                                } elseif (!in_array($filter['status_sd'], $value['statuses_id'])) {
+                                    unset($this->data['outs'][$key]);
+                                    continue;
+                                }
+                            }
+                        }
+                    }
+                }
+
                 $media = $this->dones_model->get_dones_media($value['id']);
                 $this->data['outs'][$key]['media'] = $media;
 
@@ -245,6 +344,38 @@ class Catalog extends My_Controller
         }
 
 
+$this->data['filter'] = $filter;
+
+        if ($this->input->is_ajax_request()) {//filter
+            if ($this->data['active_user']['level'] == Main_model::LEVEL_ID_ROCHS) {
+
+
+
+                if (in_array($this->data['active_user']['id_organ'], [Main_model::ORGAN_ID_ROSN, Main_model::ORGAN_ID_UGZ, Main_model::ORGAN_ID_AVIA])) {
+
+                    echo json_encode([
+                        'innerHtml' => $this->twig->render('viewer/catalog/grochs/rosn/list', $this->data, true)
+                    ]);
+                } else {
+
+                    echo json_encode([
+                        'innerHtml' => $this->twig->render('viewer/catalog/grochs/list', $this->data, true)
+                    ]);
+                }
+            } elseif ($this->data['active_user']['level'] == Main_model::LEVEL_ID_UMCHS) {
+
+                echo json_encode([
+                    'innerHtml' => $this->twig->render('viewer/catalog/umchs/list', $this->data, true)
+                ]);
+            } elseif ($this->data['active_user']['level'] == Main_model::LEVEL_ID_RCU) {
+                echo json_encode([
+                    'innerHtml' => $this->twig->render('viewer/catalog/rcu/list', $this->data, true)
+                ]);
+            }
+
+            die;
+        }
+
 
 
         if ($this->data['active_user']['level'] == Main_model::LEVEL_ID_ROCHS) {
@@ -258,6 +389,35 @@ class Catalog extends My_Controller
 
 
             $this->twig->display('viewer/catalog/rcu/index', $this->data);
+        }
+    }
+
+
+
+    public function close_filter()
+    {
+
+        $post = $this->input->post();
+        $id_current_user = $this->data['active_user']['id_user'];
+
+        if (isset($post['is_open'])) {
+            $is_open = intval($post['is_open']);
+            $filter_users = $this->main_model->get_filter_by_user($id_current_user);
+            if (isset($filter_users['id']) && !empty($filter_users['id'])) {
+                //update
+                $last_value = json_decode($filter_users['value'], TRUE);
+                $last_value['is_open_filter'] = $is_open;
+                $f_u['value'] = json_encode($last_value);
+                $f_u['last_update'] = date("Y-m-d H:i:s");
+                //print_r($f_u);
+                $this->main_model->edit_filter_user($f_u, $filter_users['id']);
+            } else {
+                $last_value['is_open_filter'] = $is_open;
+                $f_u['value'] = json_encode($last_value);
+                $f_u['id_user'] = $id_current_user;
+                $f_u['date_create'] = $f_u['last_update'] = date("Y-m-d H:i:s");
+                $this->main_model->add_filter_user($f_u);
+            }
         }
     }
 }

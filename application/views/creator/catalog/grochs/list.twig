@@ -1,5 +1,5 @@
 {#{{dump(outs)}}#}
-<table class="table table-condensed table-hover  table-bordered table-custom"  id="catalogUmchsTable">
+<table class="table table-condensed table-hover  table-bordered table-custom catalog-table"  id="catalogUmchsTable">
     <!-- строка 1 -->
     <thead>
         <tr>
@@ -17,7 +17,7 @@
 
         </tr>
     </thead>
-    <tfoot>
+    {#<tfoot>
         <tr>
             <th>ID</th>
             <th>Дата, номер</th>
@@ -33,7 +33,7 @@
 
 
         </tr>
-    </tfoot>
+    </tfoot>#}
     {%if outs is defined and outs is not empty%}
         <tbody>
 
@@ -335,6 +335,7 @@
 
 
 <script src="{{ base_url('/assets/libs/jquery/jquery/dist/jquery.js')}}"></script>
+<script src="{{ base_url('/assets/datatables/jquery.dataTables.js')}}"></script>
 
 <script>
     $(document).ready(function () {
@@ -342,6 +343,7 @@
         var table = $('#catalogUmchsTable').DataTable({
             "pageLength": 50,
              "order": [],
+             "searching": false,
             language: {
                 "processing": "Подождите...",
                 "search": "Поиск:",
@@ -368,7 +370,7 @@
         });
 
 
-        $('#catalogUmchsTable tfoot th').each(function (i) {
+        {#$('#catalogUmchsTable tfoot th').each(function (i) {
 
             if (i !== 7 && i !== 8 && i !== 5 && i !== 6 && i !== 9) {
 
@@ -410,7 +412,7 @@
                     .column($(this).parent().index() + ':visible')
                     .search(this.value)
                     .draw();
-        });
+        });#}
 
     });
 

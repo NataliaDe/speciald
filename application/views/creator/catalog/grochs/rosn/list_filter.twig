@@ -81,7 +81,7 @@
 
 
 
-                        <div class="form-group col-md-2 search-input with-progress">
+{#                        <div class="form-group col-md-2 search-input with-progress">
                             <label for="creator_dones" >Создатель</label>
 
                             <span class="typing-progress-background"></span>
@@ -90,13 +90,8 @@
 
                             <input type="text" class="form-control input-search-progress"  placeholder="Поиск" name="creator_name" value="{{(filter.creator_name is defined and filter.creator_name is not empty) ? filter.creator_name : ''}}">
 
-                        </div>
-                        {#        <div class="form-group col-md-2">
-                                    <label for="creator_dones" >Создатель</label>
-                                    <input type="text" class="form-control"  placeholder="Поиск" name="creator_name" value="">
+                        </div>#}
 
-
-                                </div>#}
 
 
 
@@ -138,17 +133,17 @@
                             <select class="form-control catalog-filter-vid filters" name="status_sd"   >
                                 <option value="" selected>Все</option>
                                 <option  value="6" {{(filter.status_sd is defined and filter.status_sd is not empty and filter.status_sd == 6) ? 'selected' : ''}}>Подтверждено РЦУРЧС</option>
-                                <option  value="4" {{(filter.status_sd is defined and filter.status_sd is not empty and filter.status_sd == 4) ? 'selected' : ''}} >Подтверждено УМЧС</option>
+
                                 <option  value="1" {{(filter.status_sd is defined and filter.status_sd is not empty and filter.status_sd == 1) ? 'selected' : ''}} >Ожидает исполнения РЦУРЧС</option>
-                                <option  value="2" {{(filter.status_sd is defined and filter.status_sd is not empty and filter.status_sd == 2) ? 'selected' : ''}}>Ожидает исполнения УМЧС</option>
+
                                 <option  value="7" {{(filter.status_sd is defined and filter.status_sd is not empty and filter.status_sd == 7) ? 'selected' : ''}} >Замечания от РЦУРЧС</option>
-                                <option  value="5" {{(filter.status_sd is defined and filter.status_sd is not empty and filter.status_sd == 5) ? 'selected' : ''}}>Замечания от УМЧС</option>
-                                {#<option  value="8" {{(filter.status_sd is defined and filter.status_sd is not empty and filter.status_sd == 8) ? 'selected' : ''}}>Не требует подтверждения УМЧС</option>#}
+
+
                             </select>
                         </div>
 
 
-                        <div class="form-group col-md-2">
+                        <div class="form-group col-md-2 ">
                             <button class="btn btn-sm btn-primary reset_filter" type="button">Сбросить фильтры</button>
                         </div>
 
