@@ -66,10 +66,16 @@ class Catalog extends My_Controller
 
             if (!empty($post['date_dones'])) {
                 $arr_daterange = explode(' - ', $daterange);
-                $start_date = $arr_daterange[0];
-                $end_date = $arr_daterange[1];
-                $filter['start_date_dones'] = $bd_filter['start_date_dones'] = (isset($start_date) && !empty($start_date)) ? (\DateTime::createFromFormat('d.m.Y', trim($start_date))->format('Y-m-d')) : '';
-                $filter['end_date_dones'] = $bd_filter['end_date_dones'] = (isset($end_date) && !empty($end_date)) ? (\DateTime::createFromFormat('d.m.Y', trim($end_date))->format('Y-m-d')) : '';
+                if (isset($arr_daterange) && is_array($arr_daterange)) {
+
+                    $start_date = $arr_daterange[0];
+                    if (count($arr_daterange) == 1) {
+                        $end_date = $arr_daterange[0];
+                    } else
+                        $end_date = $arr_daterange[1];
+                    $filter['start_date_dones'] = $bd_filter['start_date_dones'] = (isset($start_date) && !empty($start_date)) ? (\DateTime::createFromFormat('d.m.Y', trim($start_date))->format('Y-m-d')) : '';
+                    $filter['end_date_dones'] = $bd_filter['end_date_dones'] = (isset($end_date) && !empty($end_date)) ? (\DateTime::createFromFormat('d.m.Y', trim($end_date))->format('Y-m-d')) : '';
+                }
             }
 
             //$filter['date_dones'] = $bd_filter['date_dones'] = (isset($post['date_dones']) && !empty($post['date_dones'])) ? (\DateTime::createFromFormat('d.m.Y', trim($post['date_dones']))->format('Y-m-d')) : '';
