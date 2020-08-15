@@ -492,6 +492,8 @@
 
     <script>
 
+        var id_owner_dead={{id_owner_dead}};
+
         {% if rig is defined%}
             setPreviewData();
         {%endif%}
@@ -1539,6 +1541,26 @@
                                         $('#createStandart input[name="disp_take_msg"]').val(selected.val());
 
                                         $('#modal-list-disp').click();
+                                    }
+                                });
+
+
+                                $('body').on('change', '#individual-face-div #id_owner_category', function (event) {
+
+
+                                    if (parseInt($(this).val()) === {{id_owner_dead}}) {
+//alert($(this).val());
+                                        $('#individual-face-div #owner_place_life_div label').text('Где проживал');
+                                        $('#individual-face-div #owner_position_div label').text('Кем работал');
+                                        $('#individual-face-div #owner_job_div label').text('Где работал');
+                                        $('#individual-face-div #owner_is_uhet_div label').text('Состоял на учете профилактики');
+
+                                    }
+                                    else{
+                                        $('#individual-face-div #owner_place_life_div label').text('Место жительства');
+                                        $('#individual-face-div #owner_position_div label').text('Должность');
+                                        $('#individual-face-div #owner_job_div label').text('Место работы');
+                                        $('#individual-face-div #owner_is_uhet_div label').text('Состоит на учете профилактики');
                                     }
                                 });
 

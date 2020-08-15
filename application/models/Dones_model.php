@@ -178,6 +178,7 @@ class Dones_model extends CI_Model
         $this->db->order_by('dl.date_action', 'desc');
 
         $result = $this->db->get('speciald.dones_logs as dl')->result_array();
+        //echo $this->db->last_query();
         return $result;
     }
 
@@ -552,6 +553,27 @@ class Dones_model extends CI_Model
         $this->db->set('last_update', date('Y-m-d H:i:s'));
         $this->db->update('filter_range_sd');
 
+    }
+
+
+        public function date_action_by_id_dones($id_dones, $status,$id_user=false)
+    {
+
+        $this->db->select('dl.*');
+        $this->db->where('dl.id_dones', $id_dones);
+
+        $this->db->where('dl.id_action', $status);
+        if($id_user)
+        $this->db->where('dl.id_user', $id_user);
+
+
+        $this->db->where('dl.is_history', 0);
+
+        $this->db->order_by('dl.date_action', 'desc');
+        $this->db->limit(1);
+
+        $result = $this->db->get('speciald.dones_logs as dl')->row_array();
+        return $result['date_action'];
     }
 
 }

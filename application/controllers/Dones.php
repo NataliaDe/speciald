@@ -57,7 +57,7 @@ class Dones extends My_Controller
             $this->data['firereason'] = $this->main_model->get_firereason();
 
 
-
+            $this->data['id_owner_dead'] = Main_model::ID_OWNER_DEAD;
 
 
             $this->load->library('form_validation');
@@ -80,6 +80,7 @@ class Dones extends My_Controller
         $this->data['section'] = 'create_spec_d';
         $this->data['title'] = 'Создать спец.донесение';
         $this->data['active_item_menu'] = 'create';
+
         $this->twig->display('create/index', $this->data);
     }
 

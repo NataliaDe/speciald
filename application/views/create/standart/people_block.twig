@@ -46,12 +46,17 @@
             <textarea class="form-control" cols="2" rows="2"  name="owner_character">{{character}}</textarea>
         </div>
 
-        <div class="form-group col-md-2">
+        <div class="form-group col-md-2" >
             <label for="owner_is_uhet" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-            <div class="checkbox checkbox-success">
+            <div class="checkbox checkbox-success" id="owner_is_uhet_div">
                 <input  type="checkbox" name="owner_is_uhet" value="1" id="owner_is_uhet" {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.owner_is_uhet == 1 %}checked{%endif%}>
                 <label for="owner_is_uhet">
-                    Состоит на учете профилактики
+                    {%if (rig.id_owner_category is defined and rig.id_owner_category is not empty and rig.id_owner_category == id_owner_dead) or (is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.id_owner_category == id_owner_dead)%}
+                        Состоял на учете профилактики
+                    {%else%}
+                        Состоит на учете профилактики
+                    {%endif%}
+
                 </label>
             </div>
         </div>

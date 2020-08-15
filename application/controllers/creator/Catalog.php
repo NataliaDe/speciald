@@ -187,6 +187,12 @@ class Catalog extends My_Controller
                     $this->data['outs'][$key]['dates_actions'] = [];
 
 
+//if($value['id'] == 10){
+//    echo '==';
+//                    print_r($this->data['outs'][$key]['statuses']);
+//}
+
+
                     if (isset($this->data['outs'][$key]['statuses']) && !empty($this->data['outs'][$key]['statuses'])) {
                         $this->data['outs'][$key]['statuses_id'] = array_column($this->data['outs'][$key]['statuses'], 'id_action');
 
@@ -322,49 +328,115 @@ class Catalog extends My_Controller
 
 
 
+                 /* sign edit after refuse */
 
                 $this->data['outs'][$key]['edit_after_refuse_umchs'] = 0;
                 $this->data['outs'][$key]['edit_after_refuse_rcu'] = 0;
 
-                $refuse_date_rcu = isset($this->data['outs'][$key]['dates_actions'][Logs_model::ACTION_REFUSE_SD_RCU]) ? $this->data['outs'][$key]['dates_actions'][Logs_model::ACTION_REFUSE_SD_RCU] : '';
-                $refuse_date_umchs = isset($this->data['outs'][$key]['dates_actions'][Logs_model::ACTION_REFUSE_SD_UMCHS]) ? $this->data['outs'][$key]['dates_actions'][Logs_model::ACTION_REFUSE_SD_UMCHS] : '';
-                $edit_date = (isset($this->data['outs'][$key]['dates_actions'][Logs_model::ACTION_EDIT_SD])) ? $this->data['outs'][$key]['dates_actions'][Logs_model::ACTION_EDIT_SD] : "";
-                $set_number_date = (isset($this->data['outs'][$key]['dates_actions'][Logs_model::ACTION_SET_NUMBER_SD])) ? $this->data['outs'][$key]['dates_actions'][Logs_model::ACTION_SET_NUMBER_SD] : '';
+                $date_edit_sd = $this->dones_model->date_action_by_id_dones($value['id'], Logs_model::ACTION_EDIT_SD);
+                $date_set_number_sd = $this->dones_model->date_action_by_id_dones($value['id'], Logs_model::ACTION_SET_NUMBER_SD);
+
+                $date_umchs_refuse_sd = $this->dones_model->date_action_by_id_dones($value['id'], Logs_model::ACTION_REFUSE_SD_UMCHS);
+                $date_umchs_refresh_sd = $this->dones_model->date_action_by_id_dones($value['id'], Logs_model::ACTION_UPDATE_REFUSE_UMCHS);
+
+                $date_user_refuse_sd = $this->dones_model->date_action_by_id_dones($value['id'], Logs_model::ACTION_REFUSE_SD_RCU);
+                $date_user_refresh_sd = $this->dones_model->date_action_by_id_dones($value['id'], Logs_model::ACTION_UPDATE_REFUSE_RCU);
 
 
                 // if edit was after refuse rcu. for all levels
-                if ($edit_date > $refuse_date_rcu) {
-                    $this->data['outs'][$key]['edit_after_refuse_rcu'] = 1;
-                } elseif ($set_number_date > $refuse_date_rcu) {
-                    $this->data['outs'][$key]['edit_after_refuse_rcu'] = 1;
+                if ($this->data['active_user']['level'] != Main_model::LEVEL_ID_RCU) {
+
+                    $this->data['outs'][$key]['edit_after_refuse_rcu'] = 0;
+
+                    if (!empty($date_user_refuse_sd)) {
+                        if (!empty($date_edit_sd) || !empty($date_set_number_sd)) {
+                            if (!empty($date_user_refresh_sd)) {//was refresh rcu user
+                                if ($date_edit_sd > $date_user_refresh_sd || $date_set_number_sd > $date_user_refresh_sd) {
+                                    $this->data['outs'][$key]['edit_after_refuse_rcu'] = 1;
+                                }
+                            } else {//not was refresh rcu user
+                                if ($date_edit_sd > $date_user_refuse_sd || $date_set_number_sd > $date_user_refuse_sd) {
+                                    $this->data['outs'][$key]['edit_after_refuse_rcu'] = 1;
+                                }
+                            }
+                        }
+                    }
                 }
 
+
                 // if edit was after refuse umchs. for all levels
-                if ($edit_date > $refuse_date_umchs) {
-                    $this->data['outs'][$key]['edit_after_refuse_umchs'] = 1;
-                } elseif ($set_number_date > $refuse_date_umchs) {
-                    $this->data['outs'][$key]['edit_after_refuse_umchs'] = 1;
+                if (!empty($date_umchs_refuse_sd)) {
+                    if (!empty($date_edit_sd) || !empty($date_set_number_sd)) {
+                        if (!empty($date_umchs_refresh_sd)) {//was refresh umchs
+                            if (!empty($date_edit_sd) && $date_edit_sd > $date_umchs_refresh_sd) {
+                                $this->data['outs'][$key]['edit_after_refuse_umchs'] = 1;
+                            } elseif (!empty($date_set_number_sd) && $date_set_number_sd > $date_umchs_refresh_sd) {
+                                $this->data['outs'][$key]['edit_after_refuse_umchs'] = 1;
+                            }
+                        } else {//not was refresh umchs user
+                            if (!empty($date_edit_sd) && $date_edit_sd > $date_umchs_refuse_sd) {
+                                $this->data['outs'][$key]['edit_after_refuse_umchs'] = 1;
+                            } elseif (!empty($date_set_number_sd) && $date_set_number_sd > $date_umchs_refuse_sd) {
+                                $this->data['outs'][$key]['edit_after_refuse_umchs'] = 1;
+                            }
+                        }
+                    }
                 }
+
 
                 // for level RCU. was or no edit after refuse
                 if ($this->data['active_user']['level'] == Main_model::LEVEL_ID_RCU) {
 
                     $this->data['outs'][$key]['edit_after_refuse_rcu'] = 0;
+                    $date_user_refuse_sd = $this->dones_model->date_action_by_id_dones($value['id'], Logs_model::ACTION_REFUSE_SD_RCU, $id_current_user);
 
-                    // if edit was after refuse rcu
-                    $refuse_date_user = (isset($this->data['outs'][$key]['dates_actions_by_user'][Logs_model::ACTION_REFUSE_SD_RCU][$id_current_user])) ? $this->data['outs'][$key]['dates_actions_by_user'][Logs_model::ACTION_REFUSE_SD_RCU][$id_current_user] : '';
 
-                    if (($edit_date > $refuse_date_user)) {
-                        $this->data['outs'][$key]['edit_after_refuse_rcu'] = 1;
-                    } elseif ($set_number_date > $refuse_date_user) {
-                        $this->data['outs'][$key]['edit_after_refuse_rcu'] = 1;
-                    } elseif (empty($refuse_date_user) && ($edit_date > $refuse_date_rcu || $set_number_date > $refuse_date_rcu)) {
-                        $this->data['outs'][$key]['edit_after_refuse_rcu'] = 1;
+                    if (!empty($date_user_refuse_sd)) {//was refuse rcu user
+                        $date_user_refresh_sd = $this->dones_model->date_action_by_id_dones($value['id'], Logs_model::ACTION_UPDATE_REFUSE_RCU, $id_current_user);
+
+                        if (!empty($date_edit_sd) || !empty($date_set_number_sd)) {
+                            if (!empty($date_user_refresh_sd)) {//was refresh rcu user
+                                if (!empty($date_edit_sd) && $date_edit_sd > $date_user_refresh_sd) {
+                                    $this->data['outs'][$key]['edit_after_refuse_rcu'] = 1;
+                                } elseif (!empty($date_set_number_sd) && $date_set_number_sd > $date_user_refresh_sd) {
+                                    $this->data['outs'][$key]['edit_after_refuse_rcu'] = 1;
+                                }
+                            } else {//not was refresh rcu user
+                                if (!empty($date_edit_sd) && $date_edit_sd > $date_user_refuse_sd) {
+                                    $this->data['outs'][$key]['edit_after_refuse_rcu'] = 1;
+                                } elseif (!empty($date_set_number_sd) && $date_set_number_sd > $date_user_refuse_sd) {
+                                    $this->data['outs'][$key]['edit_after_refuse_rcu'] = 1;
+                                }
+                            }
+                        }
+                    } else {//not was refuse rcu  user
+                        $date_user_refuse_sd = $this->dones_model->date_action_by_id_dones($value['id'], Logs_model::ACTION_REFUSE_SD_RCU);
+
+                        $date_user_refresh_sd = $this->dones_model->date_action_by_id_dones($value['id'], Logs_model::ACTION_UPDATE_REFUSE_RCU);
+
+                        if (!empty($date_user_refuse_sd)) {
+                            if (!empty($date_edit_sd) || !empty($date_set_number_sd)) {
+                                if (!empty($date_user_refresh_sd)) {//was refresh
+                                    if (!empty($date_edit_sd) && $date_edit_sd > $date_user_refresh_sd) {
+                                        $this->data['outs'][$key]['edit_after_refuse_rcu'] = 1;
+                                    } elseif (!empty($date_set_number_sd) && $date_set_number_sd > $date_user_refresh_sd) {
+                                        $this->data['outs'][$key]['edit_after_refuse_rcu'] = 1;
+                                    }
+                                } else {//not was refresh
+                                    if (!empty($date_edit_sd) && $date_edit_sd > $date_user_refuse_sd) {
+                                        $this->data['outs'][$key]['edit_after_refuse_rcu'] = 1;
+                                    } elseif (!empty($date_set_number_sd) && $date_set_number_sd > $date_user_refuse_sd) {
+                                        $this->data['outs'][$key]['edit_after_refuse_rcu'] = 1;
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
         }
-
+                /* END sign edit after refuse */
+        
         $this->data['filter'] = $filter;
 
 

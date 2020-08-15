@@ -117,6 +117,9 @@
 //}
 
 
+
+
+
 $('body').on('input change keyup', '#createStandart #middle-block-div input[name="time_msg"]', function (e) {
     setPreviewData();
 });
@@ -1156,10 +1159,17 @@ function setPreviewOwner() {
         }
 
         if (addr !== '') {
+            if (parseInt(category_val) === id_owner_dead) {//погибший
+
+                var pl='проживал';
+            }
+            else{
+                var pl='проживает';
+            }
             if (preview === '')
-                preview = ' (проживает ' + addr + ')';
+                preview = ' ('+pl+' ' + addr + ')';
             else
-                preview = preview + ' (проживает ' + addr + ')';
+                preview = preview + ' ('+pl+' ' + addr + ')';
         }
 
         if (preview !== '')
@@ -1220,10 +1230,18 @@ function setPreviewOwner() {
 
             preview = preview + '.';
         } else {
+
+            if (parseInt(category_val) === id_owner_dead) {//погибший
+
+                var pl = 'Проживал';
+            } else {
+                var pl = 'Проживает';
+            }
+
             if (preview === '')
-                preview = 'Проживает';
+                preview = pl;
             else
-                preview = preview + ' Проживает';
+                preview = preview + ' '+pl;
 
             if (parseInt(category_gender) === 1) {
                 preview = preview + ' одна.';
@@ -1243,18 +1261,32 @@ function setPreviewOwner() {
                 preview = preview + ' ' + character;
         }
 
+        if (parseInt(category_val) === id_owner_dead) {//погибший
+
+            if (owner_is_uhet === true) {
+                var s='Состоял на учете профилактики';
+            } else {
+                var s='На учете профилактики не состоял';
+            }
+        } else {
+            if (owner_is_uhet === true) {
+                var s='Состоит на учете профилактики';
+            } else {
+                var s='На учете профилактики не состоит';
+            }
+        }
 
 
         if (owner_is_uhet === true) {
             if (preview === '')
-                preview = ' Состоит на учете профилактики.';
+                preview = ' '+s+'.';
             else
-                preview = preview + ' Состоит на учете профилактики.';
+                preview = preview + ' '+s+'.';
         } else {
             if (preview === '')
-                preview = ' На учете профилактики не состоит.';
+                preview = ' '+s+'.';
             else
-                preview = preview + ' На учете профилактики не состоит.';
+                preview = preview + ' '+s+'.';
         }
 
 
