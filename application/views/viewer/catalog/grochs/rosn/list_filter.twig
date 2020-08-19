@@ -131,12 +131,7 @@
                             <select class="form-control catalog-filter-vid filters" name="status_sd"   >
                                 <option value="" selected>Все</option>
                                 <option  value="6" {{(filter.status_sd is defined and filter.status_sd is not empty and filter.status_sd == 6) ? 'selected' : ''}}>Подтверждено РЦУРЧС</option>
-
-                                <option  value="1" {{(filter.status_sd is defined and filter.status_sd is not empty and filter.status_sd == 1) ? 'selected' : ''}} >Ожидает исполнения РЦУРЧС</option>
-
                                 <option  value="7" {{(filter.status_sd is defined and filter.status_sd is not empty and filter.status_sd == 7) ? 'selected' : ''}} >Замечания от РЦУРЧС</option>
-
-
                             </select>
                         </div>
 
@@ -148,8 +143,8 @@
                     </div>
 
 
-
-
+                    <input type="hidden" name="limit" value="{{ limit }}">
+                    <input type="hidden" name="page" value="{{ page }}">
 
 
                     <div class="form-row create-form-row">

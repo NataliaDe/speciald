@@ -19,6 +19,30 @@ class Catalog extends My_Controller
      * map to /index.php/welcome/<method_name>
      * @see https://codeigniter.com/user_guide/general/urls.html
      */
+    protected static $paginationConfig = [
+        'use_page_numbers' => TRUE,
+        'per_page'         => 25,
+        'num_links'        => 4,
+        'full_tag_open'    => '<ul class="pagination pagination-sm m-t-none m-b-none pog90">',
+        'full_tag_close'   => '</ul>',
+        'next_tag_open'    => '<li>',
+        'next_link'        => '<i class="fa fa-chevron-right"></i>',
+        'next_tag_close'   => '</li>',
+        'prev_tag_open'    => '<li>',
+        'prev_link'        => '<i class="fa fa-chevron-left"></i>',
+        'prev_tag_close'   => '</li>',
+        'cur_tag_open'     => '<li class="selected"><span>',
+        'cur_tag_close'    => '</span></li >',
+        'num_tag_open'     => '<li>',
+        'num_tag_close'    => '</li>',
+        'first_tag_open'   => '<li class="first-link">',
+        'first_link'       => '<i class="fa fa-chevron-left"></i><i class="fa fa-chevron-left"></i>',
+        'first_tag_close'  => '</li>',
+        'last_tag_open'    => '<li class="last-link">',
+        'last_link'        => '<i class="fa fa-chevron-right"></i><i class="fa fa-chevron-right"></i>',
+        'last_tag_close'   => '</li>'
+    ];
+
     public function __construct()
     {
         parent::__construct();
@@ -56,7 +80,7 @@ class Catalog extends My_Controller
 
 
         if ($this->input->is_ajax_request()) {//filter
-            $post = $this->input->post();
+            $post = $this->input->get();
             $filter['id_dones'] = $bd_filter['id_dones'] = (isset($post['id_dones']) && !empty($post['id_dones'])) ? intval($post['id_dones']) : '';
             //$filter['date_dones'] = $bd_filter['date_dones'] = (isset($post['date_dones']) && !empty($post['date_dones'])) ? (\DateTime::createFromFormat('d.m.Y', trim($post['date_dones']))->format('Y-m-d')) : '';
 
@@ -116,6 +140,7 @@ class Catalog extends My_Controller
 
 
 
+
         if ($this->data['active_user']['level'] == Main_model::LEVEL_ID_ROCHS) {
 
             /* all  dones of grochs */
@@ -127,12 +152,88 @@ class Catalog extends My_Controller
                 $this->data['outs'] = $this->dones_model->get_dones_by_grochs($filter, $this->data['active_user']['id_organ']);
             } else {
 
+                if (in_array($this->data['active_user']['id_local'], array(Main_model::GOMEL_LOCAL, Main_model::GOMEL_CITY))) {
+                    $filter['merge_locals'] = array(Main_model::GOMEL_LOCAL, Main_model::GOMEL_CITY);
+                    $this->data['can_edit_sd_by_merge'] = 1;
+                }
+
                 $filter['author_local_id'] = $this->data['active_user']['id_local'];
                 $filter['without_cp'] = [Main_model::ORGAN_ID_ROSN, Main_model::ORGAN_ID_UGZ, Main_model::ORGAN_ID_AVIA];
                 $this->data['outs'] = $this->dones_model->get_dones_by_grochs($filter, FALSE);
             }
+        } elseif ($this->data['active_user']['level'] == Main_model::LEVEL_ID_UMCHS) {//UMCHS
+            $filter['author_region_id'] = $this->data['active_user']['id_region'];
+            $filter['is_delete'] = 0;
+
+//            if (in_array($this->data['active_user']['id_organ'], [Main_model::ORGAN_ID_ROSN, Main_model::ORGAN_ID_UGZ, Main_model::ORGAN_ID_AVIA])) {
+//                $this->data['outs'] = $this->dones_model->get_dones_by_region($filter, $this->data['active_user']['id_organ']);
+//            } else {
+
+            $filter['without_cp'] = [Main_model::ORGAN_ID_ROSN, Main_model::ORGAN_ID_UGZ, Main_model::ORGAN_ID_AVIA, Main_model::ORGAN_ID_RCU];
+            $this->data['outs'] = $this->dones_model->get_dones_by_region($filter, FALSE);
+            //}
+        } elseif ($this->data['active_user']['level'] == Main_model::LEVEL_ID_RCU) {//rcu
+            $filter['is_delete'] = 0;
+            $this->data['outs'] = $this->dones_model->get_dones_for_rcu($filter, FALSE);
+        }
 
 
+        /* pagination */
+        $this->data['page'] = (isset($post['page']) && !empty($post['page'])) ? $post['page'] : 1;
+
+
+        $count = count($this->data['outs']);
+        $this->data['cnt_outs'] = $count . ' ' . declination_word_by_number($count, array('запись', 'записи', 'записей'));
+
+        $conf = self::$paginationConfig;
+        //echo $post['limit'];
+        //$conf['base_url'] = base_url('creator/catalog/index');
+        $conf['base_url'] = base_url('creator/catalog');
+        $conf['total_rows'] = $count;
+        if (isset($post['limit']) && !empty($post['limit'])) {
+            $this->data['limit'] = $post['limit'];
+            $conf['per_page'] = $this->data['limit'];
+        } else {
+            $this->data['limit'] = $conf['per_page'];
+        }
+
+        $this->data['active_limit'] = $this->data['limit'];
+
+        $conf['enable_query_strings'] = TRUE;
+        $conf['page_query_string'] = TRUE;
+        $conf['use_page_numbers'] = TRUE;
+        $conf['query_string_segment'] = 'page';
+        $segment = $this->data['page'];
+
+        $offset = $segment ? $conf['per_page'] * ($segment - 1) : 0;
+
+        $this->pagination->initialize($conf);
+
+        $this->data['pagination'] = $this->pagination->create_links();
+        //echo $this->data['limit'];
+
+        if ($this->data['limit'] != 0) {
+
+            $this->data['page_count'] = (int) ceil(count($this->data['outs']) / $this->data['limit']);
+
+            $r = array_slice($this->data['outs'], $offset, $this->data['limit']);
+            if ($this->data['page'] > 1 && empty($r)) {
+
+            } else {
+                $this->data['outs'] = array_slice($this->data['outs'], $offset, $this->data['limit']);
+            }
+        } else {
+            $this->data['page_count'] = 1;
+        }
+
+
+
+
+
+
+
+
+        if ($this->data['active_user']['level'] == Main_model::LEVEL_ID_ROCHS) {
 
             if (isset($this->data['outs']) && !empty($this->data['outs'])) {
                 foreach ($this->data['outs'] as $key => $value) {
@@ -159,20 +260,6 @@ class Catalog extends My_Controller
                 }
             }
         } elseif ($this->data['active_user']['level'] == Main_model::LEVEL_ID_UMCHS) {//UMCHS
-            $filter['author_region_id'] = $this->data['active_user']['id_region'];
-            $filter['is_delete'] = 0;
-
-//            if (in_array($this->data['active_user']['id_organ'], [Main_model::ORGAN_ID_ROSN, Main_model::ORGAN_ID_UGZ, Main_model::ORGAN_ID_AVIA])) {
-//                $this->data['outs'] = $this->dones_model->get_dones_by_region($filter, $this->data['active_user']['id_organ']);
-//            } else {
-
-            $filter['without_cp'] = [Main_model::ORGAN_ID_ROSN, Main_model::ORGAN_ID_UGZ, Main_model::ORGAN_ID_AVIA, Main_model::ORGAN_ID_RCU];
-            $this->data['outs'] = $this->dones_model->get_dones_by_region($filter, FALSE);
-            //}
-
-
-
-
             if (isset($this->data['outs']) && !empty($this->data['outs'])) {
                 foreach ($this->data['outs'] as $key => $value) {
                     $this->data['outs'][$key]['statuses'] = $this->dones_model->get_statuses_by_id_dones($value['id'], 0, false); //only active statuses
@@ -209,9 +296,6 @@ class Catalog extends My_Controller
                 }
             }
         } elseif ($this->data['active_user']['level'] == Main_model::LEVEL_ID_RCU) {//rcu
-            $filter['is_delete'] = 0;
-            $this->data['outs'] = $this->dones_model->get_dones_for_rcu($filter, FALSE);
-
             if (isset($this->data['outs']) && !empty($this->data['outs'])) {
                 foreach ($this->data['outs'] as $key => $value) {
                     $this->data['outs'][$key]['statuses'] = $this->dones_model->get_statuses_by_id_dones($value['id'], 0, false); //only active statuses
@@ -257,58 +341,13 @@ class Catalog extends My_Controller
             foreach ($this->data['outs'] as $key => $value) {
 
 
-
-                if (isset($filter['status_sd']) && !empty($filter['status_sd'])) {
-                    if (isset($value['statuses_id']) && !empty($value['statuses_id'])) {
-//                        if(in_array($filter['status_sd'], array(1))){
-//                            if(in_array(Logs_model::ACTION_PROVE_SD_RCU, $value['statuses_id']) || in_array(Logs_model::ACTION_PROVE_SD_UMCHS, $value['statuses_id']) ||
-//                                in_array(Logs_model::ACTION_REFUSE_SD_RCU, $value['statuses_id']) || in_array(Logs_model::ACTION_REFUSE_SD_UMCHS, $value['statuses_id'])){
-// unset($this->data['outs'][$key]);
-//                            continue;
-//
-//                                }
-//                        }
-//
-//                        elseif (!in_array($filter['status_sd'], $value['statuses_id'])) {
-//                            unset($this->data['outs'][$key]);
-//                            continue;
-//                        }
-
-
-                        if (isset($filter['status_sd']) && !empty($filter['status_sd'])) {
-                            if (isset($value['statuses_id']) && !empty($value['statuses_id'])) {
-
-                                if ($filter['status_sd'] == 1) {
-                                    if (in_array(Logs_model::ACTION_PROVE_SD_RCU, $value['statuses_id']) || in_array(Logs_model::ACTION_REFUSE_SD_RCU, $value['statuses_id'])) {
-                                        unset($this->data['outs'][$key]);
-                                        continue;
-                                    }
-                                } elseif ($filter['status_sd'] == 2) {
-                                    if ((in_array(Logs_model::ACTION_PROVE_SD_UMCHS, $value['statuses_id']) || in_array(Logs_model::ACTION_REFUSE_SD_UMCHS, $value['statuses_id'])) || in_array($value['author_id_organ'], array(Main_model::ORGAN_ID_AVIA, Main_model::ORGAN_ID_RCU, Main_model::ORGAN_ID_ROSN, Main_model::ORGAN_ID_UGZ))) {
-                                        unset($this->data['outs'][$key]);
-                                        continue;
-                                    }
-                                } elseif ($filter['status_sd'] == 8) {
-                                    if (!in_array($value['author_id_organ'], array(Main_model::ORGAN_ID_AVIA, Main_model::ORGAN_ID_RCU, Main_model::ORGAN_ID_ROSN, Main_model::ORGAN_ID_UGZ))) {
-                                        unset($this->data['outs'][$key]);
-                                        continue;
-                                    }
-                                } elseif (!in_array($filter['status_sd'], $value['statuses_id'])) {
-                                    unset($this->data['outs'][$key]);
-                                    continue;
-                                }
-                            }
-                        }
-                    }
-                }
-
                 $media = $this->dones_model->get_dones_media($value['id']);
                 $this->data['outs'][$key]['media'] = $media;
 
 
 
 
-                 /* sign edit after refuse */
+                /* sign edit after refuse */
 
                 $this->data['outs'][$key]['edit_after_refuse_umchs'] = 0;
                 $this->data['outs'][$key]['edit_after_refuse_rcu'] = 0;
@@ -415,9 +454,9 @@ class Catalog extends My_Controller
                 }
             }
         }
-                /* END sign edit after refuse */
+        /* END sign edit after refuse */
 
-$this->data['filter'] = $filter;
+        $this->data['filter'] = $filter;
 
         if ($this->input->is_ajax_request()) {//filter
             if ($this->data['active_user']['level'] == Main_model::LEVEL_ID_ROCHS) {
@@ -464,8 +503,6 @@ $this->data['filter'] = $filter;
             $this->twig->display('viewer/catalog/rcu/index', $this->data);
         }
     }
-
-
 
     public function close_filter()
     {

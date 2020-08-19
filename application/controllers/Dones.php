@@ -102,6 +102,7 @@ class Dones extends My_Controller
         $this->data['active_item_menu'] = 'create';
         $this->data['active_item_menu_type_create'] = 'standart';
         $this->data['is_show_btn_search_rig'] = 1; //show btn "search rig"
+        $this->data['is_timer'] = 1;
 
         $this->data['id_object_many_floor'] = Main_model::OBJECT_MANY_FLOOR;
         $this->data['id_object_avtotransport'] = Main_model::OBJECT_AVTO_TRANSPORT;
@@ -347,6 +348,7 @@ class Dones extends My_Controller
         $this->data['title'] = 'Новое спец.донесение (простое)';
         $this->data['active_item_menu'] = 'create';
         $this->data['is_show_btn_search_rig'] = 0; //don't show btn "search rig"
+        $this->data['is_timer'] = 1;
 
         $this->data['bread_crumb'] = array(array('/dones' => 'Создать специальное донесение'),
             array('Простое'));
@@ -1417,7 +1419,17 @@ class Dones extends My_Controller
                  * proved umchs and proved rcu and not open update
                  * proved rcu and not open update
                  *          */
-                if ($this->data['active_user']['level'] == 3 && (($this->data['active_user']['id_local'] != $this->data['dones']['author_local_id']) ||
+
+
+                                /* gomel GOCHS + gomel ROCHS */
+                $this->data['can_edit_sd_by_merge'] = 0;
+                if (in_array($this->data['active_user']['id_local'], array(Main_model::GOMEL_LOCAL, Main_model::GOMEL_CITY)) &&
+                    in_array($this->data['dones']['author_local_id'], array(Main_model::GOMEL_LOCAL, Main_model::GOMEL_CITY))) {
+
+                    $this->data['can_edit_sd_by_merge'] = 1;
+                }
+
+                if ($this->data['active_user']['level'] == 3 && (($this->data['active_user']['id_local'] != $this->data['dones']['author_local_id'] && $this->data['can_edit_sd_by_merge'] == 0) ||
                     ($this->data['dones']['is_open_update'] == 0 && in_array(Logs_model::ACTION_PROVE_SD_UMCHS, $statuses_id) &&
                     in_array(Logs_model::ACTION_PROVE_SD_RCU, $statuses_id)) ||
                     ($this->data['dones']['is_open_update'] == 0 && in_array(Logs_model::ACTION_PROVE_SD_RCU, $statuses_id)))) {
@@ -1620,6 +1632,12 @@ class Dones extends My_Controller
         $dones['people_position'] = (isset($post['people_position']) && !empty($post['people_position'])) ? trim($post['people_position']) : '';
         $dones['people_status'] = (isset($post['people_status']) && !empty($post['people_status'])) ? intval($post['people_status']) : 0;
 
+
+         if (!empty($settings) && isset($settings['is_situation_first_arrival']) && in_array('yes', $settings['is_situation_first_arrival'])) {
+            $dones['situation_first_arrival'] = (isset($post['situation_first_arrival']) && !empty($post['situation_first_arrival'])) ? trim($post['situation_first_arrival']) : '';
+        } else {
+            $dones['situation_first_arrival'] = '';
+        }
 
 
         /* detail inf block */
@@ -2319,7 +2337,16 @@ class Dones extends My_Controller
                  * proved umchs and proved rcu and not open update
                  * proved rcu and not open update
                  *          */
-                if ($this->data['active_user']['level'] == 3 && (($this->data['active_user']['id_local'] != $this->data['dones']['author_local_id']) ||
+
+                /* gomel GOCHS + gomel ROCHS */
+                $this->data['can_edit_sd_by_merge'] = 0;
+                if (in_array($this->data['active_user']['id_local'], array(Main_model::GOMEL_LOCAL, Main_model::GOMEL_CITY)) &&
+                    in_array($this->data['dones']['author_local_id'], array(Main_model::GOMEL_LOCAL, Main_model::GOMEL_CITY))) {
+
+                    $this->data['can_edit_sd_by_merge'] = 1;
+                }
+
+                if ($this->data['active_user']['level'] == 3 && (($this->data['active_user']['id_local'] != $this->data['dones']['author_local_id'] && $this->data['can_edit_sd_by_merge'] == 0) ||
                     ($this->data['dones']['is_open_update'] == 0 && in_array(Logs_model::ACTION_PROVE_SD_UMCHS, $statuses_id) &&
                     in_array(Logs_model::ACTION_PROVE_SD_RCU, $statuses_id)) ||
                     ($this->data['dones']['is_open_update'] == 0 && in_array(Logs_model::ACTION_PROVE_SD_RCU, $statuses_id)))) {
@@ -2453,7 +2480,17 @@ class Dones extends My_Controller
                  * proved umchs and proved rcu and not open update
                  * proved rcu and not open update
                  *          */
-                if ($this->data['active_user']['level'] == 3 && (($this->data['active_user']['id_local'] != $this->data['dones']['author_local_id']) ||
+
+
+                                                /* gomel GOCHS + gomel ROCHS */
+                $this->data['can_edit_sd_by_merge'] = 0;
+                if (in_array($this->data['active_user']['id_local'], array(Main_model::GOMEL_LOCAL, Main_model::GOMEL_CITY)) &&
+                    in_array($this->data['dones']['author_local_id'], array(Main_model::GOMEL_LOCAL, Main_model::GOMEL_CITY))) {
+
+                    $this->data['can_edit_sd_by_merge'] = 1;
+                }
+
+                if ($this->data['active_user']['level'] == 3 && (($this->data['active_user']['id_local'] != $this->data['dones']['author_local_id'] && $this->data['can_edit_sd_by_merge'] == 0) ||
                     ($this->data['dones']['is_open_update'] == 0 && in_array(Logs_model::ACTION_PROVE_SD_UMCHS, $statuses_id) &&
                     in_array(Logs_model::ACTION_PROVE_SD_RCU, $statuses_id)) ||
                     ($this->data['dones']['is_open_update'] == 0 && in_array(Logs_model::ACTION_PROVE_SD_RCU, $statuses_id)))) {
@@ -2505,7 +2542,16 @@ class Dones extends My_Controller
 
             /*  author SD = current user
              *          */
-            if (($this->data['active_user']['level'] == 3 && $this->data['active_user']['id_local'] != $this->data['dones']['author_local_id']) ||
+
+                                            /* gomel GOCHS + gomel ROCHS */
+                $this->data['can_edit_sd_by_merge'] = 0;
+                if (in_array($this->data['active_user']['id_local'], array(Main_model::GOMEL_LOCAL, Main_model::GOMEL_CITY)) &&
+                    in_array($this->data['dones']['author_local_id'], array(Main_model::GOMEL_LOCAL, Main_model::GOMEL_CITY))) {
+
+                    $this->data['can_edit_sd_by_merge'] = 1;
+                }
+
+            if (($this->data['active_user']['level'] == 3 && $this->data['active_user']['id_local'] != $this->data['dones']['author_local_id'] && $this->data['can_edit_sd_by_merge'] == 0) ||
                 ($this->data['active_user']['level'] == 2 && $this->data['active_user']['id_region'] != $this->data['dones']['author_region_id'])) {
 
                 echo json_encode(array('error' => 'Функция не доступна. Вы не являетесь автором.'));
@@ -2917,6 +2963,8 @@ class Dones extends My_Controller
 
 
 
+            $new_dones['situation_first_arrival'] = $dones['situation_first_arrival'];
+
             /* detail inf block */
             $new_dones['detail_inf'] = (isset($dones['detail_inf']) && !empty($dones['detail_inf'])) ? trim($dones['detail_inf']) : '';
 
@@ -3289,7 +3337,16 @@ class Dones extends My_Controller
                  * proved umchs and proved rcu and not open update
                  * proved rcu and not open update
                  *          */
-                if ($this->data['active_user']['level'] == 3 && (($this->data['active_user']['id_local'] != $this->data['dones']['author_local_id']) ||
+
+                                                /* gomel GOCHS + gomel ROCHS */
+                $this->data['can_edit_sd_by_merge'] = 0;
+                if (in_array($this->data['active_user']['id_local'], array(Main_model::GOMEL_LOCAL, Main_model::GOMEL_CITY)) &&
+                    in_array($this->data['dones']['author_local_id'], array(Main_model::GOMEL_LOCAL, Main_model::GOMEL_CITY))) {
+
+                    $this->data['can_edit_sd_by_merge'] = 1;
+                }
+
+                if ($this->data['active_user']['level'] == 3 && (($this->data['active_user']['id_local'] != $this->data['dones']['author_local_id'] && $this->data['can_edit_sd_by_merge'] == 0) ||
                     ($this->data['dones']['is_open_update'] == 0 && in_array(Logs_model::ACTION_PROVE_SD_UMCHS, $statuses_id) &&
                     in_array(Logs_model::ACTION_PROVE_SD_RCU, $statuses_id)) ||
                     ($this->data['dones']['is_open_update'] == 0 && in_array(Logs_model::ACTION_PROVE_SD_RCU, $statuses_id)))) {
@@ -3596,7 +3653,16 @@ class Dones extends My_Controller
                  * proved umchs and proved rcu and not open update
                  * proved rcu and not open update
                  *          */
-                if ($this->data['active_user']['level'] == 3 && (($this->data['active_user']['id_local'] != $this->data['dones']['author_local_id']) ||
+
+                                                                /* gomel GOCHS + gomel ROCHS */
+                $this->data['can_edit_sd_by_merge'] = 0;
+                if (in_array($this->data['active_user']['id_local'], array(Main_model::GOMEL_LOCAL, Main_model::GOMEL_CITY)) &&
+                    in_array($this->data['dones']['author_local_id'], array(Main_model::GOMEL_LOCAL, Main_model::GOMEL_CITY))) {
+
+                    $this->data['can_edit_sd_by_merge'] = 1;
+                }
+
+                if ($this->data['active_user']['level'] == 3 && (($this->data['active_user']['id_local'] != $this->data['dones']['author_local_id'] && $this->data['can_edit_sd_by_merge'] == 0) ||
                     ($this->data['dones']['is_open_update'] == 0 && in_array(Logs_model::ACTION_PROVE_SD_UMCHS, $statuses_id) &&
                     in_array(Logs_model::ACTION_PROVE_SD_RCU, $statuses_id)) ||
                     ($this->data['dones']['is_open_update'] == 0 && in_array(Logs_model::ACTION_PROVE_SD_RCU, $statuses_id)))) {
@@ -3704,9 +3770,16 @@ class Dones extends My_Controller
         /* OPG group from str*/
         $journal_user = $this->user_model->get_data_user_journal_by_user_sd($this->data['active_user']['id_user']);
 
+
+                    if (in_array($journal_user['id_locorg'], array(Main_model::GOMEL_GOCHS, Main_model::GOMEL_ROCHS))) {
+            $locorg = array(Main_model::GOMEL_GOCHS, Main_model::GOMEL_ROCHS);
+        } else {
+            $locorg = $journal_user['id_locorg'];
+        }
+
         if (isset($journal_user) && !empty($journal_user) && isset($journal_user['id_locorg']) && !empty($journal_user['id_locorg'])) {
 
-            $main_cou = $this->main_model->get_posduty_from_str_by_ch($journal_user['id_locorg'], Main_model::DIVIZ_COU);
+            $main_cou = $this->main_model->get_posduty_from_str_by_ch($locorg, Main_model::DIVIZ_COU);
 
              if (isset($main_cou) && !empty($main_cou)) {
                 foreach ($main_cou as $value) {
@@ -3714,7 +3787,12 @@ class Dones extends My_Controller
 
                         $list_opg[$value['ch']]['dateduty'] = $value['dateduty'];
                         $list_opg[$value['ch']]['is_duty'] = $value['is_duty'];
+                        if (in_array($journal_user['id_locorg'], array(Main_model::GOMEL_GOCHS, Main_model::GOMEL_ROCHS))) {
+                            $value['podr'] = 'ЦОУ ' . $this->ss_model->get_locorg_name_by_id($value['id_grochs']);
+                        }
+
                         $list_opg[$value['ch']]['man'][] = $value;
+
                     }
                 }
             }
@@ -3734,16 +3812,31 @@ class Dones extends My_Controller
     {
 
         $list_disp=[];
+         $gomel_merge=0;
         /* dispetchers from str */
         $journal_user = $this->user_model->get_data_user_journal_by_user_sd($this->data['active_user']['id_user']);
 
         if (isset($journal_user) && !empty($journal_user) && isset($journal_user['id_locorg']) && !empty($journal_user['id_locorg'])) {
 
-            $main_cou = $this->main_model->get_posduty_listfio_from_str_by_ch($journal_user['id_locorg'], Main_model::DIVIZ_COU);
+            if(in_array($journal_user['id_locorg'], array(Main_model::GOMEL_GOCHS, Main_model::GOMEL_ROCHS))){
+                $locorg=array(Main_model::GOMEL_GOCHS, Main_model::GOMEL_ROCHS);
+                $gomel_merge=1;
+            }
+            else{
+                $locorg=$journal_user['id_locorg'];
 
+            }
+
+
+            $main_cou = $this->main_model->get_posduty_listfio_from_str_by_ch($locorg, Main_model::DIVIZ_COU);
+//print_r($main_cou);exit();
              if (isset($main_cou) && !empty($main_cou)) {
                 foreach ($main_cou as $value) {
                     if (in_array($value['id_pos_duty'], [Main_model::POS_DISP])) {
+
+                        $id_grochs=$value['id_grochs'];
+                        //print_r($value);                        echo '<br>';
+                       // echo $value['id_loc_org'];exit();
 
                         $man['dateduty'] = $value['dateduty'];
                         $man['ch'] = $value['ch'];
@@ -3753,8 +3846,8 @@ class Dones extends My_Controller
                         $rank = mb_strtolower($value['rank_name']);
                         $rank = explode(' ', $rank);
                         $rank_sign = '';
-                        foreach ($rank as $k => $value) {
-                            if ($value == 'вн.сл.')
+                        foreach ($rank as $k => $n) {
+                            if ($n == 'вн.сл.')
                                 $key = $k;
                         }
                         if (isset($key)) {
@@ -3771,7 +3864,11 @@ class Dones extends My_Controller
 
                         $man['rank'] = $rank_sign;
                         $man['position'] ='Диспетчер';
-                        $man['podr'] = 'ЦОУ '.$this->ss_model->get_locorg_name_by_id($journal_user['id_locorg']);
+                        $man['podr'] = 'ЦОУ '.$this->ss_model->get_locorg_name_by_id($id_grochs);
+
+                        if($gomel_merge == 1)
+                            $man['is_show_podr'] = 1;
+
 
 
                         $list_disp[]=$man;
@@ -3781,6 +3878,7 @@ class Dones extends My_Controller
 
 
         }
+        //exit();
 //print_r($list_disp);exit();
         return $list_disp;
 //print_r($this->data['list_opg']);

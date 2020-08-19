@@ -45,7 +45,7 @@
                     <td> {{out.specd_date ? out.specd_date|date('d.m.Y') : ''}}<br>{{out.specd_number ? '№ '~out.specd_number : ''}}
 
 
-                        {%if out.author_local_id == active_user.id_local %}
+                        {%if out.author_local_id == active_user.id_local or (can_edit_sd_by_merge is defined or can_edit_sd_by_merge == 1) %}
 
                             <a data-toggle="modal"  data-target="#set-number-sd-modal"
                                data-id="{{out.id}}" data-number="{{out.specd_number}}">
@@ -73,7 +73,7 @@
                                 <button class="btn btn-sm btn-disabled" type="button"><i class="fa fa-eye" aria-hidden="true"  style="color:blue"></i></button>
                             </a>
 
-                        {%elseif out.author_local_id != active_user.id_local %}
+                        {%elseif out.author_local_id != active_user.id_local and (can_edit_sd_by_merge is not defined or can_edit_sd_by_merge == 0)%}
                             <i class="fa fa-ban" style="color: red" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Функция не доступна. Вы не являетесь автором."></i>
 
                         {%else%}
@@ -91,7 +91,7 @@
                         {%if out.is_open_update == 0 and out.statuses_id is defined and  6 in out.statuses_id %}
                            <i class="fa fa-ban" style="color: red" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Функция не доступна. СД подтверждено."></i>
 
-                        {%elseif out.author_local_id != active_user.id_local %}
+                        {%elseif out.author_local_id != active_user.id_local and (can_edit_sd_by_merge is not defined or can_edit_sd_by_merge == 0) %}
                            <i class="fa fa-ban" style="color: red" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Функция не доступна. Вы не являетесь автором."></i>
                         {%else%}
                             <a href="#" data-toggle="modal"  data-target="#delete-sd-modal" data-url="{{base_url('dones/delete_sd/'~out.id)}}" data-sd-id="{{out.id}}" data-number-sd="{{out.specd_date ? out.specd_date|date('d.m.Y') : ''}} {{out.specd_number ? '№ '~out.specd_number : ''}}" >
@@ -333,6 +333,11 @@
     {%endif%}
 </table>
 
+{%if outs is defined and outs is not empty%}
+
+{% include 'creator/catalog/pagination.twig' %}
+{% endif %}
+
 
 <script src="{{ base_url('/assets/libs/jquery/jquery/dist/jquery.js')}}"></script>
 <script src="{{ base_url('/assets/datatables/jquery.dataTables.js')}}"></script>
@@ -344,6 +349,9 @@
             "pageLength": 50,
              "order": [],
              "searching": false,
+             "paging": false,
+             "info": false,
+
             language: {
                 "processing": "Подождите...",
                 "search": "Поиск:",

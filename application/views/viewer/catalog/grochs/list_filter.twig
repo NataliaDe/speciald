@@ -134,8 +134,8 @@
                                 <option value="" selected>Все</option>
                                 <option  value="6" {{(filter.status_sd is defined and filter.status_sd is not empty and filter.status_sd == 6) ? 'selected' : ''}}>Подтверждено РЦУРЧС</option>
                                 <option  value="4" {{(filter.status_sd is defined and filter.status_sd is not empty and filter.status_sd == 4) ? 'selected' : ''}} >Подтверждено УМЧС</option>
-                                <option  value="1" {{(filter.status_sd is defined and filter.status_sd is not empty and filter.status_sd == 1) ? 'selected' : ''}} >Ожидает исполнения РЦУРЧС</option>
-                                <option  value="2" {{(filter.status_sd is defined and filter.status_sd is not empty and filter.status_sd == 2) ? 'selected' : ''}}>Ожидает исполнения УМЧС</option>
+                                {#                                <option  value="1" {{(filter.status_sd is defined and filter.status_sd is not empty and filter.status_sd == 1) ? 'selected' : ''}} >Ожидает исполнения РЦУРЧС</option>
+                                                                <option  value="2" {{(filter.status_sd is defined and filter.status_sd is not empty and filter.status_sd == 2) ? 'selected' : ''}}>Ожидает исполнения УМЧС</option>#}
                                 <option  value="7" {{(filter.status_sd is defined and filter.status_sd is not empty and filter.status_sd == 7) ? 'selected' : ''}} >Замечания от РЦУРЧС</option>
                                 <option  value="5" {{(filter.status_sd is defined and filter.status_sd is not empty and filter.status_sd == 5) ? 'selected' : ''}}>Замечания от УМЧС</option>
                                 {#<option  value="8" {{(filter.status_sd is defined and filter.status_sd is not empty and filter.status_sd == 8) ? 'selected' : ''}}>Не требует подтверждения УМЧС</option>#}
@@ -151,6 +151,8 @@
 
 
 
+                    <input type="hidden" name="limit" value="{{ limit }}">
+                    <input type="hidden" name="page" value="{{ page }}">
 
 
 

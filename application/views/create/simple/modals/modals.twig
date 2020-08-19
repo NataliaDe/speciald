@@ -31,7 +31,7 @@
                                         <input  type="checkbox" class="is_add_to_opg" value="1" data-name="{{p.fio_text}}">
                                     </td>
                                     <td class="fio_add_to_opg" data-fio="{{p.fio_text}}">
-                                        {{p.fio_text}}
+                                        {{p.fio_text}} {{(p.podr is defined and p.podr is not empty) ? '('~p.podr~')' : ''}}
                                     </td>
                                 </tr>
 

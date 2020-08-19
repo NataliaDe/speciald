@@ -23,6 +23,8 @@ class MY_Controller extends CI_Controller
         $this->load->model('user_model');
         $this->load->model('main_model');
 
+        $this->load->library('pagination');
+
         //TWIG
         $this->load->library('twig');
 

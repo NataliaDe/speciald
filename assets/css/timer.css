@@ -9,7 +9,7 @@ display: block;}
 /* здесь дни, часы, минуты, секунды */
 .countdown li span{
 width:100%;
-color:#000;
+color:#a7abb1;
 font:18px Verdana;
 display:inline-block;}
 

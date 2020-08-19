@@ -105,6 +105,23 @@
 
 
 
+
+
+                    {%if settings is defined and settings.is_situation_first_arrival is defined and 'yes' in settings.is_situation_first_arrival %}
+
+                        <dt class="dt-class">
+                            <a style="background-color:#428bca; color: white;border-color: #428bca; " href="#accordion_situation_first_arrival" aria-expanded="{%if settings_accordion is not defined or settings_accordion.value is empty or ('accordion_situation_first_arrival' not in settings_accordion.value|split(","))%}true{%else%} false{%endif%}" aria-controls="accordion_situation_first_arrival" class="accordion-title accordionTitle js-accordionTrigger custom-a {%if settings_accordion is not defined or settings_accordion.value is empty or ('accordion_situation_first_arrival' not in settings_accordion.value|split(","))%}is-collapsed is-expanded{%endif%}">
+                                Обстановка на момент прибытия первого подразделения
+                            </a>
+                        </dt>
+                        <dd class="accordion-content accordionItem {%if settings_accordion is not defined or settings_accordion.value is empty or ('accordion_situation_first_arrival' not in settings_accordion.value|split(","))%}is-expanded animateIn{%else%}is-collapsed{%endif%}" id="accordion_situation_first_arrival" aria-hidden="{%if settings_accordion is not defined or settings_accordion.value is empty or ('accordion_situation_first_arrival' not in settings_accordion.value|split(","))%}false{%else%} true{%endif%}">
+                            {%include '/create/standart/accordion_situation_first_arrival.twig'%}
+                        </dd>
+
+                    {%endif%}
+
+
+
                     <dt class="dt-class">
                         <a style="background-color:#428bca; color: white;border-color: #428bca; " href="#accordion5" aria-expanded="{%if settings_accordion is not defined or settings_accordion.value is empty or ('accordion5' not in settings_accordion.value|split(","))%}true{%else%} false{%endif%}" aria-controls="accordion5" class="accordion-title accordionTitle js-accordionTrigger custom-a {%if settings_accordion is not defined or settings_accordion.value is empty or ('accordion5' not in settings_accordion.value|split(","))%}is-collapsed is-expanded{%endif%}">
                             Объект
@@ -233,6 +250,7 @@
 
     </form>
 
+    <a href="#" data-toggle="modal" data-target="#show-error" class="hide" id="a-show-error"></a>
     <!-- .content -->
 
 
@@ -266,7 +284,7 @@
     <link rel="stylesheet" href="{{ base_url('/assets/accordion/style.css') }}">
     <link rel="stylesheet" href="{{ base_url('/assets/css/sb-admin-2.css') }}">
 
-    <link rel="stylesheet" href="{{ base_url('/assets/css/timer.css') }}">
+    <link rel="stylesheet" href="{{ base_url('/assets/css/timer.css') }}?{{now|date('H:i:s')}}">
 
     <link rel="stylesheet" href="{{ base_url('/assets/css/media.css') }}?{{now|date('H:i:s')}}">
 
@@ -462,9 +480,10 @@
 
 
 
-    <script src="{{ base_url('/assets/js/form-standart/preview_standart.js')}}?{{now|date('H:i:s')}}"></script>
+    {#<script src="{{ base_url('/assets/js/form-standart/preview_standart.js')}}?{{now|date('H:i:s')}}"></script>#}
 
     {%include '/create/standart/owner/actions_js.twig'%}
+    {%include '/create/standart/preview_standart.twig'%}
 
     {%if is_edit_dones is not defined  %}
         <script src="{{ base_url('/assets/js/timer.js')}}"></script>
@@ -492,7 +511,7 @@
 
     <script>
 
-        var id_owner_dead={{id_owner_dead}};
+        var id_owner_dead ={{id_owner_dead}} ;
 
         {% if rig is defined%}
             setPreviewData();
@@ -1548,21 +1567,323 @@
                                 $('body').on('change', '#individual-face-div #id_owner_category', function (event) {
 
 
-                                    if (parseInt($(this).val()) === {{id_owner_dead}}) {
+                                if (parseInt($(this).val()) === {{id_owner_dead}}) {
 //alert($(this).val());
-                                        $('#individual-face-div #owner_place_life_div label').text('Где проживал');
+                                $('#individual-face-div #owner_place_life_div label').text('Где проживал');
                                         $('#individual-face-div #owner_position_div label').text('Кем работал');
                                         $('#individual-face-div #owner_job_div label').text('Где работал');
                                         $('#individual-face-div #owner_is_uhet_div label').text('Состоял на учете профилактики');
-
-                                    }
-                                    else{
-                                        $('#individual-face-div #owner_place_life_div label').text('Место жительства');
+                                }
+                                else{
+                                $('#individual-face-div #owner_place_life_div label').text('Место жительства');
                                         $('#individual-face-div #owner_position_div label').text('Должность');
                                         $('#individual-face-div #owner_job_div label').text('Место работы');
                                         $('#individual-face-div #owner_is_uhet_div label').text('Состоит на учете профилактики');
-                                    }
-                                });
+                                }
+                                }
+                                );
+
+
+
+                                $('form#createStandart').submit(function (e) {
+
+                                    // Запрещаем стандартное поведение для кнопки submit
+                                    e.preventDefault();
+
+                                    var time_msg = $('#createStandart input[name="time_msg"]').val();
+                                    var time_loc = $('#createStandart input[name="time_loc"]').val();
+                                    var time_likv = $('#createStandart input[name="time_likv"]').val();
+
+
+
+
+
+
+        {%if settings is defined and settings.is_seconds_show is defined and 'yes' in settings.is_seconds_show %}
+                var datetime_regex = /(\d\d)\.(\d\d)\.(\d\d\d\d)\s(\d\d):(\d\d):(\d\d)/;
+        {%else%}
+                var datetime_regex = /(\d\d)\.(\d\d)\.(\d\d\d\d)\s(\d\d):(\d\d)/;
+        {%endif%}
+
+
+
+                var first_date_arr = datetime_regex.exec(time_msg);
+                var second_date_arr = datetime_regex.exec(time_loc);
+                var third_date_arr = datetime_regex.exec(time_likv);
+
+
+
+
+        {%if settings is defined and settings.is_seconds_show is defined and 'yes' in settings.is_seconds_show %}
+
+                if (first_date_arr === null) {
+
+                    $('#a-show-error').click();
+
+                    var field = $('#createStandart input[name="time_msg"]');
+
+                    field.removeClass('error-inpt');
+                    field.addClass('error-inpt');
+
+                    $('#show-error .modal-body p').html('Время сообщения не может быть пустым');
+
+                    $('html, body').animate({
+                        scrollTop: (field.offset().top - 125)
+                    }, 500);
+                    return false;
+                } else if (first_date_arr.length !== 7) {
+                    $('#a-show-error').click();
+
+                    var field = $('#createStandart input[name="time_msg"]');
+
+                    field.removeClass('error-inpt');
+                    field.addClass('error-inpt');
+
+                    $('#show-error .modal-body p').html('Время сообщения должно быть указано в формате xx.xx.xxxx xx:xx:xx');
+
+                    $('html, body').animate({
+                        scrollTop: (field.offset().top - 125)
+                    }, 500);
+                    return false;
+                } else if (second_date_arr === null) {
+
+                    $('#a-show-error').click();
+
+                    var field = $('#createStandart input[name="time_loc"]');
+
+                    field.removeClass('error-inpt');
+                    field.addClass('error-inpt');
+
+                    $('#show-error .modal-body p').html('Время локализации не может быть пустым');
+
+                    $('html, body').animate({
+                        scrollTop: (field.offset().top - 125)
+                    }, 500);
+                    return false;
+                } else if (second_date_arr.length !== 7) {
+                    $('#a-show-error').click();
+
+                    var field = $('#createStandart input[name="time_loc"]');
+
+                    field.removeClass('error-inpt');
+                    field.addClass('error-inpt');
+
+                    $('#show-error .modal-body p').html('Время локализации должно быть указано в формате xx.xx.xxxx xx:xx:xx');
+
+                    $('html, body').animate({
+                        scrollTop: (field.offset().top - 125)
+                    }, 500);
+                    return false;
+                } else if (third_date_arr === null) {
+
+                    $('#a-show-error').click();
+
+                    var field = $('#createStandart input[name="time_likv"]');
+
+                    field.removeClass('error-inpt');
+                    field.addClass('error-inpt');
+
+                    $('#show-error .modal-body p').html('Время ликвидации не может быть пустым');
+
+                    $('html, body').animate({
+                        scrollTop: (field.offset().top - 125)
+                    }, 500);
+                    return false;
+                } else if (third_date_arr.length !== 7) {
+                    $('#a-show-error').click();
+
+                    var field = $('#createStandart input[name="time_likv"]');
+
+                    field.removeClass('error-inpt');
+                    field.addClass('error-inpt');
+
+                    $('#show-error .modal-body p').html('Время ликвидации должно быть указано в формате xx.xx.xxxx xx:xx:xx');
+
+                    $('html, body').animate({
+                        scrollTop: (field.offset().top - 125)
+                    }, 500);
+                    return false;
+                } else {
+                    var msg_datetime = new Date(first_date_arr[3], first_date_arr[2], first_date_arr[1], first_date_arr[4], first_date_arr[5], first_date_arr[6]);
+                    var loc_datetime = new Date(second_date_arr[3], second_date_arr[2], second_date_arr[1], second_date_arr[4], second_date_arr[5], second_date_arr[6]);
+                    var likv_datetime = new Date(third_date_arr[3], third_date_arr[2], third_date_arr[1], third_date_arr[4], third_date_arr[5], third_date_arr[6]);
+
+                }
+
+
+        {%else%}
+
+
+
+                if (first_date_arr === null) {
+
+                    $('#a-show-error').click();
+
+                    var field = $('#createStandart input[name="time_msg"]');
+
+                    field.removeClass('error-inpt');
+                    field.addClass('error-inpt');
+
+                    $('#show-error .modal-body p').html('Время сообщения не может быть пустым');
+
+                    $('html, body').animate({
+                        scrollTop: (field.offset().top - 125)
+                    }, 500);
+                    return false;
+                } else if (first_date_arr.length !== 6) {
+                    console.log(first_date_arr.length);
+                    $('#a-show-error').click();
+
+                    var field = $('#createStandart input[name="time_msg"]');
+
+                    field.removeClass('error-inpt');
+                    field.addClass('error-inpt');
+
+                    $('#show-error .modal-body p').html('Время сообщения должно быть указано в формате xx.xx.xxxx xx:xx');
+
+                    $('html, body').animate({
+                        scrollTop: (field.offset().top - 125)
+                    }, 500);
+                    return false;
+                } else if (second_date_arr === null) {
+
+                    $('#a-show-error').click();
+
+                    var field = $('#createStandart input[name="time_loc"]');
+
+                    field.removeClass('error-inpt');
+                    field.addClass('error-inpt');
+
+                    $('#show-error .modal-body p').html('Время локализации не может быть пустым');
+
+                    $('html, body').animate({
+                        scrollTop: (field.offset().top - 125)
+                    }, 500);
+                    return false;
+                } else if (second_date_arr.length !== 6) {
+                    $('#a-show-error').click();
+
+                    var field = $('#createStandart input[name="time_loc"]');
+
+                    field.removeClass('error-inpt');
+                    field.addClass('error-inpt');
+
+                    $('#show-error .modal-body p').html('Время локализации должно быть указано в формате xx.xx.xxxx xx:xx');
+
+                    $('html, body').animate({
+                        scrollTop: (field.offset().top - 125)
+                    }, 500);
+                    return false;
+                } else if (third_date_arr === null) {
+
+                    $('#a-show-error').click();
+
+                    var field = $('#createStandart input[name="time_likv"]');
+
+                    field.removeClass('error-inpt');
+                    field.addClass('error-inpt');
+
+                    $('#show-error .modal-body p').html('Время ликвидации не может быть пустым');
+
+                    $('html, body').animate({
+                        scrollTop: (field.offset().top - 125)
+                    }, 500);
+                    return false;
+                } else if (third_date_arr.length !== 6) {
+                    $('#a-show-error').click();
+
+                    var field = $('#createStandart input[name="time_likv"]');
+
+                    field.removeClass('error-inpt');
+                    field.addClass('error-inpt');
+
+                    $('#show-error .modal-body p').html('Время ликвидации должно быть указано в формате xx.xx.xxxx xx:xx');
+
+                    $('html, body').animate({
+                        scrollTop: (field.offset().top - 125)
+                    }, 500);
+                    return false;
+                } else {
+                    var msg_datetime = new Date(first_date_arr[3], first_date_arr[2], first_date_arr[1], first_date_arr[4], first_date_arr[5]);
+                    var loc_datetime = new Date(second_date_arr[3], second_date_arr[2], second_date_arr[1], second_date_arr[4], second_date_arr[5]);
+                    var likv_datetime = new Date(third_date_arr[3], third_date_arr[2], third_date_arr[1], third_date_arr[4], third_date_arr[5]);
+                }
+
+
+
+        {%endif%}
+
+
+                if (msg_datetime.getTime() > loc_datetime.getTime()) {
+
+                    $('#a-show-error').click();
+
+                    var field = $('#createStandart input[name="time_msg"]');
+
+                    field.removeClass('error-inpt');
+                    field.addClass('error-inpt');
+
+                    $('#show-error .modal-body p').html('Время сообщения не может превышать времени локализации');
+
+                    $('html, body').animate({
+                        scrollTop: (field.offset().top - 125)
+                    }, 500);
+                    return false;
+
+                } else {
+                    var field = $('#createStandart input[name="time_msg"]');
+                    field.removeClass('error-inpt');
+                }
+
+
+                if (msg_datetime.getTime() > likv_datetime.getTime()) {
+
+
+                    $('#a-show-error').click();
+
+                    var field = $('#createStandart input[name="time_msg"]');
+
+                    field.removeClass('error-inpt');
+                    field.addClass('error-inpt');
+
+                    $('#show-error .modal-body p').html('Время сообщения не может превышать времени ликвидации');
+
+                    $('html, body').animate({
+                        scrollTop: (field.offset().top - 125)
+                    }, 500);
+                    return false;
+
+
+                } else {
+                    var field = $('#createStandart input[name="time_msg"]');
+                    field.removeClass('error-inpt');
+                }
+
+                if (loc_datetime.getTime() > likv_datetime.getTime()) {
+
+                    $('#a-show-error').click();
+
+                    var field = $('#createStandart input[name="time_loc"]');
+
+                    field.removeClass('error-inpt');
+                    field.addClass('error-inpt');
+
+                    $('#show-error .modal-body p').html('Время локализации не может превышать времени ликвидации');
+
+                    $('html, body').animate({
+                        scrollTop: (field.offset().top - 125)
+                    }, 500);
+                    return false;
+
+                } else {
+                    var field = $('#createStandart input[name="time_loc"]');
+                    field.removeClass('error-inpt');
+                }
+
+                //later you decide you want to submit
+                $(this).unbind('submit').submit();
+
+            });
 
     </script>
 

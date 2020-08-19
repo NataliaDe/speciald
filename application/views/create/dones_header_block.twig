@@ -17,9 +17,9 @@
                     <input type="text" class="form-control "  placeholder="0/0/0" name="specd_number" value="{%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.specd_number is not empty%}{{dones.specd_number|trim}}{%elseif default_number_sd is defined and default_number_sd is not empty%}{{default_number_sd}}{%endif%}">
                 </div>
 
-                {%if is_edit_dones is not defined  %}
+{#                {%if is_edit_dones is not defined  %}
                     <div class="col-sm-4">
                         {%include '/create/timer.twig'%}
                     </div>
-                {%endif%}
+                {%endif%}#}
             </div>

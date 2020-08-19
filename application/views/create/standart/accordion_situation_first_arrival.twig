@@ -1,0 +1,13 @@
+<br>
+<div class="form-row create-form-row">
+
+    <div class="form-group col-md-12">
+        <label for="situation_first_arrival">Обстановка на момент прибытия первого подразделения</label>
+        <textarea class="form-control" name="situation_first_arrival"  rows="10" cols="50">{%if  rig.situation_first_arrival is defined and  rig.situation_first_arrival is not empty and rig.situation_first_arrival is not null %}{{rig.situation_first_arrival|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.situation_first_arrival is not empty %}{{dones.situation_first_arrival|trim}}{%endif%}</textarea>
+    </div>
+
+
+
+</div>
+
+

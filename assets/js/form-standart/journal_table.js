@@ -503,11 +503,21 @@ function returnTeh(t) {
 
 var i=$(t).data('numb');
     var time_arrival = $('input[name="silymchs[' + i + '][time_arrival]"]');
+    var time_follow = $('input[name="silymchs[' + i + '][time_follow]"]');
+    var time_end = $('input[name="silymchs[' + i + '][time_end]"]');
 
     if ($(t).is(':checked') === true) {
         time_arrival.val('');
         time_arrival.prop('disabled', true);
+
+        time_follow.val('');
+        time_follow.prop('disabled', true);
+
+        time_end.val('');
+        time_end.prop('disabled', true);
     } else {
         time_arrival.prop('disabled', false);
+        time_follow.prop('disabled', false);
+        time_end.prop('disabled', false);
     }
 }

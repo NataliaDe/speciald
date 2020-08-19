@@ -473,3 +473,34 @@ input[type="checkbox"][readonly] {
 #catalog-filter .sittings-block{
     line-height: 0.8;
 }
+
+
+
+.pagination-block ul.pagination li a {
+    background-color: #e5e6e6;
+    border: none;
+    padding: 10px;
+    padding-top: 15px;
+    color: #636d7d;
+}
+
+.pagination-block ul.pagination li.active a {
+    background-color: #d4d6d8;
+    color: #212529;
+}
+
+
+.pag-new  .pagination .selected{
+   font-weight: 800;
+   background-color: #d4d6d8;
+
+}
+
+
+.number_blocks ul.pagination{
+    float: right;
+}
+
+.number_page{
+    padding-left: 20px;
+}

@@ -135,7 +135,7 @@
                                         {%set time_arrival=sily.time_arrival%}
                                     {%endif%}
 
-                                    <input type="time" class="form-control time_arrival" onchange="setTimeFollow(this);"  placeholder="" name="silymchs[{{x}}][time_arrival]" value="{%if time_arrival is not empty%}{{time_arrival|date('H:i')}}{%endif%}" {%if sily.is_return == 1%}disabled{%endif%}>
+                                    <input type="time" class="form-control time_arrival" onchange="setTimeFollow(this);"  placeholder="" name="silymchs[{{x}}][time_arrival]" value="{%if time_arrival is not empty and sily.is_return == 0%}{{time_arrival|date('H:i')}}{%endif%}" {%if sily.is_return == 1%}disabled{%endif%}>
 
 
                                     <input  type="checkbox" class="is_return" name="silymchs[{{x}}][is_return]"  value="1" data-numb="{{x}}" onChange='returnTeh(this);' {%if sily.is_return == 1%}checked{%endif%}>
@@ -160,7 +160,7 @@
                                         {%endif%}
                                     {%endif%}
 
-                                    <input type="number" class="form-control time_follow" min="0"  placeholder="" name="silymchs[{{x}}][time_follow]" value="{%if time_follow is not empty%}{{time_follow}}{%endif%}">
+                                    <input type="number" class="form-control time_follow" min="0"  placeholder="" name="silymchs[{{x}}][time_follow]" value="{%if time_follow is not empty and sily.is_return == 0%}{{time_follow}}{%endif%}" {%if sily.is_return == 1%}disabled{%endif%}>
 
 
                                 </td>
@@ -181,7 +181,7 @@
                                         {%set time_end=sily.time_end%}
                                     {%endif%}
 
-                                    <input type="time" class="form-control time_end"   placeholder="" name="silymchs[{{x}}][time_end]" value="{%if time_end is not empty%}{{time_end|date('H:i')}}{%endif%}">
+                                    <input type="time" class="form-control time_end"   placeholder="" name="silymchs[{{x}}][time_end]" value="{%if time_end is not empty and sily.is_return == 0%}{{time_end|date('H:i')}}{%endif%}" {%if sily.is_return == 1%}disabled{%endif%}>
 
                                 </td>
 

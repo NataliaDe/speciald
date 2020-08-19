@@ -122,7 +122,7 @@
 {% block head %}
     <link rel="stylesheet" href="{{ base_url('/assets/accordion/style.css') }}">
     <link rel="stylesheet" href="{{ base_url('/assets/css/sb-admin-2.css') }}">
-    <link rel="stylesheet" href="{{ base_url('/assets/css/timer.css') }}">
+    <link rel="stylesheet" href="{{ base_url('/assets/css/timer.css') }}?{{now|date('H:i:s')}}">
     <link href="{{ base_url('/assets/daterangepicker/daterangepicker.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ base_url('assets/datatables/jquery.dataTables.css') }}">
     <link rel="stylesheet" href="{{ base_url('/assets/css/media.css') }}?{{now|date('H:i:s')}}">

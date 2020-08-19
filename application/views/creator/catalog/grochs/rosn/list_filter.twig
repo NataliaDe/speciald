@@ -81,16 +81,16 @@
 
 
 
-{#                        <div class="form-group col-md-2 search-input with-progress">
-                            <label for="creator_dones" >Создатель</label>
+                        {#                        <div class="form-group col-md-2 search-input with-progress">
+                                                    <label for="creator_dones" >Создатель</label>
 
-                            <span class="typing-progress-background"></span>
-                            <span class="typing-progress"></span>
+                                                    <span class="typing-progress-background"></span>
+                                                    <span class="typing-progress"></span>
 
 
-                            <input type="text" class="form-control input-search-progress"  placeholder="Поиск" name="creator_name" value="{{(filter.creator_name is defined and filter.creator_name is not empty) ? filter.creator_name : ''}}">
+                                                    <input type="text" class="form-control input-search-progress"  placeholder="Поиск" name="creator_name" value="{{(filter.creator_name is defined and filter.creator_name is not empty) ? filter.creator_name : ''}}">
 
-                        </div>#}
+                                                </div>#}
 
 
 
@@ -133,12 +133,7 @@
                             <select class="form-control catalog-filter-vid filters" name="status_sd"   >
                                 <option value="" selected>Все</option>
                                 <option  value="6" {{(filter.status_sd is defined and filter.status_sd is not empty and filter.status_sd == 6) ? 'selected' : ''}}>Подтверждено РЦУРЧС</option>
-
-                                <option  value="1" {{(filter.status_sd is defined and filter.status_sd is not empty and filter.status_sd == 1) ? 'selected' : ''}} >Ожидает исполнения РЦУРЧС</option>
-
                                 <option  value="7" {{(filter.status_sd is defined and filter.status_sd is not empty and filter.status_sd == 7) ? 'selected' : ''}} >Замечания от РЦУРЧС</option>
-
-
                             </select>
                         </div>
 
@@ -150,7 +145,8 @@
                     </div>
 
 
-
+                    <input type="hidden" name="limit" value="{{ limit }}">
+                    <input type="hidden" name="page" value="{{ page }}">
 
 
 

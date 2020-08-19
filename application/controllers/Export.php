@@ -844,6 +844,17 @@ class Export extends My_Controller
         /* END object  */
 
 
+
+                if (isset($dones['situation_first_arrival']) && !empty($dones['situation_first_arrival'])) {
+            $a = explode(PHP_EOL, $dones['situation_first_arrival']);
+            foreach ($a as $value) {
+                $section->addText('          ' . $value, array('size' => 15), array('spaceAfter' => 0, 'spacing'    => 0,
+                    'alignment'  => PhpOffice\PhpWord\SimpleType\Jc::BOTH));
+            }
+        }
+
+
+
         /*  END DESCRIPTION */
 
 

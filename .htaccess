@@ -5,6 +5,8 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ index.php?/$1 [L,QSA]
 
 
+
+
 #RewriteEngine on
 #RewriteCond $1 !^(index.php|images|robots.txt|public)
 #RewriteCond %{REQUEST_URI} !. (cssijsijpgigifipng)$

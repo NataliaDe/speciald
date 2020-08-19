@@ -35,6 +35,13 @@ class Main_model extends CI_Model
     const REGION_GRODNO = 5;
     const REGION_MOGILEV = 6;
     const REGION_MINOBL = 7;
+
+    const GOMEL_ROCHS=45;
+    const GOMEL_GOCHS=44;
+
+    const GOMEL_LOCAL=28;
+    const GOMEL_CITY=22;
+
     const PHOTO_CNT_PER_SD = 4;
     const VIDEO_CNT_PER_SD = 2;
     const AUDIO_CNT_PER_SD = 1;
@@ -51,6 +58,9 @@ class Main_model extends CI_Model
     const POS_DISP = 6; // str.maincou. pos duty
 
     const ID_OWNER_DEAD = 6;
+
+
+
 
     public function __construct()
     {
@@ -481,10 +491,15 @@ class Main_model extends CI_Model
 
         public function get_posduty_from_str_by_ch($id_grochs, $id_divizion)
     {
-        $this->db->select("m.*");
+        $this->db->select("m.*, rec.id_loc_org as id_grochs");
         $this->db->join('ss.`records` `rec`', '`rec`.`id` = `m`.`id_card`', 'left');
         $this->db->where('rec.id_divizion', $id_divizion);
-        $this->db->where('rec.id_loc_org', $id_grochs);
+                if(is_array($id_grochs))
+        $this->db->where_in('rec.id_loc_org', $id_grochs);
+        else
+            $this->db->where('rec.id_loc_org', $id_grochs);
+
+        $this->db->group_by('m.id_card');
         $this->db->group_by('m.ch');
         $this->db->group_by('m.id_pos_duty');
 
@@ -496,19 +511,26 @@ class Main_model extends CI_Model
 
             public function get_posduty_listfio_from_str_by_ch($id_grochs, $id_divizion)
     {
-        $this->db->select("m.*, lf.fio, r.name as rank_name");
+        $this->db->select("m.*, lf.fio, r.name as rank_name, rec.id_loc_org as id_grochs");
         $this->db->join('ss.`records` `rec`', '`rec`.`id` = `m`.`id_card`', 'left');
         $this->db->join('str.`listfio` `lf`', '`lf`.`id` = `m`.`id_fio`', 'left');
         $this->db->join('str.`rank` `r`', '`r`.`id` = `lf`.`id_rank`', 'left');
         $this->db->where('rec.id_divizion', $id_divizion);
-        $this->db->where('rec.id_loc_org', $id_grochs);
+
+        if(is_array($id_grochs))
+        $this->db->where_in('rec.id_loc_org', $id_grochs);
+        else
+            $this->db->where('rec.id_loc_org', $id_grochs);
+
+
+        $this->db->group_by('m.id_card');
         $this->db->group_by('m.ch');
         $this->db->group_by('m.id_pos_duty');
         $this->db->order_by('is_duty','desc');
 
 
         $res = $this->db->get('str.maincou as m')->result_array();
-        //echo $this->db->last_query();
+        //echo $this->db->last_query();exit();
         return $res;
     }
 

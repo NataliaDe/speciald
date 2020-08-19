@@ -221,6 +221,10 @@
         </tbody>
     {%endif%}
 </table>
+{%if outs is defined and outs is not empty%}
+
+{% include 'creator/catalog/pagination.twig' %}
+{% endif %}
 
 
 <script src="{{ base_url('/assets/libs/jquery/jquery/dist/jquery.js')}}"></script>
@@ -233,6 +237,8 @@
             "pageLength": 50,
               "order": [],
               "searching": false,
+              "paging": false,
+              "info": false,
             language: {
                 "processing": "Подождите...",
                 "search": "Поиск:",

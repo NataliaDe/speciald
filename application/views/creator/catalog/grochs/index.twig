@@ -37,6 +37,7 @@
     {% include 'creator/catalog/grochs/list.twig' %}
 {%endif%}
  </div>
+ {%include 'parts/preloader.twig'%}
 
 {% include 'creator/catalog/modals.twig' %}
 
@@ -110,7 +111,7 @@
                         if (old_val === $this.val()) {
                             $progress_bar.animate({width: '98%'}, 1000, function () {
                                 $progress_bar.removeClass('typing');
-                                update();
+                                update(1);
                             });
                         }
                     }, 200);
@@ -119,7 +120,7 @@
                         if (old_val === $this.val()) {
                             $progress_bar.animate({width: '96%'}, 1000, function () {
                                 $progress_bar.removeClass('typing');
-                                update();
+                                update(1);
                             });
                         }
                     }, 200);
@@ -141,12 +142,12 @@
                     if ($this.parent().hasClass('col-md-2')) {
                         $progress_bar.animate({width: '98%'}, 500, function () {
                             $progress_bar.removeClass('submitting');
-                            update();
+                            update(1);
                         });
                     } else {
                         $progress_bar.animate({width: '96%'}, 500, function () {
                             $progress_bar.removeClass('submitting');
-                            update();
+                            update(1);
                         });
                     }
 
@@ -164,13 +165,18 @@
 
 
 
-        function update() {
+        function update(page_reset=0) {
             $("#inner_content").html('');
             $('#preload-update-data').css('display', 'block');
-            getItemsList();
+            getItemsList(page_reset);
         }
 
-        function getItemsList() {
+        function getItemsList(page_reset=0) {
+
+            if(page_reset === 1){
+                $("input[name=page]").val(1);
+            }
+
             let data = {};
             let myUrl = '{{ base_url("creator/catalog") }}';
 
@@ -180,7 +186,7 @@
 
             $.ajax({
                 url: myUrl,
-                type: 'post',
+                type: 'get',
                 data: data,
                 dataType: 'json',
                 success: function (res) {
@@ -214,7 +220,7 @@
 
 
         $('body').on('change', '.filters', function () {
-            update();
+            update(1);
         });
 
         $("body").on('click', '.reset_filter:not(.disabled)', function () {
@@ -230,7 +236,7 @@
             selectbox_in_form.find('option:selected').removeAttr('selected');
             selectbox_in_form.val('');
 
-            update();
+            update(1);
 
             setTimeout(function () {
                 location.reload();
@@ -314,7 +320,7 @@
         $('.only-date').on('apply.daterangepicker', function (event, picker) {
             var date = picker.startDate.format('DD.MM.YYYY');
             $(this).val(date);
-            update();
+            update(1);
         });
 
 
@@ -365,7 +371,7 @@
             });
 
             $('body').on('change', 'input[name="date_dones"]', function (e) {
-                update();
+                update(1);
             });
 
 
@@ -379,6 +385,18 @@
 
         {%endif%}
                 });
+
+                                        $('body').on('click', '.pag-new .pagination a', function (e) {
+            e.preventDefault();
+            $("input[name=page]").val($(this).data('ci-pagination-page'));
+            update();
+        });
+
+                $('body').on('click', '.lim-new', function (e) {
+            e.preventDefault();
+            $("input[name=limit]").val($(this).data('page'));
+            update();
+        });
     </script>
 {% endblock %}
 

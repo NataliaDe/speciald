@@ -701,4 +701,5 @@ class CI_Pagination {
 		return '';
 	}
 
+
 }

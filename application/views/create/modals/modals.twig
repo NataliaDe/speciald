@@ -50,7 +50,7 @@
                         {%for disp in list_disp%}
                             <option value="{{ disp.fio }}" data-rank="{{disp.rank}}" data-position="{{disp.position}}" data-podr="{{disp.podr}}" >
 
-                                {{ disp.fio }} {{disp.rank}} (смена {{disp.ch}}, {{disp.dateduty|date('d.m.Y')}})</option>
+                                {{ disp.fio }} {{disp.rank}} (смена {{disp.ch}}, {{disp.dateduty|date('d.m.Y')}} {{disp.is_show_podr is defined and disp.is_show_podr == 1 ? ', '~disp.podr :''}})</option>
                         {% endfor %}
                     </select>
 

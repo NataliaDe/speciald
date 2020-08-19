@@ -1,0 +1,31 @@
+{% if(page_count != 0) %}
+    {%if (cnt_outs is defined and cnt_outs > 0) or (page_count is defined and page_count>0)%}
+        <p>
+            {%if (cnt_outs is defined and cnt_outs > 0)%}
+                Всего: {{cnt_outs}}&nbsp;&nbsp;&nbsp;&nbsp;
+            {%endif%}
+
+            {%if (page_count is defined and page_count>0)%}
+                Страниц: {{page_count}}
+            {%endif%}
+        </p>
+
+    {%endif%}
+    <div class="row pagination-block">
+        <div class="col-md-6 number_page">
+            <div class="pagination-block pag-new">
+                {{pagination|raw}}
+            </div>
+
+        </div>
+        <div class="col-md-6 number_blocks" align="right">
+            <ul class="pagination">
+                {% for p in [25,50,100] %}
+                    <li {% if p==active_limit or (active_limit==0 and p=='Все') %} class="active" {% endif %}>
+                        <a href="#" class="lim-new"{% if p=='Все' %} data-page="0" {% else %} data-page="{{ p }}" {% endif %}>{{ p }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{%endif%}

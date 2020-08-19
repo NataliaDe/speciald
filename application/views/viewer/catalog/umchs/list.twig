@@ -264,6 +264,11 @@
     {%endif%}
 </table>
 
+{%if outs is defined and outs is not empty%}
+
+{% include 'viewer/catalog/pagination.twig' %}
+{% endif %}
+
 
 <script src="{{ base_url('/assets/libs/jquery/jquery/dist/jquery.js')}}"></script>
 <script src="{{ base_url('/assets/datatables/jquery.dataTables.js')}}"></script>
@@ -273,7 +278,9 @@
         var table = $('#catalogviewerUmchsTable').DataTable({
             "pageLength": 50,
             "order": [],
-            "searching":false,
+            "searching": false,
+            "paging": false,
+            "info": false,
             language: {
                 "processing": "Подождите...",
                 "search": "Поиск:",

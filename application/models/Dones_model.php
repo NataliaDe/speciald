@@ -44,12 +44,19 @@ class Dones_model extends CI_Model
     public function get_dones_by_grochs($filter, $id_organ = false)
     {
 
-        $this->db->select('d.*, author.id_local as author_local_id, vid.name as specd_vid_name, author.id_organ as author_id_organ');
+        $this->db->select('distinct(d.id), d.*, author.id_local as author_local_id, vid.name as specd_vid_name, author.id_organ as author_id_organ');
         $this->db->join('permissions as author', 'author.id_user=d.created_by', 'left');
         $this->db->join('vid_specd as vid', 'vid.id=d.specd_vid', 'left');
 
+        if (isset($filter['status_sd']) && !empty($filter['status_sd'])) {
+
+            $this->db->join('dones_logs as dl', "dl.id_dones=d.id and dl.`is_history`=0 AND dl.`id_action`=" . $filter['status_sd'], 'RIGHT');
+        }
+
         //who created SD
-        if (isset($filter['author_local_id']))
+        if (isset($filter['merge_locals']) && !empty($filter['merge_locals']))
+            $this->db->where_in('author.id_local', $filter['merge_locals']);
+        elseif (isset($filter['author_local_id']))
             $this->db->where('author.id_local', $filter['author_local_id']);
 
         if ($id_organ != FALSE)
@@ -195,9 +202,15 @@ class Dones_model extends CI_Model
     public function get_dones_by_region($filter, $id_organ = false)
     {
 
-        $this->db->select('d.*, author.id_local as author_local_id,author.id_region as author_region_id, vid.name as specd_vid_name, author.auth_organ,author.id_organ as author_id_organ');
+        $this->db->select('distinct(d.id), d.*, author.id_local as author_local_id,author.id_region as author_region_id, vid.name as specd_vid_name, author.auth_organ,author.id_organ as author_id_organ');
         $this->db->join('permissions as author', 'author.id_user=d.created_by', 'left');
         $this->db->join('vid_specd as vid', 'vid.id=d.specd_vid', 'left');
+
+
+                if (isset($filter['status_sd']) && !empty($filter['status_sd'])) {
+
+            $this->db->join('dones_logs as dl', "dl.id_dones=d.id and dl.`is_history`=0 AND dl.`id_action`=" . $filter['status_sd'], 'RIGHT');
+        }
 
         //who created SD
         if (isset($filter['author_region_id']))
@@ -325,11 +338,17 @@ class Dones_model extends CI_Model
     public function get_dones_for_rcu($filter)
     {
 
-        $this->db->select('d.*, author.id_local as author_local_id,author.id_region as author_region_id,author.level as author_level,'
+        $this->db->select('distinct(d.id), d.*, author.id_local as author_local_id,author.id_region as author_region_id,author.level as author_level,'
             . 'author.id_organ as author_id_organ,author.auth_organ, vid.name as specd_vid_name');
         $this->db->join('permissions as author', 'author.id_user=d.created_by', 'left');
         $this->db->join('vid_specd as vid', 'vid.id=d.specd_vid', 'left');
 
+
+
+        if (isset($filter['status_sd']) && !empty($filter['status_sd'])) {
+
+            $this->db->join('dones_logs as dl', "dl.id_dones=d.id and dl.`is_history`=0 AND dl.`id_action`=" . $filter['status_sd'] , 'RIGHT');
+        }
 
         if (isset($filter['is_delete']))
             $this->db->where('d.is_delete', $filter['is_delete']);

@@ -484,8 +484,13 @@
     {%endif%}
 </table>
 
+{%if outs is defined and outs is not empty%}
+
+{% include 'creator/catalog/pagination.twig' %}
+{% endif %}
 
 <script src="{{ base_url('/assets/libs/jquery/jquery/dist/jquery.js')}}"></script>
+<script src="{{ base_url('/assets/datatables/jquery.dataTables.js')}}"></script>
 
 <script>
     $(document).ready(function () {
@@ -494,6 +499,8 @@
             "pageLength": 50,
              "order": [],
              "searching": false,
+             "paging": false,
+             "info": false,
             language: {
                 "processing": "Подождите...",
                 "search": "Поиск:",

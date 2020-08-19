@@ -200,7 +200,9 @@ function setPreviewData() {
     var theme_msg = $('#createStandart  #id_theme_message option:selected').text();
 
 
-
+        var creator = $('#createStandart input[name="official_creator_name"]').val();
+        var people_fio = $('#createStandart input[name="people_fio"]').val();
+        var people_phone = $('#createStandart input[name="people_phone"]').val();
 
     if (is_show_opening_descr === true) {
 
@@ -212,6 +214,7 @@ function setPreviewData() {
         var new_lat = '';
         var new_long = '';
         var new_coord = '';
+        var preview = '';
 
 
         var arr_date = date.split(' ');
@@ -242,6 +245,35 @@ function setPreviewData() {
 
 
 
+        if (creator !== '') {
+            preview = preview + ' в ' + creator;
+        }
+
+        if (people_fio !== '') {
+            var rn = new RussianName($.trim(people_fio));
+            var f = rn.fullName(rn.gcaseRod); // from ...
+
+            var gender = rn.getSex();
+
+            if (gender !== '' && gender === 'm') {
+                preview = preview + ' от гражданина ' + f;
+            } else if (gender !== '' && gender === 'f') {
+                preview = preview + ' от гражданки ' + f;
+            } else {
+                preview = preview + ' от гражданина ' + f;
+            }
+
+
+        }
+
+        if (people_phone !== '') {
+            preview = preview + ' с телефона ' + people_phone;
+        }
+
+        //preview = preview + ' поступило сообщение о пожаре жилого дома';
+        preview = preview + ' поступило сообщение '+theme_msg;
+
+
         if ($.trim(descr) !== '') {
 
 //        new_descr = ($.trim(descr)).replace(/\r?\n/g, '<br />');
@@ -261,8 +293,10 @@ function setPreviewData() {
             var arr_new_descr_str = new_coord;
         }
 
+        
+
         //$('#preview-opening-description-standart').html('<b><u>Предпросмотр (начальный текст):</u></b><br>' + new_date + '' + new_time + '' + arr_new_descr_str);
-        $('#preview-opening-description-standart').find('textarea[name="opening_word"]').val(new_date + '' + new_time + ' ' + arr_new_descr_str);
+        $('#preview-opening-description-standart').find('textarea[name="opening_word"]').val(new_date + '' + new_time +  preview+' ' +arr_new_descr_str);
 
     } else {
 
@@ -276,9 +310,7 @@ function setPreviewData() {
         var new_long = '';
         var new_coord = '';
 
-        var creator = $('#createStandart input[name="official_creator_name"]').val();
-        var people_fio = $('#createStandart input[name="people_fio"]').val();
-        var people_phone = $('#createStandart input[name="people_phone"]').val();
+
 
 
         var arr_date = date.split(' ');
