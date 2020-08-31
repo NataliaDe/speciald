@@ -2,9 +2,9 @@
 
 class Media extends MY_Controller
 {
-    const SIZE_SUM_PHOTO='15000000';// bytes.=15 Mb
-    const SIZE_SUM_VIDEO='80000000';// bytes.=80 Mb
-    const SIZE_SUM_AUDIO='40000000';// bytes.=40 Mb
+    const SIZE_SUM_PHOTO='10000000';// bytes.=10 Mb
+    const SIZE_SUM_VIDEO='30000000';// bytes.=30 Mb
+    const SIZE_SUM_AUDIO='20000000';// bytes.=20 Mb
 
     public function __construct()
     {
@@ -55,7 +55,8 @@ class Media extends MY_Controller
                         'overwrite'     => FALSE,
                         'allowed_types' => "jpg|png|jpeg",
                         'encrypt_name'  => TRUE,
-                        'max_size'      => 1024000
+                        //'max_size'      => 1024000
+                        'max_size'      => 2048 //in KB. = 2MB
 //                        'max_width'     => 1024,
 //                        'max_height'    => 768
                     );
@@ -67,7 +68,8 @@ class Media extends MY_Controller
                         'overwrite'     => FALSE,
                         'allowed_types' => "mp4|mpeg4",
                         //'max_size' => 1000000,
-                        'max_size'      => 40960000, //40 MB
+                       // 'max_size'      => 40960000, //40 MB
+                         'max_size'      => 15000, //15 MB
                         //   'max_size'      => 35840,
                         'encrypt_name'  => true
                     );
@@ -79,7 +81,7 @@ class Media extends MY_Controller
                         'overwrite'     => FALSE,
                         'allowed_types' => "mp3|wav",
                         //'max_size' => 1000000,
-                        'max_size'      => 20480, //kilobytes: 1MB = 1024 kilobytes, 20MB = 20480 kilobytes
+                        'max_size'      => 10000, //kilobytes: 1MB = 1024 kilobytes, 10MB = 10000 kilobytes
                         'encrypt_name'  => true
                     );
                     break;
@@ -92,7 +94,8 @@ class Media extends MY_Controller
                         'overwrite'     => FALSE,
                         'allowed_types' => "doc|docx",
                         'encrypt_name'  => TRUE,
-                        'max_size'      => 1024000
+                       // 'max_size'      => 1024000//1 MB
+                        'max_size'      => 2048// in KB. =2MB
 //                        'max_width'     => 1024,
 //                        'max_height'    => 768
                     );
@@ -106,7 +109,8 @@ class Media extends MY_Controller
                         'overwrite'     => FALSE,
                         'allowed_types' => "pdf",
                         'encrypt_name'  => TRUE,
-                        'max_size'      => 1024000
+                        //'max_size'      => 1024000
+                        'max_size'      => 2048// in KB. =2MB
 //                        'max_width'     => 1024,
 //                        'max_height'    => 768
                     );
