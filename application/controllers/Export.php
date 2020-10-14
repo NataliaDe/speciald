@@ -115,6 +115,7 @@ class Export extends My_Controller
 
         $str = $this->create_model->get_dones_str($id_dones);
         $str_text = $this->create_model->get_dones_str_text($id_dones);
+        $str_vacant_info = $this->create_model->get_dones_str_vacant_info($id_dones);
 
 
         $object_data = $this->create_model->get_dones_object_data($id_dones);
@@ -698,6 +699,36 @@ class Export extends My_Controller
 
 
 
+        /* ----------- str vacant info block ------------ */
+        $i = 0;
+        if (isset($str_vacant_info) && !empty($str_vacant_info) && $dones['is_not_involved_str'] == 0 && $type_sd == Main_model::TYPE_SD_STANDART) {//insert table
+            $section->addTextBreak(1, self::header_style_cell_size, self::header_style_cell_font);
+
+            foreach ($str_vacant_info as $row) {
+                $i++;
+                if (!empty($row['podr_name']) && !empty($row['description'])) {
+
+                    $section->addText($row['podr_name'].':', array('size' => 12, 'italic' => true, 'bold' => true, 'underline' => 'single'), array('spaceAfter' => 0, 'spacing' => 0,'align'=>'both'));
+
+                    $a = explode(PHP_EOL, $row['description']);
+                    foreach ($a as $value) {
+                        $section->addText($value, array('size' => 10), array('spaceAfter' => 0, 'spacing' => 0,'align'=>'both'));
+                    }
+//                    if (count($str_vacant_info) == $i) {
+//                        $section->addTextBreak(1, array('size' => 12), array('spaceAfter' => 0, 'spacing' => 0));
+//                    } else
+//                        $section->addTextBreak(1, array('size' => 8), array('spaceAfter' => 0, 'spacing' => 0));
+                }
+            }
+        }
+        else {
+            $section->addTextBreak(1, self::header_style_cell_size, self::header_style_cell_font);
+        }
+
+
+
+
+
         /* ----------- str text ------------ */
         $i = 0;
         if (isset($str_text) && !empty($str_text) && $dones['is_not_involved_str'] == 0 && $type_sd == Main_model::TYPE_SD_STANDART) {//insert table
@@ -707,7 +738,7 @@ class Export extends My_Controller
                 $i++;
                 if (!empty($row['str_text_podr_name']) && !empty($row['str_text_description'])) {
 
-                    $section->addText($row['str_text_podr_name'], array('size' => 12, 'italic' => true, 'bold' => true, 'underline' => 'single'), array('spaceAfter' => 0, 'spacing' => 0,'align'=>'both'));
+                    $section->addText($row['str_text_podr_name'].':', array('size' => 12, 'italic' => true, 'bold' => true, 'underline' => 'single'), array('spaceAfter' => 0, 'spacing' => 0,'align'=>'both'));
 
                     $a = explode(PHP_EOL, $row['str_text_description']);
                     foreach ($a as $value) {

@@ -204,6 +204,7 @@
 
         $("body").on('click', '.reset_filter:not(.disabled)', function () {
             $("#catalog-filter").find('input[type="text"]:not(:hidden)').val('');
+            $("#catalog-filter").find('input[type="checkbox"]').prop('checked',false);
             //$("#catalog-filter").find('select').val('');
             //$("#catalog-filter").find('input[type="checkbox"]').prop('checked',false);
             //          $('#specd_vid').val(10);
@@ -350,9 +351,9 @@
             });
 
 
-            $('body').on('change', 'input[name="date_dones"]', function (e) {
+{#            $('body').on('change', 'input[name="date_dones"]', function (e) {
                 update(1);
-            });
+            });#}
 
 
             $('input[name="date_dones"]').val('');
@@ -362,6 +363,20 @@
                     $('input[name="date_dones"]').val("{{filter.start_date_dones|date("d.m.Y")}} - {{filter.end_date_dones|date("d.m.Y")}}");
 
         {%endif%}
+
+                            $('input[name="date_dones"]').on('cancel.daterangepicker', function (ev, picker) {
+                    $(this).val('');
+                    update(1);
+                });
+
+                $('input[name="date_dones"]').on('apply.daterangepicker', function (ev, picker) {
+
+                    $(this).val(picker.startDate.format('DD.MM.YYYY') + ' - ' + picker.endDate.format('DD.MM.YYYY'));
+                    //setTimeout(function () {
+                        update(1);
+                    //}, 800);
+                });
+
                 });
 
 

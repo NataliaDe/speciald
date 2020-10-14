@@ -63,6 +63,8 @@ class Dones extends My_Controller
             $this->load->library('form_validation');
 
             $this->load->helper('floor_by_number_helper');
+            $this->load->helper('declination_helper');
+            $this->load->helper('positions_declination');
 
 //            //TWIG
 //            $this->load->library('twig');
@@ -107,8 +109,8 @@ class Dones extends My_Controller
         $this->data['id_object_many_floor'] = Main_model::OBJECT_MANY_FLOOR;
         $this->data['id_object_avtotransport'] = Main_model::OBJECT_AVTO_TRANSPORT;
 
-        $this->data['avtotransport_vid']= $this->main_model->get_avtotransport_vid();
-        $this->data['theme_messages']= $this->main_model->get_theme_messages();
+        $this->data['avtotransport_vid'] = $this->main_model->get_avtotransport_vid();
+        $this->data['theme_messages'] = $this->main_model->get_theme_messages();
 
         $this->data['bread_crumb'] = array(array('/dones' => 'Создать специальное донесение'),
             array('Стандартное'));
@@ -173,18 +175,18 @@ class Dones extends My_Controller
         /* END default number sd */
 
 
-            //head garnison. from str
+        //head garnison. from str
 //        if (isset($this->data['active_user']['id_grochs']) && !empty($this->data['active_user']['id_grochs'])) {
 //            $garnison = $this->get_head_garnison_from_str($this->data['active_user']['id_grochs'], Main_model::POS_HEAD_GARNISON, Main_model::DIVIZ_COU);
 //            $this->data['head_garnison'] = $garnison;
 //        }
-            $journal_user = $this->user_model->get_data_user_journal_by_user_sd($this->data['active_user']['id_user']);
-            if (isset($journal_user) && !empty($journal_user) && isset($journal_user['id_locorg']) && !empty($journal_user['id_locorg'])) {
-                $garnison = $this->get_head_garnison_from_str($journal_user['id_locorg'], Main_model::POS_HEAD_GARNISON, Main_model::DIVIZ_COU);
-                $this->data['head_garnison'] = $garnison;
-            }
+        $journal_user = $this->user_model->get_data_user_journal_by_user_sd($this->data['active_user']['id_user']);
+        if (isset($journal_user) && !empty($journal_user) && isset($journal_user['id_locorg']) && !empty($journal_user['id_locorg'])) {
+            $garnison = $this->get_head_garnison_from_str($journal_user['id_locorg'], Main_model::POS_HEAD_GARNISON, Main_model::DIVIZ_COU);
+            $this->data['head_garnison'] = $garnison;
+        }
 
-            $this->data['list_disp']= $this->get_list_disp_from_str();
+        $this->data['list_disp'] = $this->get_list_disp_from_str();
 
 
 
@@ -264,6 +266,8 @@ class Dones extends My_Controller
                 }
             }
 
+            $this->data['str']['vacant_info'] = $this->getStrVacantInfoByIdsPasp(array_unique($ids_pasp)); //get vacant info block...
+
             if (isset($this->data['rig']['silymchs']) && !empty($this->data['rig']['silymchs'])) {
 
                 $is_min_br = 0;
@@ -341,7 +345,7 @@ class Dones extends My_Controller
     }
 
     //form simple
-    public function form_simple($is_default=0)
+    public function form_simple($is_default = 0)
     {
 
         $this->data['type_sd'] = Main_model::TYPE_SD_SIMPLE;
@@ -417,39 +421,33 @@ class Dones extends My_Controller
         // auto from journal rig
         elseif ($is_default == 1 && isset($this->data['active_user']['id_rig']) && $this->data['active_user']['id_rig'] != 0) {
             $id_rig = $this->data['active_user']['id_rig'];
-            $id_template=$this->data['active_user']['id_template'];
-
+            $id_template = $this->data['active_user']['id_template'];
         }
 
-         if (isset($id_rig) && !empty($id_rig)) {
+        if (isset($id_rig) && !empty($id_rig)) {
             $this->data['id_rig_current'] = $id_rig;
             $this->data['rig'] = $this->journal_model->get_rig_by_id($id_rig);
             $this->data['rig']['people'] = $this->journal_model->get_people_by_rig_id($id_rig);
             $this->data['rig']['silymchs'] = $this->journal_model->get_silymchs_by_rig_id_sort_distance($id_rig);
-            $this->data['rig']['ct_1_silymchs']=[];
-            $this->data['rig']['cnt_view_teh']=[];
+            $this->data['rig']['ct_1_silymchs'] = [];
+            $this->data['rig']['cnt_view_teh'] = [];
 
             if (isset($this->data['rig']['silymchs']) && !empty($this->data['rig']['silymchs'])) {
                 foreach ($this->data['rig']['silymchs'] as $key => $value) {
-                    if(isset($this->data['rig']['cnt_view_teh'][$value['pasp_name_full']][$value['view_teh']]))
-                    $this->data['rig']['cnt_view_teh'][$value['pasp_name_full']][$value['view_teh']]++;
+                    if (isset($this->data['rig']['cnt_view_teh'][$value['pasp_name_full']][$value['view_teh']]))
+                        $this->data['rig']['cnt_view_teh'][$value['pasp_name_full']][$value['view_teh']] ++;
                     else
-                        $this->data['rig']['cnt_view_teh'][$value['pasp_name_full']][$value['view_teh']]=1;
+                        $this->data['rig']['cnt_view_teh'][$value['pasp_name_full']][$value['view_teh']] = 1;
                 }
 
-                if(isset($this->data['rig']['cnt_view_teh']) && !empty($this->data['rig']['cnt_view_teh'])){
+                if (isset($this->data['rig']['cnt_view_teh']) && !empty($this->data['rig']['cnt_view_teh'])) {
                     foreach ($this->data['rig']['cnt_view_teh'] as $pasp => $teh) {
 
                         foreach ($teh as $view => $cnt) {
-                            $this->data['rig']['ct_1_silymchs'][]=$cnt.' '.$view.' '.$pasp;
-
+                            $this->data['rig']['ct_1_silymchs'][] = $cnt . ' ' . $view . ' ' . $pasp;
                         }
-
-
                     }
                 }
-
-
             }
 
 
@@ -461,8 +459,8 @@ class Dones extends My_Controller
         }
 
 
-        $this->data['list_opg']= $this->get_data_for_opg_from_str();
-        $this->data['list_disp']= $this->get_list_disp_from_str();
+        $this->data['list_opg'] = $this->get_data_for_opg_from_str();
+        $this->data['list_disp'] = $this->get_list_disp_from_str();
         //print_r($this->data['list_opg']);exit();
 
         $this->twig->display('create/simple/form_simple', $this->data);
@@ -552,14 +550,19 @@ class Dones extends My_Controller
                 if ($dateduty_manual != NULL) {//get data by dateduty
                     $is_main = $this->str_model->get_main_by_id_pasp_and_dateduty($row['id_pasp'], $dateduty_manual);
 
-                    if (isset($is_main) && !empty($is_main))
+                    if (isset($is_main) && !empty($is_main)){
                         $diviz_organ_of_pasp[$key] = array_merge($row, $is_main);
-                    else
+                    }
+                    else{
                         $diviz_organ_of_pasp[$key] = array_merge($row, $this->str_model->get_main_by_id_pasp($row['id_pasp']));
+                    }
+
                 }
                 else {//get data by last duty ch
                     $diviz_organ_of_pasp[$key] = array_merge($row, $this->str_model->get_main_by_id_pasp($row['id_pasp']));
                 }
+
+                $diviz_organ_of_pasp[$key]['on_list_ch'] = $diviz_organ_of_pasp[$key]['shtat_ch'];
             }
 
 
@@ -1373,9 +1376,11 @@ class Dones extends My_Controller
 
             $result = $this->getStrByIdsPasp(array_unique($ids_pasp)); //data for table: shtat, vacant...
 
+            $vacant_info = $this->getStrVacantInfoByIdsPasp(array_unique($ids_pasp)); //data for table vacant info: vacabnts, everyday description...
+
             if (isset($result) && !empty($result)) {
 
-                echo json_encode(array('pasp' => $result, 'is_error' => 0));
+                echo json_encode(array('pasp' => $result, 'vacant_info' => $vacant_info, 'is_error' => 0));
             } else {
                 echo json_encode(array('is_error' => 1, 'msg' => 'Данные по подразделениям не найдены'));
             }
@@ -1421,7 +1426,7 @@ class Dones extends My_Controller
                  *          */
 
 
-                                /* gomel GOCHS + gomel ROCHS */
+                /* gomel GOCHS + gomel ROCHS */
                 $this->data['can_edit_sd_by_merge'] = 0;
                 if (in_array($this->data['active_user']['id_local'], array(Main_model::GOMEL_LOCAL, Main_model::GOMEL_CITY)) &&
                     in_array($this->data['dones']['author_local_id'], array(Main_model::GOMEL_LOCAL, Main_model::GOMEL_CITY))) {
@@ -1633,7 +1638,7 @@ class Dones extends My_Controller
         $dones['people_status'] = (isset($post['people_status']) && !empty($post['people_status'])) ? intval($post['people_status']) : 0;
 
 
-         if (!empty($settings) && isset($settings['is_situation_first_arrival']) && in_array('yes', $settings['is_situation_first_arrival'])) {
+        if (!empty($settings) && isset($settings['is_situation_first_arrival']) && in_array('yes', $settings['is_situation_first_arrival'])) {
             $dones['situation_first_arrival'] = (isset($post['situation_first_arrival']) && !empty($post['situation_first_arrival'])) ? trim($post['situation_first_arrival']) : '';
         } else {
             $dones['situation_first_arrival'] = '';
@@ -1677,6 +1682,8 @@ class Dones extends My_Controller
 
         // type SD
         $dones['type'] = Main_model::TYPE_SD_STANDART;
+
+        $dones['is_to_daily_summary'] = (isset($post['is_to_daily_summary']) && !empty($post['is_to_daily_summary'])) ? 1 : 0;
 
         /* insert/edit dones */
         if ($id_dones == 0) {//create a new
@@ -2010,6 +2017,43 @@ class Dones extends My_Controller
         }
 
 
+         /* ------------ str vacant info of dones 1-∞ ------------- */
+        $str_vac_info = (isset($post['str_vacant_info']) && !empty($post['str_vacant_info'])) ? $post['str_vacant_info'] : array();
+
+        $str_vac_info_by_dones = $this->create_model->get_dones_str_vacant_info($id_dones_new); // str_vacant_info of dones
+        $prev_ids_str_text_by_dones = (isset($str_vac_info_by_dones) && !empty($str_vac_info_by_dones)) ? array_unique(array_column($str_vac_info_by_dones, 'id')) : array();
+
+        if (isset($str_vac_info) && !empty($str_vac_info) && $dones['is_not_involved_str'] == 0) {
+            foreach ($str_vac_info as $k => $row) {
+                $dones_str_vacant = array();
+                if (isset($row['podr_name']) && !empty(trim($row['podr_name']))) {
+
+                    $dones_str_vacant['id_dones'] = $id_dones_new;
+                    $dones_str_vacant['id_pasp'] = (isset($row['id_pasp']) && !empty($row['id_pasp'])) ? intval($row['id_pasp']) : 0;
+                    $dones_str_vacant['podr_name'] = (isset($row['podr_name']) && !empty($row['podr_name'])) ? trim($row['podr_name']) : '';
+                    $dones_str_vacant['description'] = (isset($row['description']) && !empty($row['description'])) ? trim($row['description']) : '';
+                    $dones_str_vacant['sort'] = (isset($row['sort']) && !empty($row['sort'])) ? intval($row['sort']) : 0;
+
+                    $id_str_vacant_info = (isset($row['id_str_vacant_info']) && !empty($row['id_str_vacant_info'])) ? intval($row['id_str_vacant_info']) : 0; //edit id of table dones_vacant_info
+
+                    if ($id_str_vacant_info == 0) {//add new dones_vacant_info
+                        $this->create_model->add_new_dones_str_vacant_info($dones_str_vacant);
+                    } else {//edit str_text
+                        $this->create_model->edit_dones_str_vacant_info($id_str_vacant_info, $dones_str_vacant);
+                        if (isset($prev_ids_str_text_by_dones) && !empty($prev_ids_str_text_by_dones) && (($key = array_search($id_str_vacant_info, $prev_ids_str_text_by_dones)) !== false)) {
+                            unset($prev_ids_str_text_by_dones[$key]);
+                        }
+                    }
+                }
+            }
+        }
+
+        /* delete prev str_vacant_info of dones */
+        if (isset($prev_ids_str_text_by_dones) && !empty($prev_ids_str_text_by_dones)) {
+            $this->create_model->delete_dones_str_vacant_info_by_ids($id_dones_new, $prev_ids_str_text_by_dones);
+        }
+
+
 
 
         /* ------------ trunks of dones 1-∞ ------------- */
@@ -2167,21 +2211,20 @@ class Dones extends My_Controller
         }
 
 
-        if(isset($post['avtotransport']) && !empty($post['avtotransport']) && $object['object_house'] == Main_model::OBJECT_AVTO_TRANSPORT){
+        if (isset($post['avtotransport']) && !empty($post['avtotransport']) && $object['object_house'] == Main_model::OBJECT_AVTO_TRANSPORT) {
             foreach ($post['avtotransport'] as $row) {
-                $object['avto_vid']=(isset($row['avto_vid']) && !empty($row['avto_vid'])) ? intval($row['avto_vid']) : '0';
-                $object['avto_year']=(isset($row['avto_year']) && !empty($row['avto_year'])) ? intval($row['avto_year']) : '0';
-                $object['avto_type_fuel']=(isset($row['avto_type_fuel']) && !empty($row['avto_type_fuel'])) ? trim($row['avto_type_fuel']) : '';
-                $object['avto_register_sign']=(isset($row['avto_register_sign']) && !empty($row['avto_register_sign'])) ? trim($row['avto_register_sign']) : '';
-                $object['avto_mark']=(isset($row['avto_mark']) && !empty($row['avto_mark'])) ? trim($row['avto_mark']) : '';
+                $object['avto_vid'] = (isset($row['avto_vid']) && !empty($row['avto_vid'])) ? intval($row['avto_vid']) : '0';
+                $object['avto_year'] = (isset($row['avto_year']) && !empty($row['avto_year'])) ? intval($row['avto_year']) : '0';
+                $object['avto_type_fuel'] = (isset($row['avto_type_fuel']) && !empty($row['avto_type_fuel'])) ? trim($row['avto_type_fuel']) : '';
+                $object['avto_register_sign'] = (isset($row['avto_register_sign']) && !empty($row['avto_register_sign'])) ? trim($row['avto_register_sign']) : '';
+                $object['avto_mark'] = (isset($row['avto_mark']) && !empty($row['avto_mark'])) ? trim($row['avto_mark']) : '';
             }
-        }
-        else{
-             $object['avto_vid']=0;
-             $object['avto_year']=0;
-             $object['avto_type_fuel']='';
-             $object['avto_register_sign']='';
-             $object['avto_mark']='';
+        } else {
+            $object['avto_vid'] = 0;
+            $object['avto_year'] = 0;
+            $object['avto_type_fuel'] = '';
+            $object['avto_register_sign'] = '';
+            $object['avto_mark'] = '';
         }
 
         $id_object = (isset($post['id_object']) && !empty($post['id_object'])) ? intval($post['id_object']) : 0; //edit id of table object
@@ -2288,8 +2331,8 @@ class Dones extends My_Controller
         $this->data['id_object_many_floor'] = Main_model::OBJECT_MANY_FLOOR;
         $this->data['id_object_avtotransport'] = Main_model::OBJECT_AVTO_TRANSPORT;
 
-        $this->data['avtotransport_vid']= $this->main_model->get_avtotransport_vid();
-        $this->data['theme_messages']= $this->main_model->get_theme_messages();
+        $this->data['avtotransport_vid'] = $this->main_model->get_avtotransport_vid();
+        $this->data['theme_messages'] = $this->main_model->get_theme_messages();
 
         $this->data['bread_crumb'] = array(array('/' => 'Редактировать специальное донесение'),
             array('ID = ' . $id_dones)
@@ -2312,7 +2355,7 @@ class Dones extends My_Controller
         $this->data['owner_categories'] = $this->journal_model->get_owner_categories();
         $this->data['api_source'] = $this->main_model->get_api_source();
 
-        $this->data['list_disp']= $this->get_list_disp_from_str();
+        $this->data['list_disp'] = $this->get_list_disp_from_str();
 
 
         if ($this->session->userdata('can_edit') == 0) {// viewer can see SD
@@ -2414,6 +2457,7 @@ class Dones extends My_Controller
         $this->data['dones']['informing'] = $this->create_model->get_dones_informing($id_dones);
         $this->data['dones']['str'] = $this->create_model->get_dones_str($id_dones);
         $this->data['dones']['str_text'] = $this->create_model->get_dones_str_text($id_dones);
+        $this->data['dones']['str_vacant_info'] = $this->create_model->get_dones_str_vacant_info($id_dones);
         $this->data['dones']['trunks'] = $this->create_model->get_dones_trunks($id_dones);
 
 
@@ -2482,7 +2526,7 @@ class Dones extends My_Controller
                  *          */
 
 
-                                                /* gomel GOCHS + gomel ROCHS */
+                /* gomel GOCHS + gomel ROCHS */
                 $this->data['can_edit_sd_by_merge'] = 0;
                 if (in_array($this->data['active_user']['id_local'], array(Main_model::GOMEL_LOCAL, Main_model::GOMEL_CITY)) &&
                     in_array($this->data['dones']['author_local_id'], array(Main_model::GOMEL_LOCAL, Main_model::GOMEL_CITY))) {
@@ -2543,13 +2587,13 @@ class Dones extends My_Controller
             /*  author SD = current user
              *          */
 
-                                            /* gomel GOCHS + gomel ROCHS */
-                $this->data['can_edit_sd_by_merge'] = 0;
-                if (in_array($this->data['active_user']['id_local'], array(Main_model::GOMEL_LOCAL, Main_model::GOMEL_CITY)) &&
-                    in_array($this->data['dones']['author_local_id'], array(Main_model::GOMEL_LOCAL, Main_model::GOMEL_CITY))) {
+            /* gomel GOCHS + gomel ROCHS */
+            $this->data['can_edit_sd_by_merge'] = 0;
+            if (in_array($this->data['active_user']['id_local'], array(Main_model::GOMEL_LOCAL, Main_model::GOMEL_CITY)) &&
+                in_array($this->data['dones']['author_local_id'], array(Main_model::GOMEL_LOCAL, Main_model::GOMEL_CITY))) {
 
-                    $this->data['can_edit_sd_by_merge'] = 1;
-                }
+                $this->data['can_edit_sd_by_merge'] = 1;
+            }
 
             if (($this->data['active_user']['level'] == 3 && $this->data['active_user']['id_local'] != $this->data['dones']['author_local_id'] && $this->data['can_edit_sd_by_merge'] == 0) ||
                 ($this->data['active_user']['level'] == 2 && $this->data['active_user']['id_region'] != $this->data['dones']['author_region_id'])) {
@@ -2863,6 +2907,7 @@ class Dones extends My_Controller
                 $informing = $this->create_model->get_dones_informing($id_dones);
                 $str = $this->create_model->get_dones_str($id_dones);
                 $str_text = $this->create_model->get_dones_str_text($id_dones);
+                $str_vacant_info = $this->create_model->get_dones_str_vacant_info($id_dones);
                 $trunks = $this->create_model->get_dones_trunks($id_dones);
 
                 $water_source = $this->create_model->get_dones_water_source($id_dones);
@@ -3030,6 +3075,8 @@ class Dones extends My_Controller
                 if (isset($this->data['active_user']['id_user_jour']) && !empty($this->data['active_user']['id_user_jour']))
                     $new_dones['id_user_jour'] = $this->data['active_user']['id_user_jour'];
             }
+
+            $new_dones['is_to_daily_summary'] = $dones['is_to_daily_summary'];
 
 
             $id_dones_new = $this->create_model->add_new_dones($new_dones);
@@ -3204,6 +3251,25 @@ class Dones extends My_Controller
 
 
 
+        /* ------------ str vacant info of dones 1-∞ ------------- */
+
+        if (isset($str_vacant_info) && !empty($str_vacant_info)) {
+            foreach ($str_vacant_info as $k => $row) {
+                $dones_str_vacant_info = array();
+                if (isset($row['podr_name']) && !empty(trim($row['podr_name']))) {
+
+                    $dones_str_vacant_info['id_dones'] = $id_dones_new;
+                    $dones_str_vacant_info['id_pasp'] = (isset($row['id_pasp']) && !empty($row['id_pasp'])) ? intval($row['id_pasp']) : 0;
+                    $dones_str_vacant_info['podr_name'] = (isset($row['podr_name']) && !empty($row['podr_name'])) ? trim($row['podr_name']) : '';
+                    $dones_str_vacant_info['description'] = (isset($row['description']) && !empty($row['description'])) ? trim($row['description']) : '';
+                    $dones_str_vacant_info['sort'] = (isset($row['sort']) && !empty($row['sort'])) ? intval($row['sort']) : 0;
+
+                    $this->create_model->add_new_dones_str_vacant_info($dones_str_vacant_info);
+                }
+            }
+        }
+
+
 
         /* ------------ trunks of dones 1-∞ ------------- */
 
@@ -3294,7 +3360,7 @@ class Dones extends My_Controller
             $dones_object['avto_year'] = $object['avto_year'];
             $dones_object['avto_type_fuel'] = $object['avto_type_fuel'];
             $dones_object['avto_register_sign'] = $object['avto_register_sign'];
-            $dones_object['avto_mark']=$object['avto_mark'];
+            $dones_object['avto_mark'] = $object['avto_mark'];
 
 
             $this->create_model->add_new_dones_object($dones_object);
@@ -3338,7 +3404,7 @@ class Dones extends My_Controller
                  * proved rcu and not open update
                  *          */
 
-                                                /* gomel GOCHS + gomel ROCHS */
+                /* gomel GOCHS + gomel ROCHS */
                 $this->data['can_edit_sd_by_merge'] = 0;
                 if (in_array($this->data['active_user']['id_local'], array(Main_model::GOMEL_LOCAL, Main_model::GOMEL_CITY)) &&
                     in_array($this->data['dones']['author_local_id'], array(Main_model::GOMEL_LOCAL, Main_model::GOMEL_CITY))) {
@@ -3429,9 +3495,11 @@ class Dones extends My_Controller
         // type SD
         $dones['type'] = Main_model::TYPE_SD_SIMPLE;
 
+        $dones['is_to_daily_summary'] = (isset($post['is_to_daily_summary']) && !empty($post['is_to_daily_summary'])) ? 1 : 0;
 
-            /* templates */
-            if (isset($post['id_template']) && !empty($post['id_template'])) {
+
+        /* templates */
+        if (isset($post['id_template']) && !empty($post['id_template'])) {
             $dones['id_template'] = (isset($post['id_template']) && !empty($post['id_template'])) ? $post['id_template'] : '';
 
             if ($post['id_template'] == 'ct_1') {
@@ -3626,8 +3694,8 @@ class Dones extends My_Controller
         $statuses_id = array_column($statuses, 'id_action');
 
 
-         $this->data['list_opg']= $this->get_data_for_opg_from_str();
-        $this->data['list_disp']= $this->get_list_disp_from_str();
+        $this->data['list_opg'] = $this->get_data_for_opg_from_str();
+        $this->data['list_disp'] = $this->get_list_disp_from_str();
 
 
 
@@ -3654,7 +3722,7 @@ class Dones extends My_Controller
                  * proved rcu and not open update
                  *          */
 
-                                                                /* gomel GOCHS + gomel ROCHS */
+                /* gomel GOCHS + gomel ROCHS */
                 $this->data['can_edit_sd_by_merge'] = 0;
                 if (in_array($this->data['active_user']['id_local'], array(Main_model::GOMEL_LOCAL, Main_model::GOMEL_CITY)) &&
                     in_array($this->data['dones']['author_local_id'], array(Main_model::GOMEL_LOCAL, Main_model::GOMEL_CITY))) {
@@ -3729,9 +3797,11 @@ class Dones extends My_Controller
 
             $result = $this->getStrByIdsPasp(array_unique($ids_pasp), (isset($dateduty) ? $dateduty : null)); //data for table: shtat, vacant...
 
+            $vacant_info = $this->getStrVacantInfoByIdsPasp(array_unique($ids_pasp)); //data for table vacant info: vacabnts, everyday description...
+
             if (isset($result) && !empty($result)) {
 
-                echo json_encode(array('pasp' => $result, 'is_error' => 0));
+                echo json_encode(array('pasp' => $result,'vacant_info'=>$vacant_info, 'is_error' => 0));
             } else {
                 echo json_encode(array('is_error' => 1, 'msg' => 'Данные по подразделениям не найдены'));
             }
@@ -3750,7 +3820,6 @@ class Dones extends My_Controller
         echo json_encode(array('result' => $result, 'is_error' => 0));
     }
 
-
     public function get_head_garnison_from_str($id_grochs, $pos, $diviz)
     {
         $main_cou = $this->main_model->get_head_garnison_from_str($id_grochs, $pos, $diviz);
@@ -3762,16 +3831,15 @@ class Dones extends My_Controller
         return $garnison;
     }
 
-
     public function get_data_for_opg_from_str()
     {
 
-        $list_opg=[];
-        /* OPG group from str*/
+        $list_opg = [];
+        /* OPG group from str */
         $journal_user = $this->user_model->get_data_user_journal_by_user_sd($this->data['active_user']['id_user']);
 
 
-                    if (in_array($journal_user['id_locorg'], array(Main_model::GOMEL_GOCHS, Main_model::GOMEL_ROCHS))) {
+        if (in_array($journal_user['id_locorg'], array(Main_model::GOMEL_GOCHS, Main_model::GOMEL_ROCHS))) {
             $locorg = array(Main_model::GOMEL_GOCHS, Main_model::GOMEL_ROCHS);
         } else {
             $locorg = $journal_user['id_locorg'];
@@ -3781,7 +3849,7 @@ class Dones extends My_Controller
 
             $main_cou = $this->main_model->get_posduty_from_str_by_ch($locorg, Main_model::DIVIZ_COU);
 
-             if (isset($main_cou) && !empty($main_cou)) {
+            if (isset($main_cou) && !empty($main_cou)) {
                 foreach ($main_cou as $value) {
                     if (in_array($value['id_pos_duty'], [Main_model::POS_HEAD_GARNISON, Main_model::POS_HEAD_INSPECTOR])) {
 
@@ -3792,12 +3860,9 @@ class Dones extends My_Controller
                         }
 
                         $list_opg[$value['ch']]['man'][] = $value;
-
                     }
                 }
             }
-
-
         }
 
         return $list_opg;
@@ -3807,36 +3872,33 @@ class Dones extends My_Controller
 //        ]);
     }
 
-
     public function get_list_disp_from_str()
     {
 
-        $list_disp=[];
-         $gomel_merge=0;
+        $list_disp = [];
+        $gomel_merge = 0;
         /* dispetchers from str */
         $journal_user = $this->user_model->get_data_user_journal_by_user_sd($this->data['active_user']['id_user']);
 
         if (isset($journal_user) && !empty($journal_user) && isset($journal_user['id_locorg']) && !empty($journal_user['id_locorg'])) {
 
-            if(in_array($journal_user['id_locorg'], array(Main_model::GOMEL_GOCHS, Main_model::GOMEL_ROCHS))){
-                $locorg=array(Main_model::GOMEL_GOCHS, Main_model::GOMEL_ROCHS);
-                $gomel_merge=1;
-            }
-            else{
-                $locorg=$journal_user['id_locorg'];
-
+            if (in_array($journal_user['id_locorg'], array(Main_model::GOMEL_GOCHS, Main_model::GOMEL_ROCHS))) {
+                $locorg = array(Main_model::GOMEL_GOCHS, Main_model::GOMEL_ROCHS);
+                $gomel_merge = 1;
+            } else {
+                $locorg = $journal_user['id_locorg'];
             }
 
 
             $main_cou = $this->main_model->get_posduty_listfio_from_str_by_ch($locorg, Main_model::DIVIZ_COU);
 //print_r($main_cou);exit();
-             if (isset($main_cou) && !empty($main_cou)) {
+            if (isset($main_cou) && !empty($main_cou)) {
                 foreach ($main_cou as $value) {
                     if (in_array($value['id_pos_duty'], [Main_model::POS_DISP])) {
 
-                        $id_grochs=$value['id_grochs'];
+                        $id_grochs = $value['id_grochs'];
                         //print_r($value);                        echo '<br>';
-                       // echo $value['id_loc_org'];exit();
+                        // echo $value['id_loc_org'];exit();
 
                         $man['dateduty'] = $value['dateduty'];
                         $man['ch'] = $value['ch'];
@@ -3863,25 +3925,266 @@ class Dones extends My_Controller
                             $rank_sign = $rank_sign . ' ' . 'внутренней службы';
 
                         $man['rank'] = $rank_sign;
-                        $man['position'] ='Диспетчер';
-                        $man['podr'] = 'ЦОУ '.$this->ss_model->get_locorg_name_by_id($id_grochs);
+                        $man['position'] = 'Диспетчер';
+                        $man['podr'] = 'ЦОУ ' . $this->ss_model->get_locorg_name_by_id($id_grochs);
 
-                        if($gomel_merge == 1)
+                        if ($gomel_merge == 1)
                             $man['is_show_podr'] = 1;
 
 
 
-                        $list_disp[]=$man;
+                        $list_disp[] = $man;
                     }
                 }
             }
-
-
         }
         //exit();
 //print_r($list_disp);exit();
         return $list_disp;
 //print_r($this->data['list_opg']);
+    }
 
+    public function getStrVacantInfoByIdsPasp($ids_pasp)
+    {
+
+        $diviz_organ_of_pasp = $this->str_model->get_inf_by_id_pasp($ids_pasp);
+
+        foreach ($diviz_organ_of_pasp as $key => $row) {
+
+            $diviz_organ_of_pasp[$key] = $row;
+
+            $stroke = ''; //result - add to textarea by pasp
+
+            if ($row['id_organ'] == Main_model::ORGAN_ID_RCU) {
+
+                $diviz_organ_of_pasp[$key]['vi_stroke']=$stroke;
+                return $diviz_organ_of_pasp;
+            }
+
+
+            /* cnt man of each ch. from str listfio: 16x3 */
+            for ($c = 1; $c <= 3; $c++) {
+
+                // shtat in ch. from str.listfio
+                $count_ls = $this->str_model->get_shtat_from_listfio($row['id_pasp'], $c);
+
+                if (!empty($count_ls)) {
+                    $diviz_organ_of_pasp[$key]['vi_shtat_ch'][$c] = $count_ls; // shtat in ch № c
+                } else {//get from KUSIS
+                    $main_ss = $this->ss_model->get_shtat_ch_by_id_pasp_and_ch($row['id_pasp'], $c);
+                    $diviz_organ_of_pasp[$key]['vi_shtat_ch'][$c] = $main_ss['cnt']; // shtat in ch № c
+                }
+            }
+
+
+            //itogo man by pasp: Итого 54 человека.
+            if (isset($diviz_organ_of_pasp[$key]['vi_shtat_ch'])) {
+                $diviz_organ_of_pasp[$key]['itogo_all_ch'] = array_sum($diviz_organ_of_pasp[$key]['vi_shtat_ch']);
+
+                $shtat_by_key = array_count_values($diviz_organ_of_pasp[$key]['vi_shtat_ch']);
+
+                foreach ($shtat_by_key as $man => $cnt) {
+                    if (count($shtat_by_key) == 3) {
+
+                        if (empty($stroke))
+                            $stroke = $man;
+                        else
+                            $stroke = $stroke . '+' . $man;
+                    }
+                    elseif (count($shtat_by_key) == 1) {//equal all 3 ch
+                        $stroke = $man . 'x3';
+                    } else {
+                        if ($cnt > 1) {
+                            if (empty($stroke))
+                                $stroke = $man . 'x' . $cnt;
+                            else
+                                $stroke = $stroke . '+' . $man . 'x' . $cnt;
+                        }
+                        else {
+                            if (empty($stroke))
+                                $stroke = $man;
+                            else
+                                $stroke = $stroke . '+' . $man;
+                        }
+                    }
+                }
+
+//                if (!empty($stroke))
+//                    $stroke = $stroke . '=(' . $diviz_organ_of_pasp[$key]['itogo_all_ch'] . ' ' . declination_word_by_number($diviz_organ_of_pasp[$key]['itogo_all_ch'], array('человек', 'человека', 'человек'));
+            }
+            else {
+                $diviz_organ_of_pasp[$key]['itogo_all_ch'] = 0;
+            }
+
+
+
+            /* vacants */
+            $vacants = $this->str_model->get_cnt_vacant_by_pasp($row['id_pasp']); // sum vacants in pasp
+
+            if(!empty($vacants)){
+                $stroke = $stroke . '=(' . $diviz_organ_of_pasp[$key]['itogo_all_ch'] . ' ' . declination_word_by_number($diviz_organ_of_pasp[$key]['itogo_all_ch'], array('человек', 'человека', 'человек'));
+            }
+            else{
+                $stroke = $stroke . '=' . $diviz_organ_of_pasp[$key]['itogo_all_ch'] . ' ' . declination_word_by_number($diviz_organ_of_pasp[$key]['itogo_all_ch'], array('человек', 'человека', 'человек'));
+            }
+
+            $i = 0;
+            if (!empty($vacants)) {
+                foreach ($vacants as $vac) {
+                    $i++;
+
+                    $str = '';
+
+                    $pos_decl= get_arr_positon(mb_strtolower($vac['pos_name'],'utf-8'),1);
+
+                    $str = $vac['cnt'] . ' ' . declination_word_by_number($vac['cnt'], array('вакансия', 'вакансии', 'вакансий')) . ' ' . $pos_decl; // 2 вакансии мастера-спасателя
+
+
+                    $dates_vacant = $this->str_model->get_vacant_info_by_pasp($row['id_pasp'], $vac['id_pos']); // vacants by ch and date
+
+                    if (!empty($dates_vacant)) {
+                        foreach ($dates_vacant as $dat) {
+                            if (!empty($dat['vacant_from_date'])) {
+                                $str = $str . ', c ' . (\DateTime::createFromFormat('Y-m-d', trim($dat['vacant_from_date']))->format('d.m.Y')) . ' (' . $dat['ch'] . ' смена)';
+                            } else {
+                                $str = $str . ' (' . $dat['ch'] . ' смена)';
+                            }
+                        }
+                    }
+
+                    $diviz_organ_of_pasp[$key]['vi_array'][] = $str;
+
+
+                    if (!empty($str)) {
+
+                        if ($i == 1)
+                            $stroke = $stroke . ', в т.ч. ' . $str;
+                        else {
+                            $stroke = $stroke . ', ' . $str;
+                        }
+                    }
+                }
+                $stroke = $stroke . ')';
+            }
+
+
+            /* everyday in pasp by position */
+            $everyday = $this->str_model->get_everyday_pasp($row['id_pasp']);
+            if (!empty($everyday)) {
+                foreach ($everyday as $ev) {
+                    $e = $ev['cnt'] . ' ' . ((!empty($ev['sd_slug'])) ? $ev['sd_slug'] : declination_word_by_number($ev['cnt'], get_arr_positon(mb_strtolower($ev['pos_name'],'utf-8'))));
+                    $diviz_organ_of_pasp[$key]['vi_array'][] = $e;
+                    $diviz_organ_of_pasp[$key]['itogo_all_ch'] += $ev['cnt'];
+
+                    $stroke = $stroke . ' + ' . $e;
+                }
+            }
+
+            /* everyday vacant in pasp by position */
+            $everyday_vacants = $this->str_model->get_everyday_pasp($row['id_pasp'],1);
+            if (!empty($everyday_vacants)) {
+                foreach ($everyday_vacants as $ev) {
+                    $e = $ev['cnt'] . ' ' . ((!empty($ev['sd_slug'])) ? $ev['sd_slug'] : (declination_word_by_number($ev['cnt'], get_arr_positon(mb_strtolower($ev['pos_name'],'utf-8')))) );
+                    $diviz_organ_of_pasp[$key]['vi_array'][] = $e;
+                    $diviz_organ_of_pasp[$key]['itogo_all_ch'] += $ev['cnt'];
+
+                    $stroke = $stroke . ' + ' . $e;
+
+                    $stroke = $stroke .' ('. $ev['cnt'].' '.declination_word_by_number($ev['cnt'], array('вакансия', 'вакансии', 'вакансий'));
+
+
+                    //vacants date
+                    $dates= $this->str_model->get_cnt_everyday_vacant_pasp($row['id_pasp'],$ev['id_pos'],1,0);
+
+
+                    $ii=0;
+                    if(!empty($dates)){
+                        foreach ($dates as $dt) {
+                            $ii++;
+
+                              if (!empty($dt['vacant_from_date'])) {
+                                  if($ii==1)
+                                $stroke = $stroke . ' c ' . (\DateTime::createFromFormat('Y-m-d', trim($dt['vacant_from_date']))->format('d.m.Y'));
+                            else
+                                $stroke = $stroke . ', c ' . (\DateTime::createFromFormat('Y-m-d', trim($dt['vacant_from_date']))->format('d.m.Y'));
+
+                              }
+
+                        }
+                    }
+                    $stroke = $stroke .')';
+                }
+            }
+
+
+
+
+            /* dop data from main_dop_pos */
+            if ($row['diviz_id'] == Main_model::DIVIZ_COU) {
+                $dop_pos = $this->str_model->get_cnt_dop_pos_pasp($row['id_pasp'], 1);
+            } else {
+                $dop_pos = $this->str_model->get_cnt_dop_pos_pasp($row['id_pasp']);
+            }
+
+            if (!empty($dop_pos)) {
+                foreach ($dop_pos as $dop) {
+
+                    //get vacant, if isset
+                    if ($row['diviz_id'] == Main_model::DIVIZ_COU) {
+                        $dop_vac = $this->str_model->get_dop_pos_pasp($row['id_pasp'], $dop['id_pos'], 1);
+                    } else {
+                        $dop_vac = $this->str_model->get_dop_pos_pasp($row['id_pasp'], $dop['id_pos']);
+                    }
+
+                    $cnt_dop_vac = 0;
+                    $dates = [];
+                    if (!empty($dop_vac)) {
+
+                        foreach ($dop_vac as $dv) {
+                            if (!empty($dv['vacant_date_1'])) {
+                                $cnt_dop_vac++;
+                                $d = \DateTime::createFromFormat('Y-m-d', trim($dv['vacant_date_1']))->format('d.m.Y');
+                                $dates[$d] = 1;
+                            } elseif (!empty($dv['vacant_date_2'])) {
+                                $cnt_dop_vac++;
+                                $d = \DateTime::createFromFormat('Y-m-d', trim($dv['vacant_date_2']))->format('d.m.Y');
+                                $dates[$d] = 1;
+                            }
+                        }
+                    }
+
+                    if (isset($cnt_dop_vac) && $cnt_dop_vac > 0) {
+                        $v = $cnt_dop_vac . ' ' . declination_word_by_number($cnt_dop_vac, array('вакансия', 'вакансии', 'вакансий'));
+
+                        $i = 0;
+                        if (isset($dates) && !empty($dates)) {
+                            foreach ($dates as $d => $cnt) {
+                                $i++;
+                                if ($i == 1)
+                                    $v = $v . ' с ' . $d;
+                                else {
+                                    $v = $v . ', с ' . $d;
+                                }
+                            }
+                        }
+                    }
+
+                    $diviz_organ_of_pasp[$key]['itogo_all_ch']+=$dop['cnt'];
+
+                    $dop_str = $dop['cnt'] . ' ' . declination_word_by_number($dop['cnt'], get_arr_positon($dop['pos_name'])). ((isset($v) && !empty($v)) ? (' (' . $v . ')') : '');
+                    $diviz_organ_of_pasp[$key]['vi_array'][] = $dop_str;
+
+                    $stroke = $stroke . ' + ' . $dop_str;
+                }
+            }
+
+
+            $stroke = $stroke . '. Итого ' . $diviz_organ_of_pasp[$key]['itogo_all_ch'] . ' ' . declination_word_by_number($diviz_organ_of_pasp[$key]['itogo_all_ch'], array('человек', 'человека', 'человек')) . '.';
+
+
+            $diviz_organ_of_pasp[$key]['vi_stroke'] = $stroke;
+        }
+
+        return $diviz_organ_of_pasp;
     }
 }

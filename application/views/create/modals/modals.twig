@@ -51,7 +51,7 @@
                             <option value="{{ disp.fio }}" data-rank="{{disp.rank}}" data-position="{{disp.position}}" data-podr="{{disp.podr}}" >
 
                                 {{ disp.fio }} {{disp.rank}} (смена {{disp.ch}}, {{disp.dateduty|date('d.m.Y')}} {{disp.is_show_podr is defined and disp.is_show_podr == 1 ? ', '~disp.podr :''}})</option>
-                        {% endfor %}
+                            {% endfor %}
                     </select>
 
 
@@ -66,6 +66,29 @@
 
                 <button id="btn-add-list-disp"  type="button" class="btn btn-warning" >Добавить</button>
                 <button  type="button" class="btn btn-secondary" data-dismiss="modal" >Отмена</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="show-warning" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <h4 class="modal-title ff-l title-warning" id="myModalLabel">Предупреждение</h4>
+
+                <button class="close danger" type="button" data-dismiss="modal" style="font-weight: bolder;">×</button>
+
+            </div>
+
+            <div class="modal-body">
+                <p></p>
+            </div>
+            <div class="modal-footer">
+                <button  type="button" class="btn btn-warning btn-continue"   >Продолжить</button>
+                <button  type="button" class="btn btn-secondary" data-dismiss="modal" >Закрыть</button>
             </div>
         </div>
     </div>

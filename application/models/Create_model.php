@@ -354,4 +354,36 @@ class Create_model extends CI_Model
     }
 
 
+        public function get_dones_str_vacant_info($id_dones)
+    {
+        return $this->db->select('*,description as vi_stroke')
+                ->from('speciald.dones_str_vacant_info')
+                ->where('id_dones', $id_dones)
+                ->order_by('sort', 'asc')
+                ->get()
+                ->result_array();
+    }
+
+
+        public function add_new_dones_str_vacant_info($data)
+    {
+        $this->db->insert('speciald.dones_str_vacant_info', $data);
+        return $this->db->insert_id();
+    }
+
+    public function edit_dones_str_vacant_info($id, $data)
+    {
+        $this->db->where('id', $id);
+        $this->db->update('speciald.dones_str_vacant_info', $data);
+    }
+
+        public function delete_dones_str_vacant_info_by_ids($id_dones, $ids)
+    {
+
+        $this->db->where('id_dones', $id_dones);
+        $this->db->where_in('id', $ids);
+        $this->db->delete('speciald.dones_str_vacant_info');
+    }
+
+
 }

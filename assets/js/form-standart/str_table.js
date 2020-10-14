@@ -111,9 +111,9 @@ $(document).ready(function () {
         $div_new.find('td').find('.str_text_podr_name').attr('name','str_text['+num+'][str_text_podr_name]');
         $div_new.find('td').find('.str_text_descr').attr('name','str_text['+num+'][str_text_description]');
         $div_new.find('td').find('.sort').attr('name','str_text['+num+'][sort]');
-        $div_new.find('td').find('.id_pasp_text').attr('name','silymchs['+num+'][id_pasp_text]');
+        $div_new.find('td').find('.id_pasp_text').attr('name','str_text['+num+'][id_pasp]');
 
-        $div_new.find('td').find('.id_str_text').attr('name','str['+num+'][id_str_text]');
+        $div_new.find('td').find('.id_str').attr('name','str_text['+num+'][id_str_text]');
 
         $div_new.find('td').find('input').val('');
         $div_new.find('td').find('textarea').val('');
@@ -194,3 +194,98 @@ $(document).ready(function () {
         k_sort++;
     });
   });
+
+
+
+
+
+          /* ----------------- add str vacant info block --------------- */
+    $('body').on('click', '#add-str-vacant-row', function (e) {
+        e.preventDefault();
+
+        var $div = $('div[id^="str_vacant_info_id_row"]:last');
+        var $div_for_clon = $('.str_vacant_info_row:last');
+
+        var id_car_block=$div_for_clon.data('loop');
+        //var new_loop=parseInt($div_for_clon.find('.loop-index').text())+1;
+        var new_loop=parseInt($div_for_clon.find('.sort').val())+1;
+
+        var num = parseInt(id_car_block) + 1;
+
+        var is = $('div #str_vacant_info_id_row' + num);
+        while ((is.length > 0)) {
+            var num = num + 1;
+            var is = $('div #str_vacant_info_id_row' + num);
+        }
+
+        // Clone it and assign the new ID (i.e: from num 4 to ID "klon4")
+        var $klon = $div_for_clon.clone().prop('id', 'str_vacant_info_id_row' + num);
+
+        $klon.insertAfter($('.str_vacant_info_row').last());
+
+        /* new name */
+        var $div_new = $('#str_vacant_info_id_row'+num);
+        $div_new.find('td').find('.str_vacant_info_podr_name').attr('name','str_vacant_info['+num+'][podr_name]');
+        $div_new.find('td').find('.str_vacant_info_descr').attr('name','str_vacant_info['+num+'][description]');
+        $div_new.find('td').find('.sort').attr('name','str_vacant_info['+num+'][sort]');
+        $div_new.find('td').find('.id_pasp_vacant_info').attr('name','str_vacant_info['+num+'][id_pasp]');
+
+        $div_new.find('td').find('.id_str_vacant_info').attr('name','str_vacant_info['+num+'][id_str_vacant_info]');
+
+        $div_new.find('td').find('input').val('');
+        $div_new.find('td').find('textarea').val('');
+
+        $div_new.find('td').find('.sort').val(new_loop);
+
+       // $div_new.find('.loop-index').text(new_loop);
+       // $div_new.attr('data-loop',new_loop);
+
+
+        return false;
+    });
+
+
+
+        $('body').on('click', '.del-str-vacant-info-row', function (e) {
+
+        e.preventDefault();
+
+        if ($(".str_vacant_info_podr_name").length > 1) {
+
+            $(this).parent().parent().remove();
+
+            var k = 1;
+            var k_sort = 1;
+            $('#collapse_vacant_block table').find('.sort').each(function () {
+                $(this).val(k_sort);
+                k_sort++;
+            });
+
+        }
+        return false;
+    });
+
+
+
+      $("#accordion_vacant #collapse_vacant_block table").on("click", ".up, .down", function(){
+     var $row = $(this).closest("tr");
+
+     var up = $(this).hasClass("up");
+
+     var $t = up  ?  $row.prev() : $row.next() ;
+     if($t.length){
+        up ? $t.insertAfter($row) : $t.insertBefore($row);
+     }
+
+    var k = 1;
+    var k_sort = 1;
+    $('#accordion_vacant #collapse_vacant_block table').find('.loop-index').each(function () {
+        $(this).text(k);
+        k++;
+    });
+    $('#accordion_vacant #collapse_vacant_block table').find('.sort').each(function () {
+        $(this).val(k_sort);
+        k_sort++;
+    });
+  });
+

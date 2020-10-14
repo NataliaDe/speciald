@@ -6,7 +6,7 @@
     <!-- content -->
     <br>
 
-{#<button type="button" class="btn btn-lg btn-danger" data-toggle="popover" title="Popover title" data-content="And here's some amazing content. It's very engaging. Right?">Click to toggle popover</button>#}
+    {#<button type="button" class="btn btn-lg btn-danger" data-toggle="popover" title="Popover title" data-content="And here's some amazing content. It's very engaging. Right?">Click to toggle popover</button>#}
 
 
 
@@ -15,48 +15,48 @@
 
 
 
-{% include 'creator/catalog/catalog_head.twig' %}
+    {% include 'creator/catalog/catalog_head.twig' %}
 
-{%if active_user.id_organ in [8,9,12]%}
+    {%if active_user.id_organ in [8,9,12]%}
 
-    {% include 'creator/catalog/grochs/rosn/list_filter.twig' %}
+        {% include 'creator/catalog/grochs/rosn/list_filter.twig' %}
 
-{%else%}
-    {% include 'creator/catalog/grochs/list_filter.twig' %}
-{%endif%}
-
-
-  <div id="inner_content">
+    {%else%}
+        {% include 'creator/catalog/grochs/list_filter.twig' %}
+    {%endif%}
 
 
-{%if active_user.id_organ in [8,9,12]%}
-
-    {% include 'creator/catalog/grochs/rosn/list.twig' %}
-
-{%else%}
-    {% include 'creator/catalog/grochs/list.twig' %}
-{%endif%}
- </div>
- {%include 'parts/preloader.twig'%}
-
-{% include 'creator/catalog/modals.twig' %}
-
-{% include 'common/catalog/modal-catalog-media.twig' %}
-
-{#{%if active_user.id_organ == 8%}
-
-    {% include 'creator/catalog/grochs/rosn/list.twig' %}
-{%elseif active_user.id_organ == 9%}
-    {% include 'creator/catalog/grochs/ugz/list.twig' %}
-{%elseif active_user.id_organ == 12%}
-    {% include 'creator/catalog/grochs/avia/list.twig' %}
-{%else%}
-    {% include 'creator/catalog/grochs/list.twig' %}
-{%endif%}#}
+    <div id="inner_content">
 
 
+        {%if active_user.id_organ in [8,9,12]%}
 
-<!-- .content -->
+            {% include 'creator/catalog/grochs/rosn/list.twig' %}
+
+        {%else%}
+            {% include 'creator/catalog/grochs/list.twig' %}
+        {%endif%}
+    </div>
+    {%include 'parts/preloader.twig'%}
+
+    {% include 'creator/catalog/modals.twig' %}
+
+    {% include 'common/catalog/modal-catalog-media.twig' %}
+
+    {#{%if active_user.id_organ == 8%}
+
+        {% include 'creator/catalog/grochs/rosn/list.twig' %}
+    {%elseif active_user.id_organ == 9%}
+        {% include 'creator/catalog/grochs/ugz/list.twig' %}
+    {%elseif active_user.id_organ == 12%}
+        {% include 'creator/catalog/grochs/avia/list.twig' %}
+    {%else%}
+        {% include 'creator/catalog/grochs/list.twig' %}
+    {%endif%}#}
+
+
+
+    <!-- .content -->
 
 
 
@@ -68,9 +68,9 @@
 
 
 {% block head %}
-<link rel="stylesheet" href="{{ base_url('assets/datatables/jquery.dataTables.css') }}">
-<link rel="stylesheet" href="{{ base_url('assets/css/history/history.css') }}">
-<link rel="stylesheet" href="{{ base_url('/assets/css/catalog/media.css') }}">
+    <link rel="stylesheet" href="{{ base_url('assets/datatables/jquery.dataTables.css') }}">
+    <link rel="stylesheet" href="{{ base_url('assets/css/history/history.css') }}">
+    <link rel="stylesheet" href="{{ base_url('/assets/css/catalog/media.css') }}">
 
     <link href="{{ base_url('/assets/daterangepicker/daterangepicker.css') }}" rel="stylesheet">
 
@@ -78,22 +78,22 @@
 
 {% block footer %}
 
-{% include 'copyright_footer.twig' %}
+    {% include 'copyright_footer.twig' %}
 
 
-  <script src="{{ base_url('/assets/datatables/jquery.dataTables.js')}}"></script>
+    <script src="{{ base_url('/assets/datatables/jquery.dataTables.js')}}"></script>
 
-      <script type="text/javascript"
+    <script type="text/javascript"
     src="{{ base_url('assets/daterangepicker/moment.min.js') }}"></script>
     <script type="text/javascript"
     src="{{ base_url('assets/daterangepicker/daterangepicker.js') }}"></script>
 
 
 
-  <script src="{{ base_url('/assets/js/creator/catalog.js')}}?{{now|date('H:i:s')}}"></script>
-  <script src="{{ base_url('/assets/js/catalog/slider_media_manual.js')}}"></script>
+    <script src="{{ base_url('/assets/js/creator/catalog.js')}}?{{now|date('H:i:s')}}"></script>
+    <script src="{{ base_url('/assets/js/catalog/slider_media_manual.js')}}"></script>
 
-<script>
+    <script>
 
         $(function () {
 
@@ -165,238 +165,254 @@
 
 
 
-        function update(page_reset=0) {
-            $("#inner_content").html('');
-            $('#preload-update-data').css('display', 'block');
-            getItemsList(page_reset);
-        }
-
-        function getItemsList(page_reset=0) {
-
-            if(page_reset === 1){
-                $("input[name=page]").val(1);
-            }
-
-            let data = {};
-            let myUrl = '{{ base_url("creator/catalog") }}';
-
-            data = $("#catalog-filter").serialize();
-
-            disableFilter();
-
-            $.ajax({
-                url: myUrl,
-                type: 'get',
-                data: data,
-                dataType: 'json',
-                success: function (res) {
-                    $('#preload-update-data').css('display', 'none');
-                    enableFilter();
-                    if (typeof (res.innerHtml) !== 'undefined') {
-                        $(".main-content #inner_content").html($(res.innerHtml));
-                        // $(".chzn-select").chosen();
-                        enableFilter();
+                    function update(page_reset = 0) {
+                        $("#inner_content").html('');
+                        $('#preload-update-data').css('display', 'block');
+                        getItemsList(page_reset);
                     }
 
-                }
-            });
-        }
+                    function getItemsList(page_reset = 0) {
+
+                        if (page_reset === 1) {
+                            $("input[name=page]").val(1);
+                        }
+
+                        let data = {};
+                        let myUrl = '{{ base_url("creator/catalog") }}';
+
+                        data = $("#catalog-filter").serialize();
+
+                        disableFilter();
+
+                        $.ajax({
+                            url: myUrl,
+                            type: 'get',
+                            data: data,
+                            dataType: 'json',
+                            success: function (res) {
+                                $('#preload-update-data').css('display', 'none');
+                                enableFilter();
+                                if (typeof (res.innerHtml) !== 'undefined') {
+                                    $(".main-content #inner_content").html($(res.innerHtml));
+                                    // $(".chzn-select").chosen();
+                                    enableFilter();
+                                }
+
+                            }
+                        });
+                    }
 
 
-        function disableFilter() {
-            $("#catalog-filter").find('input[type="text"]:not(:hidden)').prop('disabled', 'disabled').css('opacity', '0.5');
-            $("#catalog-filter").find('select').prop('disabled', 'disabled').trigger('chosen:updated');
-            //$("#courses-filter").find('.chosen-container').css('opacity','0.5');
-            //$("#courses-filter").find('input[type="checkbox"]').prop('disabled','disabled').closest('.check-block').css('opacity','0.5');
-            $("#catalog-filter").find('.reset_filter').addClass('disabled').css('opacity', '0.5');
-        }
-        function enableFilter() {
-            $("#catalog-filter").find('input[type="text"]:not(:hidden)').prop('disabled', false).css('opacity', '');
-            $("#catalog-filter").find('select').prop('disabled', false).trigger('chosen:updated');
-            //$("#courses-filter").find('.chosen-container').css('opacity','');
-            //$("#courses-filter").find('input[type="checkbox"]').prop('disabled',false).closest('.check-block').css('opacity','');
-            $("#catalog-filter").find('.reset_filter').removeClass('disabled').css('opacity', '');
-        }
+                    function disableFilter() {
+                        $("#catalog-filter").find('input[type="text"]:not(:hidden)').prop('disabled', 'disabled').css('opacity', '0.5');
+                        $("#catalog-filter").find('select').prop('disabled', 'disabled').trigger('chosen:updated');
+                        //$("#courses-filter").find('.chosen-container').css('opacity','0.5');
+                        //$("#courses-filter").find('input[type="checkbox"]').prop('disabled','disabled').closest('.check-block').css('opacity','0.5');
+                        $("#catalog-filter").find('.reset_filter').addClass('disabled').css('opacity', '0.5');
+                    }
+                    function enableFilter() {
+                        $("#catalog-filter").find('input[type="text"]:not(:hidden)').prop('disabled', false).css('opacity', '');
+                        $("#catalog-filter").find('select').prop('disabled', false).trigger('chosen:updated');
+                        //$("#courses-filter").find('.chosen-container').css('opacity','');
+                        //$("#courses-filter").find('input[type="checkbox"]').prop('disabled',false).closest('.check-block').css('opacity','');
+                        $("#catalog-filter").find('.reset_filter').removeClass('disabled').css('opacity', '');
+                    }
 
 
-        $('body').on('change', '.filters', function () {
-            update(1);
-        });
+                    $('body').on('change', '.filters', function () {
+                        update(1);
+                    });
 
-        $("body").on('click', '.reset_filter:not(.disabled)', function () {
-            $("#catalog-filter").find('input[type="text"]:not(:hidden)').val('');
-            //$("#catalog-filter").find('select').val('');
-            //$("#catalog-filter").find('input[type="checkbox"]').prop('checked',false);
-            //          $('#specd_vid').val(10);
-            // $('#specd_vid').trigger('change');
-            //$('#specd_vid').val("").trigger('change');
-
-
-            selectbox_in_form = $("#catalog-filter").find('select');
-            selectbox_in_form.find('option:selected').removeAttr('selected');
-            selectbox_in_form.val('');
-
-            update(1);
-
-            setTimeout(function () {
-                location.reload();
-            }, 300);
-
-        });
+                    $("body").on('click', '.reset_filter:not(.disabled)', function () {
+                        $("#catalog-filter").find('input[type="text"]:not(:hidden)').val('');
+                        $("#catalog-filter").find('input[type="checkbox"]').prop('checked', false);
+                        //$("#catalog-filter").find('select').val('');
+                        //$("#catalog-filter").find('input[type="checkbox"]').prop('checked',false);
+                        //          $('#specd_vid').val(10);
+                        // $('#specd_vid').trigger('change');
+                        //$('#specd_vid').val("").trigger('change');
 
 
-        $("body").on('click', '.button-filter', function () {
+                        selectbox_in_form = $("#catalog-filter").find('select');
+                        selectbox_in_form.find('option:selected').removeAttr('selected');
+                        selectbox_in_form.val('');
+
+                        update(1);
+
+                        setTimeout(function () {
+                            location.reload();
+                        }, 300);
+
+                    });
 
 
-
-            if ($("#collapseThree").hasClass('show')) {
-
-                $(this).text('Показать фильтр');
-                close_filter(0);
-
-            } else {
-                $(this).text('Скрыть фильтр');
-                close_filter(1);
-            }
-
-        });
-
-
-        function close_filter(is_open) {
-
-            let myUrl = '{{ base_url("creator/catalog/close_filter") }}';
-
-
-            $.ajax({
-                url: myUrl,
-                type: 'post',
-                data: {'is_open': is_open},
-                dataType: 'json',
-                success: function (res) {
-
-                }
-            });
-        }
+                    $("body").on('click', '.button-filter', function () {
 
 
 
-        $('.only-date').daterangepicker({
-            singleDatePicker: true,
-            showDropdowns: true,
-            "autoApply": true,
-            autoUpdateInput: false,
+                        if ($("#collapseThree").hasClass('show')) {
 
-            locale: {
-                format: 'DD.MM.YYYY',
-                applyLabel: 'Применить',
-                cancelLabel: 'Отменить',
-                "daysOfWeek": [
-                    "Вс",
-                    "Пн",
-                    "Вт",
-                    "Ср",
-                    "Чт",
-                    "Пт",
-                    "Сб"
-                ],
-                "monthNames": [
-                    "Январь",
-                    "Февраль",
-                    "Март",
-                    "Апрель",
-                    "Май",
-                    "Июнь",
-                    "Июль",
-                    "Август",
-                    "Сентябрь",
-                    "Октябрь",
-                    "Ноябрь",
-                    "Декабрь"
-                ],
-                "firstDay": 1
-            }
-        });
+                            $(this).text('Показать фильтр');
+                            close_filter(0);
 
-        $('.only-date').on('apply.daterangepicker', function (event, picker) {
-            var date = picker.startDate.format('DD.MM.YYYY');
-            $(this).val(date);
-            update(1);
-        });
+                        } else {
+                            $(this).text('Скрыть фильтр');
+                            close_filter(1);
+                        }
+
+                    });
+
+
+                    function close_filter(is_open) {
+
+                        let myUrl = '{{ base_url("creator/catalog/close_filter") }}';
+
+
+                        $.ajax({
+                            url: myUrl,
+                            type: 'post',
+                            data: {'is_open': is_open},
+                            dataType: 'json',
+                            success: function (res) {
+
+                            }
+                        });
+                    }
 
 
 
+                    $('.only-date').daterangepicker({
+                        singleDatePicker: true,
+                        showDropdowns: true,
+                        "autoApply": true,
+                        autoUpdateInput: false,
 
-        $(function () {
-            $('input[name="date_dones"]').daterangepicker({
+                        locale: {
+                            format: 'DD.MM.YYYY',
+                            applyLabel: 'Применить',
+                            cancelLabel: 'Отменить',
+                            "daysOfWeek": [
+                                "Вс",
+                                "Пн",
+                                "Вт",
+                                "Ср",
+                                "Чт",
+                                "Пт",
+                                "Сб"
+                            ],
+                            "monthNames": [
+                                "Январь",
+                                "Февраль",
+                                "Март",
+                                "Апрель",
+                                "Май",
+                                "Июнь",
+                                "Июль",
+                                "Август",
+                                "Сентябрь",
+                                "Октябрь",
+                                "Ноябрь",
+                                "Декабрь"
+                            ],
+                            "firstDay": 1
+                        }
+                    });
 
-                "autoApply": false,
-                autoUpdateInput: true,
-
-                opens: 'left',
-                locale: {
-                    format: 'DD.MM.YYYY',
-                    applyLabel: 'Применить',
-                    cancelLabel: 'Отменить',
-                    "daysOfWeek": [
-                        "Вс",
-                        "Пн",
-                        "Вт",
-                        "Ср",
-                        "Чт",
-                        "Пт",
-                        "Сб"
-                    ],
-                    "monthNames": [
-                        "Январь",
-                        "Февраль",
-                        "Март",
-                        "Апрель",
-                        "Май",
-                        "Июнь",
-                        "Июль",
-                        "Август",
-                        "Сентябрь",
-                        "Октябрь",
-                        "Ноябрь",
-                        "Декабрь"
-                    ],
-                    "firstDay": 1
-                }
-            }, function (start, end, label) {
-
-                //console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
-                setTimeout(function () {
-                 //   update();
-                }, 800);
-            });
-
-            $('body').on('change', 'input[name="date_dones"]', function (e) {
-                update(1);
-            });
+                    $('.only-date').on('apply.daterangepicker', function (event, picker) {
+                        var date = picker.startDate.format('DD.MM.YYYY');
+                        $(this).val(date);
+                        update(1);
+                    });
 
 
 
 
-            $('input[name="date_dones"]').val('');
+                    $(function () {
+                        $('input[name="date_dones"]').daterangepicker({
+
+                            "autoApply": false,
+                            autoUpdateInput: true,
+
+                            opens: 'left',
+                            locale: {
+                                format: 'DD.MM.YYYY',
+                                applyLabel: 'Применить',
+                                cancelLabel: 'Отменить',
+                                "daysOfWeek": [
+                                    "Вс",
+                                    "Пн",
+                                    "Вт",
+                                    "Ср",
+                                    "Чт",
+                                    "Пт",
+                                    "Сб"
+                                ],
+                                "monthNames": [
+                                    "Январь",
+                                    "Февраль",
+                                    "Март",
+                                    "Апрель",
+                                    "Май",
+                                    "Июнь",
+                                    "Июль",
+                                    "Август",
+                                    "Сентябрь",
+                                    "Октябрь",
+                                    "Ноябрь",
+                                    "Декабрь"
+                                ],
+                                "firstDay": 1
+                            }
+                        }, function (start, end, label) {
+
+                            //console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+                            setTimeout(function () {
+                                //   update();
+                            }, 800);
+                        });
+
+        {#            $('body').on('change', 'input[name="date_dones"]', function (e) {
+                        update(1);
+                    });#}
+
+
+
+
+                            $('input[name="date_dones"]').val('');
 
         {%if (filter.start_date_dones is defined and filter.start_date_dones is not empty) and (filter.end_date_dones is defined and filter.end_date_dones is not empty)%}
 
-                    $('input[name="date_dones"]').val("{{filter.start_date_dones|date("d.m.Y")}} - {{filter.end_date_dones|date("d.m.Y")}}");
+                $('input[name="date_dones"]').val("{{filter.start_date_dones|date("d.m.Y")}} - {{filter.end_date_dones|date("d.m.Y")}}");
 
         {%endif%}
+
+
+                $('input[name="date_dones"]').on('cancel.daterangepicker', function (ev, picker) {
+                    $(this).val('');
+                    update(1);
                 });
 
-                                        $('body').on('click', '.pag-new .pagination a', function (e) {
-            e.preventDefault();
-            $("input[name=page]").val($(this).data('ci-pagination-page'));
-            update();
-        });
+                $('input[name="date_dones"]').on('apply.daterangepicker', function (ev, picker) {
 
-                $('body').on('click', '.lim-new', function (e) {
-            e.preventDefault();
-            $("input[name=limit]").val($(this).data('page'));
-            update();
-        });
+                    $(this).val(picker.startDate.format('DD.MM.YYYY') + ' - ' + picker.endDate.format('DD.MM.YYYY'));
+                    //setTimeout(function () {
+                    update(1);
+                    //}, 800);
+                });
+
+            });
+
+            $('body').on('click', '.pag-new .pagination a', function (e) {
+                e.preventDefault();
+                $("input[name=page]").val($(this).data('ci-pagination-page'));
+                update();
+            });
+
+            $('body').on('click', '.lim-new', function (e) {
+                e.preventDefault();
+                $("input[name=limit]").val($(this).data('page'));
+                update();
+            });
     </script>
 {% endblock %}
 

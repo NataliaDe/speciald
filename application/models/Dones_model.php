@@ -150,6 +150,9 @@ class Dones_model extends CI_Model
             $this->db->where('d.specd_vid', $filter['specd_vid']);
         }
 
+        if (isset($filter['is_to_daily_summary']) && $filter['is_to_daily_summary'] == 1)
+            $this->db->where('d.is_to_daily_summary', 1);
+
         $this->db->order_by('d.date_insert', 'DESC');
 
 
@@ -307,6 +310,8 @@ class Dones_model extends CI_Model
 
             $this->db->where('d.specd_vid', $filter['specd_vid']);
         }
+        if (isset($filter['is_to_daily_summary']) && $filter['is_to_daily_summary'] == 1)
+            $this->db->where('d.is_to_daily_summary', 1);
 
         $this->db->order_by('d.date_insert', 'DESC');
 
@@ -429,6 +434,9 @@ class Dones_model extends CI_Model
 
             $this->db->where('d.specd_vid', $filter['specd_vid']);
         }
+
+        if (isset($filter['is_to_daily_summary']) && $filter['is_to_daily_summary'] == 1)
+            $this->db->where('d.is_to_daily_summary', 1);
 
         $this->db->order_by('d.date_insert', 'DESC');
 

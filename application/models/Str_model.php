@@ -108,7 +108,7 @@ class Str_model extends CI_Model
     public function get_main_by_id_pasp($id_pasp)
     {
 
-        $this->db->select('m.dateduty,m.ch,m.id_card,m.listls as on_list_ch,m.countls as shtat_ch, m.vacant as vacant_ch,m.face as face_ch,m.calc as br_ch, m.duty as cnt_naryd, m.gas, m.fio_duty');
+        $this->db->select('m.dateduty,m.ch,m.id_card,m.listls as on_list_ch,m.listls as on_list_ch_1,m.countls as shtat_ch, m.vacant as vacant_ch,m.face as face_ch,m.calc as br_ch, m.duty as cnt_naryd, m.gas, m.fio_duty');
         $this->db->where('m.id_card', $id_pasp);
         $this->db->where('m.is_duty', 1);
         $this->db->order_by('m.dateduty', 'desc');
@@ -419,7 +419,7 @@ class Str_model extends CI_Model
     public function get_main_by_id_pasp_and_dateduty($id_pasp, $dateduty)
     {
 
-        $this->db->select('m.dateduty,m.ch,m.id_card,m.listls as on_list_ch,m.countls as shtat_ch, m.vacant as vacant_ch,m.face as face_ch,m.calc as br_ch, m.duty as cnt_naryd, m.gas, m.fio_duty');
+        $this->db->select('m.dateduty,m.ch,m.id_card,m.listls as on_list_ch,m.listls as on_list_ch_1,m.countls as shtat_ch, m.vacant as vacant_ch,m.face as face_ch,m.calc as br_ch, m.duty as cnt_naryd, m.gas, m.fio_duty');
         $this->db->where('m.id_card', $id_pasp);
         $this->db->where('m.dateduty', $dateduty);
         $this->db->limit(1);
@@ -451,4 +451,103 @@ class Str_model extends CI_Model
         $res = $this->db->get('str.mainrcu AS m')->row_array();
         return $res;
     }
+
+
+
+        public function get_main_by_id_pasp_and_ch($id_pasp, $ch)
+    {
+
+        $this->db->select('m.*');
+        $this->db->where('m.id_card', $id_pasp);
+        $this->db->where('m.ch', $ch);
+        $this->db->order_by('m.dateduty','desc');
+        $this->db->limit(1);
+
+        $res = $this->db->get('str.main AS m')->row_array();
+        return $res;
+    }
+
+            public function get_cnt_vacant_by_pasp($id_pasp)
+    {
+
+        $result = $this->db->query("CALL str.`sd_get_cnt_vacant_pasp`({$id_pasp})");
+        //$this->db->reconnect();
+        mysqli_next_result($this->db->conn_id);
+        $res = $result->result_array();
+
+        return $res;
+    }
+
+        public function get_vacant_info_by_pasp($id_pasp,$id_pos)
+    {
+
+        $result = $this->db->query("CALL str.`sd_get_vacant_info`({$id_pasp}, {$id_pos})");
+        //$this->db->reconnect();
+        mysqli_next_result($this->db->conn_id);
+        $res = $result->result_array();
+
+        return $res;
+    }
+
+
+        public function get_everyday_pasp($id_pasp, $is_vacant=0)
+    {
+
+        $result = $this->db->query("CALL str.`sd_get_everyday_pasp`({$id_pasp},{$is_vacant})");
+        //$this->db->reconnect();
+        mysqli_next_result($this->db->conn_id);
+        $res = $result->result_array();
+
+        return $res;
+    }
+
+            public function get_cnt_dop_pos_pasp($id_pasp,$is_cou=0)
+    {
+
+        $result = $this->db->query("CALL str.`sd_get_cnt_dop_pos_pasp`({$id_pasp},{$is_cou})");
+        //$this->db->reconnect();
+        mysqli_next_result($this->db->conn_id);
+        $res = $result->result_array();
+
+        return $res;
+    }
+
+
+            public function get_dop_pos_pasp($id_pasp,$id_pos,$is_cou=0)
+    {
+
+        $result = $this->db->query("CALL str.`sd_get_dop_pos_pasp`({$id_pasp},{$id_pos},{$is_cou})");
+        //$this->db->reconnect();
+        mysqli_next_result($this->db->conn_id);
+        $res = $result->result_array();
+
+        return $res;
+    }
+
+
+
+            public function get_cnt_everyday_vacant_pasp($id_pasp,$id_pos,$is_vacant=0,$ch=0)
+    {
+
+        $result = $this->db->query("CALL str.`sd_get_cnt_everyday_vacant_pasp`({$id_pasp},{$id_pos},{$is_vacant},{$ch})");
+        //$this->db->reconnect();
+        mysqli_next_result($this->db->conn_id);
+        $res = $result->result_array();
+
+        return $res;
+    }
+
+    public function get_shtat_from_listfio($id_pasp, $ch)
+    {
+        /* all man in pasp */
+        $this->db->select('count(l.id) as cnt');
+        $this->db->join('str.listfio as l ', 'l.id_cardch=c.id', 'left');
+        $this->db->where('c.id_card', $id_pasp);
+        $this->db->where('c.ch', $ch);
+
+        $res = $this->db->get('str.cardch AS c')->row_array();
+        return $res['cnt'];
+    }
+
+
 }

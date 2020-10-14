@@ -43,7 +43,7 @@
 
 
                             <label for="date_doness" >Дата СД</label>
-                            <input type="text" class="form-control "  placeholder="" name="date_dones" value="{%if (filter.start_date_dones is defined and filter.start_date_dones is not empty) and (filter.end_date_dones is defined and filter.end_date_dones is not empty)%}{{filter.start_date_dones|date("d.m.Y")}} - {{filter.end_date_dones|date("d.m.Y")}}{%endif%}">
+                            <input type="text" class="form-control " autocomplete="off"  placeholder="" name="date_dones" value="{%if (filter.start_date_dones is defined and filter.start_date_dones is not empty) and (filter.end_date_dones is defined and filter.end_date_dones is not empty)%}{{filter.start_date_dones|date("d.m.Y")}} - {{filter.end_date_dones|date("d.m.Y")}}{%endif%}">
                         </div>
 
 
@@ -140,6 +140,12 @@
                                 <option  value="5" {{(filter.status_sd is defined and filter.status_sd is not empty and filter.status_sd == 5) ? 'selected' : ''}}>Замечания от УМЧС</option>
                                 {#<option  value="8" {{(filter.status_sd is defined and filter.status_sd is not empty and filter.status_sd == 8) ? 'selected' : ''}}>Не требует подтверждения УМЧС</option>#}
                             </select>
+                        </div>
+
+                        <div class="material-switch pull-right" style="padding-top: 31px; padding-right: 20px;">
+                            <input class="filters"  name="is_to_daily_summary" type="checkbox" id="is_to_daily_summary" value="1" {{(filter.is_to_daily_summary is defined and filter.is_to_daily_summary==1) ? 'checked' : ''}}>
+                            <label for="is_to_daily_summary" class="label-warning" style="margin-bottom: 5px; background-color: #07ad2d !important;"></label>
+                            <span style="padding-right: 5px; ">Только СД в суточную сводку</span>
                         </div>
 
 

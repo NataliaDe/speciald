@@ -95,4 +95,21 @@ class Ss_model extends CI_Model
             ->row_array();
         return $res['auth'];
     }
+
+    public function get_shtat_ch_by_id_pasp_and_ch($id_pasp, $ch)
+    {
+
+        if ($ch == 1)
+            $this->db->select('m.change_one as cnt');
+        elseif ($ch == 2)
+            $this->db->select('m.change_two as cnt');
+        elseif ($ch == 3)
+            $this->db->select('m.change_three as cnt');
+
+        $this->db->where('m.id_record', $id_pasp);
+        $this->db->limit(1);
+
+        $res = $this->db->get('ss.staff AS m')->row_array();
+        return $res;
+    }
 }

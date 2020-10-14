@@ -53,7 +53,12 @@
             {% for out in outs %}
 
                 <tr class="{%if out.type == 1 and out.statuses_id is defined and out.statuses_id is not empty and 4 in out.statuses_id and 6 in out.statuses_id  %} standart-sd-confirm {%elseif out.type == 1 and out.statuses_id is defined and out.statuses_id is not empty and 4 in out.statuses_id %} standart-sd-confirm-umchs {%elseif out.type == 1%} standart-sd-color {%endif%}">
-                    <td><a href="#" class="a-custom" data-toggle="modal"  data-target="#history-sd-modal" data-url="{{base_url('history')}}" data-id="{{out.id}}" data-number-sd="{{out.specd_date ? out.specd_date|date('d.m.Y') : ''}} {{out.specd_number ? '№ '~out.specd_number : ''}}" >{{out.id}}</a></td>
+                    <td><a href="#" class="a-custom" data-toggle="modal"  data-target="#history-sd-modal" data-url="{{base_url('history')}}" data-id="{{out.id}}" data-number-sd="{{out.specd_date ? out.specd_date|date('d.m.Y') : ''}} {{out.specd_number ? '№ '~out.specd_number : ''}}" >{{out.id}}</a>
+                    {%if out.is_to_daily_summary == 1%}
+                        <br>
+<i class="fa fa-check-square-o" aria-hidden="true" style="color:#28a745" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="В суточную сводку"></i>
+                        {%endif%}
+                    </td>
 
                     <td> {{out.specd_date ? out.specd_date|date('d.m.Y') : ''}}<br>{{out.specd_number ? '№ '~out.specd_number : ''}}
 

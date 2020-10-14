@@ -250,6 +250,39 @@ if(ids_pasp !== '' && ids_pasp !== null){
 
 
 
+
+            /* vacant info  */
+
+            $(JSON.parse(res)['vacant_info']).each(function (index, val) {
+
+                $(val).each(function (index_1, value) {
+
+                    var yes_not = 0;
+                    $('#div-str #accordion_vacant').find('.id_pasp_vacant_info').each(function (i, v) {
+                        console.log($(this).val());
+                        if ($(this).val() === value.id_pasp)
+                            yes_not = yes_not + 1;
+                    });
+
+                    if (yes_not === 0) {// pasp description is not in table
+
+                        $('#div-str #accordion_vacant').find('#add-str-vacant-row').trigger('click');
+                        var $row = $('#div-str #accordion_vacant .table tbody').find('.str_vacant_info_row:last');
+
+                            $row.find('td').find('.str_vacant_info_podr_name').val(value.full_name_podr);
+
+                            var inf=value.vi_stroke;
+                           
+                            $row.find('td').find('.str_vacant_info_descr').val(inf);
+
+                            $row.find('td').find('.id_pasp_vacant_info').val(value.id_pasp);
+                    }
+
+                });
+            });
+
+
+
                 /*  delete empty first row*/
                 $('#str-block-div #div-str').find('.id_pasp').each(function (i, v) {
                     var id_row = ($(this).closest('.str_row')).attr('id');
@@ -265,6 +298,16 @@ if(ids_pasp !== '' && ids_pasp !== null){
                     var id_row = ($(this).closest('.str_text_row')).attr('id');
                     var $row_check = $('#str-block-div #div-str .table tbody').find('#' + id_row);
                     if ($row_check.find('td').find('.str_text_podr_name').val() === ''){
+                        $row_check.remove();
+                    }
+                });
+
+
+                /*  delete empty first row - vacant info block */
+                $('#str-block-div #div-str #accordion_vacant').find('.id_pasp_vacant_info').each(function (i, v) {
+                    var id_row = ($(this).closest('.str_vacant_info_row')).attr('id');
+                    var $row_check = $('#str-block-div #div-str #accordion_vacant .table tbody').find('#' + id_row);
+                    if ($row_check.find('td').find('.str_vacant_info_podr_name').val() === '') {
                         $row_check.remove();
                     }
                 });
@@ -433,11 +476,46 @@ if(ids_pasp !== '' && ids_pasp !== null && ids_pasp.length > 0){
 
                             $row.find('td').find('.id_pasp_text').val(value.id_pasp);
 
-
-
                     }
 
+                });
+            });
 
+
+
+
+
+
+            /* vacant info  */
+
+            $(JSON.parse(res)['vacant_info']).each(function (index, val) {
+
+                $(val).each(function (index_1, value) {
+
+                    /* vacant info */
+                    var yes_vacant = 0;
+                    var id_row_vacant='';
+                    $('#div-str #accordion_vacant').find('.id_pasp_vacant_info').each(function (i, v) {
+                        if ($(this).val() === value.id_pasp){
+                            yes_vacant = yes_vacant + 1;
+                            id_row_vacant=($(this).closest('.str_vacant_info_row')).attr('id');
+
+                        }
+                    });
+
+                    if (yes_vacant === 1 && id_row_vacant !== '') {// pasp description is  in table
+
+                        var $row = $('#div-str #accordion_vacant .table tbody').find('#'+id_row_vacant);
+
+                            $row.find('td').find('.str_vacant_info_podr_name').val(value.full_name_podr);
+
+                            var inf=value.vi_stroke;
+
+                            $row.find('td').find('.str_vacant_info_descr').val(inf);
+
+                            $row.find('td').find('.id_pasp_vacant_info').val(value.id_pasp);
+
+                    }
 
                 });
             });

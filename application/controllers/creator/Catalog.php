@@ -110,6 +110,11 @@ class Catalog extends My_Controller
             $filter['short_description'] = $bd_filter['short_description'] = (isset($post['short_description']) && !empty($post['short_description'])) ? $post['short_description'] : '';
             $filter['specd_vid'] = $bd_filter['specd_vid'] = (isset($post['specd_vid']) && !empty($post['specd_vid'])) ? intval($post['specd_vid']) : '';
             $filter['status_sd'] = $bd_filter['status_sd'] = (isset($post['status_sd']) && !empty($post['status_sd'])) ? intval($post['status_sd']) : '';
+            $filter['is_to_daily_summary'] = (isset($post['is_to_daily_summary']) && !empty($post['is_to_daily_summary'])) ? 1 : 0;
+
+            if ($this->data['active_user']['level'] == Main_model::LEVEL_ID_ROCHS || $this->data['active_user']['level'] == Main_model::LEVEL_ID_UMCHS) {
+                $bd_filter['is_to_daily_summary'] =$filter['is_to_daily_summary'];
+            }
 
             $filter['is_open_filter'] = $bd_filter['is_open_filter'] = 1;
 
@@ -184,6 +189,7 @@ class Catalog extends My_Controller
             //}
         } elseif ($this->data['active_user']['level'] == Main_model::LEVEL_ID_RCU) {//rcu
             $filter['is_delete'] = 0;
+            $filter['is_to_daily_summary'] = (isset($filter['is_to_daily_summary'])) ? $filter['is_to_daily_summary'] : 1;
             $this->data['outs'] = $this->dones_model->get_dones_for_rcu($filter, FALSE);
         }
 

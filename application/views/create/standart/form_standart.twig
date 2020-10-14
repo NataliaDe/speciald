@@ -251,6 +251,7 @@
     </form>
 
     <a href="#" data-toggle="modal" data-target="#show-error" class="hide" id="a-show-error"></a>
+    <a href="#" data-toggle="modal" data-target="#show-warning" class="hide" id="a-show-warning"></a>
     <!-- .content -->
 
 
@@ -283,6 +284,8 @@
 {% block head %}
     <link rel="stylesheet" href="{{ base_url('/assets/accordion/style.css') }}">
     <link rel="stylesheet" href="{{ base_url('/assets/css/sb-admin-2.css') }}">
+
+    <link rel="stylesheet" href="{{ base_url('/assets/css/checkbox_new.css') }}">
 
     <link rel="stylesheet" href="{{ base_url('/assets/css/timer.css') }}?{{now|date('H:i:s')}}">
 
@@ -1594,7 +1597,7 @@
                                     var time_loc = $('#createStandart input[name="time_loc"]').val();
                                     var time_likv = $('#createStandart input[name="time_likv"]').val();
 
-
+                                    var is_likv_before_arrival = $('#createStandart input[name="is_likv_before_arrival"]');
 
 
 
@@ -1618,86 +1621,113 @@
 
                 if (first_date_arr === null) {
 
-                    $('#a-show-error').click();
+                    var nm = 'show-error';
+                    var md = $('#' + nm);
+                    //$('#a-show-error').click();
+                    $('#a-' + nm).click();
 
                     var field = $('#createStandart input[name="time_msg"]');
 
                     field.removeClass('error-inpt');
                     field.addClass('error-inpt');
 
-                    $('#show-error .modal-body p').html('Время сообщения не может быть пустым');
+                    //$('#show-error .modal-body p').html('Время сообщения не может быть пустым');
+                    md.find('.modal-body p').html('Время сообщения не может быть пустым');
 
                     $('html, body').animate({
                         scrollTop: (field.offset().top - 125)
                     }, 500);
                     return false;
                 } else if (first_date_arr.length !== 7) {
-                    $('#a-show-error').click();
+                    //$('#a-show-error').click();
+
+                    var nm = 'show-warning';
+                    var md = $('#' + nm);
+                    $('#a-' + nm).click();
 
                     var field = $('#createStandart input[name="time_msg"]');
 
                     field.removeClass('error-inpt');
                     field.addClass('error-inpt');
 
-                    $('#show-error .modal-body p').html('Время сообщения должно быть указано в формате xx.xx.xxxx xx:xx:xx');
+                    //$('#show-error .modal-body p').html('Время сообщения должно быть указано в формате xx.xx.xxxx xx:xx:xx');
+                    md.find('.modal-body p').html('Время сообщения должно быть указано в формате xx.xx.xxxx xx:xx:xx');
 
                     $('html, body').animate({
                         scrollTop: (field.offset().top - 125)
                     }, 500);
                     return false;
-                } else if (second_date_arr === null) {
+                } else if (second_date_arr === null && (is_likv_before_arrival.is(':checked') !== true)) {
 
-                    $('#a-show-error').click();
+
+                    //$('#a-show-error').click();
+                    var nm = 'show-warning';
+                    var md = $('#' + nm);
+                    $('#a-' + nm).click();
 
                     var field = $('#createStandart input[name="time_loc"]');
 
                     field.removeClass('error-inpt');
                     field.addClass('error-inpt');
 
-                    $('#show-error .modal-body p').html('Время локализации не может быть пустым');
+                    //$('#show-error .modal-body p').html('Время локализации не может быть пустым');
+                    md.find('.modal-body p').html('Время локализации не может быть пустым');
 
                     $('html, body').animate({
                         scrollTop: (field.offset().top - 125)
                     }, 500);
                     return false;
-                } else if (second_date_arr.length !== 7) {
-                    $('#a-show-error').click();
+                } else if (second_date_arr !== null && second_date_arr.length !== 7) {
+                    //$('#a-show-error').click();
+                    var nm = 'show-warning';
+                    var md = $('#' + nm);
+                    $('#a-' + nm).click();
 
                     var field = $('#createStandart input[name="time_loc"]');
 
                     field.removeClass('error-inpt');
                     field.addClass('error-inpt');
 
-                    $('#show-error .modal-body p').html('Время локализации должно быть указано в формате xx.xx.xxxx xx:xx:xx');
+                    //$('#show-error .modal-body p').html('Время локализации должно быть указано в формате xx.xx.xxxx xx:xx:xx');
+                    md.find('.modal-body p').html('Время локализации должно быть указано в формате xx.xx.xxxx xx:xx:xx');
 
                     $('html, body').animate({
                         scrollTop: (field.offset().top - 125)
                     }, 500);
                     return false;
-                } else if (third_date_arr === null) {
+                } else if (third_date_arr === null && (is_likv_before_arrival.is(':checked') !== true)) {
 
-                    $('#a-show-error').click();
+                    //$('#a-show-error').click();
+                    var nm = 'show-warning';
+                    var md = $('#' + nm);
+                    $('#a-' + nm).click();
+
 
                     var field = $('#createStandart input[name="time_likv"]');
 
                     field.removeClass('error-inpt');
                     field.addClass('error-inpt');
 
-                    $('#show-error .modal-body p').html('Время ликвидации не может быть пустым');
+                    //$('#show-error .modal-body p').html('Время ликвидации не может быть пустым');
+                    md.find('.modal-body p').html('Время ликвидации не может быть пустым');
 
                     $('html, body').animate({
                         scrollTop: (field.offset().top - 125)
                     }, 500);
                     return false;
-                } else if (third_date_arr.length !== 7) {
-                    $('#a-show-error').click();
+                } else if (third_date_arr !== null && third_date_arr.length !== 7) {
+                    //$('#a-show-error').click();
+                    var nm = 'show-warning';
+                    var md = $('#' + nm);
+                    $('#a-' + nm).click();
 
                     var field = $('#createStandart input[name="time_likv"]');
 
                     field.removeClass('error-inpt');
                     field.addClass('error-inpt');
 
-                    $('#show-error .modal-body p').html('Время ликвидации должно быть указано в формате xx.xx.xxxx xx:xx:xx');
+                    //$('#show-error .modal-body p').html('Время ликвидации должно быть указано в формате xx.xx.xxxx xx:xx:xx');
+                    md.find('.modal-body p').html('Время ликвидации должно быть указано в формате xx.xx.xxxx xx:xx:xx');
 
                     $('html, body').animate({
                         scrollTop: (field.offset().top - 125)
@@ -1705,9 +1735,14 @@
                     return false;
                 } else {
                     var msg_datetime = new Date(first_date_arr[3], first_date_arr[2], first_date_arr[1], first_date_arr[4], first_date_arr[5], first_date_arr[6]);
-                    var loc_datetime = new Date(second_date_arr[3], second_date_arr[2], second_date_arr[1], second_date_arr[4], second_date_arr[5], second_date_arr[6]);
-                    var likv_datetime = new Date(third_date_arr[3], third_date_arr[2], third_date_arr[1], third_date_arr[4], third_date_arr[5], third_date_arr[6]);
+                    if (is_likv_before_arrival.is(':checked') !== true) {
+                        var loc_datetime = new Date(second_date_arr[3], second_date_arr[2], second_date_arr[1], second_date_arr[4], second_date_arr[5], second_date_arr[6]);
+                        var likv_datetime = new Date(third_date_arr[3], third_date_arr[2], third_date_arr[1], third_date_arr[4], third_date_arr[5], third_date_arr[6]);
+                    } else {
+                        var loc_datetime = null;
+                        var likv_datetime = null;
 
+                    }
                 }
 
 
@@ -1717,21 +1752,25 @@
 
                 if (first_date_arr === null) {
 
-                    $('#a-show-error').click();
+                    var nm = 'show-error';
+                    var md = $('#' + nm);
+                    //$('#a-show-error').click();
+                    $('#a-' + nm).click();
 
                     var field = $('#createStandart input[name="time_msg"]');
 
                     field.removeClass('error-inpt');
                     field.addClass('error-inpt');
 
-                    $('#show-error .modal-body p').html('Время сообщения не может быть пустым');
+                    md.find('.modal-body p').html('Время сообщения не может быть пустым');
+                    //md.find('.modal-body p').html('Время сообщения не может быть пустым');
 
                     $('html, body').animate({
                         scrollTop: (field.offset().top - 125)
                     }, 500);
                     return false;
                 } else if (first_date_arr.length !== 6) {
-                    console.log(first_date_arr.length);
+
                     $('#a-show-error').click();
 
                     var field = $('#createStandart input[name="time_msg"]');
@@ -1745,59 +1784,80 @@
                         scrollTop: (field.offset().top - 125)
                     }, 500);
                     return false;
-                } else if (second_date_arr === null) {
+                } else if (second_date_arr === null && (is_likv_before_arrival.is(':checked') !== true)) {
 
-                    $('#a-show-error').click();
+                    //$('#a-show-error').click();
 
-                    var field = $('#createStandart input[name="time_loc"]');
-
-                    field.removeClass('error-inpt');
-                    field.addClass('error-inpt');
-
-                    $('#show-error .modal-body p').html('Время локализации не может быть пустым');
-
-                    $('html, body').animate({
-                        scrollTop: (field.offset().top - 125)
-                    }, 500);
-                    return false;
-                } else if (second_date_arr.length !== 6) {
-                    $('#a-show-error').click();
+                    var nm = 'show-warning';
+                    var md = $('#' + nm);
+                    $('#a-' + nm).click();
 
                     var field = $('#createStandart input[name="time_loc"]');
 
                     field.removeClass('error-inpt');
                     field.addClass('error-inpt');
 
-                    $('#show-error .modal-body p').html('Время локализации должно быть указано в формате xx.xx.xxxx xx:xx');
+                    //$('#show-error .modal-body p').html('Время локализации не может быть пустым');
+                    md.find('.modal-body p').html('Время локализации не может быть пустым');
 
                     $('html, body').animate({
                         scrollTop: (field.offset().top - 125)
                     }, 500);
                     return false;
-                } else if (third_date_arr === null) {
+                } else if (second_date_arr !== null && second_date_arr.length !== 6) {
+                    //$('#a-show-error').click();
 
-                    $('#a-show-error').click();
+                    var nm = 'show-warning';
+                    var md = $('#' + nm);
+                    $('#a-' + nm).click();
+
+                    var field = $('#createStandart input[name="time_loc"]');
+
+                    field.removeClass('error-inpt');
+                    field.addClass('error-inpt');
+
+                   //$('#show-error .modal-body p').html('Время локализации должно быть указано в формате xx.xx.xxxx xx:xx');
+
+                    md.find('.modal-body p').html('Время локализации должно быть указано в формате xx.xx.xxxx xx:xx');
+
+                    $('html, body').animate({
+                        scrollTop: (field.offset().top - 125)
+                    }, 500);
+                    return false;
+                } else if (third_date_arr === null && (is_likv_before_arrival.is(':checked') !== true)) {
+
+                    //$('#a-show-error').click();
+
+                    var nm = 'show-warning';
+                    var md = $('#' + nm);
+                    $('#a-' + nm).click();
 
                     var field = $('#createStandart input[name="time_likv"]');
 
                     field.removeClass('error-inpt');
                     field.addClass('error-inpt');
 
-                    $('#show-error .modal-body p').html('Время ликвидации не может быть пустым');
+                    //$('#show-error .modal-body p').html('Время ликвидации не может быть пустым');
+                    md.find('.modal-body p').html('Время ликвидации не может быть пустым');
 
                     $('html, body').animate({
                         scrollTop: (field.offset().top - 125)
                     }, 500);
                     return false;
-                } else if (third_date_arr.length !== 6) {
-                    $('#a-show-error').click();
+                } else if (third_date_arr !== null && third_date_arr.length !== 6) {
+                    //$('#a-show-error').click();
+                    var nm = 'show-warning';
+                    var md = $('#' + nm);
+                    $('#a-' + nm).click();
 
                     var field = $('#createStandart input[name="time_likv"]');
 
                     field.removeClass('error-inpt');
                     field.addClass('error-inpt');
 
-                    $('#show-error .modal-body p').html('Время ликвидации должно быть указано в формате xx.xx.xxxx xx:xx');
+                    //$('#show-error .modal-body p').html('Время ликвидации должно быть указано в формате xx.xx.xxxx xx:xx');
+                    md.find('.modal-body p').html('Время ликвидации должно быть указано в формате xx.xx.xxxx xx:xx');
+
 
                     $('html, body').animate({
                         scrollTop: (field.offset().top - 125)
@@ -1805,8 +1865,14 @@
                     return false;
                 } else {
                     var msg_datetime = new Date(first_date_arr[3], first_date_arr[2], first_date_arr[1], first_date_arr[4], first_date_arr[5]);
-                    var loc_datetime = new Date(second_date_arr[3], second_date_arr[2], second_date_arr[1], second_date_arr[4], second_date_arr[5]);
-                    var likv_datetime = new Date(third_date_arr[3], third_date_arr[2], third_date_arr[1], third_date_arr[4], third_date_arr[5]);
+                    if (is_likv_before_arrival.is(':checked') !== true) {
+                        var loc_datetime = new Date(second_date_arr[3], second_date_arr[2], second_date_arr[1], second_date_arr[4], second_date_arr[5]);
+                        var likv_datetime = new Date(third_date_arr[3], third_date_arr[2], third_date_arr[1], third_date_arr[4], third_date_arr[5]);
+                    } else {
+                        var loc_datetime = null;
+                        var likv_datetime = null;
+
+                    }
                 }
 
 
@@ -1814,7 +1880,7 @@
         {%endif%}
 
 
-                if (msg_datetime.getTime() > loc_datetime.getTime()) {
+                if (loc_datetime !== null && msg_datetime.getTime() > loc_datetime.getTime()) {
 
                     $('#a-show-error').click();
 
@@ -1836,7 +1902,7 @@
                 }
 
 
-                if (msg_datetime.getTime() > likv_datetime.getTime()) {
+                if (likv_datetime !== null && msg_datetime.getTime() > likv_datetime.getTime()) {
 
 
                     $('#a-show-error').click();
@@ -1859,7 +1925,7 @@
                     field.removeClass('error-inpt');
                 }
 
-                if (loc_datetime.getTime() > likv_datetime.getTime()) {
+                if ((loc_datetime !== null && likv_datetime !== null) && loc_datetime.getTime() > likv_datetime.getTime()) {
 
                     $('#a-show-error').click();
 
@@ -1884,6 +1950,17 @@
                 $(this).unbind('submit').submit();
 
             });
+
+
+            /* continue in warning modal */
+            $('body').on('click', '#show-warning .btn-continue', function (e) {
+
+                var form = $('#createStandart');
+                form.unbind('submit').submit();
+            });
+
+
+
 
     </script>
 

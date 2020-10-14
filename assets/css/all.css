@@ -504,3 +504,15 @@ input[type="checkbox"][readonly] {
 .number_page{
     padding-left: 20px;
 }
+
+.title-warning{
+    color: #ffc107;
+}
+
+
+.card-header-limon{
+background-color: #faffc3;
+}
+.card-body-limon{
+    background-color: rgb(251, 253, 228);
+}

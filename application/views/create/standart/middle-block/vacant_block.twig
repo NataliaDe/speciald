@@ -1,0 +1,145 @@
+<div class="accordion" id="accordion_vacant">
+
+  <div class="card">
+    <div class="card-header card-header-limon" id="header_vacant_block">
+      <h2 class="mb-0">
+        <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapse_vacant_block" aria-expanded="false" aria-controls="collapse_vacant_block">
+          {#Блок &laquo;Вакансии&raquo;#}
+          Информация по вакансиям
+        </button>
+      </h2>
+    </div>
+    <div id="collapse_vacant_block" class="collapse card-body-limon" aria-labelledby="header_vacant_block" data-parent="#accordion_vacant">
+      <div class="card-body">
+
+
+          <table class="table table-borderless" >
+
+                {%set x=1%}
+                {% if (str.vacant_info is defined  and str.vacant_info is not empty) or (is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.str_vacant_info is defined and dones.str_vacant_info is not empty)  %}
+
+
+                    {% if str.vacant_info is defined  and str.vacant_info is not empty %}
+
+                        {%set arr_str_text=str.vacant_info%}
+
+                    {%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.str_vacant_info is defined and dones.str_vacant_info is not empty%}
+                        {%set arr_str_text=dones.str_vacant_info%}
+                    {%endif%}
+
+                    <tbody>
+                        {%for st in arr_str_text %}
+
+                            {% if str.vacant_info is defined  and str.vacant_info is not empty %}
+
+                                {%set x=loop.index%}
+
+                            {%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.str_vacant_info is defined and dones.str_vacant_info is not empty%}
+                                {%set x=st.sort%}
+                            {%endif%}
+
+
+
+                            <tr class="str_vacant_info_row" id="str_vacant_info_id_row{{x}}" data-loop="{{x}}">
+
+
+                                <td style="width: 30px">
+                                    <div class="btn-group btn-group-xs">
+                                        <img src="{{ base_url('assets/images/updown/24-em-up.png') }}" class="up" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Переместить строку вверх" >
+                                        <img src="{{ base_url('assets/images/updown/24-em-down.png') }}" class="down" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Переместить строку вниз" >
+                                    </div>
+                                    <input type="hidden" class="sort" name="str_vacant_info[{{x}}][sort]" value="{{x}}">
+                                </td>
+
+                                <td>
+                                    {%set podr_name=''%}
+                                    {%if str.vacant_info is defined  and str.vacant_info is not empty%}
+                                        {%if st.pasp_name_spec is defined and st.pasp_name_spec is not empty %}
+                                            {%set podr_name=st.pasp_name_spec%}
+                                        {%endif%}
+                                        {%if st.locorg_name_spec is defined and st.locorg_name_spec is not empty %}
+                                            {%set podr_name=podr_name~' '~st.locorg_name_spec%}
+                                        {%endif%}
+
+                                    {%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.str_vacant_info is defined and dones.str_vacant_info is not empty%}
+                                        {%set podr_name=st.podr_name%}
+                                    {%endif%}
+
+                                    <input  type="text" class="form-control str_vacant_info_podr_name "   placeholder="часть наименование ГРОЧС" name="str_vacant_info[{{x}}][podr_name]" value="{%if podr_name is defined and podr_name is not empty %}{{podr_name|trim}}{%endif%}">
+
+
+
+                                    {%set inf=st.vi_stroke%}
+
+
+
+
+
+                                    <textarea class="form-control str_vacant_info_descr" name="str_vacant_info[{{x}}][description]"  rows="8" cols="3">{%if inf is defined and inf is not empty%}{{inf}}{%endif%}</textarea>
+
+                                </td>
+
+
+                                <td style="padding-top: 50px;">
+                                    <input type="hidden" class="id_pasp_vacant_info" name="str_vacant_info[{{x}}][id_pasp]"  value="{%if st.id_pasp is defined and st.id_pasp is not empty %}{{st.id_pasp}}{%endif%}">
+
+                                    {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined  and st.id is defined %}
+                                        <input type="hidden" class="id_str_vacant_info" name="str_vacant_info[{{x}}][id_str_vacant_info]" value="{{st.id}}">
+                                    {%endif%}
+
+                                    <a href="#" class="del-str-vacant_info-row delete-cross"  data-toggle="tooltip" data-placement="right" title="Удалить строку"  ><i class="fa fa-times" aria-hidden="true"></i></a>
+                                </td>
+                            </tr>
+
+
+
+
+                        {%endfor%}
+                    </tbody>
+
+                {%else%}
+                    {%set i=1%}
+                    {%set x=i%}
+
+
+                    <tbody>
+
+                        <tr class="str_vacant_info_row" id="str_vacant_info_id_row{{i}}" data-loop="{{i}}">
+
+
+                            <td style=" width: 30px">
+                                <div class="btn-group btn-group-xs">
+                                    <img src="{{ base_url('assets/images/updown/24-em-up.png') }}" class="up" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Переместить строку вверх" >
+                                    <img src="{{ base_url('assets/images/updown/24-em-down.png') }}" class="down" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Переместить строку вниз" >
+                                </div>
+                                <input type="hidden" class="sort" name="str_vacant_info[{{i}}][sort]" value="{{i}}">
+                            </td>
+
+                            <td>
+
+                                <input  type="text" class="form-control str_vacant_info_podr_name "   placeholder="часть наименование ГРОЧС" name="str_vacant_info[{{i}}][podr_name]" value="">
+
+                                <textarea style="white-space: pre-line" class="form-control str_vacant_info_descr" name="str_vacant_info[{{i}}][description]"  rows="8" cols="3"></textarea>
+
+                            </td>
+
+
+                            <td style="padding-top: 50px;">
+                                <input type="hidden" class="id_pasp_vacant_info" name="str_vacant_info[{{i}}][id_pasp]">
+                                <a href="#" class="del-str-vacant-info-row delete-cross"  data-toggle="tooltip" data-placement="right" title="Удалить строку"  ><i class="fa fa-times" aria-hidden="true" ></i></a>
+                            </td>
+                        </tr>
+
+
+                    </tbody>
+
+                {%endif%}
+
+            </table>
+            <a href="#" id="add-str-vacant-row" >+  добавить еще</a>
+
+      </div>
+    </div>
+  </div>
+
+</div>
