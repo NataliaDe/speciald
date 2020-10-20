@@ -4187,4 +4187,133 @@ class Dones extends My_Controller
 
         return $diviz_organ_of_pasp;
     }
+
+    public function refresh_silymchs()
+    {
+
+        $post = $this->input->post();
+        $id_rig = $this->data['id_rig_current'] = (isset($post['id_rig']) && !empty($post['id_rig'])) ? $post['id_rig'] : 0;
+        $sign = (isset($post['sign']) && !empty($post['sign'])) ? $post['sign'] : 0;
+
+        if ($id_rig == 0) {
+            echo json_encode([
+                'is_data' => 0
+            ]);
+            die;
+        }
+
+        $this->data['rig']['silymchs'] = $this->journal_model->get_silymchs_by_rig_id_sort_distance($id_rig);
+
+        $this->data['rig'] = $this->journal_model->get_rig_by_id($id_rig);
+        $this->data['rig']['silymchs'] = $this->journal_model->get_silymchs_by_rig_id_sort_distance($id_rig);
+
+
+        $man_per_car_id = array();
+        if (isset($this->data['rig']['silymchs']) && !empty($this->data['rig']['silymchs'])) {
+
+            foreach ($this->data['rig']['silymchs'] as $key => $value) {
+
+                if (isset($value['pasp_id']) && !empty($value['pasp_id']) && $value['pasp_id'] != null)
+                    $ids_pasp[] = $value['pasp_id']; // ids pasp of each car
+            }
+        }
+
+        /* get data from str */
+        if (isset($ids_pasp) && !empty($ids_pasp)) {
+            $this->data['str']['table'] = $this->getStrByIdsPasp(array_unique($ids_pasp)); //data for table: shtat, vacant...
+        }
+
+        if (isset($this->data['str']['table']) && !empty($this->data['str']['table'])) {
+            foreach ($this->data['str']['table'] as $value) {
+                /* get last ch of each card */
+                if (isset($value['ch']) && !empty($value['ch']) && isset($value['id_card']) && !empty($value['id_card'])) {
+                    $last_ch_by_card[$value['id_card']] = $value['ch'];
+                }
+            }
+        }
+
+        $this->data['str']['vacant_info'] = $this->getStrVacantInfoByIdsPasp(array_unique($ids_pasp)); //get vacant info block...
+
+        if (isset($this->data['rig']['silymchs']) && !empty($this->data['rig']['silymchs'])) {
+
+            $is_min_br = 0;
+
+            foreach ($this->data['rig']['silymchs'] as $key => $value) {
+
+                if (isset($last_ch_by_card[$value['pasp_id']]) && isset($value['id_teh']) && !empty($value['id_teh']) && $value['id_teh'] != null) {
+
+                    $result = $this->str_model->get_man_per_car_by_ch($value['id_teh'], $last_ch_by_card[$value['pasp_id']]);
+
+                    if ((isset($result['is_result']) && $result['is_result'] > 0)) {
+                        $man_per_car = $result['cnt_man'];
+                        $man_per_car_id[$value['id_teh']] = (isset($man_per_car) ) ? $man_per_car : $value['min_br'];
+                    } else {
+                        $is_min_br++;
+                        $this->data['rig']['silymchs'][$key]['man_per_car_note'] = 'указан мин.б.р.';
+                    }
+                } else {
+                    $is_min_br++;
+                    $this->data['rig']['silymchs'][$key]['man_per_car_note'] = 'указан мин.б.р.';
+                }
+
+                /* cnt man on each car. If not isset row in str.s_man_per_car, then take min br of car  */
+                $this->data['rig']['silymchs'][$key]['man_per_car'] = (isset($man_per_car) ) ? $man_per_car : $value['min_br'];
+            }
+
+            if ($is_min_br > 0)
+                $this->data['rig']['man_per_car_note'] = 'указан мин.б.р.';
+        }
+
+
+        if ($sign == 2) {
+            /* get data about journal trunks */
+            $this->data['rig']['trunks'] = $this->getTrunksByIdRig($id_rig, $man_per_car_id); //data for trunks
+        } elseif ($sign == 3) {
+
+            $this->data['innerservice_list'] = $this->main_model->get_innerservice_list();
+            $this->data['rig']['innerservice'] = $this->journal_model->get_innerservice_by_rig_id($id_rig);
+        }
+        elseif ($sign == 4) {
+ $this->data['rig']['informing'] = $this->journal_model->get_informing_by_rig_id($id_rig);
+        }
+
+        if (isset($this->data['rig']) && !empty($this->data['rig'])) {
+            $is_data = 1;
+        } else {
+            $is_data = 0;
+        }
+
+        if ($sign == 1) {
+            echo json_encode([
+                'silymchs' => $this->twig->render('create/standart/middle-block/silymchs', $this->data, true),
+                'is_data'  => $is_data
+            ]);
+        }
+       else if ($sign == 2) {
+            echo json_encode([
+                'trunks_block' => $this->twig->render('create/standart/middle-block/trunks', $this->data, true),
+                'is_data'      => $is_data
+            ]);
+        } elseif ($sign == 3) {
+            echo json_encode([
+                'innerservice' => $this->twig->render('create/standart/middle-block/innerservice', $this->data, true),
+                'is_data'      => $is_data
+            ]);
+        }
+                elseif ($sign == 4) {
+                        echo json_encode([
+                'informing'              => $this->twig->render('create/standart/middle-block/informing', $this->data, true),
+                'is_data'      => $is_data
+            ]);
+                }
+          elseif ($sign == 5) {
+                        echo json_encode([
+                'detail_inf'              => $this->data['rig'] ['inf_detail'],
+                'is_data'      => $is_data
+            ]);
+        }
+        die;
+    }
+
+
 }

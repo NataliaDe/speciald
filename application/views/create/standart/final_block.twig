@@ -3,6 +3,12 @@
 
     <div class="form-group col-md-12">
         <label for="detail_inf">Детализированная информация (из ПС &laquo;Журнал ЦОУ&raquo;)</label>
+                &nbsp;&nbsp;
+       {%if (id_rig_current is defined and id_rig_current is not empty) or (is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.id_rig is not empty)%}
+          <a href="#" id="a-refresh-inf-detail" class="refresh-icon" data-toggle="modal"  data-target="#modal-refresh-inf-detail" data-url="" data-toggle="tooltip" data-placement="right" title="Обновить из ПС «Журнал ЦОУ»" >
+          <img  src="{{base_url('/assets/images/calendar-refresh.png')}}">
+        </a>
+       {%endif%}
         <textarea class="form-control" name="detail_inf"  rows="10" cols="50">{%if  rig.inf_detail is defined and  rig.inf_detail is not empty and rig.inf_detail is not null %}{{rig.inf_detail|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.detail_inf is not empty %}{{dones.detail_inf|trim}}{%endif%}</textarea>
     </div>
 

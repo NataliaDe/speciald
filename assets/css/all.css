@@ -516,3 +516,9 @@ background-color: #faffc3;
 .card-body-limon{
     background-color: rgb(251, 253, 228);
 }
+.refresh-icon img{
+    width: 19px;
+}
+.refresh-icon:hover {
+text-decoration: none;
+}

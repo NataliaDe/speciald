@@ -404,7 +404,7 @@ function setTimeFollow(td) {
 
 
 
-$("#div-silymchs table").on("click", ".up, .down", function(){
+$('body').on("click", "#div-silymchs table .up, .down", function(){
      var $row = $(this).closest("tr");
 
      var up = $(this).hasClass("up");
@@ -431,7 +431,7 @@ $("#div-silymchs table").on("click", ".up, .down", function(){
 
 
 
-  $("#div-innerservice table").on("click", ".up, .down", function(){
+ $('body').on("click", "#div-innerservice table .up, .down", function(){
      var $row = $(this).closest("tr");
 
      var up = $(this).hasClass("up");
@@ -453,7 +453,7 @@ $("#div-silymchs table").on("click", ".up, .down", function(){
             });
   });
 
-    $("#div-informing table").on("click", ".up, .down", function(){
+   $('body').on("click", "#div-informing table .up, .down", function(){
      var $row = $(this).closest("tr");
 
      var up = $(this).hasClass("up");
@@ -476,7 +476,7 @@ $("#div-silymchs table").on("click", ".up, .down", function(){
   });
 
 
-    $("#div-trunks table").on("click", ".up, .down", function(){
+    $('body').on("click", "#div-trunks table .up, .down", function(){
      var $row = $(this).closest("tr");
 
      var up = $(this).hasClass("up");

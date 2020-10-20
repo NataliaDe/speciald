@@ -149,7 +149,7 @@ $(document).ready(function () {
 
 });
 
-    $("#div-str .table-str").on("click", ".up, .down", function(){
+    $('body').on("click", "#div-str .table-str .up, .down", function(){
      var $row = $(this).closest("tr");
 
      var up = $(this).hasClass("up");
@@ -173,7 +173,7 @@ $(document).ready(function () {
   });
 
 
-      $("#div-str #str-text table").on("click", ".up, .down", function(){
+      $('body').on("click", "#div-str #str-text table .up, .down", function(){
      var $row = $(this).closest("tr");
 
      var up = $(this).hasClass("up");
@@ -267,7 +267,7 @@ $(document).ready(function () {
 
 
 
-      $("#accordion_vacant #collapse_vacant_block table").on("click", ".up, .down", function(){
+      $('body').on("click", "#accordion_vacant #collapse_vacant_block table .up, .down", function(){
      var $row = $(this).closest("tr");
 
      var up = $(this).hasClass("up");
