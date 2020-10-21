@@ -180,6 +180,17 @@ $('#btn-fill-form').on('click', function (event) {
             });
 
 
+                    $('.select2-single-theme-msg').select2({
+        placeholder: "Поступило сообщение",
+        allowClear: true,
+        "language": {
+            "noResults": function () {
+                return "Ничего не найдено";
+            }
+        }
+    });
+
+
             $('.select2-select').trigger("change");
             $('.select2-single').trigger("change");
             $('.select2-multi').trigger("change");

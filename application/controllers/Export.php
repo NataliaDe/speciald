@@ -157,10 +157,28 @@ class Export extends My_Controller
         for ($r = 1; $r <= $rows; $r++) {
             $table->addRow();
             for ($c = 1; $c <= $cols; $c++) {
-                if ($c == 1)
-                    $table->addCell(PhpOffice\PhpWord\Shared\Converter::cmToTwip(9.72))->addText(((isset($dones['official_creator_name']) && !empty($dones['official_creator_name'])) ? $dones['official_creator_name'] : 'ПОДРАЗДЕЛЕНИЕ-СОЗДАТЕЛЬ'), self::header_style_cell_size, self::header_style_cell_font);
+                if ($c == 1){
+                   if((isset($this->data['active_user']['umchs_name']) && !empty($this->data['active_user']['umchs_name'])) ){
+                       $umchs_name=$this->data['active_user']['umchs_name'];
+                        $a = explode(PHP_EOL, $this->data['active_user']['umchs_name']);
+                        if(count($a) >1){
+                            $creator= implode('<w:br/>', $a);
+                        }
+                        else{
+                            $creator=$this->data['active_user']['umchs_name'];
+                        }
+
+                   }
+                    elseif((isset($dones['official_creator_name']) && !empty($dones['official_creator_name']))){
+                        $creator= $dones['official_creator_name'] ;
+                    }
+                        else
+                            $creator='ПОДРАЗДЕЛЕНИЕ-СОЗДАТЕЛЬ';
+
+                    $table->addCell(PhpOffice\PhpWord\Shared\Converter::cmToTwip(9.72))->addText($creator, self::header_style_cell_size, self::header_style_cell_font);
+                }
                 else
-                    $table->addCell(PhpOffice\PhpWord\Shared\Converter::cmToTwip(6.98))->addText("Главному оперативному дежурному РЦУРЧС МЧС", self::header_style_cell_size, self::header_style_cell_font);
+                    $table->addCell(PhpOffice\PhpWord\Shared\Converter::cmToTwip(10))->addText("Главному оперативному дежурному РЦУРЧС МЧС Республики Беларусь", self::header_style_cell_size, self::header_style_cell_font);
             }
         }
 
@@ -197,9 +215,21 @@ class Export extends My_Controller
 
 
         /* START DESCRIPTION */
-
         if (isset($dones['opening_word']) && !empty(trim($dones['opening_word']))) {
-            $section->addText('          ' . trim($dones['opening_word']), self::header_style_cell_size, self::start_descr_font);
+
+            $a = explode(PHP_EOL, trim($dones['opening_word']));
+            if (count($a) > 1) {
+                foreach ($a as $value) {
+
+                    $section->addText('          ' . $value, self::header_style_cell_size, self::start_descr_font);
+                }
+            } else {
+                $ow = trim($dones['opening_word']);
+                $section->addText('          ' . $ow, self::header_style_cell_size, self::start_descr_font);
+            }
+
+            //$section->addText('          ' . trim($dones['opening_word']), self::header_style_cell_size, self::start_descr_font);
+
         } else {
             $open_descr = '';
             $date_msg = ((isset($dones['time_msg']) && !empty($dones['time_msg'])) ? (\DateTime::createFromFormat('Y-m-d H:i:s', $dones['time_msg'])->format('d.m.Y')) : '');
@@ -335,6 +365,97 @@ class Export extends My_Controller
                 }
             }
         }
+
+
+        /* ----------- innerservice ---------------- */
+        $arr = [];
+        if (isset($dones['is_not_involved_innerservice']) && $dones['is_not_involved_innerservice'] == 0 && $type_sd == Main_model::TYPE_SD_STANDART) {//insert table
+            //$section->addTextBreak(1, self::header_style_cell_size, self::header_style_cell_font);
+            $section->addText('          ' . 'Справочно:', array('size' => 15, 'italic' => true), array('spaceAfter' => 0, 'spacing' => 0));
+
+            if (!empty($innerservice)) {
+                foreach ($innerservice as $row) {
+                    $arr[] = array(
+                        'innerservice_name' => (!empty($row['innerservice_name'])) ? $row['innerservice_name'] : '-',
+                        'time_msg'          => ((isset($row['time_msg']) && !empty($row['time_msg'])) ? (\DateTime::createFromFormat('H:i:s', $row['time_msg'])->format('H-i')) : ''),
+                        'time_arrival'      => ((isset($row['time_arrival']) && !empty($row['time_arrival'])) ? (\DateTime::createFromFormat('H:i:s', $row['time_arrival'])->format('H-i')) : ''),
+                        'distance'          => (!empty($row['distance'])) ? $row['distance'] : '-',
+                        'note'              => ((isset($row['note']) && !empty($row['note'])) ? $row['note'] : '-')
+                    );
+                }
+            }
+
+
+            $table = $section->addTable((array('borderSize' => 3, 'cellMarginLeft' => PhpOffice\PhpWord\Shared\Converter::cmToTwip(0.19))));
+
+
+            $table->addRow();
+            $table->addCell(PhpOffice\PhpWord\Shared\Converter::cmToTwip(25), self::cell_center)->addText("Службы взаимодействия", array('align' => 'center', 'size' => 8), array('spaceAfter' => 0, 'spacing' => 0, 'align' => 'center'));
+            $table->addCell(PhpOffice\PhpWord\Shared\Converter::cmToTwip(6), self::cell_center)->addText('Время<w:br/>сообщения', array('align' => 'center', 'size' => 8), array('spaceAfter' => 0, 'spacing' => 0, 'align' => 'center'));
+            $table->addCell(PhpOffice\PhpWord\Shared\Converter::cmToTwip(6), self::cell_center)->addText('Время<w:br/>прибытия', array('align' => 'center', 'size' => 8), array('spaceAfter' => 0, 'spacing' => 0, 'align' => 'center'));
+            $table->addCell(PhpOffice\PhpWord\Shared\Converter::cmToTwip(6), self::cell_center)->addText('Расстояние<w:br/>(км)', array('align' => 'center', 'size' => 8), array('spaceAfter' => 0, 'spacing' => 0, 'align' => 'center'));
+            $table->addCell(PhpOffice\PhpWord\Shared\Converter::cmToTwip(6), self::cell_center)->addText('Примечание', array('align' => 'center', 'size' => 8), array('spaceAfter' => 0, 'spacing' => 0, 'align' => 'center'));
+
+
+            if (count($arr) > 0) {
+                foreach ($arr as $key => $row) {
+                    $table->addRow();
+                    $table->addCell(PhpOffice\PhpWord\Shared\Converter::cmToTwip(25), self::cell_center)->addText($row['innerservice_name'], self::style_cell_font, array('align' => 'left', 'spaceAfter' => 0, 'spacing' => 0));
+                    $table->addCell(PhpOffice\PhpWord\Shared\Converter::cmToTwip(6), self::style_cell_center)->addText($row['time_msg'], self::cellTextCenteredFont, array('align' => 'center', 'spaceAfter' => 0, 'spacing' => 0));
+                    $table->addCell(PhpOffice\PhpWord\Shared\Converter::cmToTwip(6), self::style_cell_center)->addText($row['time_arrival'], self::cellTextCenteredFont, array('align' => 'center', 'spaceAfter' => 0, 'spacing' => 0));
+                    $table->addCell(PhpOffice\PhpWord\Shared\Converter::cmToTwip(6), self::style_cell_center)->addText($row['distance'], self::cellTextCenteredFont, array('align' => 'center', 'spaceAfter' => 0, 'spacing' => 0));
+                    $table->addCell(PhpOffice\PhpWord\Shared\Converter::cmToTwip(6), self::style_cell_center)->addText($row['note'], self::cellTextCenteredFont, array('align' => 'center', 'spaceAfter' => 0, 'spacing' => 0));
+                }
+            }
+        }
+
+
+
+
+
+
+        /* ----------- informing ---------------- */
+        $arr = [];
+        if (isset($dones['is_not_involved_informing']) && $dones['is_not_involved_informing'] == 0 && $type_sd == Main_model::TYPE_SD_STANDART) {//insert table
+            //$section->addTextBreak(1, self::header_style_cell_size, self::header_style_cell_font);
+            $section->addText('          ' . 'К месту вызова выезжали:', array('size' => 15, 'italic' => true), array('spaceAfter' => 0, 'spacing' => 0));
+
+            if (!empty($informing)) {
+                foreach ($informing as $row) {
+                    $arr[] = array(
+                        'fio'          => (!empty($row['fio'])) ? $row['fio'] : '-',
+                        'time_msg'     => ((isset($row['time_msg']) && !empty($row['time_msg'])) ? (\DateTime::createFromFormat('H:i:s', $row['time_msg'])->format('H-i')) : ''),
+                        'time_exit'    => ((isset($row['time_exit']) && !empty($row['time_exit'])) ? (\DateTime::createFromFormat('H:i:s', $row['time_exit'])->format('H-i')) : ''),
+                        'time_arrival' => ((isset($row['time_arrival']) && !empty($row['time_arrival'])) ? (\DateTime::createFromFormat('H:i:s', $row['time_arrival'])->format('H-i')) : '')
+                    );
+                }
+            }
+
+
+            $table = $section->addTable((array('borderSize' => 3, 'cellMarginLeft' => PhpOffice\PhpWord\Shared\Converter::cmToTwip(0.19))));
+
+
+            $table->addRow();
+            $table->addCell(PhpOffice\PhpWord\Shared\Converter::cmToTwip(21), self::cell_center)->addText("ФИО, должность, звание руководителя органа, подразделения, ответственного", array('align' => 'center', 'size' => 8), array('spaceAfter' => 0, 'spacing' => 0, 'align' => 'center'));
+            $table->addCell(PhpOffice\PhpWord\Shared\Converter::cmToTwip(8), self::cell_center)->addText('Время<w:br/>сообщения о ЧС', array('align' => 'center', 'size' => 8), array('spaceAfter' => 0, 'spacing' => 0, 'align' => 'center'));
+            $table->addCell(PhpOffice\PhpWord\Shared\Converter::cmToTwip(8), self::cell_center)->addText('Время<w:br/>выезда к месту ЧС', array('align' => 'center', 'size' => 8), array('spaceAfter' => 0, 'spacing' => 0, 'align' => 'center'));
+            $table->addCell(PhpOffice\PhpWord\Shared\Converter::cmToTwip(8), self::cell_center)->addText('Время<w:br/>прибытия к месту ЧС', array('align' => 'center', 'size' => 8), array('spaceAfter' => 0, 'spacing' => 0, 'align' => 'center'));
+
+
+
+            if (count($arr) > 0) {
+                foreach ($arr as $key => $row) {
+                    $table->addRow();
+                    $table->addCell(PhpOffice\PhpWord\Shared\Converter::cmToTwip(21), self::cell_center)->addText($row['fio'], self::style_cell_font, array('align' => 'left', 'spaceAfter' => 0, 'spacing' => 0));
+                    $table->addCell(PhpOffice\PhpWord\Shared\Converter::cmToTwip(8), self::style_cell_center)->addText($row['time_msg'], self::cellTextCenteredFont, array('align' => 'center', 'spaceAfter' => 0, 'spacing' => 0));
+                    $table->addCell(PhpOffice\PhpWord\Shared\Converter::cmToTwip(8), self::style_cell_center)->addText($row['time_exit'], self::cellTextCenteredFont, array('align' => 'center', 'spaceAfter' => 0, 'spacing' => 0));
+                    $table->addCell(PhpOffice\PhpWord\Shared\Converter::cmToTwip(8), self::style_cell_center)->addText($row['time_arrival'], self::cellTextCenteredFont, array('align' => 'center', 'spaceAfter' => 0, 'spacing' => 0));
+                }
+            }
+        }
+
+
+
 
 
 
@@ -511,98 +632,6 @@ class Export extends My_Controller
                 }
             }
         }
-
-
-
-
-        /* ----------- innerservice ---------------- */
-        $arr = [];
-        if (isset($dones['is_not_involved_innerservice']) && $dones['is_not_involved_innerservice'] == 0 && $type_sd == Main_model::TYPE_SD_STANDART) {//insert table
-            $section->addTextBreak(1, self::header_style_cell_size, self::header_style_cell_font);
-
-            if (!empty($innerservice)) {
-                foreach ($innerservice as $row) {
-                    $arr[] = array(
-                        'innerservice_name' => (!empty($row['innerservice_name'])) ? $row['innerservice_name'] : '-',
-                        'time_msg'          => ((isset($row['time_msg']) && !empty($row['time_msg'])) ? (\DateTime::createFromFormat('H:i:s', $row['time_msg'])->format('H-i')) : ''),
-                        'time_arrival'      => ((isset($row['time_arrival']) && !empty($row['time_arrival'])) ? (\DateTime::createFromFormat('H:i:s', $row['time_arrival'])->format('H-i')) : ''),
-                        'distance'          => (!empty($row['distance'])) ? $row['distance'] : '-',
-                        'note'              => ((isset($row['note']) && !empty($row['note'])) ? $row['note'] : '-')
-                    );
-                }
-            }
-
-
-            $table = $section->addTable((array('borderSize' => 3, 'cellMarginLeft' => PhpOffice\PhpWord\Shared\Converter::cmToTwip(0.19))));
-
-
-            $table->addRow();
-            $table->addCell(PhpOffice\PhpWord\Shared\Converter::cmToTwip(25), self::cell_center)->addText("Службы взаимодействия", array('align' => 'center', 'size' => 8), array('spaceAfter' => 0, 'spacing' => 0, 'align' => 'center'));
-            $table->addCell(PhpOffice\PhpWord\Shared\Converter::cmToTwip(6), self::cell_center)->addText('Время<w:br/>сообщения', array('align' => 'center', 'size' => 8), array('spaceAfter' => 0, 'spacing' => 0, 'align' => 'center'));
-            $table->addCell(PhpOffice\PhpWord\Shared\Converter::cmToTwip(6), self::cell_center)->addText('Время<w:br/>прибытия', array('align' => 'center', 'size' => 8), array('spaceAfter' => 0, 'spacing' => 0, 'align' => 'center'));
-            $table->addCell(PhpOffice\PhpWord\Shared\Converter::cmToTwip(6), self::cell_center)->addText('Расстояние<w:br/>(км)', array('align' => 'center', 'size' => 8), array('spaceAfter' => 0, 'spacing' => 0, 'align' => 'center'));
-            $table->addCell(PhpOffice\PhpWord\Shared\Converter::cmToTwip(6), self::cell_center)->addText('Примечание', array('align' => 'center', 'size' => 8), array('spaceAfter' => 0, 'spacing' => 0, 'align' => 'center'));
-
-
-            if (count($arr) > 0) {
-                foreach ($arr as $key => $row) {
-                    $table->addRow();
-                    $table->addCell(PhpOffice\PhpWord\Shared\Converter::cmToTwip(25), self::cell_center)->addText($row['innerservice_name'], self::style_cell_font, array('align' => 'left', 'spaceAfter' => 0, 'spacing' => 0));
-                    $table->addCell(PhpOffice\PhpWord\Shared\Converter::cmToTwip(6), self::style_cell_center)->addText($row['time_msg'], self::cellTextCenteredFont, array('align' => 'center', 'spaceAfter' => 0, 'spacing' => 0));
-                    $table->addCell(PhpOffice\PhpWord\Shared\Converter::cmToTwip(6), self::style_cell_center)->addText($row['time_arrival'], self::cellTextCenteredFont, array('align' => 'center', 'spaceAfter' => 0, 'spacing' => 0));
-                    $table->addCell(PhpOffice\PhpWord\Shared\Converter::cmToTwip(6), self::style_cell_center)->addText($row['distance'], self::cellTextCenteredFont, array('align' => 'center', 'spaceAfter' => 0, 'spacing' => 0));
-                    $table->addCell(PhpOffice\PhpWord\Shared\Converter::cmToTwip(6), self::style_cell_center)->addText($row['note'], self::cellTextCenteredFont, array('align' => 'center', 'spaceAfter' => 0, 'spacing' => 0));
-                }
-            }
-        }
-
-
-
-
-
-
-
-
-        /* ----------- informing ---------------- */
-        $arr = [];
-        if (isset($dones['is_not_involved_informing']) && $dones['is_not_involved_informing'] == 0 && $type_sd == Main_model::TYPE_SD_STANDART) {//insert table
-            $section->addTextBreak(1, self::header_style_cell_size, self::header_style_cell_font);
-
-            if (!empty($informing)) {
-                foreach ($informing as $row) {
-                    $arr[] = array(
-                        'fio'          => (!empty($row['fio'])) ? $row['fio'] : '-',
-                        'time_msg'     => ((isset($row['time_msg']) && !empty($row['time_msg'])) ? (\DateTime::createFromFormat('H:i:s', $row['time_msg'])->format('H-i')) : ''),
-                        'time_exit'    => ((isset($row['time_exit']) && !empty($row['time_exit'])) ? (\DateTime::createFromFormat('H:i:s', $row['time_exit'])->format('H-i')) : ''),
-                        'time_arrival' => ((isset($row['time_arrival']) && !empty($row['time_arrival'])) ? (\DateTime::createFromFormat('H:i:s', $row['time_arrival'])->format('H-i')) : '')
-                    );
-                }
-            }
-
-
-            $table = $section->addTable((array('borderSize' => 3, 'cellMarginLeft' => PhpOffice\PhpWord\Shared\Converter::cmToTwip(0.19))));
-
-
-            $table->addRow();
-            $table->addCell(PhpOffice\PhpWord\Shared\Converter::cmToTwip(21), self::cell_center)->addText("ФИО, должность, звание руководителя органа, подразделения, ответственного", array('align' => 'center', 'size' => 8), array('spaceAfter' => 0, 'spacing' => 0, 'align' => 'center'));
-            $table->addCell(PhpOffice\PhpWord\Shared\Converter::cmToTwip(8), self::cell_center)->addText('Время<w:br/>сообщения о ЧС', array('align' => 'center', 'size' => 8), array('spaceAfter' => 0, 'spacing' => 0, 'align' => 'center'));
-            $table->addCell(PhpOffice\PhpWord\Shared\Converter::cmToTwip(8), self::cell_center)->addText('Время<w:br/>выезда к месту ЧС', array('align' => 'center', 'size' => 8), array('spaceAfter' => 0, 'spacing' => 0, 'align' => 'center'));
-            $table->addCell(PhpOffice\PhpWord\Shared\Converter::cmToTwip(8), self::cell_center)->addText('Время<w:br/>прибытия к месту ЧС', array('align' => 'center', 'size' => 8), array('spaceAfter' => 0, 'spacing' => 0, 'align' => 'center'));
-
-
-
-            if (count($arr) > 0) {
-                foreach ($arr as $key => $row) {
-                    $table->addRow();
-                    $table->addCell(PhpOffice\PhpWord\Shared\Converter::cmToTwip(21), self::cell_center)->addText($row['fio'], self::style_cell_font, array('align' => 'left', 'spaceAfter' => 0, 'spacing' => 0));
-                    $table->addCell(PhpOffice\PhpWord\Shared\Converter::cmToTwip(8), self::style_cell_center)->addText($row['time_msg'], self::cellTextCenteredFont, array('align' => 'center', 'spaceAfter' => 0, 'spacing' => 0));
-                    $table->addCell(PhpOffice\PhpWord\Shared\Converter::cmToTwip(8), self::style_cell_center)->addText($row['time_exit'], self::cellTextCenteredFont, array('align' => 'center', 'spaceAfter' => 0, 'spacing' => 0));
-                    $table->addCell(PhpOffice\PhpWord\Shared\Converter::cmToTwip(8), self::style_cell_center)->addText($row['time_arrival'], self::cellTextCenteredFont, array('align' => 'center', 'spaceAfter' => 0, 'spacing' => 0));
-                }
-            }
-        }
-
-
 
 
 
