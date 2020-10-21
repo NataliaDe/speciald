@@ -106,6 +106,7 @@ class Users extends My_Controller
             $data['id_local'] = $post['id_local'];
             $data['fio'] = trim($post['fio']);
             $data['creator_name'] = trim($post['creator_name']);
+            $data['umchs_name'] = trim($post['umchs_name']);
             $data['id_position'] = $post['id_position'];
             $data['id_rank'] = $post['id_rank'];
 

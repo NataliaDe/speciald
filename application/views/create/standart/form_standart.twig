@@ -44,13 +44,13 @@
 
 
 
-                    <dt class="dt-class">
+{#                    <dt class="dt-class">
                         <a style="background-color:#428bca; color: white;border-color: #428bca; " href="#accordion2" aria-expanded="{%if settings_accordion is not defined or settings_accordion.value is empty or ('accordion2' not in settings_accordion.value|split(","))%}true{%else%} false{%endif%}" aria-controls="accordion2" class="accordion-title accordionTitle js-accordionTrigger custom-a {%if settings_accordion is not defined or settings_accordion.value is empty or ('accordion2' not in settings_accordion.value|split(","))%}is-collapsed is-expanded{%endif%} ">
                             Начальный текст (ручной набор данных)</a>
                     </dt>
                     <dd class="accordion-content accordionItem {%if settings_accordion is not defined or settings_accordion.value is empty or ('accordion2' not in settings_accordion.value|split(","))%}is-expanded animateIn{%else%}is-collapsed{%endif%}" id="accordion2" aria-hidden="{%if settings_accordion is not defined or settings_accordion.value is empty or ('accordion2' not in settings_accordion.value|split(","))%}false{%else%} true{%endif%}">
                         {%include '/create/standart/opening_block.twig'%}
-                    </dd>
+                    </dd>#}
 
                     <dt class="dt-class">
                         <a style="background-color:#428bca; color: white;border-color: #428bca; " href="#accordion3" aria-expanded="{%if settings_accordion is not defined or settings_accordion.value is empty or ('accordion3' not in settings_accordion.value|split(","))%}true{%else%} false{%endif%}" aria-controls="accordion3" class="accordion-title accordionTitle js-accordionTrigger custom-a {%if settings_accordion is not defined or settings_accordion.value is empty or ('accordion3' not in settings_accordion.value|split(","))%}is-collapsed is-expanded{%endif%} ">
@@ -79,16 +79,15 @@
                             {%include '/create/standart/middle-block/informing.twig'%}
                         </div>
 
-                        <br>
-                        <div  id="str-block-div">
-                            {%include '/create/standart/middle-block/str.twig'%}
-                        </div>
-
-                        <br>
+                          <br>
                         <div  id="trunks_data-block-div">
                             {%include '/create/standart/middle-block/trunks.twig'%}
                         </div>
 
+                        <br>
+                        <div  id="str-block-div">
+                            {%include '/create/standart/middle-block/str.twig'%}
+                        </div>
 
                         <br>
                         <div  id="gdzs_data-block-div">

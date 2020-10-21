@@ -169,6 +169,14 @@
                 </div>
             </div>
 
+            <div class="col-lg-4">
+                <div class="form-group">
+                    <label for="umchs_name">УМЧС (отображается в Word вместо Создатель)</label>
+                    <textarea class="form-control"  name="umchs_name" >{% if user is defined %}{{user.umchs_name|trim}}{%endif%}</textarea>
+                </div>
+            </div>
+
+
         </div>
 
 

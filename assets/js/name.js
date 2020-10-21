@@ -31,6 +31,7 @@ var RussianNameProcessor = {
 			],
 			suffixes: [
                                 '	ая --ой --ой --ую --ой --ой',
+
 				'f	б,в,г,д,ж,з,й,к,л,м,н,п,р,с,т,ф,х,ц,ч,ш,щ,ъ,ь . . . . .',
 				'f	ска,цка  -ой -ой -ую -ой -ой',
 
@@ -284,5 +285,12 @@ RussianName.prototype = {
 	},
 	middleName: function(gcase) {
 		return RussianNameProcessor.word(this.mn, this.sex, 'middleName', gcase);
+	},
+        	setSex: function(g) {
+                    if(g === 2)
+		this.sex=this.sexF;
+            else
+                this.sex=this.sexM;
+		return this.sex;
 	}
 }

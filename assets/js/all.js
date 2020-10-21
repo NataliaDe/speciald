@@ -98,6 +98,17 @@ $(document).ready(function () {
         }
     });
 
+        $('.select2-single-face-gender').select2({
+        placeholder: "Не установлен",
+        allowClear: false,
+        "language": {
+            "noResults": function () {
+                return "Ничего не найдено";
+            }
+        }
+    });
+
+
 
 });
 

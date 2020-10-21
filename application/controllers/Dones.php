@@ -205,6 +205,20 @@ class Dones extends My_Controller
         if (isset($id_rig) && !empty($id_rig)) {
             $this->data['id_rig_current'] = $id_rig;
             $this->data['rig'] = $this->journal_model->get_rig_by_id($id_rig);
+
+            $addr_new='';
+            $addr_new=$this->data['rig']['loc_name_sd'];
+            if(!empty($this->data['rig']['street_name_sd']))
+            $addr_new=$addr_new.', '.$this->data['rig']['street_name_sd'];
+            if(!empty($this->data['rig']['home_number_sd']) && $this->data['rig']['home_number_sd'] != '-')
+            $addr_new=$addr_new.', дом '.$this->data['rig']['home_number_sd'];
+             if(!empty($this->data['rig']['housing_sd']) && $this->data['rig']['housing_sd'] != '-')
+            $addr_new=$addr_new.',  '.$this->data['rig']['housing_sd'];
+
+             $this->data['rig']['address']=$addr_new;
+
+
+
             $this->data['rig']['reasonrig_name'] = trim(stristr($this->data['rig']['reasonrig_name'], ' '));
             $this->data['rig']['people'] = $this->journal_model->get_people_by_rig_id($id_rig);
             //$this->data['rig']['silymchs'] = $this->journal_model->get_silymchs_by_rig_id($id_rig);
@@ -1636,6 +1650,7 @@ class Dones extends My_Controller
         $dones['people_address'] = (isset($post['people_address']) && !empty($post['people_address'])) ? trim($post['people_address']) : '';
         $dones['people_position'] = (isset($post['people_position']) && !empty($post['people_position'])) ? trim($post['people_position']) : '';
         $dones['people_status'] = (isset($post['people_status']) && !empty($post['people_status'])) ? intval($post['people_status']) : 0;
+        $dones['id_face_gender'] = (isset($post['id_face_gender']) && !empty($post['id_face_gender'])) ? intval($post['id_face_gender']) : 1;//1-man, 2-woman
 
 
         if (!empty($settings) && isset($settings['is_situation_first_arrival']) && in_array('yes', $settings['is_situation_first_arrival'])) {
@@ -3005,7 +3020,7 @@ class Dones extends My_Controller
             $new_dones['people_address'] = (isset($dones['people_address']) && !empty($dones['people_address'])) ? trim($dones['people_address']) : '';
             $new_dones['people_position'] = (isset($dones['people_position']) && !empty($dones['people_position'])) ? trim($dones['people_position']) : '';
             $new_dones['people_status'] = (isset($dones['people_status']) && !empty($dones['people_status'])) ? intval($dones['people_status']) : 0;
-
+            $new_dones['id_face_gender'] =$dones['id_face_gender'] ;//1-man, 2-woman
 
 
             $new_dones['situation_first_arrival'] = $dones['situation_first_arrival'];
