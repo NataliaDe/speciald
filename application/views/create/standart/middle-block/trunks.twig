@@ -42,16 +42,16 @@
                     <tr >
                         <th rowspan="2" >#</th>
                         <th rowspan="2" ></th>
-                        <th rowspan="2">Техника</th>
+                        <th rowspan="2"  style="width:500px">Техника</th>
                         <th rowspan="2" colspan="2" >Наименование подразделения</th>
                         <th rowspan="2" >Объем цистерны<br>(тонн)</th>
-                        <th rowspan="2" style="width: 168px">Кол-во л/с<br>(чел.) <i class="fa fa-info-circle info-all" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Данные за последнюю заступившую смену"></i></th>
+                        <th rowspan="2" style="width: 168px">Кол-во<br>л/с<br>(чел.) <i class="fa fa-info-circle info-all" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Данные за последнюю заступившую смену"></i></th>
                         <th colspan="2">Прибыте</th>
                         <th>Подача стволов</th>
-                        <th rowspan="2" style="width:300px" >Средства тушения<br>(кол-во, тип)</th>
-                        <th rowspan="2" style="width:150px" >Израсходо-<br>вано<br>воды/ПО<br>(тонн)</th>
+                        <th rowspan="2" style="width:192px" >Средства тушения<br>(кол-во, тип)</th>
+                        <th rowspan="2" style="width:105px" >Израсхо-<br>довано<br>воды/ПО<br>(тонн)</th>
                         <th colspan="2">Локализация</th>
-                        <th>Ликвидация</th>
+                        <th>Ликви-<br>дация</th>
 
                     </tr>
                     <!-- строка 2 -->
@@ -61,7 +61,7 @@
                         <th style="width: 140px">S пож. <br>(кв.м) <i class="fa fa-info-circle info-all" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Ячейка общая для всего столбца"></i></th>
                         <th>Время</th>
                         <th>Время <i class="fa fa-info-circle info-all" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Ячейка общая для всего столбца"></i></th>
-                        <th style="width: 140px">S пож. <br>(кв.м) <i class="fa fa-info-circle info-all" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Ячейка общая для всего столбца"></i></th>
+                        <th style="width: 91px">S пож. <br>(кв.м) <i class="fa fa-info-circle info-all" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Ячейка общая для всего столбца"></i></th>
                         <th>Время <i class="fa fa-info-circle info-all" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Ячейка общая для всего столбца"></i></th>
 
                     </tr>
@@ -108,11 +108,13 @@
 
                                 <td>
 
-                                    <input  style="width: 190px" type="text" class="form-control  mark_trunks"   placeholder="марка" name="trunks[{{x}}][mark]" value="{%if trunk.mark is defined %}{{trunk.mark|trim}}{%endif%}">
+                                    <input   type="text" class="form-control  mark_trunks"   placeholder="марка" name="trunks[{{x}}][mark]" value="{%if trunk.mark is defined %}{{trunk.mark|trim}}{%endif%}">
 
 
                                     <i class="fa fa-paperclip actions_ls_btn_trunks {%if (is_edit_dones is defined and is_edit_dones == 1 and dones.is_wide_table_trunks == 0) or (is_edit_dones is not defined)%} hide {%endif%}  " aria-hidden="true" id="actions_ls_btn_trunks-{{x}}" style="color:{%if trunk.actions_ls is defined and trunk.actions_ls is not empty %}green{%endif%}" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="{%if trunk.actions_ls is defined and trunk.actions_ls is not empty %}Действия л/с: {{trunk.actions_ls|trim}}{%else%}Внести действия л/с{%endif%}"></i>
-                                    <input  style="width: 190px" type="text" class="form-control  actions_ls_trunks hide"   placeholder="действия личного состава" name="trunks[{{x}}][actions_ls]" value="{%if trunk.actions_ls is defined %}{{trunk.actions_ls|trim}}{%endif%}">
+                                    {#<input  style="border:{%if trunk.actions_ls is defined and trunk.actions_ls is not empty %}2px #46b746 solid{%endif%}" type="text" class="form-control  actions_ls_trunks {{ (trunk.actions_ls is defined and trunk.actions_ls is not empty)  ? '' : 'hide'}}"   placeholder="действия личного состава" name="trunks[{{x}}][actions_ls]" value="{%if trunk.actions_ls is defined %}{{trunk.actions_ls|trim}}{%endif%}"  >#}
+
+                                    <textarea  style="border:{%if trunk.actions_ls is defined and trunk.actions_ls is not empty %}2px #46b746 solid{%endif%}"  class="form-control  actions_ls_trunks {{ (trunk.actions_ls is defined and trunk.actions_ls is not empty)  ? '' : 'hide'}}"   placeholder="действия личного состава" name="trunks[{{x}}][actions_ls]" >{%if trunk.actions_ls is defined %}{{trunk.actions_ls|trim}}{%endif%}</textarea>
                                 </td>
                                 <td>
 
@@ -201,6 +203,7 @@
                                     {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_not_involved_trunks == 0 and trunk.id is defined %}
                                         <input type="hidden" class="id_trunks" name="trunks[{{x}}][id_trunks]" value="{{trunk.id}}">
                                     {%endif%}
+                                     <input type="hidden" class="vid_t" name="trunks[{{x}}][vid_t]" value="{{trunk.vid_t}}">
 
                                     <a href="#" class="del-row-trunks delete-cross"  data-toggle="tooltip" data-placement="right" title="Удалить строку" ><i class="fa fa-times" aria-hidden="true" ></i></a>
                                 </td>
@@ -228,10 +231,11 @@
 
                             <td>
 
-                                <input  style="width: 190px" type="text" class="form-control  mark_trunks"   placeholder="марка" name="trunks[{{i}}][mark]" value="">
+                                <input   type="text" class="form-control  mark_trunks"   placeholder="марка" name="trunks[{{i}}][mark]" value="">
 
                                  <i class="fa fa-paperclip actions_ls_btn_trunks hide" aria-hidden="true" id="actions_ls_btn_trunks-{{x}}" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Внести действия л/с"></i>
-                                    <input  style="width: 190px" type="text" class="form-control  actions_ls_trunks hide"   placeholder="действия личного состава" name="trunks[{{x}}][actions_ls]">
+                                    {#<input  style="width: 190px" type="text" class="form-control  actions_ls_trunks hide"   placeholder="действия личного состава" name="trunks[{{x}}][actions_ls]">#}
+                                    <textarea  class="form-control  actions_ls_trunks hide"   placeholder="действия личного состава" name="trunks[{{x}}][actions_ls]"></textarea>
                             </td>
                             <td>
 
@@ -273,7 +277,7 @@
                             </td>
 
                             <td>
-                                <input style="width: 140px" type="text" class="form-control means_trunks"   placeholder="" name="trunks[{{i}}][means_trunks]" value="">
+                                <input style="width: 190px" type="text" class="form-control means_trunks"   placeholder="" name="trunks[{{i}}][means_trunks]" value="">
                             </td>
 
                             <td>
@@ -301,6 +305,7 @@
 
                             <td>
                                 <input type="hidden" class="id_teh" name="trunks[{{i}}][id_teh]" >
+                                  <input type="hidden" class="vid_t" name="trunks[{{i}}][vid_t]" value="1">
                                 <a href="#" class="del-row-trunks delete-cross"  data-toggle="tooltip" data-placement="right" title="Удалить строку" ><i class="fa fa-times" aria-hidden="true" ></i></a>
                             </td>
                         </tr>
