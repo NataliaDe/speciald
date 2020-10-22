@@ -298,13 +298,14 @@ $(document).ready(function () {
         $div_new.find('td').find('.sort').attr('name','trunks['+num+'][sort]');
 
         $div_new.find('td').find('.id_trunks').attr('name','trunks['+num+'][id_trunks]');
+        $div_new.find('td').find('.vid_t').attr('name','trunks['+num+'][vid_t]');
 
         $div_new.find('td').find('.actions_ls_trunks').attr('name','trunks['+num+'][actions_ls]');
         $div_new.find('td').find('.actions_ls_btn_trunks').attr('id','actions_ls_btn_trunks_'+num);
         $div_new.find('td').find('.actions_ls_btn_trunks').css('color','black');
 
        // $div_new.find('td').find('input').val('');
-        $div_new.find('td').find('.mark_trunks, .pasp_name_trunks,.locorg_name_trunks, .v_ac_trunks, .man_per_car_trunks, .time_arrival_trunks, .time_pod_trunks, .means_trunks, .water_po_out_trunks, .sort, .id_teh, .actions_ls_trunks, .id_trunks').val('');
+        $div_new.find('td').find('.mark_trunks, .pasp_name_trunks,.locorg_name_trunks, .v_ac_trunks, .man_per_car_trunks, .time_arrival_trunks, .time_pod_trunks, .means_trunks, .water_po_out_trunks, .sort, .id_teh, .actions_ls_trunks, .id_trunks, .vid_t').val('');
         $div_new.find('.loop-index').text(new_loop);
         $div_new.attr('data-loop',new_loop);
 

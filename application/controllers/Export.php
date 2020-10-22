@@ -466,10 +466,63 @@ class Export extends My_Controller
 
             $arr = [];
             $wide_table = [];
+            $multi_trunks=[];
+            $cnt_multi_trunks=[];
             if (!empty($trunks)) {
+
+                 foreach ($trunks as $key => $row) {
+
+                    $podr = $row['mark'] . '' . ((!empty($row['pasp_name'])) ? (' ' . $row['pasp_name']) : '') . '' . ((!empty($row['locorg_name'])) ? (' ' . $row['locorg_name']) : '');
+
+
+
+                    if (!empty(trim($row['means_trunks'])) && empty($row['actions_ls'])) {
+
+                                            if (isset($cnt_multi_trunks[$podr]))
+                        $cnt_multi_trunks[$podr] ++;
+                    else {
+                        $cnt_multi_trunks[$podr] = 1;
+                    }
+
+                        $t_pod= ((isset($row['time_pod']) && !empty($row['time_pod'])) ? (\DateTime::createFromFormat('H:i:s', $row['time_pod'])->format('H-i')) : '-');
+                        $m_tr= (!empty($row['means_trunks'])) ? $row['means_trunks'] : '-';
+                        $w=0;
+                        $po=0;
+                        if (!empty($row['water_po_out'])) {
+                            $water = ((isset($row['water_po_out']) && !empty($row['water_po_out'])) ? $row['water_po_out'] : 0);
+                          //  echo $water;
+                            if ($water != 0) {
+                                $arr_water = explode('/', $water);
+                                $w = (isset($arr_water[0])) ? trim($arr_water[0]) : 0;
+                                $po =  (isset($arr_water[1])) ? trim($arr_water[1]) : 0;
+                            }
+                        }
+
+                        if( isset($multi_trunks[$podr])){
+
+                            $multi_trunks[$podr]['time_pod_trunk'] =$multi_trunks[$podr]['time_pod_trunk'] .'<w:br/>'.$t_pod;
+                            $multi_trunks[$podr]['means_trunks_trunk'] =$multi_trunks[$podr]['means_trunks_trunk'].'<w:br/>'.$m_tr;
+                            $multi_trunks[$podr]['water'] = $multi_trunks[$podr]['water']+$w;
+                            $multi_trunks[$podr]['po'] = $multi_trunks[$podr]['po']+$po;
+                            $multi_trunks[$podr]['water_po_out'] =$multi_trunks[$podr]['water'].'/'.$multi_trunks[$podr]['po'] ;
+                        }
+                        else{
+                            $multi_trunks[$podr]['time_pod_trunk'] =$t_pod;
+                            $multi_trunks[$podr]['means_trunks_trunk'] =$m_tr;
+                            $multi_trunks[$podr]['water'] = 0;
+                            $multi_trunks[$podr]['po'] = 0;
+                            $multi_trunks[$podr]['water'] = $w;
+                            $multi_trunks[$podr]['po'] = $po;
+                            $multi_trunks[$podr]['water_po_out'] =$w.'/'.$po ;
+                        }
+
+                    }
+                }
+
+                $cnt_per_car=[];
                 foreach ($trunks as $key => $row) {
 
-                    if ($dones['is_wide_table_trunks'] == 1 && isset($row['actions_ls']) && !empty($row['actions_ls'])) {
+                    if ($dones['is_wide_table_trunks'] == 1 && isset($row['actions_ls']) && !empty($row['actions_ls']) && in_array( $row['vid_t'], array(Main_model::CAR_SPEC, Main_model::CAR_VSPOM))) {
 
                         $wide_table[] = array(
                             'is_wide'              => 1,
@@ -484,21 +537,79 @@ class Export extends My_Controller
                             'time_likv_trunk'      => ((isset($row['time_likv']) && !empty($row['time_likv'])) ? (\DateTime::createFromFormat('H:i:s', $row['time_likv'])->format('H-i')) : (($dones['is_likv_before_arrival'] == 1) ? '-' : '')),
                             'action_ls_trunk'      => (isset($row['actions_ls']) && !empty($row['actions_ls']) && $row['actions_ls'] != '-') ? $row['actions_ls'] : ''
                         );
-                    } else {
-                        $arr[] = array(
-                            'mark_trunk'           => $row['mark'] . '' . ((!empty($row['pasp_name'])) ? (' ' . $row['pasp_name']) : '') . '' . ((!empty($row['locorg_name'])) ? (' ' . $row['locorg_name']) : ''),
-                            //'v_ac_trunk'           => ((empty($row['v_ac'])) ? '-' : ((strpos($row['v_ac'], '.') === false) ? $row['v_ac'] : str_replace(".", ",", $row['v_ac']))),
-                            'v_ac_trunk'           => (empty($row['v_ac'])) ? '-' : (number_format($row['v_ac'] / 1000, 1, '.', '')),
-                            'man_per_car_trunk'    => $row['man_per_car'],
-                            's_fire_arrival_trunk' => (isset($row['s_fire_arrival']) && !empty($row['s_fire_arrival'])) ? $row['s_fire_arrival'] : '-',
-                            'time_arrival_trunk'   => ((isset($row['time_arrival']) && !empty($row['time_arrival'])) ? (\DateTime::createFromFormat('H:i:s', $row['time_arrival'])->format('H-i')) : ''),
-                            'time_pod_trunk'       => ((isset($row['time_pod']) && !empty($row['time_pod'])) ? (\DateTime::createFromFormat('H:i:s', $row['time_pod'])->format('H-i')) : '-'),
-                            'means_trunks_trunk'   => (!empty($row['means_trunks'])) ? $row['means_trunks'] : '-',
-                            'water_po_out_trunk'   => ((isset($row['water_po_out']) && !empty($row['water_po_out'])) ? ((strpos($row['water_po_out'], '.') === false) ? $row['water_po_out'] : str_replace(".", ",", $row['water_po_out'])) : '-'),
-                            'time_loc_trunk'       => ((isset($row['time_loc']) && !empty($row['time_loc'])) ? (\DateTime::createFromFormat('H:i:s', $row['time_loc'])->format('H-i')) : (($dones['is_likv_before_arrival'] == 1) ? '-' : '')),
-                            's_fire_loc_trunk'     => (isset($row['s_fire_loc']) && !empty($row['s_fire_loc'])) ? $row['s_fire_loc'] : '-',
-                            'time_likv_trunk'      => ((isset($row['time_likv']) && !empty($row['time_likv'])) ? (\DateTime::createFromFormat('H:i:s', $row['time_likv'])->format('H-i')) : (($dones['is_likv_before_arrival'] == 1) ? '-' : '')),
-                        );
+                    }
+
+                    else {
+
+
+                        $podr = $row['mark'] . '' . ((!empty($row['pasp_name'])) ? (' ' . $row['pasp_name']) : '') . '' . ((!empty($row['locorg_name'])) ? (' ' . $row['locorg_name']) : '');
+                        if (isset($cnt_multi_trunks[$podr]) && $cnt_multi_trunks[$podr] > 1 && !isset($cnt_per_car[$podr])) {//multi trunks on 1 car
+
+                            if (isset($cnt_per_car[$podr]))
+                                $cnt_per_car[$podr] ++;
+                            else {
+                                $cnt_per_car[$podr] = 1;
+                            }
+
+                            if ((isset($multi_trunks[$podr]['water_po_out']) && !empty($multi_trunks[$podr]['water_po_out']))){
+
+                                if((strpos($multi_trunks[$podr]['water_po_out'], '.') === false)){
+
+                                    $water_po=$multi_trunks[$podr]['water_po_out'] ;
+                                }
+                                else{
+                                    $wp_arr= explode('/', $multi_trunks[$podr]['water_po_out']);
+                                    $w = (isset($wp_arr[0])) ? trim($wp_arr[0]) : 0;
+                                    $po =  (isset($wp_arr[1])) ? trim($wp_arr[1]) : 0;
+
+                                    $w=($w == 0) ? $w : number_format($w,1,',','.');
+                                    $po=($po == 0) ? $po : number_format($po,1,',','.');
+                                     $water_po= $w.'/'.$po;
+                                }
+                            }
+                            else{
+                                $water_po='-';
+                            }
+
+                            $arr[] = array(
+                                'mark_trunk'           => $row['mark'] . '' . ((!empty($row['pasp_name'])) ? (' ' . $row['pasp_name']) : '') . '' . ((!empty($row['locorg_name'])) ? (' ' . $row['locorg_name']) : ''),
+                                //'v_ac_trunk'           => ((empty($row['v_ac'])) ? '-' : ((strpos($row['v_ac'], '.') === false) ? $row['v_ac'] : str_replace(".", ",", $row['v_ac']))),
+                                'v_ac_trunk'           => (empty($row['v_ac'])) ? '-' : (number_format($row['v_ac'] / 1000, 1, '.', '')),
+                                'man_per_car_trunk'    => $row['man_per_car'],
+                                's_fire_arrival_trunk' => (isset($row['s_fire_arrival']) && !empty($row['s_fire_arrival'])) ? $row['s_fire_arrival'] : '-',
+                                'time_arrival_trunk'   => ((isset($row['time_arrival']) && !empty($row['time_arrival'])) ? (\DateTime::createFromFormat('H:i:s', $row['time_arrival'])->format('H-i')) : ''),
+                                'time_pod_trunk'       => ((isset($multi_trunks[$podr]['time_pod_trunk'] ) && !empty($multi_trunks[$podr]['time_pod_trunk'] )) ? $multi_trunks[$podr]['time_pod_trunk']  : '-'),
+                                'means_trunks_trunk'   => (!empty($multi_trunks[$podr]['means_trunks_trunk'] )) ? $multi_trunks[$podr]['means_trunks_trunk']  : '-',
+                                'water_po_out_trunk'   => $water_po,
+                                'time_loc_trunk'       => ((isset($row['time_loc']) && !empty($row['time_loc'])) ? (\DateTime::createFromFormat('H:i:s', $row['time_loc'])->format('H-i')) : (($dones['is_likv_before_arrival'] == 1) ? '-' : '')),
+                                's_fire_loc_trunk'     => (isset($row['s_fire_loc']) && !empty($row['s_fire_loc'])) ? $row['s_fire_loc'] : '-',
+                                'time_likv_trunk'      => ((isset($row['time_likv']) && !empty($row['time_likv'])) ? (\DateTime::createFromFormat('H:i:s', $row['time_likv'])->format('H-i')) : (($dones['is_likv_before_arrival'] == 1) ? '-' : '')),
+                                'action_ls_trunk'      => (isset($row['actions_ls']) && !empty($row['actions_ls']) && $row['actions_ls'] != '-') ? $row['actions_ls'] : ''
+                            );
+                        } elseif( !isset($cnt_per_car[$podr])) {
+
+                            if (isset($cnt_per_car[$podr]))
+                                $cnt_per_car[$podr] ++;
+                            else {
+                                $cnt_per_car[$podr] = 1;
+                            }
+
+                            $arr[] = array(
+                                'mark_trunk'           => $row['mark'] . '' . ((!empty($row['pasp_name'])) ? (' ' . $row['pasp_name']) : '') . '' . ((!empty($row['locorg_name'])) ? (' ' . $row['locorg_name']) : ''),
+                                //'v_ac_trunk'           => ((empty($row['v_ac'])) ? '-' : ((strpos($row['v_ac'], '.') === false) ? $row['v_ac'] : str_replace(".", ",", $row['v_ac']))),
+                                'v_ac_trunk'           => (empty($row['v_ac'])) ? '-' : (number_format($row['v_ac'] / 1000, 1, '.', '')),
+                                'man_per_car_trunk'    => $row['man_per_car'],
+                                's_fire_arrival_trunk' => (isset($row['s_fire_arrival']) && !empty($row['s_fire_arrival'])) ? $row['s_fire_arrival'] : '-',
+                                'time_arrival_trunk'   => ((isset($row['time_arrival']) && !empty($row['time_arrival'])) ? (\DateTime::createFromFormat('H:i:s', $row['time_arrival'])->format('H-i')) : ''),
+                                'time_pod_trunk'       => ((isset($row['time_pod']) && !empty($row['time_pod'])) ? (\DateTime::createFromFormat('H:i:s', $row['time_pod'])->format('H-i')) : '-'),
+                                'means_trunks_trunk'   => (!empty($row['means_trunks'])) ? $row['means_trunks'] : '-',
+                                'water_po_out_trunk'   => ((isset($row['water_po_out']) && !empty($row['water_po_out'])) ? ((strpos($row['water_po_out'], '.') === false) ? $row['water_po_out'] : str_replace(".", ",", $row['water_po_out'])) : '-'),
+                                'time_loc_trunk'       => ((isset($row['time_loc']) && !empty($row['time_loc'])) ? (\DateTime::createFromFormat('H:i:s', $row['time_loc'])->format('H-i')) : (($dones['is_likv_before_arrival'] == 1) ? '-' : '')),
+                                's_fire_loc_trunk'     => (isset($row['s_fire_loc']) && !empty($row['s_fire_loc'])) ? $row['s_fire_loc'] : '-',
+                                'time_likv_trunk'      => ((isset($row['time_likv']) && !empty($row['time_likv'])) ? (\DateTime::createFromFormat('H:i:s', $row['time_likv'])->format('H-i')) : (($dones['is_likv_before_arrival'] == 1) ? '-' : '')),
+                                'action_ls_trunk'      => (isset($row['actions_ls']) && !empty($row['actions_ls']) && $row['actions_ls'] != '-') ? $row['actions_ls'] : ''
+                            );
+                        }
                     }
                 }
 
@@ -609,7 +720,13 @@ class Export extends My_Controller
 
                         $table->addCell(null, self::style_cell_center)->addText($row['time_pod_trunk'], self::cellTextCenteredFont, array('align' => 'center', 'spaceAfter' => 0, 'spacing' => 0));
                         $table->addCell(null, self::style_cell_center)->addText($row['means_trunks_trunk'], self::cellTextCenteredFont, array('align' => 'center', 'spaceAfter' => 0, 'spacing' => 0));
-                        $table->addCell(null, self::style_cell_center)->addText($row['water_po_out_trunk'], self::cellTextCenteredFont, array('align' => 'center', 'spaceAfter' => 0, 'spacing' => 0));
+
+                        if (isset($row['action_ls_trunk']) && !empty($row['action_ls_trunk'])) {//actions ls
+                            $table->addCell(null, self::style_cell_center)->addText($row['action_ls_trunk'], self::cellTextCenteredFont, array('align' => 'center', 'spaceAfter' => 0, 'spacing' => 0));
+                        } else {
+                            $table->addCell(null, self::style_cell_center)->addText($row['water_po_out_trunk'], self::cellTextCenteredFont, array('align' => 'center', 'spaceAfter' => 0, 'spacing' => 0));
+                        }
+
 
                         if ($i == 1)
                             $table->addCell(1000, self::cellRowSpan)->addText($row['time_loc_trunk'], self::cellTextCenteredFont, array('align' => 'center', 'spaceAfter' => 0, 'spacing' => 0));

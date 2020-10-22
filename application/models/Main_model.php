@@ -59,6 +59,10 @@ class Main_model extends CI_Model
 
     const ID_OWNER_DEAD = 6;
 
+    const CAR_OSNOVNAYA=1;
+        const CAR_SPEC=2;
+        const CAR_VSPOM=3;
+        const CAR_ENG=4;
 
 
 

@@ -1364,6 +1364,7 @@ class Dones extends My_Controller
                 $res['locorg_name'] = (isset($row[3])) ? trim($row[3]) : '';
                 $res['v_ac'] = (isset($row[4])) ? $row[4] : '';
                 $res['man_per_car'] = (isset($row[5])) ? $row[5] : '';
+                $res['vid_t'] = (isset($row[6])) ? $row[6] : '';
 
                 if (!empty($res))
                     $result[] = $res;
@@ -1820,6 +1821,7 @@ class Dones extends My_Controller
                     $dones_silymchs['time_return'] = (isset($row['time_return']) && !empty($row['time_return'])) ? (\DateTime::createFromFormat('H:i', $row['time_return'])->format('H:i')) : null;
                     $dones_silymchs['sort'] = (isset($row['sort']) && !empty($row['sort'])) ? intval($row['sort']) : 0;
 
+
                     $id_silymchs = (isset($row['id_silymchs']) && !empty($row['id_silymchs'])) ? intval($row['id_silymchs']) : 0; //edit id of table silymchs
 
                     if ($id_silymchs == 0) {//add new silymchs
@@ -2090,6 +2092,7 @@ class Dones extends My_Controller
                     $dones_trunks['pasp_name'] = (isset($row['pasp_name']) && !empty($row['pasp_name'])) ? trim($row['pasp_name']) : '';
                     $dones_trunks['locorg_name'] = (isset($row['locorg_name']) && !empty($row['locorg_name'])) ? trim($row['locorg_name']) : '';
                     $dones_trunks['v_ac'] = (isset($row['v_ac']) && !empty($row['v_ac'])) ? (trim($row['v_ac']) * 1000) : 0;
+                    $dones_trunks['vid_t'] = (isset($row['vid_t']) && !empty($row['vid_t'])) ? intval($row['vid_t']) : 1;//vid teh from kusis, default 1 - osnovnaya
                     $dones_trunks['man_per_car'] = (isset($row['man_per_car']) && !empty($row['man_per_car'])) ? intval($row['man_per_car']) : 0;
                     $dones_trunks['time_arrival'] = (isset($row['time_arrival']) && !empty($row['time_arrival'])) ? (\DateTime::createFromFormat('H:i', $row['time_arrival'])->format('H:i')) : NULL;
                     $dones_trunks['s_fire_arrival'] = (isset($row['s_fire_arrival']) && !empty($row['s_fire_arrival'])) ? trim($row['s_fire_arrival']) : '';
@@ -2099,6 +2102,8 @@ class Dones extends My_Controller
                     $dones_trunks['time_loc'] = (isset($row['time_loc']) && !empty($row['time_loc']) && $dones['is_likv_before_arrival'] == 0) ? (\DateTime::createFromFormat('H:i', $row['time_loc'])->format('H:i')) : NULL;
                     $dones_trunks['s_fire_loc'] = (isset($row['s_fire_loc']) && !empty($row['s_fire_loc'])) ? trim($row['s_fire_loc']) : '';
                     $dones_trunks['time_likv'] = (isset($row['time_likv']) && !empty($row['time_likv']) && $dones['is_likv_before_arrival'] == 0) ? (\DateTime::createFromFormat('H:i', $row['time_likv'])->format('H:i')) : NULL;
+
+
 
                     if ($dones['is_wide_table_trunks'] == 1) {
                         $dones_trunks['actions_ls'] = (isset($row['actions_ls']) && !empty($row['actions_ls'])) ? trim($row['actions_ls']) : '';
@@ -3298,6 +3303,7 @@ class Dones extends My_Controller
                     $dones_trunks['pasp_name'] = (isset($row['pasp_name']) && !empty($row['pasp_name'])) ? trim($row['pasp_name']) : '';
                     $dones_trunks['locorg_name'] = (isset($row['locorg_name']) && !empty($row['locorg_name'])) ? trim($row['locorg_name']) : '';
                     $dones_trunks['v_ac'] = (isset($row['v_ac']) && !empty($row['v_ac'])) ? (trim($row['v_ac']) * 1000) : 0;
+                    $dones_trunks['vid_t'] =$row['vid_t'] ;
                     $dones_trunks['man_per_car'] = (isset($row['man_per_car']) && !empty($row['man_per_car'])) ? intval($row['man_per_car']) : 0;
                     $dones_trunks['time_arrival'] = (isset($row['time_arrival']) && !empty($row['time_arrival'])) ? $row['time_arrival'] : '';
                     $dones_trunks['s_fire_arrival'] = (isset($row['s_fire_arrival']) && !empty($row['s_fire_arrival'])) ? trim($row['s_fire_arrival']) : '';
@@ -3308,6 +3314,7 @@ class Dones extends My_Controller
                     $dones_trunks['s_fire_loc'] = (isset($row['s_fire_loc']) && !empty($row['s_fire_loc'])) ? trim($row['s_fire_loc']) : '';
                     $dones_trunks['time_likv'] = (isset($row['time_likv']) && !empty($row['time_likv'])) ? $row['time_likv'] : '';
                     $dones_trunks['actions_ls'] = (isset($row['actions_ls']) && !empty($row['actions_ls'])) ? trim($row['actions_ls']) : '';
+
                     $dones_trunks['sort'] = (isset($row['sort']) && !empty($row['sort'])) ? intval($row['sort']) : 0;
 
                     $this->create_model->add_new_dones_trunks($dones_trunks);
