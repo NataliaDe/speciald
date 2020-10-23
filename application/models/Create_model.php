@@ -386,4 +386,12 @@ class Create_model extends CI_Model
     }
 
 
+        public function delete_dones_water_source_by_id_dones($id_dones)
+    {
+
+        $this->db->where('id_dones', $id_dones);
+        $this->db->delete('speciald.dones_water_source');
+    }
+
+
 }

@@ -3,8 +3,17 @@
       <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Поиск</button>
     </form>#}
 
+{#{%if is_timer_time_msg is defined and is_timer_time_msg == 1  %}#}
+    <div class="col-sm-2 {{(is_edit_dones is defined or is_timer_time_msg is not defined or is_timer_time_msg == 0) ? 'hide' : ''}}" id="div_timer_time_msg">
+        {%include '/create/timer_time_msg.twig'%}
+    </div>
+{#{%endif%}#}
+
+
+
+
 {%if is_edit_dones is not defined and is_timer is defined and is_timer == 1  %}
-    <div class="col-sm-4">
+    <div class="col-sm-2">
         {%include '/create/timer.twig'%}
     </div>
 {%endif%}

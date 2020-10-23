@@ -1,0 +1,29 @@
+.timer_time_msg{
+list-style:none;
+margin:6px 0 0 0;
+padding:0;
+display: block;}
+
+.timer_time_msg li{display: inline-block;}
+
+/* здесь дни, часы, минуты, секунды */
+.timer_time_msg li span{
+width:100%;
+color:#fd5363;
+font:18px Verdana;
+display:inline-block;}
+
+/* разделители . и : */
+.timer_time_msg li.seperator {
+color:#000;
+font:16px Verdana;
+vertical-align:top;}
+
+.timer_time_msg li div{
+margin:0;
+color:#fd5363;
+font:8pt Verdana;}
+
+.timer_time_msg{
+    float: right;
+}

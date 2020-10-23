@@ -44,13 +44,13 @@
 
 
 
-{#                    <dt class="dt-class">
-                        <a style="background-color:#428bca; color: white;border-color: #428bca; " href="#accordion2" aria-expanded="{%if settings_accordion is not defined or settings_accordion.value is empty or ('accordion2' not in settings_accordion.value|split(","))%}true{%else%} false{%endif%}" aria-controls="accordion2" class="accordion-title accordionTitle js-accordionTrigger custom-a {%if settings_accordion is not defined or settings_accordion.value is empty or ('accordion2' not in settings_accordion.value|split(","))%}is-collapsed is-expanded{%endif%} ">
-                            Начальный текст (ручной набор данных)</a>
-                    </dt>
-                    <dd class="accordion-content accordionItem {%if settings_accordion is not defined or settings_accordion.value is empty or ('accordion2' not in settings_accordion.value|split(","))%}is-expanded animateIn{%else%}is-collapsed{%endif%}" id="accordion2" aria-hidden="{%if settings_accordion is not defined or settings_accordion.value is empty or ('accordion2' not in settings_accordion.value|split(","))%}false{%else%} true{%endif%}">
-                        {%include '/create/standart/opening_block.twig'%}
-                    </dd>#}
+                    {#                    <dt class="dt-class">
+                                            <a style="background-color:#428bca; color: white;border-color: #428bca; " href="#accordion2" aria-expanded="{%if settings_accordion is not defined or settings_accordion.value is empty or ('accordion2' not in settings_accordion.value|split(","))%}true{%else%} false{%endif%}" aria-controls="accordion2" class="accordion-title accordionTitle js-accordionTrigger custom-a {%if settings_accordion is not defined or settings_accordion.value is empty or ('accordion2' not in settings_accordion.value|split(","))%}is-collapsed is-expanded{%endif%} ">
+                                                Начальный текст (ручной набор данных)</a>
+                                        </dt>
+                                        <dd class="accordion-content accordionItem {%if settings_accordion is not defined or settings_accordion.value is empty or ('accordion2' not in settings_accordion.value|split(","))%}is-expanded animateIn{%else%}is-collapsed{%endif%}" id="accordion2" aria-hidden="{%if settings_accordion is not defined or settings_accordion.value is empty or ('accordion2' not in settings_accordion.value|split(","))%}false{%else%} true{%endif%}">
+                                            {%include '/create/standart/opening_block.twig'%}
+                                        </dd>#}
 
                     <dt class="dt-class">
                         <a style="background-color:#428bca; color: white;border-color: #428bca; " href="#accordion3" aria-expanded="{%if settings_accordion is not defined or settings_accordion.value is empty or ('accordion3' not in settings_accordion.value|split(","))%}true{%else%} false{%endif%}" aria-controls="accordion3" class="accordion-title accordionTitle js-accordionTrigger custom-a {%if settings_accordion is not defined or settings_accordion.value is empty or ('accordion3' not in settings_accordion.value|split(","))%}is-collapsed is-expanded{%endif%} ">
@@ -79,7 +79,7 @@
                             {%include '/create/standart/middle-block/informing.twig'%}
                         </div>
 
-                          <br>
+                        <br>
                         <div  id="trunks_data-block-div">
                             {%include '/create/standart/middle-block/trunks.twig'%}
                         </div>
@@ -253,6 +253,13 @@
     <a href="#" data-toggle="modal" data-target="#show-warning" class="hide" id="a-show-warning"></a>
     <!-- .content -->
 
+    <audio id="myAudio">
+        <source src="{{base_url('/assets/audio/end_timer_time_msg.mp3')}}" type="audio/mpeg">
+
+    </audio>
+    {#<button onclick="playAudio();" type="button">Play Audio</button>
+    <button onclick="pauseAudio();" type="button">Pause Audio</button>#}
+
 
 
 
@@ -287,6 +294,7 @@
     <link rel="stylesheet" href="{{ base_url('/assets/css/checkbox_new.css') }}">
 
     <link rel="stylesheet" href="{{ base_url('/assets/css/timer.css') }}?{{now|date('H:i:s')}}">
+    <link rel="stylesheet" href="{{ base_url('/assets/css/timer_time_msg.css') }}?{{now|date('H:i:s')}}">
 
     <link rel="stylesheet" href="{{ base_url('/assets/css/media.css') }}?{{now|date('H:i:s')}}">
 
@@ -417,10 +425,10 @@
                 }#}
 
 
-.mark_trunks, .actions_ls_trunks{
-    width: 272px;
-    {#margin-right: -90px;#}
-}
+        .mark_trunks, .actions_ls_trunks{
+            width: 272px;
+            {#margin-right: -90px;#}
+        }
 
     </style>
 
@@ -494,6 +502,7 @@
         <script src="{{ base_url('/assets/js/timer.js')}}"></script>
 
     {%endif%}
+    <script src="{{ base_url('/assets/js/timer_time_msg.js')}}"></script>
 
 
 
@@ -1289,7 +1298,7 @@
         {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_not_involved_silymchs == 1 %}
             $('#div-silymchs').find('.card-body').hide();
             $('#div-silymchs').find('#a-search-str-cars').hide();
-             $('#div-silymchs').find('#a-refresh-silymchs').hide();
+            $('#div-silymchs').find('#a-refresh-silymchs').hide();
         {%endif%}
         {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_not_involved_str == 1 %}
             $('#div-str').find('.card-body').hide();
@@ -1983,7 +1992,7 @@
                 e.preventDefault();
                 var id_rig_current = $('#createStandart input[name="id_rig_current"]').val();
 
-                var data = {'id_rig': id_rig_current,'sign':1};
+                var data = {'id_rig': id_rig_current, 'sign': 1};
                 var url = '{{base_url('/dones/refresh_silymchs')}}';
 
                 if (id_rig_current !== '') {
@@ -2011,7 +2020,7 @@
                 e.preventDefault();
                 var id_rig_current = $('#createStandart input[name="id_rig_current"]').val();
 
-                var data = {'id_rig': id_rig_current,'sign':2};
+                var data = {'id_rig': id_rig_current, 'sign': 2};
                 var url = '{{base_url('/dones/refresh_silymchs')}}';
 
                 if (id_rig_current !== '') {
@@ -2042,7 +2051,7 @@
                 e.preventDefault();
                 var id_rig_current = $('#createStandart input[name="id_rig_current"]').val();
 
-                var data = {'id_rig': id_rig_current,'sign':3};
+                var data = {'id_rig': id_rig_current, 'sign': 3};
                 var url = '{{base_url('/dones/refresh_silymchs')}}';
 
                 if (id_rig_current !== '') {
@@ -2057,17 +2066,17 @@
                             toastr.success('Данные успешно обновлены', 'Успех:', {timeOut: 5000});
 
 
-                                        $('.select2-single').select2({
-                placeholder: "Выберите из списка",
-                allowClear: true,
-                "language": {
-                    "noResults": function () {
-                        return "Ничего не найдено";
-                    }
-                }
-            });
+                            $('.select2-single').select2({
+                                placeholder: "Выберите из списка",
+                                allowClear: true,
+                                "language": {
+                                    "noResults": function () {
+                                        return "Ничего не найдено";
+                                    }
+                                }
+                            });
 
-            $('.select2-single').trigger("change");
+                            $('.select2-single').trigger("change");
 
 
 
@@ -2089,7 +2098,7 @@
                 e.preventDefault();
                 var id_rig_current = $('#createStandart input[name="id_rig_current"]').val();
 
-                var data = {'id_rig': id_rig_current,'sign':4};
+                var data = {'id_rig': id_rig_current, 'sign': 4};
                 var url = '{{base_url('/dones/refresh_silymchs')}}';
 
                 if (id_rig_current !== '') {
@@ -2099,7 +2108,7 @@
                             $("#informing-block-div").html('');
                             $("#informing-block-div").html(JSON.parse(res)['informing']);
                             $('#modal-refresh-informing').click();
-                           toastr.success('Данные успешно обновлены', 'Успех:', {timeOut: 5000});
+                            toastr.success('Данные успешно обновлены', 'Успех:', {timeOut: 5000});
 
                         } else {
                             toastr.error('Выезд не найден', 'Ошибка:', {timeOut: 5000});
@@ -2120,7 +2129,7 @@
                 e.preventDefault();
                 var id_rig_current = $('#createStandart input[name="id_rig_current"]').val();
 
-                var data = {'id_rig': id_rig_current,'sign':5};
+                var data = {'id_rig': id_rig_current, 'sign': 5};
                 var url = '{{base_url('/dones/refresh_silymchs')}}';
 
                 if (id_rig_current !== '') {
@@ -2131,7 +2140,7 @@
                             $('#createStandart textarea[name="detail_inf"]').val(JSON.parse(res)['detail_inf']);
                             $('#modal-refresh-inf-detail').click();
 
-                             toastr.success('Данные успешно обновлены', 'Успех:', {timeOut: 5000});
+                            toastr.success('Данные успешно обновлены', 'Успех:', {timeOut: 5000});
 
                         } else {
                             toastr.error('Выезд не найден', 'Ошибка:', {timeOut: 5000});
@@ -2143,12 +2152,41 @@
 
             });
 
+
+            $('body').on('change', '#is_water_source', function (e) {
+
+                e.preventDefault();
+                if ($(this).is(':checked')) {
+                    $('#div-water-source').removeClass('hide');
+                } else {
+                    $('#div-water-source').addClass('hide');
+                }
+            });
+
+
+        {%if is_edit_dones is not defined and id_rig_current is defined and rig is defined and rig.hours<1 and rig.start_timer != 0 and rig.during_timer>0%}
+
+            start_timer_time_msg("{{rig.start_timer}}", {{rig.during_timer}});
+
+            {%elseif is_edit_dones is  defined and  is_edit_dones == 1 and dones is defined and is_timer_time_msg is defined and is_timer_time_msg == 1
+ and dones.time_msg is not empty and dones.time_msg != '0000-00-00 00:00:00' and
+                    time_msg_timer.hours<1 and time_msg_timer.start_timer != 0 and time_msg_timer.during_timer>0%}
+
+        {%endif%}
+
+
+            function playAudio() {
+                var x = document.getElementById("myAudio");
+                x.play();
+            }
+
+            function pauseAudio() {
+                var x = document.getElementById("myAudio");
+
+                x.pause();
+            }
+
     </script>
-
-
-
-
-
 
 
 {% endblock %}

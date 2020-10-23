@@ -407,6 +407,14 @@ $('#btn-fill-form').on('click', function (event) {
             $('#modal-search-rig').css('opacity', '');
             $('#modal-search-rig').click();
             $('#modal-agree-get-rig-data').click();
+
+  if (parseInt(JSON.parse(res)['diff_hours']) <1 && JSON.parse(res)['start_timer'] !== 0 && parseInt(JSON.parse(res)['during_timer']) >0) {
+      if($('#div_timer_time_msg').hasClass('hide'))
+      $('#div_timer_time_msg').removeClass('hide');
+
+            start_timer_time_msg(JSON.parse(res)['start_timer'], parseInt(JSON.parse(res)['during_timer']));
+
+        }
         } else {
 
             $('body').css('opacity', 1);

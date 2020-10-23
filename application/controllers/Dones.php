@@ -105,6 +105,7 @@ class Dones extends My_Controller
         $this->data['active_item_menu_type_create'] = 'standart';
         $this->data['is_show_btn_search_rig'] = 1; //show btn "search rig"
         $this->data['is_timer'] = 1;
+        $this->data['is_timer_time_msg'] = 1;
 
         $this->data['id_object_many_floor'] = Main_model::OBJECT_MANY_FLOOR;
         $this->data['id_object_avtotransport'] = Main_model::OBJECT_AVTO_TRANSPORT;
@@ -208,6 +209,8 @@ class Dones extends My_Controller
 
             $addr_new='';
             $addr_new=$this->data['rig']['loc_name_sd'];
+             if(!empty($this->data['rig']['sel_sd']))
+            $addr_new=$addr_new.', '.$this->data['rig']['sel_sd'];
             if(!empty($this->data['rig']['street_name_sd']))
             $addr_new=$addr_new.', '.$this->data['rig']['street_name_sd'];
             if(!empty($this->data['rig']['home_number_sd']) && $this->data['rig']['home_number_sd'] != '-')
@@ -318,6 +321,34 @@ class Dones extends My_Controller
 
             /* get data about journal trunks */
             $this->data['rig']['trunks'] = $this->getTrunksByIdRig($id_rig, $man_per_car_id); //data for trunks
+
+            /*  calculate time for timer time msg */
+            if(!empty($this->data['rig']['full_time_msg'])){
+
+            $time_msg=new DateTime($this->data['rig']['full_time_msg'] );
+            $today=new DateTime();
+            $diff=$today->diff($time_msg);
+            $hours=$diff->h;
+            $minutes=$diff->i;
+            $during_timer=$part_minutes=60-$minutes;
+//            if($part_minutes>0){
+//                $start_timer=$today->add(new DateInterval('PT'.$part_minutes.'M'));//+ missed minutes
+//                $start_timer=$start_timer->format('Y-m-d H:i:s');
+//            }
+//            else{
+//                $start_timer=0;
+//            }
+            $start_timer=$today->format('Y-m-d H:i:s');
+
+
+            //echo $minutes;            echo '    '.$start_timer;
+           // $hours = $hours + ($diff->days*24);
+             $this->data['rig']['diff_hours'] =$hours;
+              $this->data['rig']['start_timer'] =$start_timer;
+               $this->data['rig']['during_timer'] =$during_timer;
+
+            }
+
         }
 
         if ($is_default == 1) {//show empty form
@@ -327,6 +358,14 @@ class Dones extends My_Controller
             } else {
                 $is_data = 0;
             }
+
+            if (isset($this->data['rig']['diff_hours']) && !empty($this->data['rig']['diff_hours']) ) {
+                $diff_hours = $this->data['rig']['diff_hours'];
+            } else {
+                $diff_hours = 0;
+                //$start_timer=
+            }
+            //echo $diff_hours;
 
             echo json_encode([
                 'opening_block'          => $this->twig->render('create/standart/opening_block', $this->data, true),
@@ -344,6 +383,9 @@ class Dones extends My_Controller
                 'law_face_office_belong' => $this->twig->render('create/standart/owner/parts/law_face_office_belong', $this->data, true),
                 'owner_from_jour'        => $this->twig->render('create/standart/owner/parts/owner_from_jour', $this->data, true),
                 'is_data'                => $is_data,
+                'diff_hours'=>$diff_hours,
+                'start_timer'=>$start_timer,
+                'during_timer'=>$during_timer,
                 'id_face_belong'         => (($this->data['rig']['id_owner_category'] != 0 || !empty($this->data['rig']['owner_fio'])) ? 1 : 0)
             ]);
             die;
@@ -2143,44 +2185,46 @@ class Dones extends My_Controller
 
 
         /* ------------ water source of dones 1-∞ ------------- */
-        $water_source = (isset($post['water_source']) && !empty($post['water_source'])) ? $post['water_source'] : array();
+        if ($dones['is_water_source'] == 1) {
+            $water_source = (isset($post['water_source']) && !empty($post['water_source'])) ? $post['water_source'] : array();
 
-        $water_source_by_dones = $this->create_model->get_dones_water_source($id_dones_new); // water source of dones
-        $prev_ids_water_source_by_dones = (isset($water_source_by_dones) && !empty($water_source_by_dones)) ? array_unique(array_column($water_source_by_dones, 'id')) : array();
+            $water_source_by_dones = $this->create_model->get_dones_water_source($id_dones_new); // water source of dones
+            $prev_ids_water_source_by_dones = (isset($water_source_by_dones) && !empty($water_source_by_dones)) ? array_unique(array_column($water_source_by_dones, 'id')) : array();
 
-        if (isset($water_source) && !empty($water_source)) {
-            foreach ($water_source as $k => $row) {
-                $dones_water_source = array();
-                if (isset($row['water_source_type']) && !empty(intval($row['water_source_type']))) {
+            if (isset($water_source) && !empty($water_source)) {
+                foreach ($water_source as $k => $row) {
+                    $dones_water_source = array();
+                    if (isset($row['water_source_type']) && !empty(intval($row['water_source_type']))) {
 
-                    $dones_water_source['id_dones'] = $id_dones_new;
-                    $dones_water_source['water_source_type'] = intval($row['water_source_type']);
-                    $dones_water_source['water_source_distance'] = (isset($row['water_source_distance']) && !empty($row['water_source_distance'])) ? trim($row['water_source_distance']) : '';
-                    $dones_water_source['water_source_use'] = (isset($row['water_source_use']) && !empty($row['water_source_use'])) ? trim($row['water_source_use']) : '';
-                    $dones_water_source['sort'] = (isset($row['sort']) && !empty($row['sort'])) ? intval($row['sort']) : 0;
-
-
-                    $id_water_source = (isset($row['id_water_source']) && !empty($row['id_water_source'])) ? intval($row['id_water_source']) : 0; //edit id of table dones_water_source
+                        $dones_water_source['id_dones'] = $id_dones_new;
+                        $dones_water_source['water_source_type'] = intval($row['water_source_type']);
+                        $dones_water_source['water_source_distance'] = (isset($row['water_source_distance']) && !empty($row['water_source_distance'])) ? trim($row['water_source_distance']) : '';
+                        $dones_water_source['water_source_use'] = (isset($row['water_source_use']) && !empty($row['water_source_use'])) ? trim($row['water_source_use']) : '';
+                        $dones_water_source['sort'] = (isset($row['sort']) && !empty($row['sort'])) ? intval($row['sort']) : 0;
 
 
+                        $id_water_source = (isset($row['id_water_source']) && !empty($row['id_water_source'])) ? intval($row['id_water_source']) : 0; //edit id of table dones_water_source
 
 
-
-                    if ($id_water_source == 0) {//add new water_source
-                        $this->create_model->add_new_dones_water_source($dones_water_source);
-                    } else {//edit water_source
-                        $this->create_model->edit_dones_water_source($id_water_source, $dones_water_source);
-                        if (isset($prev_ids_water_source_by_dones) && !empty($prev_ids_water_source_by_dones) && (($key = array_search($id_water_source, $prev_ids_water_source_by_dones)) !== false)) {
-                            unset($prev_ids_water_source_by_dones[$key]);
+                        if ($id_water_source == 0) {//add new water_source
+                            $this->create_model->add_new_dones_water_source($dones_water_source);
+                        } else {//edit water_source
+                            $this->create_model->edit_dones_water_source($id_water_source, $dones_water_source);
+                            if (isset($prev_ids_water_source_by_dones) && !empty($prev_ids_water_source_by_dones) && (($key = array_search($id_water_source, $prev_ids_water_source_by_dones)) !== false)) {
+                                unset($prev_ids_water_source_by_dones[$key]);
+                            }
                         }
                     }
                 }
             }
-        }
 
-        /* delete prev water_source of dones */
-        if (isset($prev_ids_water_source_by_dones) && !empty($prev_ids_water_source_by_dones)) {
-            $this->create_model->delete_dones_water_source_by_ids($id_dones_new, $prev_ids_water_source_by_dones);
+            /* delete prev water_source of dones */
+            if (isset($prev_ids_water_source_by_dones) && !empty($prev_ids_water_source_by_dones)) {
+                $this->create_model->delete_dones_water_source_by_ids($id_dones_new, $prev_ids_water_source_by_dones);
+            }
+        }
+        else{
+            $this->create_model->delete_dones_water_source_by_id_dones($id_dones_new);
         }
 
 
@@ -2507,6 +2551,27 @@ class Dones extends My_Controller
 //                $this->data['dones']['media'][$row['type']][$i] = $row['file'];
 //            }
 //        }
+
+
+        /* timer time msg */
+//        if (!isset($this->data['dones']['is_see']) || $this->data['dones']['is_see'] == 0 || $this->data['active_user']['level'] == Main_model::LEVEL_ID_RCU) {
+//            $this->data['is_timer_time_msg'] = 1;
+//            $time_msg = new DateTime($this->data['dones']['time_msg']);
+//            $today = new DateTime();
+//            $diff = $today->diff($time_msg);
+//            $hours = $diff->h;
+//            $minutes = $diff->i;
+//            $during_timer = $part_minutes = 60 - $minutes;
+//
+//            $start_timer = $today->format('Y-m-d H:i:s');
+//
+//            $this->data['timer_time_msg']['diff_hours'] = $hours;
+//            $this->data['timer_time_msg']['start_timer'] = $start_timer;
+//            $this->data['timer_time_msg']['during_timer'] = $during_timer;
+//        }
+
+
+
 
         /*  settings accordion */
         $this->data['settings_accordion'] = $this->dones_model->get_settings_accordion($id_dones, $this->data['active_user']['id_user']);

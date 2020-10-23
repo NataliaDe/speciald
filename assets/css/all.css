@@ -522,3 +522,12 @@ background-color: #faffc3;
 .refresh-icon:hover {
 text-decoration: none;
 }
+
+.red_end_timer_time_msg{
+    color: #fd5363;
+    padding-top: 15px;
+}
+
+.black_end_timer_time_msg{
+  color:   #343a40 !important;
+}
