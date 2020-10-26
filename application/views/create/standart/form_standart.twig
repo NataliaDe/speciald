@@ -251,12 +251,14 @@
 
     <a href="#" data-toggle="modal" data-target="#show-error" class="hide" id="a-show-error"></a>
     <a href="#" data-toggle="modal" data-target="#show-warning" class="hide" id="a-show-warning"></a>
+    <a href="#" data-toggle="modal" data-target="#play_end_timer_time_msg" class="hide" id="a-play-end-timer"></a>
     <!-- .content -->
 
     <audio id="myAudio">
-        <source src="{{base_url('/assets/audio/end_timer_time_msg.mp3')}}" type="audio/mpeg">
+        <source src="{{base_url('/assets/audio_timer/end_timer_time_msg.mp3')}}" type="audio/mpeg">
 
     </audio>
+
     {#<button onclick="playAudio();" type="button">Play Audio</button>
     <button onclick="pauseAudio();" type="button">Pause Audio</button>#}
 
@@ -2175,12 +2177,12 @@
         {%endif%}
 
 
-            function playAudio() {
+            function playEndTimer() {
                 var x = document.getElementById("myAudio");
                 x.play();
             }
 
-            function pauseAudio() {
+            function pauseEndTimer() {
                 var x = document.getElementById("myAudio");
 
                 x.pause();

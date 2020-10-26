@@ -55,7 +55,8 @@ $('.timer_time_msg').downCount({
             /* действие после завершения таймера */
             //alert("Время истекло!");
             $('.timer_time_msg').find('#end_timer_time_msg').removeClass('black_end_timer_time_msg');
-            playAudio();
+            playEndTimer();
+            $('#a-play-end-timer').click();
 //            $('.timer_time_msg').find('#end_timer_time_msg').removeClass('red_end_timer_time_msg');
         });
 }
