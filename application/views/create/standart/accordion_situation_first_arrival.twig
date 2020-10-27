@@ -1,11 +1,63 @@
 <br>
-<div class="form-row create-form-row">
+<div class="checkbox checkbox-success" >
+    <input  type="checkbox" name="is_show_sit_fa" value="1" id="is_show_sit_fa" {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_show_sit_fa == 1 %}checked{%endif%}>
+    <label for="is_show_sit_fa">
+        выводить обстановку в СД <i class="fa fa-info-circle info-all" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="обстановка будет добавлена в СД перед финальным текстом"></i>
+    </label>
+</div>
+<br>
+<div class="form-row create-form-row" id='block-sit-fa'>
 
-    <div class="form-group col-md-12">
-        <label for="situation_first_arrival">Обстановка на момент прибытия первого подразделения</label>
-        <textarea class="form-control" name="situation_first_arrival"  rows="10" cols="50">{%if  rig.situation_first_arrival is defined and  rig.situation_first_arrival is not empty and rig.situation_first_arrival is not null %}{{rig.situation_first_arrival|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.situation_first_arrival is not empty %}{{dones.situation_first_arrival|trim}}{%endif%}</textarea>
+    {#    <div class="form-group col-md-12">
+            <label for="situation_first_arrival">Обстановка на момент прибытия первого подразделения</label>
+            <textarea class="form-control" name="situation_first_arrival"  rows="10" cols="50">{%if  rig.situation_first_arrival is defined and  rig.situation_first_arrival is not empty and rig.situation_first_arrival is not null %}{{rig.situation_first_arrival|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.situation_first_arrival is not empty %}{{dones.situation_first_arrival|trim}}{%endif%}</textarea>
+        </div>#}
+
+
+    <div class="form-group col-md-4" id='div-sit-fa'>
+        <label for="situation_first_arrival">Обстановка на момент прибытия первого подразделения
+            <a href="#" class="add-new-vid-situation" data-placement="right" title="Добавить новый вид" data-toggle="modal" data-target="#modal-add-new-vid-situation">
+                <i class="fa fa-pencil-square-o " aria-hidden="true" style="color:green;padding-left: 10px; cursor: pointer"></i>
+            </a>
+        </label>
+        <select  class="form-control select2-single situation_first_arrival" name="situation_first_arrival" id="situation_first_arrival_id" >
+            <option value=""></option>
+            {% for vid in situation_fa_list %}
+                <option value="{{ vid.id }}" {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and  dones.situation_first_arrival_id is not empty and dones.situation_first_arrival_id is not null  and dones.situation_first_arrival_id== vid.id %}selected{%endif%} >{{ vid.name }}</option>
+            {% endfor %}
+        </select>
+
+
     </div>
 
+
+
+    <div class="form-group col-md-1" id='div-rig-num-rtp'>
+        <label for="rig_num_rtp">Номер вызова
+        </label>
+        <select  class="form-control select2-single " name="rig_num_rtp" id="rig_num_rtp_id" >
+            <option value=""></option>
+            <option value="1" {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and  dones.rig_num_rtp== 1%}selected{%endif%} >один</option>
+            <option value="2" {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and  dones.rig_num_rtp== 2%}selected{%endif%} >два</option>
+            <option value="3" {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and  dones.rig_num_rtp== 3%}selected{%endif%} >три</option>
+            <option value="4" {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and  dones.rig_num_rtp== 4%}selected{%endif%} >четыре</option>
+            <option value="5" {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and  dones.rig_num_rtp== 5%}selected{%endif%} >пять</option>
+        </select>
+
+
+    </div>
+
+
+    <div class="form-group col-md-4" id='div-num-ac'>
+        <label for="num_ac">количество АЦ
+        </label>
+        <input type="number" class="form-control"  placeholder="" name="num_ac" style='width: 111px;' min='0'
+               value="{%if rig.num_ac is defined %}{{rig.num_ac}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.num_ac is defined and dones.num_ac is not empty %}{{dones.num_ac}}{%else%}0{%endif%}">
+    </div>
+
+
+  <input type="hidden" class="form-control"  placeholder="" name="sit_fa_text"
+               value="{%if rig.sit_fa_text is defined %}{{rig.sit_fa_text}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.sit_fa_text is defined and dones.sit_fa_text is not empty %}{{dones.sit_fa_text}}{%endif%}">
 
 
 </div>

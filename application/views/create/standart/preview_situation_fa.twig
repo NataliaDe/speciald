@@ -1,0 +1,85 @@
+<script>
+    $("#preview_sit_fa_button").click(function () {
+
+        if ($("#panel_preview_sit_fa").hasClass('open_panel')) {
+            $("#panel_preview_sit_fa").removeClass('open_panel');
+            $("#panel_preview_sit_fa").addClass('close_panel');
+            $("#preview-sit-fa-standart").hide();
+            $("#preview_sit_fa_button").show();
+        } else {
+            $("#panel_preview_sit_fa").removeClass('close_panel');
+            $("#panel_preview_sit_fa").addClass('open_panel');
+            $("#preview-sit-fa-standart").show();
+            //$( "#theme_panel_button" ).show();
+        }
+
+    });
+
+
+    $('body').on('change', '#createStandart #is_show_sit_fa', function (e) {
+        setPreviewDataSitFa();
+
+    });
+
+
+    $('body').on('change', '#createStandart #accordion_situation_first_arrival  #situation_first_arrival_id', function (e) {
+        setPreviewDataSitFa();
+    });
+    $('body').on('change', '#createStandart #accordion_situation_first_arrival  #rig_num_rtp_id', function (e) {
+        setPreviewDataSitFa();
+    });
+    $('body').on('input change keyup', '#createStandart #accordion_situation_first_arrival  input[name="num_ac"]', function (e) {
+        setPreviewDataSitFa();
+
+    });
+
+
+    function setPreviewDataSitFa() {
+        var is_show = $('#createStandart #is_show_sit_fa').is(":checked");
+
+        var preview = '';
+
+        if (is_show === true) {
+            $("#panel_preview_sit_fa").show();
+
+            var situation_val = $('#createStandart #accordion_situation_first_arrival select[name="situation_first_arrival"]').val();
+            var situation = $('#createStandart #accordion_situation_first_arrival select[name="situation_first_arrival"] option:selected').text();
+
+            var sit_fa_text = $('#createStandart #accordion_situation_first_arrival input[name="sit_fa_text"]').val();
+
+
+            var num_rig_val = $('#createStandart #accordion_situation_first_arrival select[name="rig_num_rtp"]').val();
+            var num_rig = $('#createStandart #accordion_situation_first_arrival select[name="rig_num_rtp"] option:selected').text();
+
+            var num_ac = $('#createStandart #accordion_situation_first_arrival input[name="num_ac"]').val();
+
+            if (situation_val !== '') {
+                sit_fa_text = sit_fa_text + ' ' + situation + '.';
+            } else {
+                sit_fa_text = sit_fa_text + '.';
+            }
+
+            if (num_rig_val !== '') {
+                sit_fa_text = sit_fa_text + ' Вызов номер ' + num_rig + ' подтвержден';
+
+            }
+
+            if (num_ac !== '' && num_ac > 0) {
+                sit_fa_text = sit_fa_text + ' (' + num_ac + 'АЦ).';
+            } else {
+                sit_fa_text = sit_fa_text + '.';
+            }
+
+            preview = sit_fa_text;
+
+            $('#preview-sit-fa-standart').find('textarea[name="sit_fa_preview"]').val(preview);
+
+        } else {
+
+            $("#panel_preview_sit_fa").hide();
+
+        }
+
+    }
+
+</script>

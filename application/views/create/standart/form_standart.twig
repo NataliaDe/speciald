@@ -106,7 +106,7 @@
 
 
 
-                    {%if settings is defined and settings.is_situation_first_arrival is defined and 'yes' in settings.is_situation_first_arrival %}
+                    {#{%if settings is defined and settings.is_situation_first_arrival is defined and 'yes' in settings.is_situation_first_arrival %}#}
 
                         <dt class="dt-class">
                             <a style="background-color:#428bca; color: white;border-color: #428bca; " href="#accordion_situation_first_arrival" aria-expanded="{%if settings_accordion is not defined or settings_accordion.value is empty or ('accordion_situation_first_arrival' not in settings_accordion.value|split(","))%}true{%else%} false{%endif%}" aria-controls="accordion_situation_first_arrival" class="accordion-title accordionTitle js-accordionTrigger custom-a {%if settings_accordion is not defined or settings_accordion.value is empty or ('accordion_situation_first_arrival' not in settings_accordion.value|split(","))%}is-collapsed is-expanded{%endif%}">
@@ -117,7 +117,7 @@
                             {%include '/create/standart/accordion_situation_first_arrival.twig'%}
                         </dd>
 
-                    {%endif%}
+                    {#{%endif%}#}
 
 
 
@@ -193,6 +193,9 @@
 
 
             {%include '/create/standart/preview/opening_description.twig'%}
+
+
+            {%include '/create/standart/preview/situation_fa.twig'%}
 
 
             {%if settings is defined and settings.is_map is defined and 'yes' %}
@@ -278,6 +281,7 @@
 
     {%include '/create/standart/modals/modal-str-refresh.twig'%}
     {%include '/create/standart/modals/modal-dolj-add.twig'%}
+    {%include 'create/standart/modals/modal-add-new-vid-situation-fa.twig'%}
     {%include '/create/modals/modals.twig'%}
 
 
@@ -432,6 +436,14 @@
             {#margin-right: -90px;#}
         }
 
+
+       #div-sit-fa .select2-container {
+            width: 605px !important;
+       }
+
+       #div-rig-num-rtp .select2-container {
+           width: 145px !important;
+       }
     </style>
 
 {% endblock %}
@@ -499,6 +511,7 @@
 
     {%include '/create/standart/owner/actions_js.twig'%}
     {%include '/create/standart/preview_standart.twig'%}
+    {%include '/create/standart/preview_situation_fa.twig'%}
 
     {%if is_edit_dones is not defined  %}
         <script src="{{ base_url('/assets/js/timer.js')}}"></script>
@@ -1229,6 +1242,115 @@
             $('#modal-add-new-vid-type-water-source').find('#type_water_source_for_delete').trigger("change");
             /* refresh select on form */
             $('#div-water-source #water-source-table .water_source_type').trigger("change"); // on form
+        }
+
+
+
+
+
+
+        /* add Add new vid of situation first arrival to bd */
+        function AddSitFa() {//add in modal
+            $.ajax({
+                dataType: "json",
+                url: '{{ base_url('/dones/add_sit_fa_ajax')}}',
+                method: 'POST',
+                data: {
+                    name: $('#modal-add-new-vid-situation').find('#new_sit_fa').val()
+                }
+            }).done(function (data) {
+
+                if (data.is_success === 1) {
+                    $('#situation_first_arrival_id').append('<option value="' + data.id + '">' + data.name + '</option>');
+                    $('#situation_first_arrival_id').trigger("change");
+                    $('#sit_fa_for_edit').append('<option value="' + data.id + '">' + data.name + '</option>');
+                    $('#sit_fa_for_edit').trigger("change");
+                    $('#sit_fa_for_delete').append('<option value="' + data.id + '">' + data.name + '</option>');
+                    $('#sit_fa_for_delete').trigger("change");
+                    $('#modal-add-new-vid-situation').find('#new_si_fa').val('');
+                    $('.md-close').click();
+                    toastr.success(data.message, 'Успех:', {timeOut: 5000});
+                } else {
+                    toastr.warning(data.message, 'Внимание:', {timeOut: 5000});
+                }
+            });
+        }
+
+
+
+        /* edit situation first arrival to bd */
+        function EditSitFa() {//edit in modal
+
+            var id_edit = $('#modal-add-new-vid-situation').find('#sit_fa_for_edit').val();
+            $.ajax({
+                dataType: "json",
+                url: '{{ base_url('/dones/edit_sit_fa_ajax')}}',
+                method: 'POST',
+                data: {
+                    name: $('#modal-add-new-vid-situation').find('#new_name_sit_fa').val(),
+                    id_edit: id_edit
+                }
+            }).done(function (data) {
+
+                if (data.is_success === 1) {
+
+                    /*  set data*/
+                    $('#modal-add-new-vid-situation #sit_fa_for_edit option[value=' + id_edit + ']').text(data.name); //select edit
+                    $('#modal-add-new-vid-situation').find('#sit_fa_for_delete option[value=' + id_edit + ']').text(data.name); //select delete
+                    $('#situation_first_arrival_id option[value=' + id_edit + ']').text(data.name); //select on form
+
+                    /* refresh update select */
+                    $('#modal-add-new-vid-situation').find('#sit_fa_for_edit').select2('destroy');
+                    $('#modal-add-new-vid-situation').find('#sit_fa_for_edit').select2();
+                    /* refresh delete select */
+                    $('#modal-add-new-vid-situation').find('#sit_fa_for_delete').select2('destroy');
+                    $('#modal-add-new-vid-situation').find('#sit_fa_for_delete').select2();
+                    /* refresh select on form */
+                    $('#situation_first_arrival_id').select2('destroy');
+                    $('#situation_first_arrival_id').select2({
+                        placeholder: "Выберите из списка",
+                        allowClear: true,
+                        "language": {
+                            "noResults": function () {
+                                return "Ничего не найдено";
+                            }
+                        }
+                    });
+                    $('#modal-add-new-vid-situation #new_name_sit_fa').val('');
+                    $('.md-close').click();
+                    toastr.success(data.message, 'Успех:', {timeOut: 5000});
+                } else {
+                    toastr.warning(data.message, 'Внимание:', {timeOut: 5000});
+                }
+            });
+        }
+
+
+
+        /* delete situation first arrival from bd */
+        function deleteSitFa() {//delete in modal
+
+            var id = $('#modal-add-new-vid-situation').find('#sit_fa_for_delete').val();
+            $.ajax({
+                dataType: "json",
+                url: '{{ base_url('/dones/delete_sit_fa_ajax')}}',
+                method: 'POST',
+                data: {
+                    id: id
+                }
+            });
+            $('#situation_first_arrival_id option[value=' + id + ']').remove();
+            $('#modal-add-new-vid-situation').find('#sit_fa_for_edit option[value=' + id + ']').remove(); //edit select
+            $('#modal-add-new-vid-situation').find('#sit_fa_for_delete option[value=' + id + ']').remove();
+            toastr.success('Тип был удален из БД', 'Info:', {timeOut: 5000});
+            /* refresh update select */
+            $('#modal-add-new-vid-situation').find('#sit_fa_for_edit').trigger("change"); //select edit
+
+
+            /* refresh delete select */
+            $('#modal-add-new-vid-situation').find('#sit_fa_for_delete').trigger("change");
+            /* refresh select on form */
+            $('#situation_first_arrival_id').trigger("change"); // on form
         }
 
 

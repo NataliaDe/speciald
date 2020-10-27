@@ -904,6 +904,29 @@ class Export extends My_Controller
         // $section->addTextBreak(1, self::header_style_cell_size, self::header_style_cell_font);
 
 
+
+
+        /*  SITUATION FIRST ARRIVAL */
+        if (isset($dones['is_show_sit_fa']) &&$dones['is_show_sit_fa'] == 1) {
+            $a = explode(PHP_EOL, $dones['sit_fa_preview']);
+            foreach ($a as $value) {
+                $section->addText('          ' . $value, array('size' => 15), array('spaceAfter' => 0, 'spacing'    => 0,
+                    'alignment'  => PhpOffice\PhpWord\SimpleType\Jc::BOTH));
+            }
+        }
+        elseif (isset($dones['situation_first_arrival']) && !empty($dones['situation_first_arrival'])) {
+            $a = explode(PHP_EOL, $dones['situation_first_arrival']);
+            foreach ($a as $value) {
+                $section->addText('          ' . $value, array('size' => 15), array('spaceAfter' => 0, 'spacing'    => 0,
+                    'alignment'  => PhpOffice\PhpWord\SimpleType\Jc::BOTH));
+            }
+        }
+
+        /*  END SITUATION FIRST ARRIVAL */
+
+
+
+
          /* object  */
         if ($dones['is_show_object'] == 1 && !empty($dones['object_word'])) {
             $section->addText('          ' . trim($dones['object_word']), self::header_style_cell_size, self::start_descr_font);
@@ -1022,13 +1045,15 @@ class Export extends My_Controller
 
 
 
-                if (isset($dones['situation_first_arrival']) && !empty($dones['situation_first_arrival'])) {
-            $a = explode(PHP_EOL, $dones['situation_first_arrival']);
-            foreach ($a as $value) {
-                $section->addText('          ' . $value, array('size' => 15), array('spaceAfter' => 0, 'spacing'    => 0,
-                    'alignment'  => PhpOffice\PhpWord\SimpleType\Jc::BOTH));
-            }
-        }
+//                if (isset($dones['situation_first_arrival']) && !empty($dones['situation_first_arrival'])) {
+//            $a = explode(PHP_EOL, $dones['situation_first_arrival']);
+//            foreach ($a as $value) {
+//                $section->addText('          ' . $value, array('size' => 15), array('spaceAfter' => 0, 'spacing'    => 0,
+//                    'alignment'  => PhpOffice\PhpWord\SimpleType\Jc::BOTH));
+//            }
+//        }
+
+
 
 
 

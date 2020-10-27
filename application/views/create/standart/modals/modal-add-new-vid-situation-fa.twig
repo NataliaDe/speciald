@@ -1,0 +1,87 @@
+
+<div class="modal fade" id="modal-add-new-vid-situation"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title ff-l" id="myModalLabel">Обстановка на момент прибытия первого подразделения</h4>
+                <button class="close danger" type="button" data-dismiss="modal" style="font-weight: bolder;">×</button>
+
+            </div>
+
+            {%if is_edit_dones is defined and dones is defined and dones.is_see == 1  %}
+
+                <fieldset disabled>
+                {%endif%}
+
+                <div class="modal-body">
+
+                    <p class="line"><span>Добавление</span></p>
+
+                    <div class="form-group">
+                        <h5>Добавить новый тип</h5>
+                        <input type="text" class="form-control" placeholder="Введите наименование" required="" id='new_sit_fa' >
+                        <br>
+                        <div class="btn-modal">
+                            <button type="button" class="btn btn-success"  onclick="AddSitFa();
+                                    return false;">Добавить</button>
+                        </div>
+                    </div>
+
+
+                    <br>
+                    <p class="line"><span>Редактирование</span></p>
+
+                    <div class="form-group">
+                        <h5>Выберите тип для редактирования</h5>
+                        <div class="tags-select">
+                            <select class="select2-select" data-placeholder="Выберите из списка" id='sit_fa_for_edit' style="width:50%">
+                                {% for vid in situation_fa_list %}
+                                    {%if vid.created_by == active_user.id_user%}
+                                        <option value="{{ vid.id }}" >{{ vid.name }}</option>
+                                    {%endif%}
+                                {% endfor %}
+
+                            </select>
+                        </div>
+                        <br>
+                        <input type="text" class="form-control" placeholder="Введите новое наименование" required="" id='new_name_sit_fa' >
+                        <br>
+                        <div class="btn-modal">
+                            <button type="button" class="btn btn-warning"  onclick="EditSitFa();
+                                    return false;">Сохранить изменения</button>
+                        </div>
+                    </div>
+                    <br>
+                    <p class="line"><span>Удаление</span></p>
+                    <div class="form-group">
+                        <h5>Выберите тип для удаления</h5>
+                        <div class="tags-select">
+                            <select class="select2-select" data-placeholder="Выберите из списка" id='sit_fa_for_delete' style="width:50%">
+                                {% for vid in situation_fa_list %}
+                                    {%if vid.created_by == active_user.id_user%}
+                                        <option value="{{ vid.id }}" >{{ vid.name }}</option>
+                                    {%endif%}
+                                {% endfor %}
+
+                            </select>
+                        </div>
+                        <br>
+                        <div class="btn-modal">
+                            <button type="button" class="btn btn-danger" onclick="deleteSitFa();
+                                    return false;">Удалить</button>
+                        </div>
+                    </div>
+
+                </div>
+
+                {%if is_edit_dones is defined and dones is defined and dones.is_see == 1  %}
+
+                </fieldset>
+            {%endif%}
+
+        </div>
+    </div>
+
+
+</div>
