@@ -137,6 +137,10 @@ $('#btn-fill-form').on('click', function (event) {
             $("#owner_from_jour").html('');
             $("#owner_from_jour").html(JSON.parse(res)['owner_from_jour']);
 
+            $("#accordion_situation_first_arrival input[name='num_ac']").val(parseInt(JSON.parse(res)['num_ac']));
+            $("#accordion_situation_first_arrival input[name='sit_fa_text']").val(JSON.parse(res)['sit_fa_text']);
+
+
             setPreviewData();// set preview start text
 
             if (parseInt(JSON.parse(res)['id_face_belong']) === 1) {

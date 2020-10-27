@@ -112,6 +112,7 @@ class Dones extends My_Controller
 
         $this->data['avtotransport_vid'] = $this->main_model->get_avtotransport_vid();
         $this->data['theme_messages'] = $this->main_model->get_theme_messages();
+        $this->data['situation_fa_list'] = $this->main_model->get_situation_fa();
 
         $this->data['bread_crumb'] = array(array('/dones' => 'Создать специальное донесение'),
             array('Стандартное'));
@@ -260,12 +261,119 @@ class Dones extends My_Controller
 //            }
 
             $man_per_car_id = array();
+            $this->data['rig']['num_ac']=0;
+            $this->data['rig']['sit_fa_text']='';//situation first arrival
+            $sit_fa_cars='';//situation first arrival cars. [ПАСЧ-1 Светлогорского РОЧС (3 км)]=>array([АЦ]=>2, [АБР]=>1)
+            $sit_fa_text='';//situation first arrival text
+            $this->data['rig']['sit_fa_text']='По прибытии к месту вызова установлено, что';
+
+
             if (isset($this->data['rig']['silymchs']) && !empty($this->data['rig']['silymchs'])) {
 //print_r($this->data['rig']['silymchs']);
+                $i=0;
                 foreach ($this->data['rig']['silymchs'] as $key => $value) {
+                    $i++;
+
+                    if($value['view_id'] == Main_model::CAR_AC){
+                        $this->data['rig']['num_ac']++;
+                    }
+
+                    if($value['is_return'] == 0){
+                    if($i==1 && !empty($value['time_arrival']) && $value['time_arrival'] != '0000-00-00 00:00:00'){
+                        $first_arrival_time=$value['time_arrival'];
+                    }
+                    elseif($i !=1 && !empty($value['time_arrival']) && $value['time_arrival'] != '0000-00-00 00:00:00' && isset ($first_arrival_time) && $value['time_arrival'] <$first_arrival_time){
+                        $first_arrival_time=$value['time_arrival'];
+                    }
+                    }
+
 
                     if (isset($value['pasp_id']) && !empty($value['pasp_id']) && $value['pasp_id'] != null)
                         $ids_pasp[] = $value['pasp_id']; // ids pasp of each car
+
+                }
+
+                if (isset($first_arrival_time) && !empty($first_arrival_time)) {
+                    foreach ($this->data['rig']['silymchs'] as $key => $value) {
+
+                        if($value['time_arrival'] == $first_arrival_time){
+                            $pasp=$value['pasp_name_spec'];
+                            $gochs=$value['locorg_name_spec'];
+                            $full_paps=$pasp.' '.$gochs;
+                            $view_teh=$value['view_teh'];
+                            $distance=(!empty($value['distance']) && $value['distance'] >0) ? $value['distance'] : 0;
+                            if($distance >0)
+                                $full_paps=$full_paps.' ('.$distance.' км)';
+
+                            if(isset($sit_fa_cars[$full_paps][$view_teh]))
+                            $sit_fa_cars[$full_paps][$view_teh]++;
+                            else
+                                $sit_fa_cars[$full_paps][$view_teh]=1;
+                        }
+
+                    }
+
+
+                    if(isset($sit_fa_cars) && !empty($sit_fa_cars)){
+
+                        $otd='отделений';
+                        if(count($sit_fa_cars) == 1){
+
+                            foreach ($sit_fa_cars as $key => $value) {
+                                if(count($value) > 1){
+                                    $otd='отделений';break;
+                                }
+                               else{
+                                    foreach ($value as $cnt) {
+                                        if ($cnt > 1)
+                                            $otd = 'отделений';
+                                        else
+                                        $otd = 'отделения';
+                                    }
+                                }
+                            }
+                        }
+
+
+                        $sit_fa_text='По прибытии к месту вызова в '. (\DateTime::createFromFormat('Y-m-d H:i:s',$first_arrival_time)->format('H-i')).' '.$otd.' на';
+                        $all_cars='';
+                        $cars='';
+                          foreach ($sit_fa_cars as $pasp_name => $value) {//[ПАСЧ-1 Светлогорского РОЧС (3 км)]=>array([АЦ]=>2, [АБР]=>1)
+                              $cars='';
+                              foreach ($value as $name_car => $cnt_car) {//array([АЦ]=>2, [АБР]=>1)
+
+                                   if(count($value) > 1){//multi cars
+                                  if(empty($cars))
+                                      $cars=$cnt_car.$name_car;
+                                      else
+                                  $cars=$cars.',  '.$cnt_car.$name_car;
+                                   }
+                                   elseif($cnt_car == 1){//one car
+                                    if (empty($cars))
+                                        $cars = $name_car;
+                                    else
+                                        $cars = $cars . ',  ' . $name_car;
+                                }
+                                else{
+                                    if (empty($cars))
+                                        $cars = $cnt_car . $name_car;
+                                    else
+                                        $cars = $cars . ',  ' . $cnt_car . $name_car;
+                                }
+
+
+                              }
+                              $cars=$cars.' '.$pasp_name;
+                              if(!empty($all_cars)){
+                                  $all_cars=$all_cars.', '.$cars;
+                              }
+                              else{
+                                  $all_cars=$cars;
+                              }
+                            }
+                             $sit_fa_text=$sit_fa_text.' '.$all_cars.' установлено, что';
+                             $this->data['rig']['sit_fa_text']=$sit_fa_text;
+                    }
                 }
             }
 
@@ -386,7 +494,9 @@ class Dones extends My_Controller
                 'diff_hours'=>$diff_hours,
                 'start_timer'=>$start_timer,
                 'during_timer'=>$during_timer,
-                'id_face_belong'         => (($this->data['rig']['id_owner_category'] != 0 || !empty($this->data['rig']['owner_fio'])) ? 1 : 0)
+                'id_face_belong'         => (($this->data['rig']['id_owner_category'] != 0 || !empty($this->data['rig']['owner_fio'])) ? 1 : 0),
+                'num_ac'=>$this->data['rig']['num_ac'],
+                'sit_fa_text'=>$this->data['rig']['sit_fa_text']
             ]);
             die;
         }
@@ -1696,11 +1806,14 @@ class Dones extends My_Controller
         $dones['id_face_gender'] = (isset($post['id_face_gender']) && !empty($post['id_face_gender'])) ? intval($post['id_face_gender']) : 1;//1-man, 2-woman
 
 
-        if (!empty($settings) && isset($settings['is_situation_first_arrival']) && in_array('yes', $settings['is_situation_first_arrival'])) {
-            $dones['situation_first_arrival'] = (isset($post['situation_first_arrival']) && !empty($post['situation_first_arrival'])) ? trim($post['situation_first_arrival']) : '';
-        } else {
-            $dones['situation_first_arrival'] = '';
-        }
+        $dones['is_show_sit_fa'] = (isset($post['is_show_sit_fa']) && !empty($post['is_show_sit_fa'])) ? 1 : 0;
+        $dones['situation_first_arrival_id'] = (isset($post['situation_first_arrival']) && !empty($post['situation_first_arrival'])) ? intval($post['situation_first_arrival']) : 0;
+        $dones['situation_first_arrival_name'] =  ($name= $this->main_model->get_name_situation_fa($dones['situation_first_arrival_id'])) ? $name : '';
+        $dones['rig_num_rtp'] = (isset($post['rig_num_rtp']) && !empty($post['rig_num_rtp'])) ? trim($post['rig_num_rtp']) : 0;
+        $dones['num_ac'] = (isset($post['num_ac']) && !empty($post['num_ac'])) ? intval($post['num_ac']) : 0;
+        $dones['sit_fa_text'] = (isset($post['sit_fa_text']) && !empty($post['sit_fa_text'])) ? trim($post['sit_fa_text']) : '';
+        $dones['sit_fa_preview'] = (isset($post['sit_fa_preview']) && !empty($post['sit_fa_preview'])) ? trim($post['sit_fa_preview']) : '';
+
 
 
         /* detail inf block */
@@ -2397,6 +2510,7 @@ class Dones extends My_Controller
 
         $this->data['avtotransport_vid'] = $this->main_model->get_avtotransport_vid();
         $this->data['theme_messages'] = $this->main_model->get_theme_messages();
+        $this->data['situation_fa_list'] = $this->main_model->get_situation_fa();
 
         $this->data['bread_crumb'] = array(array('/' => 'Редактировать специальное донесение'),
             array('ID = ' . $id_dones)
@@ -3093,7 +3207,14 @@ class Dones extends My_Controller
             $new_dones['id_face_gender'] =$dones['id_face_gender'] ;//1-man, 2-woman
 
 
-            $new_dones['situation_first_arrival'] = $dones['situation_first_arrival'];
+            //$new_dones['situation_first_arrival'] = $dones['situation_first_arrival'];
+            $new_dones['is_show_sit_fa'] = $dones['is_show_sit_fa'];
+            $new_dones['situation_first_arrival_id'] = $dones['situation_first_arrival_id'];
+            $new_dones['situation_first_arrival_name'] =  $dones['situation_first_arrival_name'];
+            $new_dones['rig_num_rtp'] =$dones['rig_num_rtp'];
+            $new_dones['num_ac'] = $dones['num_ac'];
+            $new_dones['sit_fa_text'] = $dones['sit_fa_text'];
+            $new_dones['sit_fa_preview'] = $dones['sit_fa_preview'];
 
             /* detail inf block */
             $new_dones['detail_inf'] = (isset($dones['detail_inf']) && !empty($dones['detail_inf'])) ? trim($dones['detail_inf']) : '';
@@ -4400,6 +4521,96 @@ class Dones extends My_Controller
             ]);
         }
         die;
+    }
+
+
+        public function add_sit_fa_ajax()
+    {
+        $name = $this->input->post('name');
+        $is_vid = $this->main_model->is_sit_fa($name);
+
+        if ($is_vid == 0 && $name != '') {
+
+            $save['name'] = $name;
+            $save['date_insert'] = date("Y-m-d H:i:s");
+            $save['created_by'] = $this->data['active_user']['id_user'];
+            $save['updated_by'] = $this->data['active_user']['id_user'];
+            $save['date_insert'] = date("Y-m-d H:i:s");
+            $save['last_update'] = date("Y-m-d H:i:s");
+
+
+            $id = $this->main_model->add_sit_fa($save);
+
+            echo json_encode([
+                'is_success' => 1,
+                'id'         => $id,
+                'message'    => 'Вид был успешно добавлен в БД',
+                "name"       => $name
+                //'removeTagsForm' => getRemoveTagsForm()
+            ]);
+        } elseif ($name == '') {
+            echo json_encode([
+                'is_success' => 0,
+                'message'    => 'Наименование не может быть пустым'
+            ]);
+        } else {
+            echo json_encode([
+                'is_success' => 0,
+                'message'    => 'Вид не был добавлен, т.к. уже существует в БД'
+            ]);
+        }
+    }
+
+    public function edit_sit_fa_ajax()
+    {
+        $name = $this->input->post('name');
+        $id_edit = $this->input->post('id_edit');
+        $is_vid = $this->main_model->is_sit_fa($name);
+
+        if ($is_vid == 0 && $name != '' && !empty($id_edit)) {
+
+            $save['name'] = $name;
+            $save['updated_by'] = $this->data['active_user']['id_user'];
+            $save['last_update'] = date("Y-m-d H:i:s");
+
+            $this->main_model->edit_sit_fa($save, $id_edit);
+
+            echo json_encode([
+                'is_success' => 1,
+                'id'         => $id_edit,
+                'message'    => 'вид был успешно обновлен в БД',
+                "name"       => $name
+            ]);
+        } elseif ($name == '') {
+            echo json_encode([
+                'is_success' => 0,
+                'message'    => 'Наименование не может быть пустым'
+            ]);
+        } else {
+            echo json_encode([
+                'is_success' => 0,
+                'message'    => 'Вид не был обновлен, т.к. вид с таким именем уже существует в БД'
+            ]);
+        }
+    }
+
+    public function delete_sit_fa_ajax()
+    {
+        $id_edit = $this->input->post('id');
+
+        if (!empty($id_edit)) {
+
+            $save['is_delete'] = 1;
+            $save['updated_by'] = $this->data['active_user']['id_user'];
+            $save['last_update'] = date("Y-m-d H:i:s");
+
+            $this->main_model->edit_sit_fa($save, $id_edit);
+
+            echo json_encode([
+                'is_success' => 1,
+                'message'    => 'вид был успешно удален в БД'
+            ]);
+        }
     }
 
 

@@ -65,6 +65,11 @@ class Main_model extends CI_Model
         const CAR_ENG=4;
 
 
+        const CAR_AC=1;
+        //const CAR_AL=1;
+
+
+
 
     public function __construct()
     {
@@ -556,6 +561,49 @@ class Main_model extends CI_Model
         public function add_filter_user($data)
     {
         $this->db->insert('speciald.filter_user', $data);
+    }
+
+        public function get_situation_fa()
+    {
+        $this->db->select("*");
+        $this->db->group_by('name');
+        $this->db->where('is_delete',0);
+        $res = $this->db->get('situation_fa')->result_array();
+        return $res;
+    }
+
+
+        public function is_sit_fa($name)
+    {
+        $query = $this->db->where([
+                'name'      => $name,
+                'is_delete' => 0
+            ])
+            ->get('speciald.situation_fa');
+
+        return $query->num_rows();
+    }
+
+
+        public function add_sit_fa($data)
+    {
+        $this->db->insert('speciald.situation_fa', $data);
+        return $this->db->insert_id();
+    }
+
+    public function edit_sit_fa($data, $id)
+    {
+        $this->db->where('id', $id);
+        $this->db->update('speciald.situation_fa', $data);
+    }
+
+
+            public function get_name_situation_fa($id)
+    {
+        $this->db->select("name");
+        $this->db->where('id',$id);
+        $res = $this->db->get('situation_fa')->row_array();
+        return $res['name'];
     }
 
 }
