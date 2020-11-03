@@ -183,6 +183,17 @@
                                     (ссылка по возможности)
                                 </div>#}
 
+
+                            <div class="form-group col-md-3">
+                <label for="id_firereason" >Причина пожара</label>
+                <select class="form-control select2-single" name="id_firereason" id="id_firereason"  >
+                    <option></option>
+                    {% for reas in firereason %}
+                        <option value="{{ reas.id }}" {%if ( rig.firereason_id is defined and rig.firereason_id == reas.id) or (is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.id_firereason == reas.id) %}selected{%endif%} >{{ reas.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
                     </div>
 
 
@@ -323,29 +334,28 @@
                             <input type="text" class="form-control"  placeholder="" name="firereason_rig" value="{%if rig is defined and rig.firereason_id is defined and rig.firereason_id is not empty and rig.firereason_id != 0%}{{rig.firereason_name|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.firereason_rig is not empty %}{{dones.firereason_rig|trim}}{%endif%}">
                         </div>#}
 
-            <div class="form-group col-md-3">
-                <label for="id_firereason" >Причина пожара</label>
-                <select class="form-control select2-single" name="id_firereason" id="id_firereason"  >
-                    <option></option>
-                    {% for reas in firereason %}
-                        <option value="{{ reas.id }}" {%if ( rig.firereason_id is defined and rig.firereason_id == reas.id) or (is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.id_firereason == reas.id) %}selected{%endif%} >{{ reas.name }}</option>
-                    {% endfor %}
-                </select>
-            </div>
 
 
 
-            <div class="form-group col-md-2">
+
+            <div class="form-group col-md-5 new-field">
                 <label for="inspector" >Инспектор:</label>
-                <input type="text" class="form-control"  placeholder="" name="inspector" value="{%if rig is defined and rig.inspector is defined and rig.inspector is not empty %}{{rig.inspector|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.inspector is not empty %}{{dones.inspector|trim}}{%endif%}">
+                {#<input type="text" class="form-control"  placeholder="" name="inspector" value="{%if rig is defined and rig.inspector is defined and rig.inspector is not empty %}{{rig.inspector|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.inspector is not empty %}{{dones.inspector|trim}}{%endif%}">#}
+                <input type="text" class="form-control"  placeholder="" name="inspector" value="{%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.inspector is not empty %}{{dones.inspector|trim}}{%elseif inspector_str is defined and inspector_str is not empty %}{{inspector_str|trim}}{%endif%}">
             </div>
 
-
-            <div class="form-group col-md-6 new-field">
+             <div class="form-group col-md-6 new-field">
                 <label for="garnison_main" >Ответственный по гарнизону:</label>
                 <input type="text" class="form-control"  placeholder="" name="garnison_main" value="{%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.garnison_main is not empty %}{{dones.garnison_main|trim}}{%elseif head_garnison is defined and head_garnison is not empty%}{{head_garnison}}{%endif%}">
             </div>
+
+
         </div>
+
+{#                    <div class="form-row create-form-row">
+ <div class="form-group col-md-3"></div>
+
+                          </div>#}
 
 
 

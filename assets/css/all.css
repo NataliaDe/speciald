@@ -443,7 +443,7 @@ input[type="checkbox"][readonly] {
 }
 
 .filter-status-sd .select2-container{
-    width: 273px !important;
+    width: 90%  !important;
 }
 
 .filter-status-sd .select2-container .select2-selection__rendered{
@@ -531,3 +531,5 @@ text-decoration: none;
 .black_end_timer_time_msg{
   color:   #343a40 !important;
 }
+
+

@@ -534,8 +534,10 @@ class Main_model extends CI_Model
 
         $this->db->group_by('m.id_card');
         $this->db->group_by('m.ch');
-        $this->db->group_by('m.id_pos_duty');
+        $this->db->group_by('m.id_fio');
+        //$this->db->group_by('m.id_pos_duty');
         $this->db->order_by('is_duty','desc');
+        $this->db->order_by('dateduty','desc');
 
 
         $res = $this->db->get('str.maincou as m')->result_array();

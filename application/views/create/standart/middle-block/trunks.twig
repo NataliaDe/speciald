@@ -44,12 +44,13 @@
                         <th rowspan="2" ></th>
                         <th rowspan="2"  style="width:500px">Техника</th>
                         <th rowspan="2" colspan="2" >Наименование подразделения</th>
-                        <th rowspan="2" >Объем цистерны<br>(тонн)</th>
+                        <th rowspan="2" >Объем цис-<br>терны<br>(тонн)</th>
                         <th rowspan="2" style="width: 168px">Кол-во<br>л/с<br>(чел.) <i class="fa fa-info-circle info-all" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Данные за последнюю заступившую смену"></i></th>
                         <th colspan="2">Прибыте</th>
                         <th>Подача стволов</th>
                         <th rowspan="2" style="width:192px" >Средства тушения<br>(кол-во, тип)</th>
                         <th rowspan="2" style="width:105px" >Израсхо-<br>довано<br>воды/ПО<br>(тонн)</th>
+                         <th rowspan="2" style="width:105px" >Установка<br>АЦ на ПГ</th>
                         <th colspan="2">Локализация</th>
                         <th>Ликви-<br>дация</th>
 
@@ -130,7 +131,8 @@
 
 
                                 <td>
-                                    <input type="text" class="form-control v_ac_trunks" onkeypress="allowFloat();"  placeholder="" name="trunks[{{x}}][v_ac]" value="{%if trunk.v_ac is defined and trunk.v_ac is not empty%}{{(trunk.v_ac/1000)|number_format(1)}}{%endif%}">
+                                    {#<input type="text" class="form-control v_ac_trunks" onkeypress="allowFloat();"  placeholder="" name="trunks[{{x}}][v_ac]" value="{%if trunk.v_ac is defined and trunk.v_ac is not empty%}{{(trunk.v_ac/1000)|number_format(1)}}{%endif%}">#}
+                                    <input type="text" class="form-control v_ac_trunks" onkeypress="allowFloat();"  placeholder="" name="trunks[{{x}}][v_ac]" value="{%if trunk.v_ac is defined and trunk.v_ac is not empty%}{{trunk.v_ac}}{%endif%}">
                                 </td>
 
 
@@ -178,6 +180,11 @@
                                     <input type="text" class="form-control water_po_out_trunks" onkeypress="allowFloatTrunks();"  placeholder="" name="trunks[{{x}}][water_po_out]" value="{%if rig is defined and  trunk.water is defined and  trunk.water is not empty%}{{trunk.water|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and trunk.water_po_out is defined%}{{trunk.water_po_out|trim}}{%endif%}">
                                 </td>
 
+
+                                <td>
+                                    <textarea class="form-control set_ac_pg_trunks"  name="trunks[{{x}}][set_ac_pg]">{%if is_edit_dones is defined and is_edit_dones == 1 and trunk.set_ac_pg is defined%}{{trunk.set_ac_pg|trim}}{%endif%}</textarea>
+
+                                </td>
 
                                 <td>
                                     <input type="time" class="form-control time_loc_trunks" {{(trunk.is_likv_before_arrival == 1 or is_likv_before_arrival is defined and is_likv_before_arrival == 1) ? 'disabled' : ''}}  onchange="setTimeFireLoc(this);" placeholder="" name="trunks[{{x}}][time_loc]" value="{%if trunk.time_loc is defined and trunk.time_loc is not empty and trunk.time_loc is not null and trunk.time_loc != '0000-00-00 00:00:00' and trunk.is_likv_before_arrival != 1%}{{trunk.time_loc|date('H:i')}}{%endif%}">
@@ -284,6 +291,11 @@
                                 <input type="text" class="form-control water_po_out_trunks" onkeypress="allowFloatTrunks();"  placeholder="" name="trunks[{{i}}][water_po_out]" value="">
                             </td>
 
+
+                                <td>
+                                    <textarea class="form-control set_ac_pg_trunks"  name="trunks[{{i}}][set_ac_pg]"></textarea>
+
+                                </td>
 
                             <td>
                                 <input type="time" class="form-control time_loc_trunks"  onchange="setTimeFireLoc(this);"   placeholder="" name="trunks[{{i}}][time_loc]" value="">

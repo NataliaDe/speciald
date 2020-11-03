@@ -188,6 +188,13 @@ class Dones extends My_Controller
             $this->data['head_garnison'] = $garnison;
         }
 
+        //inspector
+        if (isset($journal_user) && !empty($journal_user) && isset($journal_user['id_locorg']) && !empty($journal_user['id_locorg'])) {
+            $inspector_str= $this->get_head_garnison_from_str($journal_user['id_locorg'], Main_model::POS_HEAD_INSPECTOR, Main_model::DIVIZ_COU);
+            $this->data['inspector_str'] = $inspector_str;
+        }
+
+
         $this->data['list_disp'] = $this->get_list_disp_from_str();
 
 
@@ -270,9 +277,30 @@ class Dones extends My_Controller
 
             if (isset($this->data['rig']['silymchs']) && !empty($this->data['rig']['silymchs'])) {
 //print_r($this->data['rig']['silymchs']);
+
                 $i=0;
                 foreach ($this->data['rig']['silymchs'] as $key => $value) {
                     $i++;
+
+
+                    $v_ac = number_format($value['v_ac'] / 1000, 2, '.', '');
+
+                    if (!empty($v_ac)) {
+                        $arr_v_ac = explode('.', $v_ac);
+                        if (isset($arr_v_ac[1])) {
+
+                            $second = substr($arr_v_ac[1], 1, 1);
+                            $first = substr($arr_v_ac[1], 0, 1);
+
+                            if ($second == 0) {
+                                $this->data['rig']['silymchs'][$key]['v_ac'] = $arr_v_ac[0] . '.' . $first;
+                            } else {
+                                $this->data['rig']['silymchs'][$key]['v_ac'] = $arr_v_ac[0] . '.' . $first . $second;
+                            }
+                        }
+                    }
+
+
 
                     if($value['view_id'] == Main_model::CAR_AC){
                         $this->data['rig']['num_ac']++;
@@ -429,6 +457,7 @@ class Dones extends My_Controller
 
             /* get data about journal trunks */
             $this->data['rig']['trunks'] = $this->getTrunksByIdRig($id_rig, $man_per_car_id); //data for trunks
+
 
             /*  calculate time for timer time msg */
             if(!empty($this->data['rig']['full_time_msg'])){
@@ -876,6 +905,26 @@ class Dones extends My_Controller
 
         if (!empty($man_per_car_id) && !empty($trunks)) {//man per car
             foreach ($trunks as $key => $value) {
+
+
+
+                    $v_ac = number_format($value['v_ac'] / 1000, 2, '.', '');
+
+                    if (!empty($v_ac)) {
+                        $arr_v_ac = explode('.', $v_ac);
+                        if (isset($arr_v_ac[1])) {
+
+                            $second = substr($arr_v_ac[1], 1, 1);
+                            $first = substr($arr_v_ac[1], 0, 1);
+
+                            if ($second == 0) {
+                                $trunks[$key]['v_ac'] = $arr_v_ac[0] . '.' . $first;
+                            } else {
+                                $trunks[$key]['v_ac'] = $arr_v_ac[0] . '.' . $first . $second;
+                            }
+                        }
+                    }
+
 
                 // if ($value['is_return'] == 1 && (empty($value['cnt']) || $value['cnt'] == 0)) {
                 // unset($trunks[$key]);
@@ -1515,6 +1564,28 @@ class Dones extends My_Controller
                 $res['pasp_name'] = (isset($row[2])) ? trim($row[2]) : '';
                 $res['locorg_name'] = (isset($row[3])) ? trim($row[3]) : '';
                 $res['v_ac'] = (isset($row[4])) ? $row[4] : '';
+
+                $res['v_ac']=number_format($res['v_ac']/ 1000, 2, '.', '');
+
+                if (!empty($res['v_ac'])) {
+                    $arr_v_ac = explode('.', $res['v_ac']);
+                    if (isset($arr_v_ac[1])) {
+
+
+                        $second = substr($arr_v_ac[1], 1, 1);
+                        $first = substr($arr_v_ac[1], 0, 1);
+
+                        if ($second == 0) {
+                            $res['v_ac'] = $arr_v_ac[0] . '.'.$first;
+                        }
+                        else{
+                             $res['v_ac'] = $arr_v_ac[0] . '.'.$first.$second;
+                        }
+                    }
+                }
+
+
+
                 $res['man_per_car'] = (isset($row[5])) ? $row[5] : '';
                 $res['vid_t'] = (isset($row[6])) ? $row[6] : '';
 
@@ -2266,6 +2337,8 @@ class Dones extends My_Controller
                         $dones_trunks['actions_ls'] = '';
                     }
 
+                    $dones_trunks['set_ac_pg'] = (isset($row['set_ac_pg']) && !empty($row['set_ac_pg'])) ? trim($row['set_ac_pg']) : '';
+
 
 
                     $dones_trunks['sort'] = (isset($row['sort']) && !empty($row['sort'])) ? intval($row['sort']) : 0;
@@ -2620,6 +2693,28 @@ class Dones extends My_Controller
         /* data of edit dones */
         $this->data['dones']['silymchs'] = $this->create_model->get_dones_silymchs($id_dones);
 
+        if (!empty($this->data['dones']['silymchs'])) {
+            foreach ($this->data['dones']['silymchs'] as $key => $value) {
+                $v_ac = number_format($value['v_ac'] / 1000, 2, '.', '');
+
+                if (!empty($v_ac)) {
+                    $arr_v_ac = explode('.', $v_ac);
+                    if (isset($arr_v_ac[1])) {
+
+
+                        $second = substr($arr_v_ac[1], 1, 1);
+                        $first = substr($arr_v_ac[1], 0, 1);
+
+                        if ($second == 0) {
+                            $this->data['dones']['silymchs'][$key]['v_ac'] = $arr_v_ac[0] . '.' . $first;
+                        } else {
+                             $this->data['dones']['silymchs'][$key]['v_ac'] = $arr_v_ac[0] . '.' . $first . $second;
+                        }
+                    }
+                }
+            }
+        }
+
 
         $innerservice = $this->create_model->get_dones_innerservice($id_dones);
         if (isset($innerservice) && !empty($innerservice)) {//works of each innerservice row
@@ -2637,6 +2732,30 @@ class Dones extends My_Controller
         $this->data['dones']['str_text'] = $this->create_model->get_dones_str_text($id_dones);
         $this->data['dones']['str_vacant_info'] = $this->create_model->get_dones_str_vacant_info($id_dones);
         $this->data['dones']['trunks'] = $this->create_model->get_dones_trunks($id_dones);
+
+
+
+        if (!empty($this->data['dones']['trunks'])) {
+            foreach ($this->data['dones']['trunks'] as $key => $value) {
+                $v_ac = number_format($value['v_ac'] / 1000, 2, '.', '');
+
+                if (!empty($v_ac)) {
+                    $arr_v_ac = explode('.', $v_ac);
+                    if (isset($arr_v_ac[1])) {
+
+
+                        $second = substr($arr_v_ac[1], 1, 1);
+                        $first = substr($arr_v_ac[1], 0, 1);
+
+                        if ($second == 0) {
+                            $this->data['dones']['trunks'][$key]['v_ac'] = $arr_v_ac[0] . '.' . $first;
+                        } else {
+                             $this->data['dones']['trunks'][$key]['v_ac'] = $arr_v_ac[0] . '.' . $first . $second;
+                        }
+                    }
+                }
+            }
+        }
 
 
         $this->data['dones']['water_source'] = $this->create_model->get_dones_water_source($id_dones);
@@ -4420,6 +4539,24 @@ class Dones extends My_Controller
         if (isset($this->data['rig']['silymchs']) && !empty($this->data['rig']['silymchs'])) {
 
             foreach ($this->data['rig']['silymchs'] as $key => $value) {
+
+
+                $v_ac = number_format($value['v_ac'] / 1000, 2, '.', '');
+
+                if (!empty($v_ac)) {
+                    $arr_v_ac = explode('.', $v_ac);
+                    if (isset($arr_v_ac[1])) {
+
+                        $second = substr($arr_v_ac[1], 1, 1);
+                        $first = substr($arr_v_ac[1], 0, 1);
+
+                        if ($second == 0) {
+                            $this->data['rig']['silymchs'][$key]['v_ac'] = $arr_v_ac[0] . '.' . $first;
+                        } else {
+                            $this->data['rig']['silymchs'][$key]['v_ac'] = $arr_v_ac[0] . '.' . $first . $second;
+                        }
+                    }
+                }
 
                 if (isset($value['pasp_id']) && !empty($value['pasp_id']) && $value['pasp_id'] != null)
                     $ids_pasp[] = $value['pasp_id']; // ids pasp of each car

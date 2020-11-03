@@ -320,10 +320,31 @@ class Export extends My_Controller
             $arr = [];
             if (!empty($silymchs)) {
                 foreach ($silymchs as $key => $row) {
+
+
+                    $v_ac = number_format($row['v_ac'] / 1000, 2, '.', '');
+
+                    if (!empty($v_ac)) {
+                        $arr_v_ac = explode('.', $v_ac);
+                        if (isset($arr_v_ac[1])) {
+
+
+                            $second = substr($arr_v_ac[1], 1, 1);
+                            $first = substr($arr_v_ac[1], 0, 1);
+
+                            if ($second == 0) {
+                                $v_ac = $arr_v_ac[0] . '.' . $first;
+                            } else {
+                                $v_ac = $arr_v_ac[0] . '.' . $first . $second;
+                            }
+                        }
+                    }
+
                     $arr[] = array(
                         'mark_sis'          => $row['mark'] . '' . ((!empty($row['pasp_name'])) ? (' ' . $row['pasp_name']) : '') . '' . ((!empty($row['locorg_name'])) ? (' ' . $row['locorg_name']) : ''),
                         //'v_ac_sis'          => ((empty($row['v_ac'])) ? '-' : ((strpos($row['v_ac'], '.') === false) ? $row['v_ac'] : str_replace(".", ",", $row['v_ac']))),
-                        'v_ac_sis'          => (empty($row['v_ac'])) ? '-' : (number_format($row['v_ac'] / 1000, 1, '.', '')),
+                        //'v_ac_sis'          => (empty($row['v_ac'])) ? '-' : (number_format($row['v_ac'] / 1000, 1, '.', '')),
+                        'v_ac_sis'          => (empty($v_ac)) ? '-' : $v_ac,
                         'man_per_car_sis'   => $row['man_per_car'],
                         'time_exit_sis'     => ((isset($row['time_exit']) && !empty($row['time_exit'])) ? (\DateTime::createFromFormat('H:i:s', $row['time_exit'])->format('H-i')) : ''),
                         'time_arrival_sis'  => ($row['is_return'] == 1)? 'возврат' : (((isset($row['time_arrival']) && !empty($row['time_arrival'])) ? (\DateTime::createFromFormat('H:i:s', $row['time_arrival'])->format('H-i')) : '')),
@@ -505,6 +526,7 @@ class Export extends My_Controller
                             $multi_trunks[$podr]['water'] = $multi_trunks[$podr]['water']+$w;
                             $multi_trunks[$podr]['po'] = $multi_trunks[$podr]['po']+$po;
                             $multi_trunks[$podr]['water_po_out'] =$multi_trunks[$podr]['water'].'/'.$multi_trunks[$podr]['po'] ;
+
                         }
                         else{
                             $multi_trunks[$podr]['time_pod_trunk'] =$t_pod;
@@ -514,6 +536,7 @@ class Export extends My_Controller
                             $multi_trunks[$podr]['water'] = $w;
                             $multi_trunks[$podr]['po'] = $po;
                             $multi_trunks[$podr]['water_po_out'] =$w.'/'.$po ;
+                           // $multi_trunks[$podr]['set_ac_pg']=(isset($row['set_ac_pg']) && !empty($row['set_ac_pg']) && $row['set_ac_pg'] != '-') ? $row['set_ac_pg'] : '';
                         }
 
                     }
@@ -524,18 +547,39 @@ class Export extends My_Controller
 
                     if ($dones['is_wide_table_trunks'] == 1 && isset($row['actions_ls']) && !empty($row['actions_ls']) && in_array( $row['vid_t'], array(Main_model::CAR_SPEC, Main_model::CAR_VSPOM))) {
 
+
+                        $v_ac = number_format($row['v_ac'] / 1000, 2, '.', '');
+
+                        if (!empty($v_ac)) {
+                            $arr_v_ac = explode('.', $v_ac);
+                            if (isset($arr_v_ac[1])) {
+
+
+                                $second = substr($arr_v_ac[1], 1, 1);
+                                $first = substr($arr_v_ac[1], 0, 1);
+
+                                if ($second == 0) {
+                                    $v_ac = $arr_v_ac[0] . '.' . $first;
+                                } else {
+                                    $v_ac = $arr_v_ac[0] . '.' . $first . $second;
+                                }
+                            }
+                        }
+
                         $wide_table[] = array(
                             'is_wide'              => 1,
                             'mark_trunk'           => $row['mark'] . '' . ((!empty($row['pasp_name'])) ? (' ' . $row['pasp_name']) : '') . '' . ((!empty($row['locorg_name'])) ? (' ' . $row['locorg_name']) : ''),
                             //'v_ac_trunk'           => ((empty($row['v_ac'])) ? '-' : ((strpos($row['v_ac'], '.') === false) ? $row['v_ac'] : str_replace(".", ",", $row['v_ac']))),
-                            'v_ac_trunk'           => (empty($row['v_ac'])) ? '-' : (number_format($row['v_ac'] / 1000, 1, '.', '')),
+                            //'v_ac_trunk'           => (empty($row['v_ac'])) ? '-' : (number_format($row['v_ac'] / 1000, 1, '.', '')),
+                             'v_ac_trunk'           => (empty($v_ac)) ? '-' : $v_ac,
                             'man_per_car_trunk'    => $row['man_per_car'],
                             's_fire_arrival_trunk' => (isset($row['s_fire_arrival']) && !empty($row['s_fire_arrival'])) ? $row['s_fire_arrival'] : '-',
                             'time_arrival_trunk'   => ((isset($row['time_arrival']) && !empty($row['time_arrival'])) ? (\DateTime::createFromFormat('H:i:s', $row['time_arrival'])->format('H-i')) : ''),
                             'time_loc_trunk'       => ((isset($row['time_loc']) && !empty($row['time_loc'])) ? (\DateTime::createFromFormat('H:i:s', $row['time_loc'])->format('H-i')) : (($dones['is_likv_before_arrival'] == 1) ? '-' : '')),
                             's_fire_loc_trunk'     => (isset($row['s_fire_loc']) && !empty($row['s_fire_loc'])) ? $row['s_fire_loc'] : '-',
                             'time_likv_trunk'      => ((isset($row['time_likv']) && !empty($row['time_likv'])) ? (\DateTime::createFromFormat('H:i:s', $row['time_likv'])->format('H-i')) : (($dones['is_likv_before_arrival'] == 1) ? '-' : '')),
-                            'action_ls_trunk'      => (isset($row['actions_ls']) && !empty($row['actions_ls']) && $row['actions_ls'] != '-') ? $row['actions_ls'] : ''
+                            'action_ls_trunk'      => (isset($row['actions_ls']) && !empty($row['actions_ls']) && $row['actions_ls'] != '-') ? $row['actions_ls'] : '',
+                             'set_ac_pg'=>(isset($row['set_ac_pg']) && !empty($row['set_ac_pg']) && $row['set_ac_pg'] != '-') ? $row['set_ac_pg'] : ''
                         );
                     }
 
@@ -571,10 +615,31 @@ class Export extends My_Controller
                                 $water_po='-';
                             }
 
+
+
+                        $v_ac = number_format($row['v_ac'] / 1000, 2, '.', '');
+
+                        if (!empty($v_ac)) {
+                            $arr_v_ac = explode('.', $v_ac);
+                            if (isset($arr_v_ac[1])) {
+
+
+                                $second = substr($arr_v_ac[1], 1, 1);
+                                $first = substr($arr_v_ac[1], 0, 1);
+
+                                if ($second == 0) {
+                                    $v_ac = $arr_v_ac[0] . '.' . $first;
+                                } else {
+                                    $v_ac = $arr_v_ac[0] . '.' . $first . $second;
+                                }
+                            }
+                        }
+
                             $arr[] = array(
                                 'mark_trunk'           => $row['mark'] . '' . ((!empty($row['pasp_name'])) ? (' ' . $row['pasp_name']) : '') . '' . ((!empty($row['locorg_name'])) ? (' ' . $row['locorg_name']) : ''),
                                 //'v_ac_trunk'           => ((empty($row['v_ac'])) ? '-' : ((strpos($row['v_ac'], '.') === false) ? $row['v_ac'] : str_replace(".", ",", $row['v_ac']))),
-                                'v_ac_trunk'           => (empty($row['v_ac'])) ? '-' : (number_format($row['v_ac'] / 1000, 1, '.', '')),
+                               // 'v_ac_trunk'           => (empty($row['v_ac'])) ? '-' : (number_format($row['v_ac'] / 1000, 1, '.', '')),
+                                  'v_ac_trunk'           => (empty($v_ac)) ? '-' : $v_ac,
                                 'man_per_car_trunk'    => $row['man_per_car'],
                                 's_fire_arrival_trunk' => (isset($row['s_fire_arrival']) && !empty($row['s_fire_arrival'])) ? $row['s_fire_arrival'] : '-',
                                 'time_arrival_trunk'   => ((isset($row['time_arrival']) && !empty($row['time_arrival'])) ? (\DateTime::createFromFormat('H:i:s', $row['time_arrival'])->format('H-i')) : ''),
@@ -584,7 +649,8 @@ class Export extends My_Controller
                                 'time_loc_trunk'       => ((isset($row['time_loc']) && !empty($row['time_loc'])) ? (\DateTime::createFromFormat('H:i:s', $row['time_loc'])->format('H-i')) : (($dones['is_likv_before_arrival'] == 1) ? '-' : '')),
                                 's_fire_loc_trunk'     => (isset($row['s_fire_loc']) && !empty($row['s_fire_loc'])) ? $row['s_fire_loc'] : '-',
                                 'time_likv_trunk'      => ((isset($row['time_likv']) && !empty($row['time_likv'])) ? (\DateTime::createFromFormat('H:i:s', $row['time_likv'])->format('H-i')) : (($dones['is_likv_before_arrival'] == 1) ? '-' : '')),
-                                'action_ls_trunk'      => (isset($row['actions_ls']) && !empty($row['actions_ls']) && $row['actions_ls'] != '-') ? $row['actions_ls'] : ''
+                                'action_ls_trunk'      => (isset($row['actions_ls']) && !empty($row['actions_ls']) && $row['actions_ls'] != '-') ? $row['actions_ls'] : '',
+                                  'set_ac_pg'=>(isset($row['set_ac_pg']) && !empty($row['set_ac_pg']) && $row['set_ac_pg'] != '-') ? $row['set_ac_pg'] : ''
                             );
                         } elseif( !isset($cnt_per_car[$podr])) {
 
@@ -594,10 +660,30 @@ class Export extends My_Controller
                                 $cnt_per_car[$podr] = 1;
                             }
 
+
+                        $v_ac = number_format($row['v_ac'] / 1000, 2, '.', '');
+
+                        if (!empty($v_ac)) {
+                            $arr_v_ac = explode('.', $v_ac);
+                            if (isset($arr_v_ac[1])) {
+
+
+                                $second = substr($arr_v_ac[1], 1, 1);
+                                $first = substr($arr_v_ac[1], 0, 1);
+
+                                if ($second == 0) {
+                                    $v_ac = $arr_v_ac[0] . '.' . $first;
+                                } else {
+                                    $v_ac = $arr_v_ac[0] . '.' . $first . $second;
+                                }
+                            }
+                        }
+
                             $arr[] = array(
                                 'mark_trunk'           => $row['mark'] . '' . ((!empty($row['pasp_name'])) ? (' ' . $row['pasp_name']) : '') . '' . ((!empty($row['locorg_name'])) ? (' ' . $row['locorg_name']) : ''),
                                 //'v_ac_trunk'           => ((empty($row['v_ac'])) ? '-' : ((strpos($row['v_ac'], '.') === false) ? $row['v_ac'] : str_replace(".", ",", $row['v_ac']))),
-                                'v_ac_trunk'           => (empty($row['v_ac'])) ? '-' : (number_format($row['v_ac'] / 1000, 1, '.', '')),
+                               // 'v_ac_trunk'           => (empty($row['v_ac'])) ? '-' : (number_format($row['v_ac'] / 1000, 1, '.', '')),
+                                  'v_ac_trunk'           => (empty($v_ac)) ? '-' : $v_ac,
                                 'man_per_car_trunk'    => $row['man_per_car'],
                                 's_fire_arrival_trunk' => (isset($row['s_fire_arrival']) && !empty($row['s_fire_arrival'])) ? $row['s_fire_arrival'] : '-',
                                 'time_arrival_trunk'   => ((isset($row['time_arrival']) && !empty($row['time_arrival'])) ? (\DateTime::createFromFormat('H:i:s', $row['time_arrival'])->format('H-i')) : ''),
@@ -607,7 +693,8 @@ class Export extends My_Controller
                                 'time_loc_trunk'       => ((isset($row['time_loc']) && !empty($row['time_loc'])) ? (\DateTime::createFromFormat('H:i:s', $row['time_loc'])->format('H-i')) : (($dones['is_likv_before_arrival'] == 1) ? '-' : '')),
                                 's_fire_loc_trunk'     => (isset($row['s_fire_loc']) && !empty($row['s_fire_loc'])) ? $row['s_fire_loc'] : '-',
                                 'time_likv_trunk'      => ((isset($row['time_likv']) && !empty($row['time_likv'])) ? (\DateTime::createFromFormat('H:i:s', $row['time_likv'])->format('H-i')) : (($dones['is_likv_before_arrival'] == 1) ? '-' : '')),
-                                'action_ls_trunk'      => (isset($row['actions_ls']) && !empty($row['actions_ls']) && $row['actions_ls'] != '-') ? $row['actions_ls'] : ''
+                                'action_ls_trunk'      => (isset($row['actions_ls']) && !empty($row['actions_ls']) && $row['actions_ls'] != '-') ? $row['actions_ls'] : '',
+                                  'set_ac_pg'=>(isset($row['set_ac_pg']) && !empty($row['set_ac_pg']) && $row['set_ac_pg'] != '-') ? $row['set_ac_pg'] : ''
                             );
                         }
                     }
@@ -721,10 +808,22 @@ class Export extends My_Controller
                         $table->addCell(null, self::style_cell_center)->addText($row['time_pod_trunk'], self::cellTextCenteredFont, array('align' => 'center', 'spaceAfter' => 0, 'spacing' => 0));
                         $table->addCell(null, self::style_cell_center)->addText($row['means_trunks_trunk'], self::cellTextCenteredFont, array('align' => 'center', 'spaceAfter' => 0, 'spacing' => 0));
 
+
+                        $set_ac_pg='';
+                        if(isset($row['set_ac_pg']) && !empty($row['set_ac_pg'])){
+                            $set_ac_pg=$row['set_ac_pg'];
+                        }
+
+
                         if (isset($row['action_ls_trunk']) && !empty($row['action_ls_trunk'])) {//actions ls
-                            $table->addCell(null, self::style_cell_center)->addText($row['action_ls_trunk'], self::cellTextCenteredFont, array('align' => 'center', 'spaceAfter' => 0, 'spacing' => 0));
+                                        $table->addCell(null, self::style_cell_center)->addText($row['action_ls_trunk'], self::cellTextCenteredFont, array('align' => 'center', 'spaceAfter' => 0, 'spacing' => 0));
                         } else {
-                            $table->addCell(null, self::style_cell_center)->addText($row['water_po_out_trunk'], self::cellTextCenteredFont, array('align' => 'center', 'spaceAfter' => 0, 'spacing' => 0));
+                            if(isset($set_ac_pg) && !empty($set_ac_pg))
+                                $water_po_out=$row['water_po_out_trunk'].'<w:br/>'.$set_ac_pg;
+                            else
+                                $water_po_out=$row['water_po_out_trunk'];
+
+                            $table->addCell(null, self::style_cell_center)->addText($water_po_out, self::cellTextCenteredFont, array('align' => 'center', 'spaceAfter' => 0, 'spacing' => 0));
                         }
 
 
