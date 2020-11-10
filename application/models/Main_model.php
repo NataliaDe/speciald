@@ -33,8 +33,8 @@ class Main_model extends CI_Model
     const REGION_MINSK = 3;
     const REGION_GOMEL = 4;
     const REGION_GRODNO = 5;
-    const REGION_MOGILEV = 6;
-    const REGION_MINOBL = 7;
+    const REGION_MOGILEV = 7;
+    const REGION_MINOBL = 6;
 
     const GOMEL_ROCHS=45;
     const GOMEL_GOCHS=44;

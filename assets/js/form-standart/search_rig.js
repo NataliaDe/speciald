@@ -412,12 +412,21 @@ $('#btn-fill-form').on('click', function (event) {
             $('#modal-search-rig').click();
             $('#modal-agree-get-rig-data').click();
 
+
+
   if (parseInt(JSON.parse(res)['diff_hours']) <1 && JSON.parse(res)['start_timer'] !== 0 && parseInt(JSON.parse(res)['during_timer']) >0) {
       if($('#div_timer_time_msg').hasClass('hide'))
       $('#div_timer_time_msg').removeClass('hide');
 
+    if(!($('.timer_time_msg').find('#end_timer_time_msg').hasClass('black_end_timer_time_msg')))
+       $('.timer_time_msg').find('#end_timer_time_msg').addClass('black_end_timer_time_msg');
+
+
             start_timer_time_msg(JSON.parse(res)['start_timer'], parseInt(JSON.parse(res)['during_timer']));
 
+        }
+        else if(parseInt(JSON.parse(res)['diff_hours']) >=1){
+            $('.timer_time_msg').find('#end_timer_time_msg').removeClass('black_end_timer_time_msg');
         }
         } else {
 
