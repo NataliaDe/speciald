@@ -494,8 +494,8 @@
     <script src="{{ base_url('/assets/js/form-standart/final_block.js')}}?{{now|date('H:i:s')}}"></script>
 
     <script src="{{ base_url('/assets/js/form-standart/search_rig.js')}}?{{now|date('H:i:s')}}"></script>
-    <script src="{{ base_url('/assets/js/form-standart/search_str_cars.js')}}?{{now|date('H:i:s')}}"></script>
-    <script src="{{ base_url('/assets/js/form-standart/search_str_inf.js')}}?{{now|date('H:i:s')}}"></script>
+{#    <script src="{{ base_url('/assets/js/form-standart/search_str_cars.js')}}?{{now|date('H:i:s')}}"></script>
+    <script src="{{ base_url('/assets/js/form-standart/search_str_inf.js')}}?{{now|date('H:i:s')}}"></script>#}
 
     <script src="{{ base_url('/assets/datatables/jquery.dataTables.js')}}"></script>
 
@@ -510,6 +510,10 @@
     {#<script src="{{ base_url('/assets/js/form-standart/preview_standart.js')}}?{{now|date('H:i:s')}}"></script>#}
 
     {%include '/create/standart/owner/actions_js.twig'%}
+      {%include '/create/standart/action_js/search_str_cars.twig'%}
+        {%include '/create/standart/action_js/search_str_inf.twig'%}
+
+
     {%include '/create/standart/preview_standart.twig'%}
     {%include '/create/standart/preview_situation_fa.twig'%}
 

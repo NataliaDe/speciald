@@ -1,3 +1,4 @@
+<script>
 $('#close-modal-search-str-inf').on('click', function (event) {
     $('#modal-search-str-inf').click();
 });
@@ -34,7 +35,7 @@ $('#searchStrInfForm #id_region_str_inf').on('change', function (event) {
         //get locals by region
         $.ajax({
             dataType: "json",
-            url: '../../dones/get_grochs_by_region',
+            url: '{{ base_url('dones/get_grochs_by_region')}}',
             method: 'POST',
             data: {
                 ids_region: ids_region
@@ -84,7 +85,7 @@ $('#searchStrInfForm #id_local_str_inf').on('change', function (event) {
         //get locals by region
         $.ajax({
             dataType: "json",
-            url: '../../dones/get_pasp_by_locorg',
+            url: '{{ base_url('dones/get_pasp_by_locorg')}}',
             method: 'POST',
             data: {
                 ids_locorg: ids_locorg
@@ -272,7 +273,7 @@ if(ids_pasp !== '' && ids_pasp !== null){
                             $row.find('td').find('.str_vacant_info_podr_name').val(value.full_name_podr);
 
                             var inf=value.vi_stroke;
-                           
+
                             $row.find('td').find('.str_vacant_info_descr').val(inf);
 
                             $row.find('td').find('.id_pasp_vacant_info').val(value.id_pasp);
@@ -541,3 +542,5 @@ else{
 }
 
 });
+
+    </script>
