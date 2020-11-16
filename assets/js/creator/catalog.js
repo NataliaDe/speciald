@@ -459,3 +459,41 @@ $('#modal-copy-sd').on('show.bs.modal', function (event) {
     $(this).find('#btn-create-copy').attr('href', button.data('url'));
     $(this).find('.modal-body p b span').text(button.data('number-sd'));
 });
+
+
+$('#change-sign-sd-modal').on('show.bs.modal', function (e) {
+
+    var btn = $(e.relatedTarget);
+
+    var sd_id = btn.data('id');
+    var number = btn.data('number');
+    var date = btn.data('date');
+    var rank = btn.data('rank');
+    var pos = btn.data('position');
+    var fio = btn.data('fio');
+
+    var cur_sign='';
+    if(pos !== '')
+        cur_sign=pos;
+        if(rank !== '')
+        cur_sign=cur_sign+' '+rank;
+     if(fio !== '')
+        cur_sign=cur_sign+' '+fio;
+
+
+
+    $(this).find('.modal-body .current_author span').text('');
+    $(this).find('.modal-body .current_author span').text(cur_sign);
+
+    var n=number;
+    if(date !== ''){
+        n=n+' от '+date;
+    }
+
+    $(this).find('.modal-body p b span').text('');
+    $(this).find('.modal-body p b span').text(n);
+
+    $(this).find('#sd_id').val('');
+    $(this).find('#sd_id').val(sd_id);
+
+});

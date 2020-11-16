@@ -294,9 +294,9 @@ class Create_model extends CI_Model
     public function get_dones_by_id($id_dones)
     {
         return $this->db->select('d.*, author.id_local as author_local_id, author.id_region as author_region_id, '
-            . 'CASE WHEN (author.is_guest = 1) THEN d.fio_jour ELSE author.fio END as author_fio,'
-            . 'CASE WHEN (author.is_guest = 1) THEN d.position_name_jour ELSE author.position_name END as author_position_name,'
-            . 'CASE WHEN (author.is_guest = 1) THEN d.rank_name_jour ELSE author.rank_name ENd as author_rank_name, '
+            . 'CASE WHEN (author.is_guest = 1) THEN d.fio_jour WHEN (d.is_sign = 1) THEN d.sign_fio ELSE author.fio END as author_fio,'
+            . 'CASE WHEN (author.is_guest = 1) THEN d.position_name_jour  WHEN (d.is_sign = 1) THEN d.sign_position_name ELSE author.position_name END as author_position_name,'
+            . 'CASE WHEN (author.is_guest = 1) THEN d.rank_name_jour  WHEN (d.is_sign = 1) THEN d.sign_rank_name ELSE author.rank_name ENd as author_rank_name, '
             . 'author.is_guest as author_is_guest')
                 ->from('speciald.dones as d')
                 ->join('permissions as author', 'author.id_user=d.created_by', 'left')

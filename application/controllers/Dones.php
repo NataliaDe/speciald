@@ -2996,6 +2996,15 @@ class Dones extends My_Controller
                 $logs['date_action'] = date("Y-m-d H:i:s");
                 $this->logs_model->add_logs($logs);
 
+                if($this->data['active_user']['level'] == Main_model::LEVEL_ID_UMCHS &&  $this->data['dones']['id_template']  != 'ct_1'){//sign SD
+                    $sign['is_sign']=1;
+                    $sign['sign_position_name']=$this->data['active_user']['position_name'];
+                    $sign['sign_rank_name']=$this->data['active_user']['rank_name'];
+                    $sign['sign_fio']=$this->data['active_user']['fio'];
+                    $sign['sign_id_user']=$this->data['active_user']['id_user'];
+                    $this->dones_model->sign_sd_from_umchs($id_dones,$sign);
+                }
+
                 echo json_encode(array('success' => 'СД успешно подтверждено'));
             }
         }
@@ -3059,6 +3068,10 @@ class Dones extends My_Controller
                         $history_actions['history_actions'] = array(Logs_model::ACTION_REFUSE_SD_UMCHS);
                         $history_actions['id_user'] = $this->data['active_user']['id_user'];
                         $this->logs_model->delete_dones_statuses_of_user($history_actions);
+
+                        //reset sign SD
+                        $sign['is_sign'] = 0;
+                        $this->dones_model->sign_sd_from_umchs($id_dones, $sign);
                     } elseif ($this->data['active_user']['level'] == Main_model::LEVEL_ID_RCU) {//rcu
                         //statuses to history
                         $history_actions['history_actions'] = array(Logs_model::ACTION_REFUSE_SD_RCU, Logs_model::ACTION_PROVE_SD_RCU);

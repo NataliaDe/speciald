@@ -177,6 +177,9 @@ class Catalog extends My_Controller
                 $this->data['outs'] = $this->dones_model->get_dones_by_grochs($filter, FALSE);
             }
         } elseif ($this->data['active_user']['level'] == Main_model::LEVEL_ID_UMCHS) {//UMCHS
+
+            $this->data['list_god']= $this->dones_model->get_list_god_by_region(Main_model::LEVEL_ID_UMCHS, $this->data['active_user']['id_region'], Main_model::SD_POSITION_GOD);
+
             $filter['author_region_id'] = $this->data['active_user']['id_region'];
             $filter['is_delete'] = 0;
 

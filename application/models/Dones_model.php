@@ -205,7 +205,7 @@ class Dones_model extends CI_Model
     public function get_dones_by_region($filter, $id_organ = false)
     {
 
-        $this->db->select('distinct(d.id), d.*, author.id_local as author_local_id,author.id_region as author_region_id, vid.name as specd_vid_name, author.auth_organ,author.id_organ as author_id_organ');
+        $this->db->select('distinct(d.id), d.*, author.id_local as author_local_id,author.id_region as author_region_id, vid.name as specd_vid_name, author.auth_organ,author.id_organ as author_id_organ, CASE WHEN (author.is_guest = 1) THEN d.rank_name_jour ELSE author.rank_name ENd as author_rank_name, CASE WHEN (author.is_guest = 1) THEN d.position_name_jour ELSE author.position_name END as author_position_name, CASE WHEN (author.is_guest = 1) THEN d.fio_jour ELSE author.fio END as author_fio');
         $this->db->join('permissions as author', 'author.id_user=d.created_by', 'left');
         $this->db->join('vid_specd as vid', 'vid.id=d.specd_vid', 'left');
 
@@ -603,4 +603,26 @@ class Dones_model extends CI_Model
         return $result['date_action'];
     }
 
+
+
+        public function get_list_god_by_region($level_id, $region_id, $position_id)
+    {
+
+        $this->db->select('u.id, u.fio,p.name as position, r.name as rank');
+        $this->db->join('position as p', 'p.id=u.id_position','left');
+        $this->db->join('ranks as r', 'r.id=u.id_rank','left');
+        $this->db->where('u.level', $level_id);
+        $this->db->where('u.id_region', $region_id);
+        $this->db->where('u.id_position', $position_id);
+        $this->db->where('u.can_edit', 1);
+        $this->db->order_by('u.fio');
+        $result = $this->db->get('users as u')->result_array();
+        return $result;
+    }
+
+        public function sign_sd_from_umchs($id_dones, $data)
+    {
+        $this->db->where('id', $id_dones);
+        $this->db->update('speciald.dones',$data);
+    }
 }

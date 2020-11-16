@@ -46,7 +46,14 @@
             {% for out in outs %}
 
                 <tr class=" {%if out.type == 1 and out.statuses_id is defined and out.statuses_id is not empty and 4 in out.statuses_id and 6 in out.statuses_id  %} standart-sd-confirm {%elseif out.type == 1 and out.statuses_id is defined and out.statuses_id is not empty and 4 in out.statuses_id %} standart-sd-confirm-umchs {%elseif out.type == 1%} standart-sd-color {%endif%}">
-                    <td><a href="#" class="a-custom" data-toggle="modal"  data-target="#history-sd-modal" data-url="{{base_url('history')}}" data-id="{{out.id}}" data-number-sd="{{out.specd_date ? out.specd_date|date('d.m.Y') : ''}} {{out.specd_number ? '№ '~out.specd_number : ''}}" >{{out.id}}</a></td>
+                    <td><a href="#" class="a-custom" data-toggle="modal"  data-target="#history-sd-modal" data-url="{{base_url('history')}}" data-id="{{out.id}}" data-number-sd="{{out.specd_date ? out.specd_date|date('d.m.Y') : ''}} {{out.specd_number ? '№ '~out.specd_number : ''}}" >{{out.id}}</a>
+
+{#                        <a data-toggle="modal"  data-target="#change-sign-sd-modal" data-date=" {{out.specd_date ? out.specd_date|date('d.m.Y') : ''}}"
+                           data-id="{{out.id}}" data-number="{{out.specd_number}}" data-rank="{{out.author_rank_name}}" data-position="{{out.author_position_name}}" data-fio="{{out.author_fio}}">
+                            <i class="fa fa-users" aria-hidden="true" style="cursor: pointer; color: #007bff"></i>
+                        </a>#}
+
+                    </td>
 
                     <td> {{out.specd_date ? out.specd_date|date('d.m.Y') : ''}}<br>{{out.specd_number ? '№ '~out.specd_number : ''}}
 

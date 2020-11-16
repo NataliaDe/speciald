@@ -189,4 +189,38 @@
     </div>
 </div>
 
+
+
+
+<div class="modal fade" id="change-sign-sd-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title ff-l" id="myModalLabel">Кто подписал СД</h5>
+                <button class="close danger" type="button" data-dismiss="modal" style="font-weight: bolder;">×</button>
+
+
+            </div>
+            <div class="modal-body">
+                <p class="current_author"><b>Текущая подпись:</b> <span></span></p>
+                <p>Выберите ФИО, кто подписал специальное донесение <b>№ </b> <b><span></span></b></p>
+                <select class="form-control select2-single" name="umchs_sign"  >
+
+                    <option value=""></option>
+                    {%for god in list_god%}
+                        <option value="{{ god.id }}">{{ god.fio }} ({{god.rank}}, {{god.position}})</option>
+                        {% endfor %}
+                </select>
+
+                <input type="hidden" class="form-control" placeholder="" name="sd_id" id="sd_id">
+            </div>
+            <div class="modal-footer">
+
+                <button id="change-sign-sd-btn"  type="button" class="btn btn-success" data-url="{{base_url('dones/change_sign_sd/')}}"  >Сохранить</button>
+                <button  type="button" class="btn btn-secondary "  data-dismiss="modal">Отмена</button>
+            </div>
+        </div>
+    </div>
+</div>
+
                  {%include '/creator/catalog/modals/modal-copy-sd.twig'%}

@@ -57,6 +57,8 @@ class Main_model extends CI_Model
     const POS_HEAD_INSPECTOR = 13; // str.maincou. pos duty
     const POS_DISP = 6; // str.maincou. pos duty
 
+    const SD_POSITION_GOD=1;//speciald.position.id
+
     const ID_OWNER_DEAD = 6;
 
     const CAR_OSNOVNAYA=1;
