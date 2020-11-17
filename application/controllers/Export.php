@@ -57,6 +57,10 @@ class Export extends My_Controller
         'spacingLineRule' => 'exact');
     const start_descr_font = array('spaceAfter' => 0, 'spacing' => 0,'align'=>'both');
 
+    const sign_style_cell_size = array('size' => 15);
+    const sign_style_cell_font = array('spaceAfter'      => 0, 'spacing'         => 280,
+        'spacingLineRule' => 'exact','align'=>'right');
+
 //'spaceAfter' => PhpOffice\PhpWord\Shared\Converter::pointToTwip(6)
 
     public function __construct()
@@ -158,7 +162,18 @@ class Export extends My_Controller
             $table->addRow();
             for ($c = 1; $c <= $cols; $c++) {
                 if ($c == 1){
-                   if((isset($this->data['active_user']['umchs_name']) && !empty($this->data['active_user']['umchs_name'])) ){
+
+                    if($dones['is_sign'] == 1){
+
+                        $umchs_name = $dones['sign_umchs_podr'];
+                        $a = explode(PHP_EOL, $umchs_name);
+                        if (count($a) > 1) {
+                            $creator = implode('<w:br/>', $a);
+                        } else {
+                            $creator = $umchs_name;
+                        }
+                    }
+                   elseif((isset($this->data['active_user']['umchs_name']) && !empty($this->data['active_user']['umchs_name'])) ){
                        $umchs_name=$this->data['active_user']['umchs_name'];
                         $a = explode(PHP_EOL, $this->data['active_user']['umchs_name']);
                         if(count($a) >1){
@@ -1239,8 +1254,16 @@ class Export extends My_Controller
 
 
 
-        $section->addText($dones['author_position_name'], self::header_style_cell_size, self::header_style_cell_font);
+        /* SIGN */
+        $rows = 1;
+        $cols = 2;
 
+        $table = $section->addTable(array('width'      => PhpOffice\PhpWord\Shared\Converter::cmToTwip(16.7),
+            'marginLeft' => PhpOffice\PhpWord\Shared\Converter::cmToTwip(0)
+        ));
+        $table->addRow();
+
+        $sign = $dones['author_position_name'];
 
         $rank = mb_strtolower($dones['author_rank_name']);
         $rank = explode(' ', $rank);
@@ -1261,7 +1284,37 @@ class Export extends My_Controller
         if (!empty($rank_sign))
             $rank_sign = $rank_sign . ' ' . 'внутренней службы';
 
-        $section->addText($rank_sign . '                                          ' . $dones['author_fio'], self::header_style_cell_size, self::header_style_cell_font);
+        $sign=$sign.' '.$rank_sign;
+
+        $table->addCell(PhpOffice\PhpWord\Shared\Converter::cmToTwip(9.72))->addText($sign, self::header_style_cell_size, self::header_style_cell_font);
+        $table->addCell(PhpOffice\PhpWord\Shared\Converter::cmToTwip(10),array('valign'=>'bottom','align'=>'right'))->addText($dones['author_fio'], self::sign_style_cell_size, self::sign_style_cell_font);
+
+        /* -------  END SIGN -------- */
+
+
+        /* OLD sign */
+//        $section->addText($dones['author_position_name'], self::header_style_cell_size, self::header_style_cell_font);
+//        $rank = mb_strtolower($dones['author_rank_name']);
+//        $rank = explode(' ', $rank);
+//        $rank_sign = '';
+//        foreach ($rank as $k => $value) {
+//            if ($value == 'вн.сл.')
+//                $key = $k;
+//        }
+//        if (isset($key)) {
+//            for ($i = 0; $i < $key; $i++) {
+//                if ($rank_sign == '') {
+//                    $rank_sign = $rank[$i];
+//                } else {
+//                    $rank_sign = $rank_sign . ' ' . $rank[$i];
+//                }
+//            }
+//        }
+//        if (!empty($rank_sign))
+//            $rank_sign = $rank_sign . ' ' . 'внутренней службы';
+//
+//        $section->addText($rank_sign . '                                          ' . $dones['author_fio'], self::header_style_cell_size, self::header_style_cell_font);
+        /* END old sign */
 
 
 

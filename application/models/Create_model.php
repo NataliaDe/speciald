@@ -297,9 +297,10 @@ class Create_model extends CI_Model
             . 'CASE WHEN (author.is_guest = 1) THEN d.fio_jour WHEN (d.is_sign = 1) THEN d.sign_fio ELSE author.fio END as author_fio,'
             . 'CASE WHEN (author.is_guest = 1) THEN d.position_name_jour  WHEN (d.is_sign = 1) THEN d.sign_position_name ELSE author.position_name END as author_position_name,'
             . 'CASE WHEN (author.is_guest = 1) THEN d.rank_name_jour  WHEN (d.is_sign = 1) THEN d.sign_rank_name ELSE author.rank_name ENd as author_rank_name, '
-            . 'author.is_guest as author_is_guest')
+            . 'author.is_guest as author_is_guest, suu.umchs_name as sign_umchs_podr')
                 ->from('speciald.dones as d')
                 ->join('permissions as author', 'author.id_user=d.created_by', 'left')
+                ->join('users as suu', 'suu.id=d.sign_id_user', 'left')
                 ->where('d.id', $id_dones)
                 ->get()
                 ->row_array();
