@@ -145,9 +145,10 @@ class Str_model extends CI_Model
     {
         /* man in trip  */
         $this->db->select('t.id, t.id_fio,date_format(t.date1,"%d.%m.%Y") AS date1,date_format(t.date2,"%d.%m.%Y") AS date2,'
-            . ' t.place,t.is_cosmr, t.prikaz,l.fio, po.name as position');
+            . ' t.place,t.is_cosmr, t.prikaz,l.fio, po.name as position, ra.short_rank as short_rank,ra.short_rank_full as short_rank_full');
         $this->db->join('str.listfio AS l ', 't.id_fio=l.id', 'left');
         $this->db->join('str.position as po ', 'po.id=l.id_position', 'left');
+        $this->db->join('str.rank as ra ', 'ra.id=l.id_rank', 'left');
         $this->db->join('str.cardch AS c', 'l.id_cardch=c.id', 'left');
         $this->db->where('(c.id_card = ' . $id_pasp . ' AND c.ch = ' . $ch . ') AND ( (t.date1 <= "' . $dateduty . '" AND t.date2 >= "' . $dateduty . '")  OR ( t.date1 <= "' . $dateduty . '" AND t.date2 is null) )');
 
@@ -166,9 +167,10 @@ class Str_model extends CI_Model
     {
         /* man on holiday */
         $this->db->select('h.id, h.id_fio,date_format(h.date1,"%d.%m.%Y") AS date1,date_format(h.date2,"%d.%m.%Y") AS date2,'
-            . ' h.prikaz, l.fio, po.name as position');
+            . ' h.prikaz, l.fio, po.name as position, ra.short_rank as short_rank,ra.short_rank_full as short_rank_full');
         $this->db->join('str.listfio AS l ', 'h.id_fio=l.id', 'left');
         $this->db->join('str.position as po ', 'po.id=l.id_position', 'left');
+        $this->db->join('str.rank as ra ', 'ra.id=l.id_rank', 'left');
         $this->db->join('str.cardch AS c', 'l.id_cardch=c.id', 'left');
         $this->db->where('(c.id_card = ' . $id_pasp . ' AND c.ch = ' . $ch . ') AND ( (h.date1 <= "' . $dateduty . '" AND h.date2 >= "' . $dateduty . '")  OR ( h.date1 <= "' . $dateduty . '" AND h.date2 is null) )');
 
@@ -187,9 +189,10 @@ class Str_model extends CI_Model
     {
         /* man on holiday */
         $this->db->select('i.id, i.id_fio,date_format(i.date1,"%d.%m.%Y") AS date1,date_format(i.date2,"%d.%m.%Y") AS date2,'
-            . ' i.diagnosis,l.fio, ma.name as maim, po.name as position');
+            . ' i.diagnosis,l.fio, ma.name as maim, po.name as position, ra.short_rank as short_rank,ra.short_rank_full as short_rank_full');
         $this->db->join('str.listfio AS l ', 'i.id_fio=l.id', 'left');
         $this->db->join('str.position as po ', 'po.id=l.id_position', 'left');
+        $this->db->join('str.rank as ra ', 'ra.id=l.id_rank', 'left');
         $this->db->join('str.cardch AS c', 'l.id_cardch=c.id', 'left');
         $this->db->join('str.maim AS ma', 'i.maim=ma.id', 'left');
         $this->db->where('(c.id_card = ' . $id_pasp . ' AND c.ch = ' . $ch . ') AND ( (i.date1 <= "' . $dateduty . '" AND i.date2 >= "' . $dateduty . '")  OR ( i.date1 <= "' . $dateduty . '" AND i.date2 is null) )');
@@ -209,9 +212,10 @@ class Str_model extends CI_Model
     {
         /* man on holiday */
         $this->db->select('o.id, o.id_fio,date_format(o.date1,"%d.%m.%Y") AS date1, date_format(o.date2,"%d.%m.%Y") AS date2,'
-            . ' o.reason, o.note, l.fio, po.name as position');
+            . ' o.reason, o.note, l.fio, po.name as position, ra.short_rank as short_rank,ra.short_rank_full as short_rank_full');
         $this->db->join('str.listfio AS l ', 'o.id_fio=l.id', 'left');
         $this->db->join('str.position as po ', 'po.id=l.id_position', 'left');
+        $this->db->join('str.rank as ra ', 'ra.id=l.id_rank', 'left');
         $this->db->join('str.cardch AS c', 'l.id_cardch=c.id', 'left');
 
         $this->db->where('(c.id_card = ' . $id_pasp . ' AND c.ch = ' . $ch . ') AND ( (o.date1 <= "' . $dateduty . '" AND o.date2 >= "' . $dateduty . '")  OR ( o.date1 <= "' . $dateduty . '" AND o.date2 is null) )');
