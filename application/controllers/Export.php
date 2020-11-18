@@ -200,7 +200,12 @@ class Export extends My_Controller
         $section->addTextBreak(2, self::header_style_cell_size, self::header_style_cell_font);
         /* NAME */
 
-        $section->addText("СПЕЦИАЛЬНОЕ ДОНЕСЕНИЕ", self::header_style_cell_size, self::header_style_cell_font);
+        if ($type_sd == Main_model::TYPE_SD_SIMPLE) {
+            $name_sd = 'ДОНЕСЕНИЕ';
+        } else {
+            $name_sd = 'СПЕЦИАЛЬНОЕ ДОНЕСЕНИЕ';
+        }
+        $section->addText($name_sd, self::header_style_cell_size, self::header_style_cell_font);
 
         $section->addTextBreak(1, self::header_style_cell_size, self::header_style_cell_font);
 
@@ -1183,8 +1188,8 @@ class Export extends My_Controller
             if ($dones['is_show_prevention'] == 0)
                 $section->addTextBreak(2, self::header_style_cell_size, self::header_style_cell_font);
         } else {
-            if ($dones['is_show_prevention'] == 0)
-                $section->addTextBreak(1, self::header_style_cell_size, self::header_style_cell_font);
+//            if ($dones['is_show_prevention'] == 0)
+//                $section->addTextBreak(1, self::header_style_cell_size, self::header_style_cell_font);
         }
 
 
@@ -1284,7 +1289,7 @@ class Export extends My_Controller
         if (!empty($rank_sign))
             $rank_sign = $rank_sign . ' ' . 'внутренней службы';
 
-        $sign=$sign.' '.$rank_sign;
+        $sign=$sign.'<w:br/>'.$rank_sign;
 
         $table->addCell(PhpOffice\PhpWord\Shared\Converter::cmToTwip(9.72))->addText($sign, self::header_style_cell_size, self::header_style_cell_font);
         $table->addCell(PhpOffice\PhpWord\Shared\Converter::cmToTwip(10),array('valign'=>'bottom','align'=>'right'))->addText($dones['author_fio'], self::sign_style_cell_size, self::sign_style_cell_font);
@@ -1341,7 +1346,7 @@ class Export extends My_Controller
             $this->config->load('storage', TRUE);
             $templates_path = $this->config->item('templates_path', 'storage');
 
-            $name_file = 'ct_1.docx';
+            $name_file = 'ct_1_new.docx';
             $documentTemplate = $templates_path . '/' . $name_file;
 
             $phpWord = new PhpOffice\PhpWord\PhpWord();

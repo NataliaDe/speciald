@@ -61,6 +61,11 @@ class Searchrig extends My_Controller
                 $filter['date_msg'] = date_format($date, 'Y-m-d');
             }
 
+            if (isset($filter['id_region']) && $filter['id_region'] == Main_model::REGION_MINSK && isset($filter['id_local']) && !empty($filter['id_local'])) {
+
+                $filter['id_local'] = 0;
+            }
+
 
             $this->data['rigs'] = $this->journal_model->serach_rigs($filter);
 

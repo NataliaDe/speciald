@@ -778,8 +778,14 @@ class Dones extends My_Controller
                     foreach ($diviz_organ_of_pasp[$key]['trip_man'] as $trip) {
 
                         if (!empty($trip['fio'])) {
+
+                            $short_rank_full='';
+                            if(isset($trip['short_rank_full']) && !empty($trip['short_rank_full'])){
+                                $short_rank_full=$trip['short_rank_full'];
+                            }
+
                             $inf = '1 чел. ';
-                            $inf = $inf . '(' . mb_strtolower($trip['position']) . ' ' . $trip['fio'] . ') ';
+                            $inf = $inf . '(' . mb_strtolower($trip['position']) . ' ' . (($short_rank_full != '') ? ($short_rank_full.' ') : '' ).$trip['fio'] . ') ';
                             $inf = $inf . '- командировка с ' . $trip['date1'] . ((!empty($trip['date2']) && $trip['date2'] != NULL && $trip['date2'] != '00.00.0000') ? (' по ' . $trip['date2']) : '');
                             $inf = $inf . ((!empty($trip['place'])) ? (', ' . $trip['place']) : '');
                             $inf = $inf . ((!empty($trip['prikaz'])) ? (' (' . $trip['prikaz'] . ')') : '');
@@ -799,8 +805,12 @@ class Dones extends My_Controller
                     foreach ($diviz_organ_of_pasp[$key]['holiday_man'] as $hol) {
 
                         if (!empty($hol['fio'])) {
+                            $short_rank_full = '';
+                            if (isset($hol['short_rank_full']) && !empty($hol['short_rank_full'])) {
+                                $short_rank_full = $hol['short_rank_full'];
+                            }
                             $inf = '1 чел. ';
-                            $inf = $inf . '(' . mb_strtolower($hol['position']) . ' ' . $hol['fio'] . ') ';
+                            $inf = $inf . '(' . mb_strtolower($hol['position']) . ' ' . (($short_rank_full != '') ? ($short_rank_full.' ') : '' ).$hol['fio'] . ') ';
                             $inf = $inf . '- отпуск с ' . $hol['date1'] . ((!empty($hol['date2']) && $hol['date2'] != NULL && $hol['date2'] != '00.00.0000') ? (' по ' . $hol['date2']) : '');
                             $inf = $inf . ((!empty($hol['prikaz'])) ? (' (' . $hol['prikaz'] . ')') : '');
 
@@ -820,8 +830,14 @@ class Dones extends My_Controller
                     foreach ($diviz_organ_of_pasp[$key]['ill_man'] as $ill) {
 
                         if (!empty($ill['fio'])) {
+
+                            $short_rank_full = '';
+                            if (isset($ill['short_rank_full']) && !empty($ill['short_rank_full'])) {
+                                $short_rank_full = $ill['short_rank_full'];
+                            }
+
                             $inf = '1 чел. ';
-                            $inf = $inf . '(' . mb_strtolower($ill['position']) . ' ' . $ill['fio'] . ') ';
+                            $inf = $inf . '(' . mb_strtolower($ill['position']) . ' ' . (($short_rank_full != '') ? ($short_rank_full.' ') : '' ). $ill['fio'] . ') ';
                             $inf = $inf . '- болен с ' . $ill['date1'] . ((!empty($ill['date2']) && $ill['date2'] != NULL && $ill['date2'] != '00.00.0000') ? (' по ' . $ill['date2']) : '');
                             $inf = $inf . ((!empty($ill['diagnosis'])) ? (' (' . $ill['diagnosis'] . ')') : '');
 
@@ -842,8 +858,14 @@ class Dones extends My_Controller
                     foreach ($diviz_organ_of_pasp[$key]['other_man'] as $other) {
 
                         if (!empty($other['fio'])) {
+
+                            $short_rank_full = '';
+                            if (isset($other['short_rank_full']) && !empty($other['short_rank_full'])) {
+                                $short_rank_full = $other['short_rank_full'];
+                            }
+
                             $inf = '1 чел. ';
-                            $inf = $inf . '(' . mb_strtolower($other['position']) . ' ' . $other['fio'] . ') ';
+                            $inf = $inf . '(' . mb_strtolower($other['position']) . ' ' .  (($short_rank_full != '') ? ($short_rank_full.' ') : '' ).$other['fio'] . ') ';
                             $inf = $inf . '- другие причины с ' . $other['date1'] . ((!empty($other['date2']) && $other['date2'] != NULL && $other['date2'] != '00.00.0000') ? (' по ' . $other['date2']) : '');
                             $inf = $inf . ((!empty($other['reason'])) ? (', ' . $other['reason']) : '');
                             $inf = $inf . ((!empty($other['note'])) ? ( '(' . mb_strtolower(mb_substr($other['note'], 0, 1)) . mb_substr($other['note'], 1) . ') ' ) : '');
