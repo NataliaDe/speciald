@@ -785,7 +785,8 @@ class Dones extends My_Controller
                             }
 
                             $inf = '1 чел. ';
-                            $inf = $inf . '(' . mb_strtolower($trip['position']) . ' ' . (($short_rank_full != '') ? ($short_rank_full.' ') : '' ).$trip['fio'] . ') ';
+                            //$inf = $inf . '(' . mb_strtolower($trip['position']) . ' ' . (($short_rank_full != '') ? ($short_rank_full.' ') : '' ).$trip['fio'] . ') ';
+                            $inf = $inf . '(' . $trip['short_pos_sd'] . ' ' . (($short_rank_full != '') ? ($short_rank_full.' ') : '' ).$trip['fio'] . ') ';
                             $inf = $inf . '- командировка с ' . $trip['date1'] . ((!empty($trip['date2']) && $trip['date2'] != NULL && $trip['date2'] != '00.00.0000') ? (' по ' . $trip['date2']) : '');
                             $inf = $inf . ((!empty($trip['place'])) ? (', ' . $trip['place']) : '');
                             $inf = $inf . ((!empty($trip['prikaz'])) ? (' (' . $trip['prikaz'] . ')') : '');
@@ -810,7 +811,7 @@ class Dones extends My_Controller
                                 $short_rank_full = $hol['short_rank_full'];
                             }
                             $inf = '1 чел. ';
-                            $inf = $inf . '(' . mb_strtolower($hol['position']) . ' ' . (($short_rank_full != '') ? ($short_rank_full.' ') : '' ).$hol['fio'] . ') ';
+                            $inf = $inf . '(' . $hol['short_pos_sd'] . ' ' . (($short_rank_full != '') ? ($short_rank_full.' ') : '' ).$hol['fio'] . ') ';
                             $inf = $inf . '- отпуск с ' . $hol['date1'] . ((!empty($hol['date2']) && $hol['date2'] != NULL && $hol['date2'] != '00.00.0000') ? (' по ' . $hol['date2']) : '');
                             $inf = $inf . ((!empty($hol['prikaz'])) ? (' (' . $hol['prikaz'] . ')') : '');
 
@@ -837,7 +838,7 @@ class Dones extends My_Controller
                             }
 
                             $inf = '1 чел. ';
-                            $inf = $inf . '(' . mb_strtolower($ill['position']) . ' ' . (($short_rank_full != '') ? ($short_rank_full.' ') : '' ). $ill['fio'] . ') ';
+                            $inf = $inf . '(' . $ill['short_pos_sd'] . ' ' . (($short_rank_full != '') ? ($short_rank_full.' ') : '' ). $ill['fio'] . ') ';
                             $inf = $inf . '- болен с ' . $ill['date1'] . ((!empty($ill['date2']) && $ill['date2'] != NULL && $ill['date2'] != '00.00.0000') ? (' по ' . $ill['date2']) : '');
                             $inf = $inf . ((!empty($ill['diagnosis'])) ? (' (' . $ill['diagnosis'] . ')') : '');
 
@@ -865,7 +866,7 @@ class Dones extends My_Controller
                             }
 
                             $inf = '1 чел. ';
-                            $inf = $inf . '(' . mb_strtolower($other['position']) . ' ' .  (($short_rank_full != '') ? ($short_rank_full.' ') : '' ).$other['fio'] . ') ';
+                            $inf = $inf . '(' . $other['short_pos_sd'] . ' ' .  (($short_rank_full != '') ? ($short_rank_full.' ') : '' ).$other['fio'] . ') ';
                             $inf = $inf . '- другие причины с ' . $other['date1'] . ((!empty($other['date2']) && $other['date2'] != NULL && $other['date2'] != '00.00.0000') ? (' по ' . $other['date2']) : '');
                             $inf = $inf . ((!empty($other['reason'])) ? (', ' . $other['reason']) : '');
                             $inf = $inf . ((!empty($other['note'])) ? ( '(' . mb_strtolower(mb_substr($other['note'], 0, 1)) . mb_substr($other['note'], 1) . ') ' ) : '');
@@ -885,7 +886,7 @@ class Dones extends My_Controller
 
                         if (!empty($vac['position'])) {
                             $inf = '1 чел. ';
-                            $inf = $inf . '(' . mb_strtolower($vac['position']) . ') ';
+                            $inf = $inf . '(' . $vac['short_pos_sd'] . ') ';
                             $inf = $inf . '- вакансия ';
 
 
@@ -4397,7 +4398,8 @@ class Dones extends My_Controller
 
                     $str = '';
 
-                    $pos_decl= get_arr_positon(mb_strtolower($vac['pos_name'],'utf-8'),1);
+                    //$pos_decl= get_arr_positon(mb_strtolower($vac['pos_name'],'utf-8'),1);
+                    $pos_decl= get_pos_name_by_id($vac['id_pos'],1,mb_strtolower($vac['pos_name'],'utf-8'));
 
                     $str = $vac['cnt'] . ' ' . declination_word_by_number($vac['cnt'], array('вакансия', 'вакансии', 'вакансий')) . ' ' . $pos_decl; // 2 вакансии мастера-спасателя
 
@@ -4434,7 +4436,11 @@ class Dones extends My_Controller
             $everyday = $this->str_model->get_everyday_pasp($row['id_pasp']);
             if (!empty($everyday)) {
                 foreach ($everyday as $ev) {
-                    $e = $ev['cnt'] . ' ' . ((!empty($ev['sd_slug'])) ? $ev['sd_slug'] : declination_word_by_number($ev['cnt'], get_arr_positon(mb_strtolower($ev['pos_name'],'utf-8'))));
+
+                    $pos_decl= get_pos_name_by_id($ev['id_pos'],0,mb_strtolower($ev['pos_name'],'utf-8'));
+
+                    //$e = $ev['cnt'] . ' ' . ((!empty($ev['sd_slug'])) ? $ev['sd_slug'] : declination_word_by_number($ev['cnt'], get_arr_positon(mb_strtolower($ev['pos_name'],'utf-8'))));
+                     $e = $ev['cnt'] . ' ' . ((!empty($ev['sd_slug'])) ? $ev['sd_slug'] : declination_word_by_number($ev['cnt'], $pos_decl));
                     $diviz_organ_of_pasp[$key]['vi_array'][] = $e;
                     $diviz_organ_of_pasp[$key]['itogo_all_ch'] += $ev['cnt'];
 
@@ -4446,7 +4452,11 @@ class Dones extends My_Controller
             $everyday_vacants = $this->str_model->get_everyday_pasp($row['id_pasp'],1);
             if (!empty($everyday_vacants)) {
                 foreach ($everyday_vacants as $ev) {
-                    $e = $ev['cnt'] . ' ' . ((!empty($ev['sd_slug'])) ? $ev['sd_slug'] : (declination_word_by_number($ev['cnt'], get_arr_positon(mb_strtolower($ev['pos_name'],'utf-8')))) );
+
+                    $pos_decl= get_pos_name_by_id($ev['id_pos'],0,mb_strtolower($ev['pos_name'],'utf-8'));
+
+                    //$e = $ev['cnt'] . ' ' . ((!empty($ev['sd_slug'])) ? $ev['sd_slug'] : (declination_word_by_number($ev['cnt'], get_arr_positon(mb_strtolower($ev['pos_name'],'utf-8')))) );
+                    $e = $ev['cnt'] . ' ' . ((!empty($ev['sd_slug'])) ? $ev['sd_slug'] : (declination_word_by_number($ev['cnt'], $pos_decl)) );
                     $diviz_organ_of_pasp[$key]['vi_array'][] = $e;
                     $diviz_organ_of_pasp[$key]['itogo_all_ch'] += $ev['cnt'];
 
