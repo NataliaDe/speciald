@@ -145,7 +145,7 @@ class Str_model extends CI_Model
     {
         /* man in trip  */
         $this->db->select('t.id, t.id_fio,date_format(t.date1,"%d.%m.%Y") AS date1,date_format(t.date2,"%d.%m.%Y") AS date2,'
-            . ' t.place,t.is_cosmr, t.prikaz,l.fio, po.name as position, ra.short_rank as short_rank,ra.short_rank_full as short_rank_full');
+            . ' t.place,t.is_cosmr, t.prikaz,l.fio, po.name as position, ra.short_rank as short_rank,ra.short_rank_full as short_rank_full, po.short_pos_sd');
         $this->db->join('str.listfio AS l ', 't.id_fio=l.id', 'left');
         $this->db->join('str.position as po ', 'po.id=l.id_position', 'left');
         $this->db->join('str.rank as ra ', 'ra.id=l.id_rank', 'left');
@@ -167,7 +167,7 @@ class Str_model extends CI_Model
     {
         /* man on holiday */
         $this->db->select('h.id, h.id_fio,date_format(h.date1,"%d.%m.%Y") AS date1,date_format(h.date2,"%d.%m.%Y") AS date2,'
-            . ' h.prikaz, l.fio, po.name as position, ra.short_rank as short_rank,ra.short_rank_full as short_rank_full');
+            . ' h.prikaz, l.fio, po.name as position, ra.short_rank as short_rank,ra.short_rank_full as short_rank_full, po.short_pos_sd');
         $this->db->join('str.listfio AS l ', 'h.id_fio=l.id', 'left');
         $this->db->join('str.position as po ', 'po.id=l.id_position', 'left');
         $this->db->join('str.rank as ra ', 'ra.id=l.id_rank', 'left');
@@ -189,7 +189,7 @@ class Str_model extends CI_Model
     {
         /* man on holiday */
         $this->db->select('i.id, i.id_fio,date_format(i.date1,"%d.%m.%Y") AS date1,date_format(i.date2,"%d.%m.%Y") AS date2,'
-            . ' i.diagnosis,l.fio, ma.name as maim, po.name as position, ra.short_rank as short_rank,ra.short_rank_full as short_rank_full');
+            . ' i.diagnosis,l.fio, ma.name as maim, po.name as position, ra.short_rank as short_rank,ra.short_rank_full as short_rank_full, po.short_pos_sd');
         $this->db->join('str.listfio AS l ', 'i.id_fio=l.id', 'left');
         $this->db->join('str.position as po ', 'po.id=l.id_position', 'left');
         $this->db->join('str.rank as ra ', 'ra.id=l.id_rank', 'left');
@@ -212,7 +212,7 @@ class Str_model extends CI_Model
     {
         /* man on holiday */
         $this->db->select('o.id, o.id_fio,date_format(o.date1,"%d.%m.%Y") AS date1, date_format(o.date2,"%d.%m.%Y") AS date2,'
-            . ' o.reason, o.note, l.fio, po.name as position, ra.short_rank as short_rank,ra.short_rank_full as short_rank_full');
+            . ' o.reason, o.note, l.fio, po.name as position, ra.short_rank as short_rank,ra.short_rank_full as short_rank_full, po.short_pos_sd');
         $this->db->join('str.listfio AS l ', 'o.id_fio=l.id', 'left');
         $this->db->join('str.position as po ', 'po.id=l.id_position', 'left');
         $this->db->join('str.rank as ra ', 'ra.id=l.id_rank', 'left');
@@ -234,7 +234,7 @@ class Str_model extends CI_Model
     public function get_cnt_vacant_inf_by_id_pasp($id_pasp, $ch)
     {
         /* man on holiday */
-        $this->db->select('l.fio, po.name as position');
+        $this->db->select('l.fio, po.name as position, po.short_pos_sd');
         $this->db->join('str.cardch AS c ', 'l.id_cardch=c.id', 'left');
         $this->db->join('str.position as po', 'po.id=l.id_position', 'left');
 

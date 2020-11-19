@@ -20,7 +20,8 @@ $('#modal-search-str-inf #btn-search-str-inf-clear-filter').on('click', function
 
 var cur_pasp = [];
 
-$('#searchStrInfForm #id_region_str_inf').on('change', function (event) {
+$('body').on('change', '#searchStrInfForm #id_region_str_inf', function (event) {
+//$('#searchStrInfForm #id_region_str_inf').on('change', function (event) {
 
     var ids_region = $(this).val();
 
@@ -71,8 +72,8 @@ $('#searchStrInfForm #id_region_str_inf').on('change', function (event) {
 
 });
 
-
-$('#searchStrInfForm #id_local_str_inf').on('change', function (event) {
+$('body').on('change', '#searchStrInfForm #id_local_str_inf', function (event) {
+//$('#searchStrInfForm #id_local_str_inf').on('change', function (event) {
 
     var ids_locorg = $(this).val();
     cur_pasp = $('#searchStrInfForm ').find('#id_pasp_str_inf').val();
@@ -123,8 +124,8 @@ $('#searchStrInfForm #id_local_str_inf').on('change', function (event) {
 
 
 
-
-$('#searchStrInfForm #id_pasp_str_inf').on('change', function (event) {
+$('body').on('change', '#searchStrInfForm #id_pasp_str_inf', function (event) {
+//$('#searchStrInfForm #id_pasp_str_inf').on('change', function (event) {
 
     var ids_cars = $(this).val();
 //alert(ids_cars);
@@ -147,7 +148,10 @@ $('#modal-agree-get-str-inf').on('show.bs.modal', function (event) {
 
 
 /*  get data by str cars and add cars to special form */
-$('#modal-agree-get-str-inf #btn-fill-str-inf-form').on('click', function (event) {
+
+
+$('body').on('click', '#modal-agree-get-str-inf #btn-fill-str-inf-form', function (event) {
+//$('#modal-agree-get-str-inf #btn-fill-str-inf-form').on('click', function (event) {
 
 
     $('#preload-update-data-search-rig').css('display', 'block');
@@ -338,11 +342,10 @@ else{
 
 
 
-
-$('.refresh-str').on('click', function (event) {
+$('body').on('click', '.refresh-str', function (e) {
     var url = $(this).attr('data-url');
     var action = $(this).attr('data-action');
-
+alert(url);
 
     if (parseInt(action) === 1) {
         $('#modal-str-refresh .modal-header h4').text('Получить строевую за предыдущую смену');
@@ -359,10 +362,7 @@ $('.refresh-str').on('click', function (event) {
 
 
 /*  refresh str inf */
-$('#modal-str-refresh #btn-refresh-str').on('click', function (event) {
-
-
-
+$('body').on('click', '#modal-str-refresh #btn-refresh-str', function (e) {
 
     var pasp = $('input:hidden.id_pasp');
 
