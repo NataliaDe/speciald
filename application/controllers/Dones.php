@@ -55,6 +55,7 @@ class Dones extends My_Controller
 
             $this->data['reasonrig'] = $this->main_model->get_reasonrig();
             $this->data['firereason'] = $this->main_model->get_firereason();
+            $this->data['ver_firereason'] = $this->main_model->get_ver_firereason();
 
 
             $this->data['id_owner_dead'] = Main_model::ID_OWNER_DEAD;
@@ -618,6 +619,13 @@ class Dones extends My_Controller
             $id_rig = $this->data['active_user']['id_rig'];
             $id_template = $this->data['active_user']['id_template'];
         }
+
+        if (isset($id_rig) && !empty($id_rig) && $id_template == 0) {//simple SD from journal
+
+            $this->data['set_prewiev_owl']=1;
+        }
+
+
 
         if (isset($id_rig) && !empty($id_rig)) {
             $this->data['id_rig_current'] = $id_rig;
@@ -1880,6 +1888,7 @@ class Dones extends My_Controller
         $dones['reason_rig'] = (isset($post['reason_rig']) && !empty($post['reason_rig'])) ? trim($post['reason_rig']) : '';
         $dones['firereason_rig'] = (isset($post['firereason_rig']) && !empty($post['firereason_rig'])) ? trim($post['firereason_rig']) : '';
         $dones['id_firereason'] = (isset($post['id_firereason']) && !empty($post['id_firereason'])) ? intval($post['id_firereason']) : 0;
+        $dones['version_firereason'] = (isset($post['version_firereason']) && !empty($post['version_firereason'])) ? intval($post['version_firereason']) : 0;
         $dones['inspector'] = (isset($post['inspector']) && !empty($post['inspector'])) ? trim($post['inspector']) : '';
         $dones['garnison_main'] = (isset($post['garnison_main']) && !empty($post['garnison_main'])) ? trim($post['garnison_main']) : '';
 
@@ -1904,6 +1913,7 @@ class Dones extends My_Controller
         $dones['situation_first_arrival_id'] = (isset($post['situation_first_arrival']) && !empty($post['situation_first_arrival'])) ? intval($post['situation_first_arrival']) : 0;
         $dones['situation_first_arrival_name'] =  ($name= $this->main_model->get_name_situation_fa($dones['situation_first_arrival_id'])) ? $name : '';
         $dones['rig_num_rtp'] = (isset($post['rig_num_rtp']) && !empty($post['rig_num_rtp'])) ? trim($post['rig_num_rtp']) : 0;
+        $dones['sit_is_not_approve_rig'] = (isset($post['sit_is_not_approve_rig']) && !empty($post['sit_is_not_approve_rig'])) ? 1 : 0;
         $dones['num_ac'] = (isset($post['num_ac']) && !empty($post['num_ac'])) ? intval($post['num_ac']) : 0;
         $dones['sit_fa_text'] = (isset($post['sit_fa_text']) && !empty($post['sit_fa_text'])) ? trim($post['sit_fa_text']) : '';
         $dones['sit_fa_preview'] = (isset($post['sit_fa_preview']) && !empty($post['sit_fa_preview'])) ? trim($post['sit_fa_preview']) : '';
@@ -3340,7 +3350,8 @@ class Dones extends My_Controller
             $new_dones['vid_hs_2'] = (isset($dones['vid_hs_2']) && !empty($dones['vid_hs_2'])) ? intval($dones['vid_hs_2']) : 0;
             $new_dones['reason_rig'] = (isset($dones['reason_rig']) && !empty($dones['reason_rig'])) ? trim($dones['reason_rig']) : '';
             $new_dones['firereason_rig'] = (isset($dones['firereason_rig']) && !empty($dones['firereason_rig'])) ? trim($dones['firereason_rig']) : '';
-            $new_dones['id_firereason'] = (isset($dones['id_firereason']) && !empty($dones['id_firereason'])) ? trim($dones['id_firereason']) : 0;
+            $new_dones['id_firereason'] = (isset($dones['id_firereason']) && !empty($dones['id_firereason'])) ? intval($dones['id_firereason']) : 0;
+            $new_dones['version_firereason'] = (isset($dones['version_firereason']) && !empty($dones['version_firereason'])) ? intval($dones['version_firereason']) : 0;
 
             $new_dones['inspector'] = (isset($dones['inspector']) && !empty($dones['inspector'])) ? trim($dones['inspector']) : '';
             $new_dones['garnison_main'] = $dones['garnison_main'];
@@ -3367,6 +3378,7 @@ class Dones extends My_Controller
             $new_dones['situation_first_arrival_id'] = $dones['situation_first_arrival_id'];
             $new_dones['situation_first_arrival_name'] =  $dones['situation_first_arrival_name'];
             $new_dones['rig_num_rtp'] =$dones['rig_num_rtp'];
+            $new_dones['sit_is_not_approve_rig'] =$dones['sit_is_not_approve_rig'];
             $new_dones['num_ac'] = $dones['num_ac'];
             $new_dones['sit_fa_text'] = $dones['sit_fa_text'];
             $new_dones['sit_fa_preview'] = $dones['sit_fa_preview'];
@@ -3843,6 +3855,8 @@ class Dones extends My_Controller
             $dones['time_msg'] = (isset($post['time_msg']) && !empty($post['time_msg'])) ? (\DateTime::createFromFormat('d.m.Y H:i', trim($post['time_msg']))->format('Y-m-d H:i:s')) : NULL;
         }
 
+         $dones['address'] = (isset($post['simple_address']) && !empty($post['simple_address'])) ? trim($post['simple_address']) : '';
+
         $dones['latitude'] = (isset($post['latitude']) && !empty($post['latitude'])) ? trim($post['latitude']) : '';
         $dones['longitude'] = (isset($post['longitude']) && !empty($post['longitude'])) ? trim($post['longitude']) : '';
 
@@ -3861,6 +3875,9 @@ class Dones extends My_Controller
         $dones['is_to_daily_summary'] = (isset($post['is_to_daily_summary']) && !empty($post['is_to_daily_summary'])) ? 1 : 0;
 
 
+        //for all type templates: ct_1 or simple
+         $dones['ct_1_id_short_description'] = (isset($post['ct_1_id_short_description']) && !empty($post['ct_1_id_short_description'])) ? intval($post['ct_1_id_short_description']) : 0;
+
         /* templates */
         if (isset($post['id_template']) && !empty($post['id_template'])) {
             $dones['id_template'] = (isset($post['id_template']) && !empty($post['id_template'])) ? $post['id_template'] : '';
@@ -3869,7 +3886,7 @@ class Dones extends My_Controller
 
                 $dones['type_template'] = 'common';
 
-                $dones['ct_1_id_short_description'] = (isset($post['ct_1_id_short_description']) && !empty($post['ct_1_id_short_description'])) ? intval($post['ct_1_id_short_description']) : 0;
+               // $dones['ct_1_id_short_description'] = (isset($post['ct_1_id_short_description']) && !empty($post['ct_1_id_short_description'])) ? intval($post['ct_1_id_short_description']) : 0;
                 $dones['ct_1_id_goal_rig'] = (isset($post['ct_1_id_goal_rig']) && !empty($post['ct_1_id_goal_rig'])) ? intval($post['ct_1_id_goal_rig']) : 0;
                 $dones['ct_1_goal_rig'] = (isset($post['ct_1_goal_rig']) && !empty($post['ct_1_goal_rig'])) ? trim($post['ct_1_goal_rig']) : '';
 

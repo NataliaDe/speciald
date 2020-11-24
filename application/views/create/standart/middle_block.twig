@@ -192,7 +192,18 @@
                         <option value="{{ reas.id }}" {%if ( rig.firereason_id is defined and rig.firereason_id == reas.id) or (is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.id_firereason == reas.id) %}selected{%endif%} >{{ reas.name }}</option>
                     {% endfor %}
                 </select>
-            </div>
+                            </div>
+
+
+                            <div class="form-group col-md-3 {{ (( rig.firereason_id is defined and rig.firereason_id == 33) or (is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.id_firereason == 33)) ? '' : 'hide' }}" id="div_version_fire">
+                                <label for="version_firereason" >Рассматриваемая версия пожара</label>
+                                <select class="form-control select2-single" name="version_firereason" id="version_firereason"  >
+                                    <option></option>
+                                    {% for reas in  ver_firereason %}
+                                        <option value="{{ reas.id }}" {%if  (is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.version_firereason == reas.id) %}selected{%endif%} >{{ reas.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
 
                     </div>
 

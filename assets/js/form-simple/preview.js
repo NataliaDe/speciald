@@ -84,7 +84,7 @@ if(is_show_coords === false){
 else{
     new_coord = '';
 }
-
+new_coord = '';
 
 
 

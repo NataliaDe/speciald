@@ -98,6 +98,10 @@ class Export extends My_Controller
         $dones = $this->create_model->get_dones_by_id($id_dones);
         $type_sd = $dones['type'];
 
+
+        $settings = $this->user_model->get_user_settings_type_sd($this->data['active_user']['id_user'], $type_sd);
+        $settings = $this->user_model->get_user_settings_options_format($settings);
+
         if($type_sd == Main_model::TYPE_SD_SIMPLE && $dones['id_template'] == 'ct_1'){
             redirect('/export/ct_1_to_word/'.$id_dones);
         }
@@ -133,9 +137,19 @@ class Export extends My_Controller
         $phpWord->setDefaultFontName('Times New Roman');
 
         /* DON'T CHECK WORDS */
+
         $phpWord->getSettings()->setThemeFontLang(new PhpOffice\PhpWord\Style\Language(PhpOffice\PhpWord\Style\Language::RU_RU));
-        $phpWord->getSettings()->setHideSpellingErrors(true);
-        $phpWord->getSettings()->setHideGrammaticalErrors(true);
+        if (isset($settings['is_check_spelling']) && in_array('yes',$settings['is_check_spelling'])) {
+
+            $phpWord->getSettings()->setHideSpellingErrors(FALSE);
+
+        } else {
+            $phpWord->getSettings()->setHideSpellingErrors(true);
+        }
+        $phpWord->getSettings()->setHideGrammaticalErrors(TRUE);
+
+
+
         //$phpWord->getSettings()->setAutoHyphenation(true);
 
 
@@ -291,6 +305,7 @@ class Export extends My_Controller
             } else {
                 $coords = '.';
             }
+
 
             if ($dones['is_show_address'] == 1 && isset($dones['address']) && !empty($dones['address'])) {
 

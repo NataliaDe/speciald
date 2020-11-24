@@ -143,7 +143,7 @@
         #modal-list-disp .select2-container {
             width: 400px !important;
         }
-        </style>
+    </style>
 
 {% endblock %}
 
@@ -275,21 +275,27 @@
 
 
 
-        $('#createSimple #content-template #simple-ct1').removeClass('hide');
-        $('#createSimple #content-template #simple-ct1').removeClass('show');
-        $('#createSimple #content-template #simple-ct1').addClass('hide');
+                $('#createSimple #content-template #simple-ct1').removeClass('hide');
+                $('#createSimple #content-template #simple-ct1').removeClass('show');
+                $('#createSimple #content-template #simple-ct1').addClass('hide');
 
-        $('#createSimple #content-template #simple-opening').removeClass('hide');
-        $('#createSimple #content-template #simple-opening').removeClass('show');
-        $('#createSimple #content-template #simple-opening').addClass('show');
+                $('#createSimple #content-template #simple-opening').removeClass('hide');
+                $('#createSimple #content-template #simple-opening').removeClass('show');
+                $('#createSimple #content-template #simple-opening').addClass('show');
 
                 $('#createSimple #simple-date-msg').removeClass('hide');
-        $('#createSimple #simple-date-msg').removeClass('show');
-        $('#createSimple #simple-date-msg').addClass('show');
+                $('#createSimple #simple-date-msg').removeClass('show');
+                $('#createSimple #simple-date-msg').addClass('show');
+
+                $('#createSimple #simple_div_address').removeClass('hide');
+                $('#createSimple #simple_div_address').removeClass('show');
+                $('#createSimple #simple_div_address').addClass('show');
+
+
 
                 $('#createSimple #preview-simple-block').removeClass('hide');
-        $('#createSimple #preview-simple-block').removeClass('show');
-        $('#createSimple #preview-simple-block').addClass('show');
+                $('#createSimple #preview-simple-block').removeClass('show');
+                $('#createSimple #preview-simple-block').addClass('show');
 
 
                 var old_text = $('#createSimple #opening_description_id').val();
@@ -316,10 +322,16 @@
 
 
 
-    </script>
+        {%if set_prewiev_owl is defined and  set_prewiev_owl == 1%}
+            setPreviewData();
+        {%endif%}
+
+
+
+        </script>
 
 
 
 
-{% endblock %}
+        {% endblock %}
 

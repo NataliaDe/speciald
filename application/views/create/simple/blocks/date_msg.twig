@@ -10,7 +10,74 @@
         <input type="text" autocomplete="off" class="form-control calendar-simple-time-msg {%if settings is defined and settings.is_seconds_show is defined and 'yes' in settings.is_seconds_show%}date-time-sec-cal{%else%} date-time-without-sec-cal {%endif%} "  placeholder="" name="time_msg" value="{%if settings is defined and settings.is_seconds_show is defined and 'yes' in settings.is_seconds_show and time_msg is not empty%}{{time_msg|date('d.m.Y H:i:s')}}{%elseif time_msg is not empty%}{{time_msg|date('d.m.Y H:i')}} {%endif%}">
     </div>
 
-    <div class="form-group col-md-1">
+
+
+
+
+                <div class="form-group col-md-4 {%if (id_template is defined and id_template == 'ct_1') or (is_edit_dones is defined and dones is defined and dones.id_template == 'ct_1')%}hide{%else%}show{%endif%}" id="simple_div_address">
+                    <label for="address" >Адрес:</label>
+                    {%set address=''%}
+                    {%set region=''%}
+                    {%set additional_field_address=''%}
+                    {%set is_opposite=''%}
+                    {%set all_address=''%}
+
+
+                    {%if rig is defined and rig.address is not empty %}
+
+                        {%if rig is defined and rig.address is not empty %}
+                            {%set address=rig.address%}
+                        {%endif%}
+
+{#                        {%if rig is defined and rig.region_name is not empty and rig.id_region != 3 %}
+                            {%set region=rig.region_name~' область'%}
+                        {%endif%}#}
+
+                        {%if rig is defined and rig.additional_field_address is not empty %}
+                            {%set additional_field_address=additional_field_address%}
+                        {%endif%}
+
+
+                        {%if rig is defined and rig.is_opposite == 1 %}
+                            {%set is_opposite='напротив'%}
+                        {%endif%}
+
+                        {%if address is not empty  %}
+                            {%set all_address=address%}
+                        {%endif%}
+
+
+                        {%if is_opposite is not empty or additional_field_address is not empty  %}
+                            {%set all_address=all_address~' ('%}
+                        {%endif%}
+
+                        {%if additional_field_address is not empty  %}
+                            {%set all_address=all_address~additional_field_address%}
+                        {%endif%}
+
+                        {%if is_opposite is not empty and additional_field_address is not empty  %}
+                            {%set all_address=all_address~', '~is_opposite%}
+                        {%elseif is_opposite is not empty %}
+                            {%set all_address=all_address~is_opposite%}
+                        {%endif%}
+
+                        {%if is_opposite is not empty or additional_field_address is not empty  %}
+                            {%set all_address=all_address~' )'%}
+                        {%endif%}
+
+{#                        {%if region is not empty  %}
+                            {%set all_address=all_address~' '~region%}
+                        {%endif%}#}
+
+                    {%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.address is not empty %}
+                        {%set all_address=dones.address|trim%}
+                    {%endif%}
+                    <textarea class="form-control" name="simple_address"  rows="2" cols="20">{{all_address}}</textarea>
+                </div>
+
+
+
+{#    <div class="form-group col-md-1">
         <label for="latitude" >Широта:</label>
         <input type="text" class="form-control" id="lat_id"  placeholder="" name="latitude" value="{%if rig is defined and rig.latitude is defined and rig.latitude is not empty and rig.latitude != 0%}{{rig.latitude|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.latitude is not empty %}{{dones.latitude|trim}}{%endif%}"
                {%if is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.is_show_coords == 1 %}readonly{%endif%}>
@@ -32,7 +99,7 @@
                         не выводить координаты в СД
                     </label>
                 </div>
-            </div>
+            </div>#}
 
 {#     <div class="form-group col-md-7">
        {%include '/create/simple/blocks/preview_for_word.twig'%}

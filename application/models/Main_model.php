@@ -381,6 +381,18 @@ class Main_model extends CI_Model
                 ->result_array();
     }
 
+        public function get_ver_firereason()
+    {
+        return $this->db->select('*')
+                ->from('journal.firereason')
+                ->where('is_delete', 0)
+                ->where('id !=', 0)
+            ->where('id !=', 33)
+                ->order_by('name', 'asc')
+                ->get()
+                ->result_array();
+    }
+
     public function get_first_part_number_sd($id_region)
     {
         $res = $this->db->select('first_part')

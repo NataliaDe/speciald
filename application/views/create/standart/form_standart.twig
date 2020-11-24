@@ -444,6 +444,10 @@
        #div-rig-num-rtp .select2-container {
            width: 145px !important;
        }
+
+              #div_version_fire .select2-container {
+            width: 453px !important;
+       }
     </style>
 
 {% endblock %}
@@ -2318,6 +2322,18 @@
                 x.pause();
             }
 
+
+
+            $('body').on('change', '#createStandart #id_firereason', function (e) {
+
+                e.preventDefault();
+
+                if (parseInt($(this).val()) === 33) {
+                    $('#createStandart #div_version_fire').removeClass('hide');
+                } else {
+                    $('#createStandart #div_version_fire').addClass('hide');
+                }
+            });
     </script>
 
 

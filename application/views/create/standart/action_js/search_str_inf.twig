@@ -345,7 +345,6 @@ else{
 $('body').on('click', '.refresh-str', function (e) {
     var url = $(this).attr('data-url');
     var action = $(this).attr('data-action');
-alert(url);
 
     if (parseInt(action) === 1) {
         $('#modal-str-refresh .modal-header h4').text('Получить строевую за предыдущую смену');

@@ -21,6 +21,11 @@
 
     });
 
+        $('body').on('change', '#createStandart #sit_is_approve_rig', function (e) {
+        setPreviewDataSitFa();
+
+    });
+
 
     $('body').on('change', '#createStandart #accordion_situation_first_arrival  #situation_first_arrival_id', function (e) {
         setPreviewDataSitFa();
@@ -53,16 +58,22 @@
 
             var num_ac = $('#createStandart #accordion_situation_first_arrival input[name="num_ac"]').val();
 
+             var is_not_appr = $('#createStandart #sit_is_approve_rig').is(":checked");
+
             if (situation_val !== '') {
                 sit_fa_text = sit_fa_text + ' ' + situation + '.';
             } else {
                 sit_fa_text = sit_fa_text + '.';
             }
 
-            if (num_rig_val !== '') {
-                sit_fa_text = sit_fa_text + ' Вызов номер ' + num_rig + ' подтвержден';
+                        if (num_rig_val !== '') {
+                            if (is_not_appr)
+                                sit_fa_text = sit_fa_text + ' Вызов номер ' + num_rig + ' не подтвержден';
 
-            }
+                            else
+                                sit_fa_text = sit_fa_text + ' Вызов номер ' + num_rig + ' подтвержден';
+
+                        }
 
             if (num_ac !== '' && num_ac > 0) {
                 sit_fa_text = sit_fa_text + ' (' + num_ac + 'АЦ).';
