@@ -205,6 +205,15 @@ $('#btn-fill-form').on('click', function (event) {
 
             jQuery("#vid_hs_2").chained("#vid_hs_1");
 
+            //ck_final_text.fire( 'change' );
+            //CKEDITOR.instances.ck_final_text.updateElement();
+           // CKEDITOR.prevention_result.updateElement();
+            //ck_prevention_res.fire( 'change' );
+
+            CKEDITOR.replace( 'ck_final_text');
+
+
+
 
 
             /*----------------------------------- Calendar ---------------------------------------*/

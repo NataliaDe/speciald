@@ -379,7 +379,7 @@ class Export extends My_Controller
                         'mark_sis'          => $row['mark'] . '' . ((!empty($row['pasp_name'])) ? (' ' . $row['pasp_name']) : '') . '' . ((!empty($row['locorg_name'])) ? (' ' . $row['locorg_name']) : ''),
                         //'v_ac_sis'          => ((empty($row['v_ac'])) ? '-' : ((strpos($row['v_ac'], '.') === false) ? $row['v_ac'] : str_replace(".", ",", $row['v_ac']))),
                         //'v_ac_sis'          => (empty($row['v_ac'])) ? '-' : (number_format($row['v_ac'] / 1000, 1, '.', '')),
-                        'v_ac_sis'          => (empty($v_ac)) ? '-' : $v_ac,
+                        'v_ac_sis'          => (empty($v_ac) || $v_ac == 0) ? '-' : $v_ac,
                         'man_per_car_sis'   => $row['man_per_car'],
                         'time_exit_sis'     => ((isset($row['time_exit']) && !empty($row['time_exit'])) ? (\DateTime::createFromFormat('H:i:s', $row['time_exit'])->format('H-i')) : ''),
                         'time_arrival_sis'  => ($row['is_return'] == 1)? 'возврат' : (((isset($row['time_arrival']) && !empty($row['time_arrival'])) ? (\DateTime::createFromFormat('H:i:s', $row['time_arrival'])->format('H-i')) : '')),
@@ -606,7 +606,7 @@ class Export extends My_Controller
                             'mark_trunk'           => $row['mark'] . '' . ((!empty($row['pasp_name'])) ? (' ' . $row['pasp_name']) : '') . '' . ((!empty($row['locorg_name'])) ? (' ' . $row['locorg_name']) : ''),
                             //'v_ac_trunk'           => ((empty($row['v_ac'])) ? '-' : ((strpos($row['v_ac'], '.') === false) ? $row['v_ac'] : str_replace(".", ",", $row['v_ac']))),
                             //'v_ac_trunk'           => (empty($row['v_ac'])) ? '-' : (number_format($row['v_ac'] / 1000, 1, '.', '')),
-                             'v_ac_trunk'           => (empty($v_ac)) ? '-' : $v_ac,
+                             'v_ac_trunk'           => (empty($v_ac) || $v_ac == 0) ? '-' : $v_ac,
                             'man_per_car_trunk'    => $row['man_per_car'],
                             's_fire_arrival_trunk' => (isset($row['s_fire_arrival']) && !empty($row['s_fire_arrival'])) ? $row['s_fire_arrival'] : '-',
                             'time_arrival_trunk'   => ((isset($row['time_arrival']) && !empty($row['time_arrival'])) ? (\DateTime::createFromFormat('H:i:s', $row['time_arrival'])->format('H-i')) : ''),
@@ -674,7 +674,7 @@ class Export extends My_Controller
                                 'mark_trunk'           => $row['mark'] . '' . ((!empty($row['pasp_name'])) ? (' ' . $row['pasp_name']) : '') . '' . ((!empty($row['locorg_name'])) ? (' ' . $row['locorg_name']) : ''),
                                 //'v_ac_trunk'           => ((empty($row['v_ac'])) ? '-' : ((strpos($row['v_ac'], '.') === false) ? $row['v_ac'] : str_replace(".", ",", $row['v_ac']))),
                                // 'v_ac_trunk'           => (empty($row['v_ac'])) ? '-' : (number_format($row['v_ac'] / 1000, 1, '.', '')),
-                                  'v_ac_trunk'           => (empty($v_ac)) ? '-' : $v_ac,
+                                  'v_ac_trunk'           => (empty($v_ac)  || $v_ac == 0) ? '-' : $v_ac,
                                 'man_per_car_trunk'    => $row['man_per_car'],
                                 's_fire_arrival_trunk' => (isset($row['s_fire_arrival']) && !empty($row['s_fire_arrival'])) ? $row['s_fire_arrival'] : '-',
                                 'time_arrival_trunk'   => ((isset($row['time_arrival']) && !empty($row['time_arrival'])) ? (\DateTime::createFromFormat('H:i:s', $row['time_arrival'])->format('H-i')) : ''),
@@ -718,7 +718,7 @@ class Export extends My_Controller
                                 'mark_trunk'           => $row['mark'] . '' . ((!empty($row['pasp_name'])) ? (' ' . $row['pasp_name']) : '') . '' . ((!empty($row['locorg_name'])) ? (' ' . $row['locorg_name']) : ''),
                                 //'v_ac_trunk'           => ((empty($row['v_ac'])) ? '-' : ((strpos($row['v_ac'], '.') === false) ? $row['v_ac'] : str_replace(".", ",", $row['v_ac']))),
                                // 'v_ac_trunk'           => (empty($row['v_ac'])) ? '-' : (number_format($row['v_ac'] / 1000, 1, '.', '')),
-                                  'v_ac_trunk'           => (empty($v_ac)) ? '-' : $v_ac,
+                                  'v_ac_trunk'           => (empty($v_ac) || $v_ac == 0) ? '-' : $v_ac,
                                 'man_per_car_trunk'    => $row['man_per_car'],
                                 's_fire_arrival_trunk' => (isset($row['s_fire_arrival']) && !empty($row['s_fire_arrival'])) ? $row['s_fire_arrival'] : '-',
                                 'time_arrival_trunk'   => ((isset($row['time_arrival']) && !empty($row['time_arrival'])) ? (\DateTime::createFromFormat('H:i:s', $row['time_arrival'])->format('H-i')) : ''),
@@ -1197,8 +1197,11 @@ class Export extends My_Controller
         if (isset($dones['detail_inf']) && !empty($dones['detail_inf'])) {
             $a = explode(PHP_EOL, $dones['detail_inf']);
             foreach ($a as $value) {
-                $section->addText('          ' . $value, array('size' => 15), array('spaceAfter' => 0, 'spacing'    => 0,
-                    'alignment'  => PhpOffice\PhpWord\SimpleType\Jc::BOTH));
+
+                if ($value != '') {
+                    $section->addText('          ' . strip_tags($value), array('size' => 15), array('spaceAfter' => 0, 'spacing'    => 0,
+                        'alignment'  => PhpOffice\PhpWord\SimpleType\Jc::BOTH));
+                }
             }
             if ($dones['is_show_prevention'] == 0)
                 $section->addTextBreak(2, self::header_style_cell_size, self::header_style_cell_font);
@@ -1212,61 +1215,95 @@ class Export extends My_Controller
         $prevention = '';
         if ($dones['is_show_prevention']) {
 
-            $a = array();
-            $b = [];
-            if (!empty($dones['prevention_result'])) {
-                $a = explode(PHP_EOL, $dones['prevention_result']);
-            }
-            if (!empty($dones['prevention_events'])) {
-                $b = explode(PHP_EOL, $dones['prevention_events']);
-            }
+            if (isset($dones['prevention_word']) && !empty(trim($dones['prevention_word']))) {
 
-            if (!empty($dones['prevention_time']) && $dones['prevention_time'] != '0000-00-00' && $dones['prevention_time'] != null) {
-                $prevention = \DateTime::createFromFormat('Y-m-d', $dones['prevention_time'])->format('d.m.Y');
-            }
+                $a = explode(PHP_EOL, trim($dones['prevention_word']));
+                if (count($a) > 1) {
+                    foreach ($a as $value) {
 
-            if (!empty($dones['prevention_who'])) {
-
-                if (empty($prevention)) {
-                    $prevention = $dones['prevention_who'];
+                        $section->addText('          ' . $value, self::header_style_cell_size, self::start_descr_font);
+                    }
                 } else {
-                    $prevention = $prevention . ' ' . $dones['prevention_who'];
+                    $ow = trim($dones['prevention_word']);
+                    $section->addText('          ' . $ow, self::header_style_cell_size, self::start_descr_font);
                 }
-            }
 
+                 $section->addTextBreak(2, self::header_style_cell_size, self::header_style_cell_font);
 
-            $i = 0;
-            if (!empty($a)) {
-                foreach ($a as $value) {
-                    $i++;
+            } else {
 
-
-                    if ($i == 1) {
-                        if ($i == count($a) && !empty($b)) {
-                            $dop = ' Проводимые мероприятия для формирования в обществе культуры, безопасной жизнедеятельности: ' . $dones['prevention_events'];
-                        } else {
-                            $dop = '';
+                $a = array();
+                $b = [];
+                if (!empty($dones['prevention_result'])) {
+                    $a = explode(PHP_EOL, $dones['prevention_result']);
+                    if (!empty($a)) {
+                        foreach ($a as $a_k => $a_val) {
+                            if ($a_val == '')
+                                unset($a[$a_k]);
                         }
-                        if (!empty($prevention))
-                            $value = $prevention . ' проводились следующие профилактические работы: ' . $value . $dop;
-                        else
-                            $value = 'Проводились следующие профилактические работы: ' . $value . $dop;
                     }
-                    elseif ($i == count($a) && !empty($b)) {
-                        $value = $value . ' Проводимые мероприятия для формирования в обществе культуры, безопасной жизнедеятельности: ' . $dones['prevention_events'];
-                    }
+                }
+                if (!empty($dones['prevention_events'])) {
+                    $b = explode(PHP_EOL, $dones['prevention_events']);
+                }
 
+                if (!empty($dones['prevention_time']) && $dones['prevention_time'] != '0000-00-00' && $dones['prevention_time'] != null) {
+                    $prevention = \DateTime::createFromFormat('Y-m-d', $dones['prevention_time'])->format('d.m.Y');
+                }
+
+                if (!empty($dones['prevention_who'])) {
+
+                    if (empty($prevention)) {
+                        $prevention = $dones['prevention_who'];
+                    } else {
+                        $prevention = $prevention . ' ' . $dones['prevention_who'];
+                    }
+                }
+
+
+                $i = 0;
+                if (!empty($a)) {
+                    foreach ($a as $value) {
+                        $i++;
+                        $value = strip_tags($value);
+
+                        if ($i == 1) {
+                            if ($i == count($a) && !empty($b)) {
+                                $dop = ' Проводимые мероприятия для формирования в обществе культуры, безопасной жизнедеятельности: ' . $dones['prevention_events'];
+                            } else {
+                                $dop = '';
+                            }
+                            if (!empty($prevention))
+                                $value = $prevention . ' проводились следующие профилактические работы: ' . $value . $dop;
+                            else
+                                $value = 'Проводились следующие профилактические работы: ' . $value . $dop;
+                        }
+                        elseif ($i == count($a) && !empty($b)) {
+                            $value = $value . ' Проводимые мероприятия для формирования в обществе культуры, безопасной жизнедеятельности: ' . $dones['prevention_events'];
+                        }
+
+                        $section->addText('          ' . trim($value), self::header_style_cell_size, self::start_descr_font);
+                    }
+                } elseif (!empty($b)) {
+                    if (!empty($prevention))
+                        $value = $prevention . '. Проводимые мероприятия для формирования в обществе культуры, безопасной жизнедеятельности: ' . $dones['prevention_events'];
+                    else
+                        $value = 'Проводимые мероприятия для формирования в обществе культуры, безопасной жизнедеятельности: ' . $dones['prevention_events'];
                     $section->addText('          ' . trim($value), self::header_style_cell_size, self::start_descr_font);
                 }
-            } elseif (!empty($b)) {
-                if (!empty($prevention))
-                    $value = $prevention . '. Проводимые мероприятия для формирования в обществе культуры, безопасной жизнедеятельности: ' . $dones['prevention_events'];
-                else
-                    $value = 'Проводимые мероприятия для формирования в обществе культуры, безопасной жизнедеятельности: ' . $dones['prevention_events'];
-                $section->addText('          ' . trim($value), self::header_style_cell_size, self::start_descr_font);
+                $section->addTextBreak(2, self::header_style_cell_size, self::header_style_cell_font);
             }
-            $section->addTextBreak(2, self::header_style_cell_size, self::header_style_cell_font);
         }
+
+
+//$section->addText('          ' . $dones['prevention_result'], self::header_style_cell_size, self::start_descr_font);
+        //test
+       // $section->addText(strip_tags($dones['prevention_result']), self::header_style_cell_size, self::start_descr_font);
+       //
+       //
+//        $phpWord->setDefaultFontName('Times New Roman');
+//$phpWord->setDefaultFontSize(15);
+//\PhpOffice\PhpWord\Shared\Html::addHtml($section, $dones['prevention_result']);
 
         /* END prevention  */
 
@@ -1294,9 +1331,9 @@ class Export extends My_Controller
         }
         if (isset($key)) {
             for ($i = 0; $i < $key; $i++) {
-                if ($rank_sign == '') {
+                if ($rank_sign == '' && isset($rank[$i])) {
                     $rank_sign = $rank[$i];
-                } else {
+                } elseif(isset($rank[$i])) {
                     $rank_sign = $rank_sign . ' ' . $rank[$i];
                 }
             }

@@ -9,7 +9,7 @@
           <img  src="{{base_url('/assets/images/calendar-refresh.png')}}">
         </a>
        {%endif%}
-        <textarea class="form-control" name="detail_inf"  rows="10" cols="50">{%if  rig.inf_detail is defined and  rig.inf_detail is not empty and rig.inf_detail is not null %}{{rig.inf_detail|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.detail_inf is not empty %}{{dones.detail_inf|trim}}{%endif%}</textarea>
+       <textarea class="form-control" name="detail_inf"  rows="10" cols="50" id="ck_final_text">{%if  rig.inf_detail is defined and  rig.inf_detail is not empty and rig.inf_detail is not null %}{{rig.inf_detail|trim}}{%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.detail_inf is not empty %}{{dones.detail_inf|trim}}{%endif%}</textarea>
     </div>
 
 

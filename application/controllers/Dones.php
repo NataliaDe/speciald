@@ -1930,6 +1930,7 @@ class Dones extends My_Controller
         $dones['prevention_who'] = (isset($post['prevention_who']) && !empty($post['prevention_who'])) ? trim($post['prevention_who']) : '';
         $dones['prevention_result'] = (isset($post['prevention_result']) && !empty($post['prevention_result'])) ? trim($post['prevention_result']) : '';
         $dones['prevention_events'] = (isset($post['prevention_events']) && !empty($post['prevention_events'])) ? trim($post['prevention_events']) : '';
+        $dones['prevention_word'] = (isset($post['prevention_word']) && !empty($post['prevention_word'])) ? trim($post['prevention_word']) : '';
 
 
         /* is involved or no */
@@ -3393,6 +3394,8 @@ class Dones extends My_Controller
             $new_dones['prevention_who'] = (isset($dones['prevention_who']) && !empty($dones['prevention_who'])) ? trim($dones['prevention_who']) : '';
             $new_dones['prevention_result'] = (isset($dones['prevention_result']) && !empty($dones['prevention_result'])) ? trim($dones['prevention_result']) : '';
             $new_dones['prevention_events'] = (isset($dones['prevention_events']) && !empty($dones['prevention_events'])) ? trim($dones['prevention_events']) : '';
+            $new_dones['prevention_word'] = (isset($dones['prevention_word']) && !empty($dones['prevention_word'])) ? trim($dones['prevention_word']) : '';
+
 
 
             /* is involved or no */

@@ -1,6 +1,5 @@
 <script>
 
-
 //$('body').on('input change keyup', '#createStandart #middle-block-div input[name="time_msg"]', function (e) {
 //    setPreviewData();
 //});
@@ -1050,9 +1049,13 @@
                             $('body').on('input change keyup', '#createStandart #accordion7 input[name="prevention_who"]', function (e) {
                                 setPreviewDataPrevent();
                             });
-                            $('body').on('input change keyup', '#createStandart #accordion7 textarea[name="prevention_result"]', function (e) {
+
+                            ck_prevention_res.on('change', function () {
                                 setPreviewDataPrevent();
                             });
+    {#                            $('body').on('input change keyup', '#createStandart #accordion7 textarea[name="prevention_result"]', function (e) {
+                                    setPreviewDataPrevent();
+                                });#}
                             $('body').on('input change keyup', '#createStandart #accordion7 textarea[name="prevention_events"]', function (e) {
                                 setPreviewDataPrevent();
                             });
@@ -1065,7 +1068,8 @@
 
                                 var date = $('#createStandart #accordion7 input[name="prevention_time"]').val();
                                 var who = $('#createStandart #accordion7 input[name="prevention_who"]').val();
-                                var result = $('#createStandart #accordion7 textarea[name="prevention_result"]').val();
+                                //var result = $('#createStandart #accordion7 textarea[name="prevention_result"]').val();
+                                var result = CKEDITOR.instances.prevention_result.getData();
                                 //var events = $('#createStandart #accordion7 textarea[name="prevention_events"]').val();
                                 var is_show_prevention = $('#createStandart #accordion7 #is_show_prevention').is(":checked");
 
@@ -1091,8 +1095,26 @@
                                     if (result !== '') {
                                         result = result.replace(/\r?\n/g, '<br />');
 
-                                        var arr_new_descr = result.split('<br />');
-                                        var arr_new_descr_str = arr_new_descr.join('<br />');
+                                        //var arr_new_descr = result.split('<br />');
+                                        var arr_new_descr_first = result.split('<br />');
+                                        var arr_new_descr = [];
+
+                                        for (var i = 0; i <  arr_new_descr_first.length; i++) {
+                                          //if( arr_new_descr_first[i] !== '' && arr_new_descr_first[i] !=='&nbsp;'){
+
+                                          var el=arr_new_descr_first[i].replace(/(<([^>]+)>)/gi, "");
+                                          var el=el.replace(/&nbsp;/g,'');
+
+                                          if(el !== ''){
+                                              console.log(el);
+                                              arr_new_descr.push(el);
+                                            }
+                                            else{
+                                                // console.log('g');
+                                            }
+                                        }
+
+                                        var arr_new_descr_str = arr_new_descr.join('\n');
 
                                         if (preview === '')
                                             preview = arr_new_descr_str;
@@ -1114,11 +1136,13 @@
 //
 //        }
                                 } else {
-                                    preview = 'информация не будет выведена в СД';
+                                    //preview = 'информация не будет выведена в СД';
+                                    preview='';
                                     $("#panel_preview_prevention").hide();
 
                                 }
-                                $('#preview_prevention').html('<b><u>Предпросмотр (меры профилактики):</u></b><br>' + preview);
+                                $('#preview_prevention').find('textarea[name="prevention_word"]').val(preview);
+                               // $('#preview_prevention').html('<b><u>Предпросмотр (меры профилактики):</u></b><br>' + preview);
 
 
                             }
