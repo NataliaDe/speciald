@@ -504,6 +504,8 @@
     <script src="{{ base_url('/assets/datatables/jquery.dataTables.js')}}"></script>
 
 
+    {%include '/create/standart/ck/manual.twig'%}
+
 
     <script src="{{ base_url('/assets/js/form-standart/media_multi.js')}}?{{now|date('H:i:s')}}"></script>
     <script src="{{ base_url('/assets/js/form-standart/media.js')}}?{{now|date('H:i:s')}}"></script>
@@ -2334,6 +2336,9 @@
                     $('#createStandart #div_version_fire').addClass('hide');
                 }
             });
+
+//CKEDITOR.replace( 'prevention_result' );
+
     </script>
 
 

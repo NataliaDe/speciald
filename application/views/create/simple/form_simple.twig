@@ -59,7 +59,7 @@
 
             </div>
 
-
+                            <p>fhsjfvj</p>
 
             <div class="form-group col-md-12">
                 <label for="is_test_sd" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
@@ -162,12 +162,15 @@
     <script src="{{ base_url('/assets/js/form-standart/media.js')}}?{{now|date('H:i:s')}}"></script>
     <script src="{{ base_url('/assets/js/form-standart/media_multi.js')}}?{{now|date('H:i:s')}}"></script>
 
+        {%include '/create/simple/ck/manual.twig'%}
+
     {%if is_edit_dones is not defined  %}
         <script src="{{ base_url('/assets/js/timer.js')}}"></script>
 
     {%endif%}
 
     <script src="{{ base_url('/assets/js/form-simple/preview.js')}}?{{now|date('H:i:s')}}"></script>
+
 
 
     {%if settings is defined and settings.is_map is defined and 'yes' %}

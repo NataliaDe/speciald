@@ -1,5 +1,4 @@
 
-
 //$('body').on('input change keyup', '#createStandart #middle-block-div input[name="time_msg"]', function (e) {
 //    setPreviewData();
 //});
@@ -293,7 +292,7 @@ function setPreviewData() {
             var arr_new_descr_str = new_coord;
         }
 
-        
+
 
         //$('#preview-opening-description-standart').html('<b><u>Предпросмотр (начальный текст):</u></b><br>' + new_date + '' + new_time + '' + arr_new_descr_str);
         $('#preview-opening-description-standart').find('textarea[name="opening_word"]').val(new_date + '' + new_time +  preview+' ' +arr_new_descr_str);
@@ -990,6 +989,11 @@ $('.prevention-date-calendar').on('apply.daterangepicker', function (event, pick
 //$('body').on('input change keyup blur', '#createStandart #accordion7 input[name="prevention_time"]', function (e) {
 //    setPreviewDataPrevent();
 //});
+
+
+// editor is object of your CKEDITOR
+
+
 $('body').on('input change keyup', '#createStandart #accordion7 input[name="prevention_who"]', function (e) {
     setPreviewDataPrevent();
 });
