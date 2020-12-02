@@ -630,6 +630,22 @@ class Dones extends My_Controller
         if (isset($id_rig) && !empty($id_rig)) {
             $this->data['id_rig_current'] = $id_rig;
             $this->data['rig'] = $this->journal_model->get_rig_by_id($id_rig);
+
+
+            $addr_new = '';
+            $addr_new = $this->data['rig']['loc_name_sd'];
+            if (!empty($this->data['rig']['sel_sd']))
+                $addr_new = $addr_new . ', ' . $this->data['rig']['sel_sd'];
+            if (!empty($this->data['rig']['street_name_sd']))
+                $addr_new = $addr_new . ', ' . $this->data['rig']['street_name_sd'];
+            if (!empty($this->data['rig']['home_number_sd']) && $this->data['rig']['home_number_sd'] != '-')
+                $addr_new = $addr_new . ', дом ' . $this->data['rig']['home_number_sd'];
+            if (!empty($this->data['rig']['housing_sd']) && $this->data['rig']['housing_sd'] != '-')
+                $addr_new = $addr_new . ',  ' . $this->data['rig']['housing_sd'];
+
+            $this->data['rig']['address'] = $addr_new;
+
+
             $this->data['rig']['people'] = $this->journal_model->get_people_by_rig_id($id_rig);
             $this->data['rig']['silymchs'] = $this->journal_model->get_silymchs_by_rig_id_sort_distance($id_rig);
             $this->data['rig']['ct_1_silymchs'] = [];

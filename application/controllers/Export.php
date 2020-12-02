@@ -99,6 +99,17 @@ class Export extends My_Controller
         $type_sd = $dones['type'];
 
 
+//                    $a = explode(PHP_EOL, $dones['detail_inf']);
+//            foreach ($a as $value) {
+//
+//                $v= strip_tags($value);
+//                $vv=htmlspecialchars_decode($v);
+//                echo $vv;
+//            }
+//            exit();
+
+
+
         $settings = $this->user_model->get_user_settings_type_sd($this->data['active_user']['id_user'], $type_sd);
         $settings = $this->user_model->get_user_settings_options_format($settings);
 
@@ -1199,8 +1210,15 @@ class Export extends My_Controller
             foreach ($a as $value) {
 
                 if ($value != '') {
-                    $section->addText('          ' . strip_tags($value), array('size' => 15), array('spaceAfter' => 0, 'spacing'    => 0,
+
+                    $v = strip_tags($value);
+                    $vv = html_entity_decode($v);
+
+                    $section->addText('          ' . strip_tags($vv), array('size' => 15), array('spaceAfter' => 0, 'spacing'    => 0,
                         'alignment'  => PhpOffice\PhpWord\SimpleType\Jc::BOTH));
+
+//                    $section->addText('          ' . strip_tags($value), array('size' => 15), array('spaceAfter' => 0, 'spacing'    => 0,
+//                        'alignment'  => PhpOffice\PhpWord\SimpleType\Jc::BOTH));
                 }
             }
             if ($dones['is_show_prevention'] == 0)
@@ -1376,7 +1394,29 @@ class Export extends My_Controller
 
 
 
-        $file_download = 'СД от ' . ((isset($dones['specd_date']) && !empty($dones['specd_date'])) ? (\DateTime::createFromFormat('Y-m-d', $dones['specd_date'])->format('d.m.Y')) : '') . ' ' . ((isset($dones['specd_number']) && !empty($dones['specd_number'])) ? (' № ' . $dones['specd_number']) : '') . '.docx';
+
+
+
+        $d=(isset($dones['specd_date']) && !empty($dones['specd_date'])) ? (\DateTime::createFromFormat('Y-m-d', $dones['specd_date'])->format('d.m.Y')) : '';
+        $addr_parts = explode(',', $dones['address']);
+        $addr_loc = (isset($addr_parts[0]) && !empty($addr_parts[0])) ? $addr_parts[0] : '';
+        $mb_str_len = mb_strlen($dones['short_description'], 'utf-8');
+        //$theme = $dones['short_description'];
+        $vid= mb_strtolower($dones['vid_specd_name']);
+
+        if ($d != '' && $addr_loc != '' && $vid != '' ){
+            $file_download = $d . ' ' . $addr_loc.' ('.$vid.')';
+            $mb_str_len = mb_strlen($file_download, 'utf-8');
+            if ($mb_str_len >= 50) {// обрезать текст
+                $file_download = mb_substr($file_download, 0, 50, 'utf-8');
+            } else {
+                $file_download = $file_download;
+            }
+            $file_download = $file_download . '.docx';
+        }
+       else
+           $file_download = 'СД от ' . ((isset($dones['specd_date']) && !empty($dones['specd_date'])) ? (\DateTime::createFromFormat('Y-m-d', $dones['specd_date'])->format('d.m.Y')) : '') . ' ' . ((isset($dones['specd_number']) && !empty($dones['specd_number'])) ? (' № ' . $dones['specd_number']) : '') . '.docx';
+
 
         header("Content-Description: File Transfer");
         header('Content-Disposition: attachment; filename="' . $file_download . '"');
@@ -1433,9 +1473,32 @@ class Export extends My_Controller
             $templateProcessor->setValue('ct_1_rank_sign', trim($dones['ct_1_rank_sign']));
             $templateProcessor->setValue('ct_1_fio_sign', trim($dones['ct_1_fio_sign']));
 
-                        $file_download = 'СД ' . $dones['specd_number'] . '.docx';
 
-            header('Content-Disposition: attachment; filename="' . $file_download . '"');
+
+
+
+
+        $d = (isset($dones['specd_date']) && !empty($dones['specd_date'])) ? (\DateTime::createFromFormat('Y-m-d', $dones['specd_date'])->format('d.m.Y')) : '';
+        $addr_parts = explode(',', $dones['address']);
+        $addr_loc = (isset($addr_parts[0]) && !empty($addr_parts[0])) ? $addr_parts[0] : '';
+        $vid= mb_strtolower($dones['vid_specd_name']);
+
+        if ($d != '' && $addr_loc != '' && $vid != '' ){
+            $file_download = $d . ' ' . $addr_loc.' ('.$vid.')';
+            $mb_str_len = mb_strlen($file_download, 'utf-8');
+            if ($mb_str_len >= 200) {// обрезать текст
+                $file_download = mb_substr($file_download, 0, 200, 'utf-8');
+            } else {
+                $file_download = $file_download;
+            }
+            $file_download = $file_download . '.docx';
+        }
+        else
+            $file_download = 'СД ' . $dones['specd_number'] . '.docx';
+
+
+
+        header('Content-Disposition: attachment; filename="' . $file_download . '"');
             $templateProcessor->saveAs('php://output');
 
         //echo $id_dones;

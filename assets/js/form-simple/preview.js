@@ -26,9 +26,9 @@ $('body').on('change', '#long_id', function (e) {
 
 
 
-                            ck_opening_descr.on('change', function () {
-                               setPreviewData();
-                            });
+ck_opening_descr.on('change', function () {
+    setPreviewData();
+});
 //$('body').on('input change keyup', '#opening_description_id', function (e) {
 //    setPreviewData();
 //
@@ -51,7 +51,7 @@ function setPreviewData() {
     var long = $('#long_id').val();
     //var descr = $("#opening_description_id").val();
 
-     var descr = CKEDITOR.instances.opening_description_id.getData();
+    var descr = CKEDITOR.instances.opening_description_id.getData();
 
     var is_show_coords = $('#is_show_coords').is(":checked");
 
@@ -72,24 +72,23 @@ function setPreviewData() {
 
     if (time !== '') {
 
-var arr_t = time.split(' ');
+        var arr_t = time.split(' ');
         var arr_time = arr_t[1].split(':');
         new_time = 'в ' + arr_time[0] + ':' + arr_time[1] + ' ';
     }
 
 
 
-if(is_show_coords === false){
+    if (is_show_coords === false) {
         new_coord = ' (' + lat + ', ' + long + ').';
 
-    if (lat === '' && long === '') {
-        new_coord = ' (нет координат).';
+        if (lat === '' && long === '') {
+            new_coord = ' (нет координат).';
+        }
+    } else {
+        new_coord = '';
     }
-}
-else{
     new_coord = '';
-}
-new_coord = '';
 
 
 
@@ -101,26 +100,28 @@ new_coord = '';
 //        arr_new_descr[0] = arr_new_descr[0] + '' + new_coord;
 //        var arr_new_descr_str = arr_new_descr.join('<br />');
 
-            var r = $.trim(descr);
-            //var arr_new_descr = r.split(/\r?\n/g);
-            //arr_new_descr[0] = arr_new_descr[0] + ' ' + new_coord;
+        var r = $.trim(descr);
+        //var arr_new_descr = r.split(/\r?\n/g);
+        //arr_new_descr[0] = arr_new_descr[0] + ' ' + new_coord;
 
-             var arr_new_descr_first = r.split(/\r?\n/g);
-             var arr_new_descr = [];
-                                                     for (var i = 0; i <  arr_new_descr_first.length; i++) {
-                                          var el=arr_new_descr_first[i].replace(/(<([^>]+)>)/gi, "");
-                                          var el=el.replace(/&nbsp;/g,'');
+        var arr_new_descr_first = r.split(/\r?\n/g);
+        var arr_new_descr = [];
+        for (var i = 0; i < arr_new_descr_first.length; i++) {
+            var el = arr_new_descr_first[i].replace(/(<([^>]+)>)/gi, "");
+            var el = el.replace(/&nbsp;/g, '');
 
-                                          if(el !== ''){
-                                             // console.log(el);
-                                              arr_new_descr.push(el);
-                                            }
-                                            else{
-                                                // console.log('g');
-                                            }
-                                        }
+            var varTitle = $('<textarea />').html(el).text();
+            var el = varTitle;
 
-            var arr_new_descr_str = arr_new_descr.join('\n');
+            if (el !== '') {
+                // console.log(el);
+                arr_new_descr.push(el);
+            } else {
+                // console.log('g');
+            }
+        }
+
+        var arr_new_descr_str = arr_new_descr.join('\n');
     } else {
         var arr_new_descr_str = new_coord;
     }

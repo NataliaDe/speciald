@@ -91,9 +91,9 @@
                     {%set all_address=all_address~' )'%}
                 {%endif%}
 
-                {%if region is not empty  %}
+{#                {%if region is not empty  %}
                     {%set all_address=all_address~' '~region%}
-                {%endif%}
+                {%endif%}#}
 
             {%elseif is_edit_dones is defined and is_edit_dones == 1 and dones is defined and dones.address is not empty %}
                 {%set all_address=dones.address|trim%}
