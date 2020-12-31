@@ -127,7 +127,7 @@ if (parseInt(object_house_id) !== {{id_object_avtotransport}}){
 //alert(cnt);
 
 
-        if (cnt > 0 && cnt <= 10) {
+        if (cnt > 0 && cnt <= 15) {
 
 
             if ($('#div-live-together').hasClass('hide')) {
@@ -179,7 +179,7 @@ if (parseInt(object_house_id) !== {{id_object_avtotransport}}){
                 $('#fill-live-together').addClass('show');
 
             } else {
-                toastr.error('Необходимо указать от 1 до 10 человек', 'Ошибка!', {progressBar: true, timeOut: 2500});
+                toastr.error('Необходимо указать от 1 до 15 человек', 'Ошибка!', {progressBar: true, timeOut: 2500});
             }
 
 

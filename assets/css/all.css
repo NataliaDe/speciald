@@ -535,3 +535,12 @@ text-decoration: none;
 #div-sit-is-not-approve-rig{
     padding-top: 34px;
 }
+
+.copy-row-trunks{
+    color: green;
+}
+
+
+.copied_row{
+    background-color: #e5f0fd;
+}

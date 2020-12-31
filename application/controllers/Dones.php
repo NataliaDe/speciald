@@ -66,6 +66,7 @@ class Dones extends My_Controller
             $this->load->helper('floor_by_number_helper');
             $this->load->helper('declination_helper');
             $this->load->helper('positions_declination');
+            $this->load->helper('validate_float');
 
 //            //TWIG
 //            $this->load->library('twig');
@@ -2093,6 +2094,9 @@ class Dones extends My_Controller
 
                     $dones_silymchs['time_follow'] = (isset($row['time_follow']) && !empty($row['time_follow'])) ? intval($row['time_follow']) : 0;
                     $dones_silymchs['distance'] = (isset($row['distance']) && !empty($row['distance'])) ? trim($row['distance']) : '';
+                    if($dones_silymchs['distance'] != ''){
+                        $dones_silymchs['distance'] = validate_float($dones_silymchs['distance'] );
+                    }
                     $dones_silymchs['time_end'] = (isset($row['time_end']) && !empty($row['time_end'])) ? (\DateTime::createFromFormat('H:i', $row['time_end'])->format('H:i')) : NULL;
                     $dones_silymchs['time_return'] = (isset($row['time_return']) && !empty($row['time_return'])) ? (\DateTime::createFromFormat('H:i', $row['time_return'])->format('H:i')) : null;
                     $dones_silymchs['sort'] = (isset($row['sort']) && !empty($row['sort'])) ? intval($row['sort']) : 0;
@@ -2135,6 +2139,9 @@ class Dones extends My_Controller
                     $dones_innerservice['time_msg'] = (isset($row['time_msg']) && !empty($row['time_msg'])) ? (\DateTime::createFromFormat('H:i', $row['time_msg'])->format('H:i')) : NULL;
                     $dones_innerservice['time_arrival'] = (isset($row['time_arrival']) && !empty($row['time_arrival'])) ? (\DateTime::createFromFormat('H:i', $row['time_arrival'])->format('H:i')) : NULL;
                     $dones_innerservice['distance'] = (isset($row['distance']) && !empty($row['distance'])) ? trim($row['distance']) : '';
+                    if ($dones_innerservice['distance'] != '') {
+                        $dones_innerservice['distance'] = validate_float($dones_innerservice['distance']);
+                    }
                     $dones_innerservice['note'] = (isset($row['note']) && !empty($row['note'])) ? trim($row['note']) : '';
                     $dones_innerservice['sort'] = (isset($row['sort']) && !empty($row['sort'])) ? intval($row['sort']) : 0;
 
@@ -2372,11 +2379,38 @@ class Dones extends My_Controller
                     $dones_trunks['man_per_car'] = (isset($row['man_per_car']) && !empty($row['man_per_car'])) ? intval($row['man_per_car']) : 0;
                     $dones_trunks['time_arrival'] = (isset($row['time_arrival']) && !empty($row['time_arrival'])) ? (\DateTime::createFromFormat('H:i', $row['time_arrival'])->format('H:i')) : NULL;
                     $dones_trunks['s_fire_arrival'] = (isset($row['s_fire_arrival']) && !empty($row['s_fire_arrival'])) ? trim($row['s_fire_arrival']) : '';
+                    if($dones_trunks['s_fire_arrival'] != ''){
+                        $dones_trunks['s_fire_arrival']= validate_float($dones_trunks['s_fire_arrival']);
+                    }
                     $dones_trunks['time_pod'] = (isset($row['time_pod']) && !empty($row['time_pod'])) ? (\DateTime::createFromFormat('H:i', $row['time_pod'])->format('H:i')) : NULL;
                     $dones_trunks['means_trunks'] = (isset($row['means_trunks']) && !empty($row['means_trunks'])) ? trim($row['means_trunks']) : '';
-                    $dones_trunks['water_po_out'] = (isset($row['water_po_out']) && !empty($row['water_po_out'])) ? trim($row['water_po_out']) : '';
+                    //$dones_trunks['water_po_out'] = (isset($row['water_po_out']) && !empty($row['water_po_out'])) ? trim($row['water_po_out']) : '';
+
+                    $w = (isset($row['water_po_out']) && !empty($row['water_po_out'] )) ? trim($row['water_po_out'] ) : '';
+                    if (!empty($w)) {
+                        $parts = explode('/', $w);
+
+                        if (!empty($parts)) {
+                            $first = (isset($parts[0]) && !empty($parts[0]) ) ? $parts[0] : 0;
+                            $first = validate_float($first);
+
+                            $second = (isset($parts[1]) && !empty($parts[1])) ? $parts[1] : 0;
+                            $second = validate_float($second);
+
+                            $w = $first . '/' . $second;
+                        } else {
+                            $w = '0/0';
+                        }
+                    } else {
+                        $w = '0/0';
+                    }
+                    $dones_trunks['water_po_out'] =$w;
+
                     $dones_trunks['time_loc'] = (isset($row['time_loc']) && !empty($row['time_loc']) && $dones['is_likv_before_arrival'] == 0) ? (\DateTime::createFromFormat('H:i', $row['time_loc'])->format('H:i')) : NULL;
                     $dones_trunks['s_fire_loc'] = (isset($row['s_fire_loc']) && !empty($row['s_fire_loc'])) ? trim($row['s_fire_loc']) : '';
+                    if ($dones_trunks['s_fire_loc'] != '') {
+                        $dones_trunks['s_fire_loc'] = validate_float($dones_trunks['s_fire_loc']);
+                    }
                     $dones_trunks['time_likv'] = (isset($row['time_likv']) && !empty($row['time_likv']) && $dones['is_likv_before_arrival'] == 0) ? (\DateTime::createFromFormat('H:i', $row['time_likv'])->format('H:i')) : NULL;
 
 

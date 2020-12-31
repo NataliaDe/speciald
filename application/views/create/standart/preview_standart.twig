@@ -204,7 +204,12 @@
         var theme_msg = $('#createStandart  #id_theme_message option:selected').text();
 
 
-        var creator = $('#createStandart input[name="official_creator_name"]').val();
+    {%if active_user.level == 2%}
+            var creator = $('#createStandart input[name="podr_take_msg"]').val();
+    {%else%}
+            var creator = $('#createStandart input[name="official_creator_name"]').val();
+    {%endif%}
+
         var people_fio = $('#createStandart input[name="people_fio"]').val();
         var people_phone = $('#createStandart input[name="people_phone"]').val();
 
