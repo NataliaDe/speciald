@@ -523,3 +523,100 @@ var i=$(t).data('numb');
         time_end.prop('disabled', false);
     }
 }
+
+
+
+
+
+
+        /* -----------------copy trunk --------------- */
+
+        $('#modal-copy-trunk').on('show.bs.modal', function (e) {
+
+            var btn = $(e.relatedTarget);
+
+            var row_id= btn.parent().parent().prop('id');
+           // alert(row_id);
+             $('#modal-copy-trunk').find('#btn-copy-trunk').attr('data-rid',row_id);
+
+        });
+
+    $('body').on('click', '#btn-copy-trunk', function (e) {
+        e.preventDefault();
+
+
+        var row_id= $(this).attr('data-rid');
+         var $row=$('#'+row_id);
+
+        //var $div = $('div[id^="trunks_row_id"]:last');
+        var $div_for_clon = $('.trunks_row:last');
+
+        var id_car_block=$div_for_clon.data('loop');
+        var new_loop=parseInt($div_for_clon.find('.loop-index').text())+1;
+
+        var num = parseInt(id_car_block) + 1;
+
+        var is = $('div #trunks_row_id' + num);
+        while ((is.length > 0)) {
+            var num = num + 1;
+            var is = $('div #trunks_row_id' + num);
+        }
+
+        // Clone it and assign the new ID (i.e: from num 4 to ID "klon4")
+        //var $klon = $div_for_clon.clone().prop('id', 'trunks_row_id' + num);
+         var $klon = $row.clone().prop('id', 'trunks_row_id' + num);
+
+        //$klon.insertAfter($('.trunks_row').last());
+        $klon.insertAfter($row);
+
+        /* new name */
+        var $div_new = $('#trunks_row_id'+num);
+        $div_new.addClass('copied_row');
+        $div_new.find('td').find('.mark_trunks').attr('name','trunks['+num+'][mark]');
+        $div_new.find('td').find('.pasp_name_trunks').attr('name','trunks['+num+'][pasp_name]');
+        $div_new.find('td').find('.locorg_name_trunks').attr('name','trunks['+num+'][locorg_name]');
+        $div_new.find('td').find('.v_ac_trunks').attr('name','trunks['+num+'][v_ac]');
+        $div_new.find('td').find('.man_per_car_trunks').attr('name','trunks['+num+'][man_per_car]');
+        $div_new.find('td').find('.time_arrival_trunks').attr('name','trunks['+num+'][time_arrival]');
+        $div_new.find('td').find('.s_fire_arrival_trunks').attr('name','trunks['+num+'][s_fire_arrival]');
+        $div_new.find('td').find('.time_pod_trunks').attr('name','trunks['+num+'][time_pod]');
+        $div_new.find('td').find('.means_trunks').attr('name','trunks['+num+'][means_trunks]');
+        $div_new.find('td').find('.water_po_out_trunks').attr('name','trunks['+num+'][water_po_out]');
+        $div_new.find('td').find('.time_loc_trunks').attr('name','trunks['+num+'][time_loc]');
+        $div_new.find('td').find('.s_fire_loc_trunks').attr('name','trunks['+num+'][s_fire_loc]');
+        $div_new.find('td').find('.time_likv_trunks').attr('name','trunks['+num+'][time_likv]');
+        $div_new.find('td').find('.id_teh').attr('name','trunks['+num+'][id_teh]');
+        $div_new.find('td').find('.set_ac_pg_trunks').attr('name','trunks['+num+'][set_ac_pg]');
+
+        $div_new.find('td').find('.sort').attr('name','trunks['+num+'][sort]');
+
+        $div_new.find('td').find('.id_trunks').attr('name','trunks['+num+'][id_trunks]');
+        $div_new.find('td').find('.vid_t').attr('name','trunks['+num+'][vid_t]');
+
+        $div_new.find('td').find('.actions_ls_trunks').attr('name','trunks['+num+'][actions_ls]');
+        $div_new.find('td').find('.actions_ls_btn_trunks').attr('id','actions_ls_btn_trunks_'+num);
+        $div_new.find('td').find('.actions_ls_btn_trunks').css('color','black');
+
+        $div_new.find('td').find(' .means_trunks, .sort, .id_trunks').val('');
+
+        $div_new.find('.loop-index').text(new_loop);
+        $div_new.attr('data-loop',new_loop);
+
+        $div_new.find('td').find('.sort').val(new_loop);
+
+
+            var k = 1;
+            var k_sort = 1;
+            $('#trunks-block').find('.loop-index').each(function () {
+                $(this).text(k);
+                k++;
+            });
+            $('#trunks-block').find('.sort').each(function () {
+                $(this).val(k_sort);
+                k_sort++;
+            });
+
+
+        $('#modal-copy-trunk').click();
+        return false;
+    });

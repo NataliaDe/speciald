@@ -527,6 +527,7 @@ class Export extends My_Controller
 
 
         /* TRUNKS */
+       // print_r($trunks);
         if (isset($dones['is_not_involved_trunks']) && $dones['is_not_involved_trunks'] == 0 && $type_sd == Main_model::TYPE_SD_STANDART) {//insert table
             $section->addTextBreak(1, self::header_style_cell_size, self::header_style_cell_font);
             $section->addText('          ' . 'Оперативные данные по боевым действиям:', array('size' => 15, 'italic' => true), array('spaceAfter' => 0, 'spacing' => 0));
@@ -556,13 +557,17 @@ class Export extends My_Controller
                         $w=0;
                         $po=0;
                         if (!empty($row['water_po_out'])) {
-                            $water = ((isset($row['water_po_out']) && !empty($row['water_po_out'])) ? $row['water_po_out'] : 0);
-                          //  echo $water;
-                            if ($water != 0) {
+                            $water = (($row['water_po_out'] != '') ? $row['water_po_out'] : 0);
+// echo '$water='.$water.'<br>';
+                           // if ($water != 0) {
                                 $arr_water = explode('/', $water);
                                 $w = (isset($arr_water[0])) ? trim($arr_water[0]) : 0;
                                 $po =  (isset($arr_water[1])) ? trim($arr_water[1]) : 0;
-                            }
+                               //  echo 'po='.$po.'<br>';
+//                            }
+//                            else{
+//                                echo '!';
+//                            }
                         }
 
                         if( isset($multi_trunks[$podr])){
@@ -584,6 +589,7 @@ class Export extends My_Controller
                             $multi_trunks[$podr]['water_po_out'] =$w.'/'.$po ;
                            // $multi_trunks[$podr]['set_ac_pg']=(isset($row['set_ac_pg']) && !empty($row['set_ac_pg']) && $row['set_ac_pg'] != '-') ? $row['set_ac_pg'] : '';
                         }
+                     //   print_r($multi_trunks);
 
                     }
                 }
@@ -652,9 +658,30 @@ class Export extends My_Controller
                                     $w = (isset($wp_arr[0])) ? trim($wp_arr[0]) : 0;
                                     $po =  (isset($wp_arr[1])) ? trim($wp_arr[1]) : 0;
 
-                                    $w=($w == 0) ? $w : number_format($w,1,',','.');
-                                    $po=($po == 0) ? $po : number_format($po,1,',','.');
-                                     $water_po= $w.'/'.$po;
+                                    $w=($w == 0) ? $w : number_format($w,2,',','.');
+
+                                    if ((strpos($w, ',') === false)) {
+
+                                    } else {
+                                        $w_parts = explode(',', $w);
+                                        $symbs = str_split($w_parts[1]);
+                                        if (!isset($symbs[1]) || $symbs[1] == 0) {
+                                            $w = $w_parts[0] . ',' . $symbs[0];
+                                        }
+                                    }
+
+                                    $po = ($po == 0) ? $po : number_format($po, 2, ',', '.');
+                                    if ((strpos($po, ',') === false)) {
+
+                                    } else {
+                                        $po_parts = explode(',', $po);
+                                        $symbs_po = str_split($po_parts[1]);
+                                        if (!isset($symbs_po[1]) || $symbs_po[1] == 0) {
+                                            $po = $po_parts[0] . ',' . $symbs_po[0];
+                                        }
+                                    }
+
+                                    $water_po= $w.'/'.$po;
                                 }
                             }
                             else{
@@ -752,7 +779,7 @@ class Export extends My_Controller
                 $arr = array_merge($arr, $wide_table);
             }
 
-
+//exit();
 
             $table = $section->addTable((array('borderSize' => 3, 'cellMarginLeft' => PhpOffice\PhpWord\Shared\Converter::cmToTwip(0.19))));
 
