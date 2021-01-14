@@ -78,6 +78,16 @@ class Catalog extends My_Controller
 
         $id_current_user = $this->data['active_user']['id_user'];
 
+        /* setting: availble or not edit after umchs prove */
+        $this->data['setting_closed_edit']=0;
+        $setting_closed_edit = $this->user_model->get_settings_by_region($this->data['active_user']['id_region'], 'is_closed_edit_after_umchs', 'no');
+       // print_r($setting_closed_edit);exit();
+        if (!empty($setting_closed_edit)) {
+            $this->data['setting_closed_edit'] = 1;
+          }
+
+
+
 
         if ($this->input->is_ajax_request()) {//filter
             $post = $this->input->get();

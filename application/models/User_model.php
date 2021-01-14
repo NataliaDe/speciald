@@ -295,6 +295,20 @@ class User_model extends CI_Model
         return $res;
     }
 
+        public function get_settings_by_region($id_region,$setting_type,$val_setting)
+    {
+        $this->db->select('s.name as setting_name, s.type as settings_type,so.option');
+        $this->db->where('u.id_region', $id_region);
+        $this->db->where('s.type', $setting_type);
+        $this->db->where('so.option', $val_setting);
+        $this->db->join('users as u', 'u.id=su.id_user', 'left');
+        $this->db->join('settings_options as so', 'su.id_settings_option=so.id', 'left');
+        $this->db->join('settings as s', 's.id=so.id_settings', 'left');
+
+        $result = $this->db->get('settings_options_users as su')->result_array();
+        return $result;
+    }
+
 
 
 }

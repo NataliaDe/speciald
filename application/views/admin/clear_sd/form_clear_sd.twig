@@ -1,0 +1,178 @@
+{% extends 'layout.twig' %}
+
+{% block title %}{{title}}{% endblock %}
+
+{% block content %}
+
+    {%include '/parts/bread_crumb.twig'%}
+    <br> <br>
+
+    <form role="form" id="time_sd_report_form" method="POST" action="{{base_url('/admin/clear_sd')}}" >
+
+        {%if msg is defined and msg is not empty%}
+            <div class="form-row create-form-row">
+
+                <div class="alert alert-success" role="alert">
+                    {{msg}}
+                </div>
+
+            </div>
+        {%endif%}
+
+
+        <div class="form-row create-form-row">
+
+            <div class="alert alert-danger" role="alert">
+                Внимание! Все <b>ТЕСТОВЫЕ СД</b> за выбранный период (включая выбранные даты) будут <b>УДАЛЕНЫ</b> из БД. Все медиматериалы, привязанные к СД, также будут удалены с диска.
+            </div>
+
+        </div>
+
+        <div class="form-row create-form-row">
+
+
+            <div class="form-group col-md-3">
+                <label for="daterange" >Период (с - по)</label>
+                <input type="text" class="form-control" name="daterange" value="" required autocomplete="off">
+            </div>
+
+
+            <div class="col-lg-3">
+                <label for="btn-search-rig"></label>
+                <div class="form-group" style="margin-top:8px">
+                    <button  type="submit" class="btn btn-danger"><i class="fa fa-paint-brush" aria-hidden="true"></i> Удалить СД</button>
+                </div>
+            </div>
+
+
+
+        </div>
+
+
+    </form>
+
+
+
+
+
+
+
+
+
+{% endblock %}
+
+
+{% block head %}
+
+    <link href="{{ base_url('/assets/daterangepicker/daterangepicker.css') }}" rel="stylesheet">
+
+    <style>
+        .select2-container {
+            width: 300px !important;
+        }
+    </style>
+
+{% endblock %}
+
+{% block footer %}
+
+    <script type="text/javascript"
+    src="{{ base_url('assets/daterangepicker/moment.min.js') }}"></script>
+    <script type="text/javascript"
+    src="{{ base_url('assets/daterangepicker/daterangepicker.js') }}"></script>
+
+    <script>
+
+
+
+        $(function () {
+            $('input[name="daterange"]').daterangepicker({
+                opens: 'left',
+                  "autoApply": false,
+                showDropdowns: true,
+                "timePicker": true,
+                "timePicker24Hour": true,
+                "timePickerSeconds": true,
+                locale: {
+                    format: 'DD.MM.YYYY HH:mm:ss',
+                    applyLabel: 'Применить',
+                    cancelLabel: 'Отменить',
+                    "daysOfWeek": [
+                        "Вс",
+                        "Пн",
+                        "Вт",
+                        "Ср",
+                        "Чт",
+                        "Пт",
+                        "Сб"
+                    ],
+                    "monthNames": [
+                        "Январь",
+                        "Февраль",
+                        "Март",
+                        "Апрель",
+                        "Май",
+                        "Июнь",
+                        "Июль",
+                        "Август",
+                        "Сентябрь",
+                        "Октябрь",
+                        "Ноябрь",
+                        "Декабрь"
+                    ],
+                    "firstDay": 1
+                }
+            }, function (start, end, label) {
+
+                console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+            });
+               $('input[name="daterange"]').val('');
+        });
+
+
+
+
+        $('.option-select').select2({
+            "language": {
+                "noResults": function () {
+                    return "Ничего не найдено";
+                }
+            }
+        });
+
+
+        {#
+                $('body').on('click', '#show-on-screen', function (e) {
+
+            e.preventDefault();
+
+            var daterange = $('form#time_sd_report_form').find('input[name="daterange"]').val();
+            var id_region = $('form#time_sd_report_form').find('input[name="id_region"]').val();
+
+
+        if(daterange === '' ){
+            toastr.error('Укажите диапазон', 'Ошибка!', {progressBar: true, timeOut: 2500});
+        }
+        else{
+
+        }
+
+            var data = {'id': id};
+
+            $.post(url, data, function (res) {
+                if (parseInt(JSON.parse(res)['success']) === 1) {
+
+                    $("#modal-catalog-media .modal-body").html('');
+                    $('#modal-catalog-media .modal-body').html(JSON.parse(res)['innerHtml']);
+
+                } else {
+
+                    toastr.error(parseInt(JSON.parse(res)['error']), 'Ошибка!', {progressBar: true, timeOut: 2500});
+
+                }
+            });
+
+        });#}
+    </script>
+{% endblock %}
+

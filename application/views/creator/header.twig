@@ -29,6 +29,15 @@
 
                 </div>
             </li>
+
+
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle {%if active_item_menu is defined and active_item_menu == 'adminka'%} active_item_menu {%endif%}" href="#" id="dropdown02" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Админка</a>
+                <div class="dropdown-menu" aria-labelledby="dropdown02">
+                    <a class="dropdown-item" href="{{ base_url('/admin/form_clear_sd')}}">Очистить тестовые СД</a>
+
+                </div>
+            </li>
         {%endif%}
 
         {#      <li class="nav-item">

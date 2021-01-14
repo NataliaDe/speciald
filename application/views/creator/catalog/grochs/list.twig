@@ -68,7 +68,7 @@
                     <td>{{out.specd_vid_name}}</td>
                     <td>
 
-                        {%if out.is_open_update == 0 and out.statuses_id is defined and  6 in out.statuses_id %}
+                        {%if out.is_open_update == 0 and out.statuses_id is defined and  (6 in out.statuses_id or (4 in out.statuses_id and setting_closed_edit is defined and setting_closed_edit == 1) ) %}
                               <a href="{{base_url('dones/edit_form_standart/'~out.id)}}" class="a-non-dec" data-toggle="tooltip" data-placement="top" title="Просмотреть СД">
                                 <button class="btn btn-sm btn-disabled" type="button"><i class="fa fa-eye" aria-hidden="true"  style="color:blue"></i></button>
                             </a>
@@ -88,7 +88,7 @@
 
                     <td>
 
-                        {%if out.is_open_update == 0 and out.statuses_id is defined and  6 in out.statuses_id %}
+                        {%if out.is_open_update == 0 and out.statuses_id is defined and ( 6 in out.statuses_id or (4 in out.statuses_id and setting_closed_edit is defined and setting_closed_edit == 1)) %}
                            <i class="fa fa-ban" style="color: red" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Функция не доступна. СД подтверждено."></i>
 
                         {%elseif out.author_local_id != active_user.id_local and (can_edit_sd_by_merge is not defined or can_edit_sd_by_merge == 0) %}

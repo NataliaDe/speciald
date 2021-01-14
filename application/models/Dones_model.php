@@ -70,13 +70,13 @@ class Dones_model extends CI_Model
             $this->db->where('d.is_delete', $filter['is_delete']);
 
 
-                // by last month
+        // by last month
         if (isset($filter['id_range']) && $filter['id_range'] == 1) {
             $date = new DateTime();
             $date->modify('-1 month');
-            $from= $date->format('Y-m-d');
-            $to=new DateTime();
-            $to=$to->format('Y-m-d');
+            $from = $date->format('Y-m-d');
+            $to = new DateTime();
+            $to = $to->format('Y-m-d');
 
             $this->db->group_start();
             $this->db->where('d.specd_date >=', $from);
@@ -84,24 +84,23 @@ class Dones_model extends CI_Model
             $this->db->group_end();
         }
         //by current year
-        elseif (isset($filter['id_range']) && $filter['id_range'] == 2){
-                        $date = new DateTime();
+        elseif (isset($filter['id_range']) && $filter['id_range'] == 2) {
+            $date = new DateTime();
             $date->modify('-1 year');
-            $from= $date->format('Y-m-d');
-            $to=new DateTime();
-            $to=$to->format('Y-m-d');
+            $from = $date->format('Y-m-d');
+            $to = new DateTime();
+            $to = $to->format('Y-m-d');
 
             $this->db->group_start();
             $this->db->where('d.specd_date >=', $from);
             $this->db->where('d.specd_date <=', $to);
             $this->db->group_end();
-        }
-        elseif(isset($filter['id_range']) && $filter['id_range'] == 3){
-                        $date = new DateTime();
+        } elseif (isset($filter['id_range']) && $filter['id_range'] == 3) {
+            $date = new DateTime();
             $date->modify('-24 hours');
-            $from= $date->format('Y-m-d');
-            $to=new DateTime();
-            $to=$to->format('Y-m-d');
+            $from = $date->format('Y-m-d');
+            $to = new DateTime();
+            $to = $to->format('Y-m-d');
 
             $this->db->group_start();
             $this->db->where('d.specd_date >=', $from);
@@ -210,7 +209,7 @@ class Dones_model extends CI_Model
         $this->db->join('vid_specd as vid', 'vid.id=d.specd_vid', 'left');
 
 
-                if (isset($filter['status_sd']) && !empty($filter['status_sd'])) {
+        if (isset($filter['status_sd']) && !empty($filter['status_sd'])) {
 
             $this->db->join('dones_logs as dl', "dl.id_dones=d.id and dl.`is_history`=0 AND dl.`id_action`=" . $filter['status_sd'], 'RIGHT');
         }
@@ -230,13 +229,13 @@ class Dones_model extends CI_Model
             $this->db->where('d.is_delete', $filter['is_delete']);
 
 
-                // by last month
+        // by last month
         if (isset($filter['id_range']) && $filter['id_range'] == 1) {
             $date = new DateTime();
             $date->modify('-1 month');
-            $from= $date->format('Y-m-d');
-            $to=new DateTime();
-            $to=$to->format('Y-m-d');
+            $from = $date->format('Y-m-d');
+            $to = new DateTime();
+            $to = $to->format('Y-m-d');
 
             $this->db->group_start();
             $this->db->where('d.specd_date >=', $from);
@@ -244,24 +243,23 @@ class Dones_model extends CI_Model
             $this->db->group_end();
         }
         //by current year
-        elseif (isset($filter['id_range']) && $filter['id_range'] == 2){
-                        $date = new DateTime();
+        elseif (isset($filter['id_range']) && $filter['id_range'] == 2) {
+            $date = new DateTime();
             $date->modify('-1 year');
-            $from= $date->format('Y-m-d');
-            $to=new DateTime();
-            $to=$to->format('Y-m-d');
+            $from = $date->format('Y-m-d');
+            $to = new DateTime();
+            $to = $to->format('Y-m-d');
 
             $this->db->group_start();
             $this->db->where('d.specd_date >=', $from);
             $this->db->where('d.specd_date <=', $to);
             $this->db->group_end();
-        }
-                elseif(isset($filter['id_range']) && $filter['id_range'] == 3){
-                        $date = new DateTime();
+        } elseif (isset($filter['id_range']) && $filter['id_range'] == 3) {
+            $date = new DateTime();
             $date->modify('-24 hours');
-            $from= $date->format('Y-m-d');
-            $to=new DateTime();
-            $to=$to->format('Y-m-d');
+            $from = $date->format('Y-m-d');
+            $to = new DateTime();
+            $to = $to->format('Y-m-d');
 
             $this->db->group_start();
             $this->db->where('d.specd_date >=', $from);
@@ -352,7 +350,7 @@ class Dones_model extends CI_Model
 
         if (isset($filter['status_sd']) && !empty($filter['status_sd'])) {
 
-            $this->db->join('dones_logs as dl', "dl.id_dones=d.id and dl.`is_history`=0 AND dl.`id_action`=" . $filter['status_sd'] , 'RIGHT');
+            $this->db->join('dones_logs as dl', "dl.id_dones=d.id and dl.`is_history`=0 AND dl.`id_action`=" . $filter['status_sd'], 'RIGHT');
         }
 
         if (isset($filter['is_delete']))
@@ -503,46 +501,43 @@ class Dones_model extends CI_Model
         return $this->db->get('settings_accordion')->row_array();
     }
 
-
-        public function get_cnt_dones()
+    public function get_cnt_dones()
     {
         $this->db->select('count(id) as cnt');
-        $res= $this->db->get('dones')->row_array();
+        $res = $this->db->get('dones')->row_array();
         return $res['cnt'];
     }
 
-
-        public function get_cnt_dones_per_region($id_region)
+    public function get_cnt_dones_per_region($id_region)
     {
         $this->db->select('count(d.id) as cnt');
         $this->db->join('users as u', 'u.id=d.created_by', 'left');
         $this->db->where('u.id_region', $id_region);
-        $res= $this->db->get('dones as d')->row_array();
+        $res = $this->db->get('dones as d')->row_array();
         return $res['cnt'];
     }
 
-
-        public function get_cnt_dones_per_organ($id_organ)
+    public function get_cnt_dones_per_organ($id_organ)
     {
         $this->db->select('count(d.id) as cnt');
         $this->db->join('users as u', 'u.id=d.created_by', 'left');
         $this->db->where('u.id_organ', $id_organ);
-        $res= $this->db->get('dones as d')->row_array();
+        $res = $this->db->get('dones as d')->row_array();
         return $res['cnt'];
     }
 
-        public function delete_dones_live_together($id_dones)
+    public function delete_dones_live_together($id_dones)
     {
         $this->db->where('id_dones', $id_dones)->delete('dones_live_together');
     }
 
-        public function add_dones_live_together($data)
+    public function add_dones_live_together($data)
     {
         $this->db->insert('speciald.dones_live_together', $data);
         return $this->db->insert_id();
     }
 
-        public function get_dones_live_together($id_dones)
+    public function get_dones_live_together($id_dones)
     {
         return $this->db->select('*')
                 ->from('speciald.dones_live_together')
@@ -552,8 +547,7 @@ class Dones_model extends CI_Model
                 ->result_array();
     }
 
-
-        public function get_range_filter_sd($id_user)
+    public function get_range_filter_sd($id_user)
     {
         return $this->db->select('*')
                 ->from('filter_range_sd')
@@ -562,36 +556,32 @@ class Dones_model extends CI_Model
                 ->row_array();
     }
 
-    public function set_range_filter_sd($id_range,$id_user)
+    public function set_range_filter_sd($id_range, $id_user)
     {
         $data['date_create'] = date('Y-m-d H:i:s');
         $data['last_update'] = date('Y-m-d H:i:s');
-        $data['id_range']=$id_range;
-        $data['id_user']=$id_user;
+        $data['id_range'] = $id_range;
+        $data['id_user'] = $id_user;
         $this->db->insert('filter_range_sd', $data);
-
     }
 
-
-        public function update_range_filter_sd($id_range,$id_user)
+    public function update_range_filter_sd($id_range, $id_user)
     {
         $this->db->where('id_user', $id_user);
         $this->db->set('id_range', $id_range);
         $this->db->set('last_update', date('Y-m-d H:i:s'));
         $this->db->update('filter_range_sd');
-
     }
 
-
-        public function date_action_by_id_dones($id_dones, $status,$id_user=false)
+    public function date_action_by_id_dones($id_dones, $status, $id_user = false)
     {
 
         $this->db->select('dl.*');
         $this->db->where('dl.id_dones', $id_dones);
 
         $this->db->where('dl.id_action', $status);
-        if($id_user)
-        $this->db->where('dl.id_user', $id_user);
+        if ($id_user)
+            $this->db->where('dl.id_user', $id_user);
 
 
         $this->db->where('dl.is_history', 0);
@@ -603,14 +593,12 @@ class Dones_model extends CI_Model
         return $result['date_action'];
     }
 
-
-
-        public function get_list_god_by_region($level_id, $region_id, $position_id)
+    public function get_list_god_by_region($level_id, $region_id, $position_id)
     {
 
         $this->db->select('u.id, u.fio,p.name as position, r.name as rank');
-        $this->db->join('position as p', 'p.id=u.id_position','left');
-        $this->db->join('ranks as r', 'r.id=u.id_rank','left');
+        $this->db->join('position as p', 'p.id=u.id_position', 'left');
+        $this->db->join('ranks as r', 'r.id=u.id_rank', 'left');
         $this->db->where('u.level', $level_id);
         $this->db->where('u.id_region', $region_id);
         $this->db->where('u.id_position', $position_id);
@@ -620,9 +608,31 @@ class Dones_model extends CI_Model
         return $result;
     }
 
-        public function sign_sd_from_umchs($id_dones, $data)
+    public function sign_sd_from_umchs($id_dones, $data)
     {
         $this->db->where('id', $id_dones);
-        $this->db->update('speciald.dones',$data);
+        $this->db->update('speciald.dones', $data);
+    }
+
+    public function get_dones_by_period($filter)
+    {
+        $this->db->select('d.*');
+        $this->db->group_start();
+        $this->db->where('d.specd_date >=', $filter['from']);
+        $this->db->where('d.specd_date <=', $filter['to']);
+        $this->db->group_end();
+
+        if(isset($filter['is_test_sd']) && $filter['is_test_sd'] == 1){
+             $this->db->where('d.is_test_sd', 1);
+        }
+
+        $result = $this->db->get('speciald.dones as d')->result_array();
+        return $result;
+    }
+
+
+        public function delete_sd_by_id($id_dones)
+    {
+        $this->db->where('id', $id_dones)->delete('dones');
     }
 }

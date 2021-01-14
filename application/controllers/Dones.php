@@ -2697,6 +2697,14 @@ class Dones extends My_Controller
             $this->data['dones']['is_see'] = 1; //only see form not possible save!!!
         } else {
 
+            /* setting: availble or not edit after umchs prove */
+            $this->data['setting_closed_edit'] = 0;
+            if ($this->data['active_user']['level'] != Main_model::LEVEL_ID_RCU) {
+                $setting_closed_edit = $this->user_model->get_settings_by_region($this->data['active_user']['id_region'], 'is_closed_edit_after_umchs', 'no');
+                if (!empty($setting_closed_edit)) {
+                    $this->data['setting_closed_edit'] = 1;
+                }
+            }
 
             /* ROSN, UGZ, AVIA */
             if ($this->data['active_user']['level'] == 3 &&
@@ -2710,7 +2718,11 @@ class Dones extends My_Controller
             } elseif ($this->data['active_user']['level'] == Main_model::LEVEL_ID_RCU &&
                 $this->data['dones']['is_open_update'] == 0 && in_array(Logs_model::ACTION_PROVE_SD_RCU, $statuses_id)) {
                 $this->data['dones']['is_see'] = 1; //only see form not possible save!!!
-            } else {
+            }
+            elseif($this->data['active_user']['level'] != Main_model::LEVEL_ID_RCU && $this->data['setting_closed_edit'] == 1){
+                $this->data['dones']['is_see'] = 1; //only see form not possible save!!!
+            }
+            else {
                 /*  author SD = current user
                  * proved umchs and proved rcu and not open update
                  * proved rcu and not open update
@@ -2928,6 +2940,14 @@ class Dones extends My_Controller
                  *          */
 
 
+                /* setting: availble or not edit after umchs prove */
+                $is_setting_closed_edit = 0;
+                $setting_closed_edit = $this->user_model->get_settings_by_region($this->data['active_user']['id_region'], 'is_closed_edit_after_umchs', 'no');
+                // print_r($setting_closed_edit);exit();
+                if (!empty($setting_closed_edit)) {
+                    $is_setting_closed_edit = 1;
+                }
+
                 /* gomel GOCHS + gomel ROCHS */
                 $this->data['can_edit_sd_by_merge'] = 0;
                 if (in_array($this->data['active_user']['id_local'], array(Main_model::GOMEL_LOCAL, Main_model::GOMEL_CITY)) &&
@@ -2941,6 +2961,10 @@ class Dones extends My_Controller
                     in_array(Logs_model::ACTION_PROVE_SD_RCU, $statuses_id)) ||
                     ($this->data['dones']['is_open_update'] == 0 && in_array(Logs_model::ACTION_PROVE_SD_RCU, $statuses_id)))) {
 
+                    echo json_encode(array('error' => 'Удаление недоступно'));
+                    //redirect('creator/catalog');
+                    die();
+                } elseif ($this->data['dones']['is_open_update'] == 0 && $this->data['active_user']['level'] != Main_model::LEVEL_ID_RCU && (in_array(Logs_model::ACTION_PROVE_SD_UMCHS, $statuses_id) || in_array(Logs_model::ACTION_PROVE_SD_RCU, $statuses_id) && $is_setting_closed_edit == 1)) {
                     echo json_encode(array('error' => 'Удаление недоступно'));
                     //redirect('creator/catalog');
                     die();

@@ -21,6 +21,10 @@
 
                     <tbody>
                         {% for setting in settings %}
+                            {%if setting.type == 'is_closed_edit_after_umchs' and active_user.level != 2 %}
+
+
+                        {%else%}
                             {%set i=0%}
                             <tr class="{%if setting.type_sd == 1 %} table-warning {%elseif setting.type_sd == 0 %} table-success {%endif%}">
                                 <td>{{setting.name}}</td>
@@ -48,61 +52,64 @@
 
                             </tr>
 
-
-                        {%endfor%}
-                    </tbody>
-
-                </table>
-
-
-                <center>
-
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-success" >Сохранить изменения</button>
-                        <br>
-                    </div>
-
-                    <div class="form-group">
-                        <a href="{{base_url('/')}}">  <button type="button" class="btn btn-secondary">Отмена</button></a>
-
-                    </div>
-
-                </center>
-            </form>
-        {%else%}
-            <i class="fa fa-folder-open-o" aria-hidden="true"></i> Настроек нет
-        {%endif%}
-    </center>
-
-    <!-- .content -->
+                            {%endif%}
 
 
 
+                                {%endfor%}
+                                </tbody>
 
-{% endblock %}
+                            </table>
 
 
-{% block head %}
+                            <center>
 
-    <style>
-        .select2-container {
-            width: 300px !important;
-        }
-    </style>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-success" >Сохранить изменения</button>
+                                    <br>
+                                </div>
 
-{% endblock %}
+                                <div class="form-group">
+                                    <a href="{{base_url('/')}}">  <button type="button" class="btn btn-secondary">Отмена</button></a>
 
-{% block footer %}
+                                </div>
 
-    <script>
+                            </center>
+                        </form>
+                        {%else%}
+                            <i class="fa fa-folder-open-o" aria-hidden="true"></i> Настроек нет
+                            {%endif%}
+                            </center>
 
-        $('.option-select').select2({
-            "language": {
-                "noResults": function () {
-                    return "Ничего не найдено";
-                }
-            }
-        });
-    </script>
-{% endblock %}
+                            <!-- .content -->
+
+
+
+
+                            {% endblock %}
+
+
+                                {% block head %}
+
+                                    <style>
+                                        .select2-container {
+                                            width: 300px !important;
+                                        }
+                                    </style>
+
+                                {% endblock %}
+
+                                {% block footer %}
+
+                                    <script>
+
+                                        $('.option-select').select2({
+                                            "language": {
+                                                "noResults": function () {
+                                                    return "Ничего не найдено";
+                                                }
+                                            }
+                                        });
+                                    </script>
+                                {% endblock %}
 
